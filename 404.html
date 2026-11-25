@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<!-- servida pelo nginx em qualquer endereço que não existe (error_page 404): tudo relativo à raiz do site -->
+<base href="/">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
+<script src="cliente-economia.js?v=20261125c"></script>
+<title>Página não encontrada · NÃO SALVO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css?v=20261125b">
+<script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
+<style>
+/* ===== 404 · "Onde é que eu tô? Será que tô na Lagoinha?" (GPS do Não Salvo recalculando) ===== */
+.e4{position:relative;max-width:1180px;margin:0 auto;padding:34px 20px 70px}
+.e4-g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:44px;align-items:center}
+.e4-k{font:800 12px Inter,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--brand-ink,#0a6a9a)}
+.e4 h1{font:800 clamp(36px,4.3vw,56px)/1.02 "Baloo 2",Inter,sans-serif;margin:10px 0 14px;color:var(--txt);letter-spacing:-1px}
+.e4 h1 em{display:block;font-style:normal;color:var(--brand-ink,#0a6a9a)}
+.e4 .lead{font-size:17px;line-height:1.55;color:var(--mut);max-width:48ch;margin:0 0 24px}
+.e4 .lead b{color:var(--txt)}
+.e4-bts{display:flex;flex-wrap:wrap;gap:10px}
+.e4-bt{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:14px;font:700 14.5px Inter,sans-serif;text-decoration:none;border:1px solid var(--line2);background:var(--panel);color:var(--txt);box-shadow:0 2px 8px #0001;transition:transform .12s}
+.e4-bt:hover{transform:translateY(-1px)}
+.e4-bt:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
+.e4-bt.pri{background:linear-gradient(180deg,#1b8fc9,#0a6a9a);border-color:#0a6a9a;color:#fff;box-shadow:0 8px 20px #0a6a9a44}
+.e4-bt .ico{width:18px;height:18px}
+.e4-meme{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font:600 14px Inter,sans-serif;color:var(--mut)}
+.e4-meme a{color:var(--brand-ink,#0a6a9a);font-weight:800}
+/* aparelho de GPS */
+.gps{position:relative;border-radius:34px;padding:18px 18px 12px;background:linear-gradient(160deg,#3b4250,#15181f);box-shadow:0 30px 60px #0a1a3a55,inset 0 2px 0 #ffffff22;margin-bottom:46px}
+.gps:before{content:"";position:absolute;left:50%;bottom:-44px;width:80px;height:48px;margin-left:-40px;background:linear-gradient(#2a2f39,#14161c);border-radius:0 0 14px 14px;z-index:-1}
+.gps-tela{position:relative;height:390px;border-radius:18px;overflow:hidden;background:#ebe6d8}
+.gps-tela svg.mapa{position:absolute;inset:0;width:100%;height:100%}
+.gps-top{position:absolute;left:0;right:0;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:10px 14px;background:linear-gradient(#1f6f3a,#14552b);color:#fff;font:800 15px Inter,sans-serif}
+.gps-top .seta{flex:none;width:44px;height:44px;border-radius:10px;background:#ffffff22;display:grid;place-items:center}
+.gps-top .seta svg{width:24px;height:24px}
+.gps-top small{display:block;font-weight:600;font-size:12px;color:#e2f3e7}
+.gps-bot{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;justify-content:space-between;gap:10px;padding:9px 14px;background:#000000d9;color:#fff;font:700 13px Inter,sans-serif}
+.gps-bot b{color:#ffd23f}
+.gps-rec{position:absolute;left:14px;top:78px;z-index:2;padding:6px 12px;border-radius:999px;background:#c8322b;color:#fff;font:800 12px Inter,sans-serif;letter-spacing:.5px}
+.gps-pin{position:absolute;z-index:2;left:54%;top:48%;width:100px;height:100px;margin:-50px;border-radius:50%;overflow:hidden;background:#fff;border:5px solid #fff;box-shadow:0 0 0 4px #d6453d,0 12px 26px #0006}
+.gps-pin svg{display:block;width:100%;height:100%}
+.gps-pin:after{content:"";position:absolute;inset:-14px;border-radius:50%}
+.gps-onda{position:absolute;z-index:1;left:54%;top:48%;width:100px;height:100px;margin:-50px;border-radius:50%;border:3px solid #d6453d;opacity:0}
+.gps-bal{position:absolute;z-index:3;left:calc(54% + 58px);top:calc(48% - 96px);background:#fff;color:#13233a;border-radius:16px;padding:9px 14px;font:800 17px/1.15 "Baloo 2",Inter,sans-serif;box-shadow:0 10px 24px #0003;max-width:220px}
+.gps-bal:after{content:"";position:absolute;left:14px;bottom:-9px;border:10px solid transparent;border-top-color:#fff;border-bottom:0}
+.gps-bts{display:flex;justify-content:center;gap:16px;margin-top:12px}
+.gps-bts i{width:44px;height:14px;border-radius:7px;background:#ffffff1c}
+.rota{stroke-dashoffset:0}
+@media(prefers-reduced-motion:no-preference){
+  .gps-rec{animation:e4-pisca 1.2s steps(2) infinite}
+  .gps-top .seta svg{animation:e4-gira 2.4s linear infinite}
+  .rota{animation:e4-rota 1.6s linear infinite}
+  .gps-onda{animation:e4-onda 2.2s ease-out infinite}
+  .gps-bal{animation:e4-bal 3.2s ease-in-out infinite}
+}
+@keyframes e4-pisca{50%{opacity:.35}}
+@keyframes e4-gira{to{transform:rotate(360deg)}}
+@keyframes e4-rota{to{stroke-dashoffset:-32}}
+@keyframes e4-onda{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.1);opacity:0}}
+@keyframes e4-bal{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-6px) rotate(1deg)}}
+:root[data-theme="dark"] .gps{box-shadow:0 30px 60px #0008,inset 0 2px 0 #ffffff22}
+@media(max-width:900px){
+  .e4{padding-top:18px;text-align:center}
+  .e4-g{grid-template-columns:minmax(0,1fr);gap:8px}
+  .e4-g>.cena{order:-1;max-width:520px;width:100%;margin:0 auto}
+  .e4 .lead{margin-left:auto;margin-right:auto}
+  .e4-bts{justify-content:center}
+}
+@media(max-width:520px){
+  .gps{padding:12px 12px 8px;border-radius:26px}
+  .gps-tela{height:300px}
+  .gps-top{font-size:14px;padding:8px 10px}
+  .gps-rec{top:70px;left:10px}
+  .gps-pin,.gps-onda{width:80px;height:80px;margin:-40px;left:44%}
+  .gps-bal{left:calc(44% + 34px);top:calc(48% - 84px);font-size:15px;max-width:150px}
+  .gps-bot{font-size:12px;padding:8px 10px}
+  .e4-bt{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<main class="e4" id="main">
+ <div class="rays-wrap"><div class="rays"></div></div>
+ <div class="e4-g">
+  <div>
+   <div class="e4-k">Erro 404 · página não encontrada</div>
+   <h1>Onde é que eu tô? <em>Será que tô na Lagoinha?</em></h1>
+   <p class="lead">Calma: o GPS do Não Salvo perdeu o sinal. Esta página <b>não existe</b> (ou a internet não salvou). Escolha uma rota e o gatinho te leva de volta.</p>
+   <div class="e4-bts">
+    <a class="e4-bt pri" href="index.html" data-ic="home">Voltar ao início</a>
+    <a class="e4-bt" href="memepedia.html" id="aleatorio" data-ic="random">Meme aleatório</a>
+    <a class="e4-bt" href="linha-do-tempo.html" data-ic="timeline">Linha do tempo</a>
+   </div>
+  </div>
+  <div class="cena" aria-hidden="true">
+   <div class="gps"><div class="gps-tela">
+    <svg class="mapa" viewBox="0 0 520 390" preserveAspectRatio="xMidYMid slice">
+     <rect width="520" height="390" fill="#ebe6d8"/>
+     <path d="M0 255C120 215 180 305 300 255S470 175 520 195V390H0z" fill="#cfe3b8"/>
+     <ellipse cx="375" cy="305" rx="92" ry="40" fill="#9fd0f0"/>
+     <text x="333" y="310" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="14" fill="#1f5f87">Lagoinha?</text>
+     <path d="M-10 125L530 165M120 -10L180 400M335 -10L305 400" stroke="#fff" stroke-width="16" fill="none"/>
+     <path d="M-10 125L530 165M120 -10L180 400M335 -10L305 400" stroke="#f2c94c" stroke-width="3" stroke-dasharray="10 8" fill="none"/>
+     <path class="rota" d="M150 210C200 170 240 220 270 186" stroke="#2f86ff" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="2 14"/>
+    </svg>
+    <div class="gps-top"><div class="seta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg></div><div>Recalculando rota…<small>Destino: esta página · não encontrado</small></div></div>
+    <div class="gps-rec">SEM SINAL</div>
+    <div class="gps-onda"></div>
+    <div class="gps-pin" id="gato"></div>
+    <div class="gps-bal">Onde é que eu tô?</div>
+    <div class="gps-bot"><span>Distância: <b>404 km</b></span><span>Chegada: <b>nunca</b></span></div>
+   </div><div class="gps-bts"><i></i><i></i><i></i></div></div>
+  </div>
+ </div>
+</main>
+<script src="common.js?v=20261125d"></script>
+<script src="data.js?v=20261125b"></script>
+<script>
+renderHeader("x",{sub:[
+  {k:"inicio",ic:"home",label:"Início",href:"index.html"},
+  {k:"tl",ic:"timeline",label:"Linha do tempo",href:"linha-do-tempo.html"},
+  {k:"wiki",ic:"book",label:"Memepédia",href:"memepedia.html"},
+  {k:"album",ic:"album",label:"Álbum de figurinhas",href:"album.html"},
+  {sp:1},
+  {k:"send",ic:"send",label:"Enviar meme",cta:1,href:"index.html#send"}
+]});
+renderWallet();
+// a 404 é pública: sem sessão, mostra o cabeçalho de quem não entrou em vez de mandar para o login
+const iniciarEconomiaDoSite=iniciarEconomia;
+iniciarEconomia=async function(){
+  try{const r=await fetch("/api/eu",{credentials:"same-origin",cache:"no-store"});if(r.status===401){ECO.convidado=true;renderWallet();updateAccount();return}}catch(e){}
+  return iniciarEconomiaDoSite();
+};
+document.querySelectorAll(".e4-bt[data-ic]").forEach(a=>a.insertAdjacentHTML("afterbegin",icon(a.dataset.ic)));
+document.getElementById("gato").innerHTML=catSVG({fur:1,pat:1,eye:1,acc:3,clo:0,bg:0});
+// meme aleatório: um verbete da Memepédia sorteado do acervo
+(function(){const l=typeof MEMES!=="undefined"?MEMES.filter(m=>m&&m.id):[];if(!l.length)return;
+  const a=document.getElementById("aleatorio");a.onclick=()=>{a.href="memepedia.html#"+encodeURIComponent(l[Math.floor(Math.random()*l.length)].id)}})();
+</script>
+</body>
+</html>

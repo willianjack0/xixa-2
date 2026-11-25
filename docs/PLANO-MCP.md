@@ -12,7 +12,7 @@ Status: **plano aprovado** (nada implementado ainda). Decisões já tomadas: mí
 - **Tudo auditado:** cada tool que altera dado grava em `log_auditoria` com `via: "mcp"` e o id da chave.
 
 ## Chaves de API (fatia M1)
-Tabela `chaves_api` (migração 018):
+Tabela `chaves_api` (migração 022; 018 a 021 estão reservadas pelas PRs abertas do colaborador):
 
 | coluna | nota |
 |---|---|
@@ -58,7 +58,7 @@ Segredo só em hash; exibição única; revogação imediata; papel conferido a 
 ## Fatias
 | # | Entrega | Pronto quando |
 |---|---|---|
-| M1 | migração 018, rotas de chaves, aba MCP com chaves e `llms.txt` base | admin cria/revoga chave; usuário comum recebe 403 |
+| M1 | migração 022, rotas de chaves, aba MCP com chaves e `llms.txt` base | admin cria/revoga chave; usuário comum recebe 403 |
 | M2 | endpoint `/mcp` + tools de leitura | um cliente MCP real lista tools e busca memes |
 | M3 | tools de escrita (rascunho, editar, publicar, carta) com escopos e log | a IA cadastra um meme oculto e ele aparece no admin |
 | M4 | mídias (volume, upload, download seguro) | meme novo com imagem aparece no site |

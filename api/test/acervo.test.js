@@ -60,7 +60,7 @@ test('GET /api/categorias: 7 categorias, total soma todos os memes', { skip }, a
   const r = await s.get('/api/categorias');
   assert.equal(r.json.itens.length, 7);
   assert.equal(r.json.itens.reduce((n, c) => n + c.total, 0), N.memes);
-  assert.equal(r.json.itens.find((c) => c.nome === 'Esportes').total, 0);
+  for (const c of r.json.itens) assert.equal(c.total, N.porCategoria[c.nome] || 0, c.nome);
 });
 
 test('rotas legadas seguem iguais: voto agregado e comentário', { skip }, async () => {

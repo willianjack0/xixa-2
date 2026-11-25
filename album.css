@@ -184,3 +184,162 @@
 @media(max-width:720px){.rings{left:6px;width:30px}.rings i{width:30px;height:9px}}
 .layout{padding-bottom:120px}
 @media(max-width:720px){.layout>.album{order:-1}.layout>.det{order:0}.layout>.side{order:1}}
+
+/* ===================================================================================================
+   Álbum com cara de álbum de banca (anos 90/2000): papel, vagas numeradas com moldura, figurinhas de
+   borda amarela com o número no cantinho, "Complete do nº… e ganhe…" e cada coleção com título próprio.
+   O papel é sempre claro (como o perfil e a linha do tempo, o visual de época tem cores fixas).
+   =================================================================================================== */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.album{padding:0;border:0;border-radius:8px;background:none;box-shadow:none}
+.album::before,.album .rings{display:none}
+.pg{--vaga:#3d8fe0;--txtp:#1b4f8f;--papel:#e8f2fb;position:relative;overflow:hidden;border-radius:6px;color:var(--txtp);
+  background:radial-gradient(circle at 20% 12%,#fff 0,transparent 42%),repeating-linear-gradient(0deg,#0000 0 3px,#00000005 3px 4px),linear-gradient(160deg,#f7fbff,var(--papel))}
+.album .page.pg{padding:26px 28px 18px;min-height:0;box-shadow:0 1px 0 #fff inset,0 16px 36px #0a2a5a33,0 2px 0 #c9dbea}
+:root[data-theme="dark"] .album .page.pg{background:radial-gradient(circle at 20% 12%,#fff 0,transparent 42%),repeating-linear-gradient(0deg,#0000 0 3px,#00000005 3px 4px),linear-gradient(160deg,#f7fbff,var(--papel));box-shadow:0 16px 40px #0009}
+.pg::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 50%,transparent 60%,#7a9cc026)}
+/* marca d'água da coleção, impressa clarinha (como nos álbuns da época) */
+.pg .marca{position:absolute;right:-5%;bottom:5%;font-size:min(38vw,300px);line-height:1;opacity:.09;filter:grayscale(1);pointer-events:none;transform:rotate(-8deg);user-select:none}
+.pg .ahead{position:relative;z-index:1;align-items:flex-start;margin-bottom:12px}
+.pg .ahead .pr{color:var(--txtp);font-weight:600;margin-top:10px}
+:root[data-theme="dark"] .pg .ahead .pr{color:var(--txtp)}
+.pg .ahead .pr .bar{background:#0000001a}
+.a-bts{display:flex;gap:8px;flex-wrap:wrap}
+.pg .about{min-height:44px;background:#fff;color:#1d2a3a;box-shadow:0 0 0 1px #00000026}
+:root[data-theme="dark"] .pg .about{background:#fff;color:#1d2a3a;box-shadow:0 0 0 1px #00000026}
+.pg .about.exp{background:linear-gradient(180deg,#ffd84a,#f2b10a);color:#3a2a00;box-shadow:0 0 0 1px #c98f00,0 3px 8px #c98f0040}
+.pg .about:focus-visible,.vaga:focus-visible,.mbt:focus-visible,.pg .pager button:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
+/* título da página (padrão; cada coleção troca embaixo) */
+.pg h1,.pg h3.tt{all:unset;display:block;position:relative;margin:0;font:400 clamp(26px,4.2vw,40px)/1.05 "Lilita One",sans-serif;color:#2b8be0;text-transform:uppercase;font-style:italic;letter-spacing:.5px;
+  -webkit-text-stroke:1.5px #0b4f9e;text-shadow:3px 3px 0 #fff,5px 5px 0 #0b4f9e33;transform:rotate(-1.5deg);transform-origin:left center}
+.pg h1::after{display:none}
+.pg h1 span,.pg h3.tt span{display:inline-block}
+/* vagas e figurinhas */
+.pg .grade{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 6%;padding:4px 3%}
+.slot{min-width:0;display:flex;flex-direction:column}
+.vaga{position:relative;display:grid;place-items:center;aspect-ratio:3/4;width:100%;padding:0;border:3px solid var(--vaga);border-radius:3px;background:#ffffffb3;cursor:pointer;font:inherit;color:inherit}
+.vaga .nv{font:400 clamp(22px,3.4vw,38px) "Lilita One",sans-serif;color:var(--vaga);letter-spacing:1px}
+.vaga.sel{outline:3px solid #0a6a9a;outline-offset:4px}
+.vaga:hover .fig{transform:rotate(0) translateY(-3px);box-shadow:0 8px 14px #0004,0 0 0 1px #c9a400}
+.slot .nm{margin-top:6px;text-align:center;font:800 12px/1.2 Inter,sans-serif;color:var(--txtp);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fig{position:absolute;inset:-3px;border-radius:3px;padding:6%;background:#ffd400;box-shadow:0 3px 6px #0003,0 0 0 1px #c9a400;transform:rotate(var(--rot,0deg));transition:transform .15s,box-shadow .15s}
+.fig .art{position:relative;display:grid;place-items:center;height:100%;border-radius:2px;overflow:hidden;background:var(--bg);font-size:clamp(28px,4.6vw,56px)}
+.fig .art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fig .art .emo[hidden]{display:none}
+.fig .art::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(115deg,transparent 30%,#ffffff55 45%,transparent 60%);mix-blend-mode:screen;pointer-events:none}
+.fig .tag{position:absolute;right:8%;top:7%;z-index:2;background:#fff;color:#14233a;font:800 12px/1 Inter,sans-serif;padding:3px 5px;border-radius:2px;box-shadow:0 1px 2px #0003}
+.fig .rar{position:absolute;left:8%;bottom:7%;z-index:2;background:#000000c7;color:#fff;font:800 12px/1 Inter,sans-serif;padding:3px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:.3px;box-shadow:inset 0 -2px 0 var(--rc)}
+.fig .cp{position:absolute;left:-8px;top:-10px;z-index:3;background:#c4343a;color:#fff;font:800 12px/1 Inter,sans-serif;padding:4px 7px;border-radius:99px;box-shadow:0 2px 6px #0004}
+.fig .star{position:absolute;right:-8px;top:-10px;z-index:3;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#ffd23f;font-size:13px;box-shadow:0 2px 6px #0004}
+.fig.foil .art::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(125deg,#ff00cc33,#00ffee33,#ffee0033,#ff00cc33);background-size:300% 300%;mix-blend-mode:overlay;pointer-events:none;animation:alb-holo 4s linear infinite}
+@keyframes alb-holo{to{background-position:300% 0}}
+.premio{position:relative;z-index:1;margin:16px 0 4px;text-align:center;font:800 14px/1.35 Inter,sans-serif;color:var(--txtp)}
+.premio b{font:400 17px "Lilita One",sans-serif;color:#b3134f;letter-spacing:.4px;text-transform:uppercase}
+.pg .pager{position:relative;z-index:1;margin-top:12px}
+.pg .pager button{min-width:44px;height:44px;background:#fff;color:#1d2a3a;box-shadow:0 0 0 1px #00000026}
+:root[data-theme="dark"] .pg .pager button{background:#fff;color:#1d2a3a;box-shadow:0 0 0 1px #00000026}
+.pg .pager button.on,:root[data-theme="dark"] .pg .pager button.on{background:#0a6a9a;color:#fff;box-shadow:0 4px 12px #0a6a9a55}
+.pg .num-pg{position:absolute;bottom:2.4%;z-index:1;font:700 13px Rajdhani,Inter,sans-serif;color:var(--txtp)}
+.pg .num-pg.e{left:4%}.pg .num-pg.d{right:4%}
+
+/* ===== cada coleção com o título, a cor e o papel da sua época (só fonte e cor, sem logos) ===== */
+/* Lendas do Orkut: rosa, letra redondinha e minúscula */
+.t-orkut{--vaga:#c2347b;--txtp:#7a1a50;--papel:#f6e3ef}
+.t-orkut h1,.t-orkut h3.tt{font:700 clamp(26px,4.4vw,44px)/1.05 Comfortaa,sans-serif;text-transform:lowercase;font-style:normal;color:#d1006f;-webkit-text-stroke:0;text-shadow:2px 2px 0 #fff,3px 3px 0 #bfd0ea;letter-spacing:-1px;transform:none}
+/* Lendas da Web: dourado de banner da internet dos anos 2000 */
+.t-lendas{--vaga:#8a5d08;--txtp:#5c3f00;--papel:#f7ecd2}
+.t-lendas h1,.t-lendas h3.tt{font:400 clamp(26px,4.4vw,44px)/1.05 "Luckiest Guy",sans-serif;color:#f2b22a;-webkit-text-stroke:2px #5c3f00;text-shadow:3px 3px 0 #5c3f00;letter-spacing:1px;font-style:normal;transform:rotate(-2deg)}
+/* Expansão Orkut: o azul e o rosa do Orkut */
+.t-expansao{--vaga:#4f6fb3;--txtp:#26437d;--papel:#e1e9f7}
+.t-expansao h1,.t-expansao h3.tt{font:700 clamp(26px,4.4vw,44px)/1.05 Comfortaa,sans-serif;text-transform:lowercase;font-style:normal;color:#26437d;-webkit-text-stroke:0;text-shadow:2px 2px 0 #fff,3px 3px 0 #f5b5d5;letter-spacing:-1px;transform:none}
+/* Comunidades Clássicas: barra roxa de fórum */
+.t-comunidades{--vaga:#7d3fd1;--txtp:#4b2380;--papel:#ece2fa}
+.t-comunidades h1,.t-comunidades h3.tt{font:700 clamp(18px,3vw,28px)/1.1 Tahoma,Verdana,sans-serif;color:#fff;-webkit-text-stroke:0;text-shadow:0 1px 0 #3a1470;text-transform:none;font-style:normal;letter-spacing:0;transform:none;background:linear-gradient(#8f45ef,#5d27b0);padding:8px 14px;border-radius:6px 6px 0 0;box-shadow:inset 0 1px #fff6}
+/* Plataformas Raiz: barra de janela do Windows XP */
+.t-plataformas{--vaga:#0d7f6b;--txtp:#0b5a4c;--papel:#ddf3ec}
+.t-plataformas h1,.t-plataformas h3.tt{font:700 italic clamp(18px,3vw,28px)/1.1 "Trebuchet MS",Tahoma,sans-serif;color:#fff;-webkit-text-stroke:0;text-shadow:1px 1px 0 #0a246a;text-transform:none;letter-spacing:0;transform:none;background:linear-gradient(#2f86f0,#0a5bd8 45%,#0646b8);padding:8px 14px;border-radius:8px 8px 0 0;box-shadow:inset 0 1px #fff8}
+/* Blogs & Épicos: canetão com marca-texto em folha pautada */
+.t-blogs{--vaga:#b5560a;--txtp:#6b3300;--papel:#f7efe2}
+.t-blogs.pg{background:radial-gradient(circle at 20% 12%,#fff 0,transparent 42%),repeating-linear-gradient(0deg,#0000 0 27px,#9cc4e833 27px 28px),linear-gradient(160deg,#fffdf8,var(--papel))!important}
+.t-blogs h1,.t-blogs h3.tt{font:400 clamp(26px,4.2vw,42px)/1.15 "Permanent Marker",cursive;color:#1d1d1d;-webkit-text-stroke:0;text-shadow:none;text-transform:none;font-style:normal;letter-spacing:0;transform:rotate(-2deg)}
+.t-blogs h1 span,.t-blogs h3.tt span{background:linear-gradient(transparent 45%,#ffe14d 45% 88%,transparent 88%);padding:0 6px}
+/* Sites & Portais: WordArt de home page dos anos 90 */
+.t-sites{--vaga:#16749f;--txtp:#0b4f72;--papel:#dcf0fa}
+.t-sites h1,.t-sites h3.tt{font:700 clamp(26px,4.2vw,42px)/1.1 "Comic Neue","Comic Sans MS",cursive;-webkit-text-stroke:0;text-transform:none;font-style:italic;letter-spacing:0;transform:skewX(-8deg);text-shadow:none;color:#0b4f72}
+.t-sites h1 span,.t-sites h3.tt span{background:linear-gradient(90deg,#e0003a,#e07a00,#c9a800,#00a344,#0084d6,#6a00e0);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(2px 2px 0 #0a3a5a)}
+
+/* Lendas do Fotolog: letra gordinha preta com sombra rosa de flog emo */
+.t-fotolog{--vaga:#b0215c;--txtp:#5e0f31;--papel:#fbe4ee}
+.t-fotolog h1,.t-fotolog h3.tt{font:400 clamp(26px,4.4vw,44px)/1.05 "Lilita One",sans-serif;color:#141414;-webkit-text-stroke:0;text-shadow:3px 3px 0 #ff5fa2,5px 5px 0 #141414;text-transform:none;font-style:normal;letter-spacing:1px;transform:rotate(-1.5deg)}
+/* YouTube Raiz: letra condensada de vinheta de vídeo, vermelha com sombra */
+.t-youtube{--vaga:#b51717;--txtp:#4d0909;--papel:#f1eeee}
+.t-youtube h1,.t-youtube h3.tt{font:400 clamp(28px,4.8vw,48px)/1.05 Anton,Impact,sans-serif;color:#c41a1a;-webkit-text-stroke:0;text-shadow:3px 3px 0 #1d1d1d;text-transform:uppercase;font-style:normal;letter-spacing:1px;transform:none}
+
+/* Redes & Trends: letra de timeline, azul de passarinho com sombra escura */
+.t-redes{--vaga:#0f6f8f;--txtp:#0a3e50;--papel:#e2f2f8}
+.t-redes h1,.t-redes h3.tt{font:800 clamp(24px,4vw,40px)/1.1 Inter,"Helvetica Neue",Arial,sans-serif;color:#0f6f8f;-webkit-text-stroke:0;text-shadow:2px 2px 0 #fff,3px 3px 0 #9fd3e6;text-transform:none;font-style:normal;letter-spacing:-.5px;transform:none}
+/* Grupinhos & Criadores: canetinha verde-limão de caderno de turma */
+.t-grupinhos{--vaga:#4a7a14;--txtp:#2c4a0a;--papel:#eef6e0}
+.t-grupinhos h1,.t-grupinhos h3.tt{font:400 clamp(26px,4.2vw,42px)/1.15 "Permanent Marker",cursive;color:#2c4a0a;-webkit-text-stroke:0;text-shadow:2px 2px 0 #b9e27a;text-transform:none;font-style:normal;letter-spacing:0;transform:rotate(1.5deg)}
+
+/* ===== álbum expandido: as duas páginas abertas na mesa ===== */
+body.mesa-on{overflow:hidden}
+.mesa{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:14px;
+  background:repeating-linear-gradient(90deg,#0000 0 118px,#00000022 118px 120px),repeating-linear-gradient(0deg,#ffffff08 0 2px,#0000 2px 7px),linear-gradient(180deg,#8fa6ae,#6f8790)}
+.mesa[hidden]{display:none}
+.mesa-top{display:flex;gap:10px}
+.mbt{min-height:44px;min-width:44px;padding:0 16px;border-radius:12px;border:1px solid #ffffff99;background:#ffffffeb;color:#14233a;font:800 14px Inter,sans-serif;cursor:pointer;box-shadow:0 4px 12px #0003}
+.mbt:disabled{opacity:.45;cursor:default}
+.mesa-nav{display:flex;align-items:center;gap:12px;color:#fff;font:800 14px Inter,sans-serif;text-shadow:0 1px 3px #000a}
+.mesa-nav .mbt{font-size:20px}
+.mesa .dica{display:none;margin:0;color:#fff;font:600 13px Inter,sans-serif;text-shadow:0 1px 3px #000a}
+@media (orientation:portrait) and (max-width:760px){.mesa .dica{display:block}}
+.livro{position:relative;width:min(96vw,calc((100vh - 150px)*1.48),1500px);width:min(96vw,calc((100dvh - 150px)*1.48),1500px);aspect-ratio:6/4.05;display:grid;grid-template-columns:1fr 1fr;perspective:2400px;filter:drop-shadow(0 26px 30px #0007);touch-action:pan-y}
+.livro .lado{position:relative;min-width:0}
+.livro .pg{height:100%;border-radius:0;padding:5% 6% 4%}
+.livro .lado.e .pg{border-radius:6px 0 0 6px}.livro .lado.d .pg{border-radius:0 6px 6px 0}
+.livro .lado.e .pg::before,.livro .lado.d .pg::before{content:"";position:absolute;top:0;bottom:0;width:12%;pointer-events:none;z-index:2}
+.livro .lado.e .pg::before{right:0;background:linear-gradient(90deg,#0000,#0000001c)}.livro .lado.d .pg::before{left:0;background:linear-gradient(90deg,#0000001c,#0000)}
+.livro::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:60px;margin-left:-30px;pointer-events:none;z-index:6;background:linear-gradient(90deg,#0000,#00000026 46%,#0000004d 50%,#00000026 54%,#0000)}
+.grampo{position:absolute;left:50%;width:4px;height:5%;margin-left:-2px;z-index:7;border-radius:2px;background:linear-gradient(90deg,#9aa3ad,#eef2f6,#9aa3ad);box-shadow:0 1px 2px #0005}
+.grampo.a{top:24%}.grampo.b{bottom:24%}
+/* dentro do livro tudo encolhe junto com a página */
+.livro .pg{container-type:inline-size}
+.livro .pg h3.tt{font-size:clamp(14px,7.4cqi,40px)}
+.livro .pg.t-comunidades h3.tt,.livro .pg.t-plataformas h3.tt{font-size:clamp(12px,4.8cqi,26px)}
+.livro .pg .grade{gap:4cqi 5%;padding:1cqi 2%}
+.livro .pg .ahead{margin-bottom:2cqi}
+.livro .pg .ahead .pr{font-size:clamp(12px,2.4cqi,13px);margin-top:1.4cqi}
+.livro .vaga{border-width:2px}
+.livro .vaga .nv{font-size:clamp(14px,6cqi,34px)}
+.livro .fig .art{font-size:clamp(16px,8cqi,48px)}
+.livro .slot .nm{font-size:clamp(12px,2.2cqi,12px)}
+.livro .premio{font-size:clamp(12px,2.5cqi,14px);margin-top:3cqi}
+.livro .premio b{font-size:clamp(12px,3cqi,17px)}
+.livro .pg.fim{display:grid;place-items:center;text-align:center;font:400 clamp(14px,5cqi,28px)/1.3 "Lilita One",sans-serif;color:#3d73b5}
+/* em telas pequenas o livro fica miúdo: o que não cabe some (o número da vaga e a figurinha continuam) */
+@container (max-width:300px){.livro .fig .rar,.livro .slot .nm,.livro .pg .ahead .pr{display:none}}
+/* folha molinha: tiras encadeadas que dobram em sequência */
+.mola{position:absolute;top:0;bottom:0;width:50%;z-index:8;transform-style:preserve-3d;pointer-events:none}
+.mola.prox{left:50%}.mola.ant{left:0}
+.tira{position:absolute;top:0;bottom:0;transform-style:preserve-3d}
+.mola.prox .tira{transform-origin:left center}.mola.ant .tira{transform-origin:right center}
+.tira>.cara{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.tira>.cara.v{transform:rotateY(180deg)}
+.tira>.cara>.pgw{position:absolute;top:0;bottom:0}
+.tira>.cara>.pgw>.pg{height:100%;border-radius:0}
+.tira>.cara>i{position:absolute;inset:0;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.fig.foil .art::after{animation:none}.fig{transition:none}}
+@media(max-width:720px){
+  .album{padding:0}
+  .album .page.pg{padding:18px 14px 14px}
+  .pg .grade{gap:14px 4%;padding:0}
+  .pg .ahead{flex-direction:column}
+  .a-bts{width:100%}.a-bts .about{flex:1;justify-content:center}
+  .fig .rar{display:none}
+}
+/* no livro a página ocupa a altura toda: vagas distribuídas e o "Complete…" no pé, como no papel */
+.livro .pg{display:flex;flex-direction:column}
+.livro .pg .grade{flex:1;align-content:space-evenly;min-height:0}
+.livro .pg .premio{margin:2cqi 0 4cqi}
+:root[data-theme="dark"] .pg .about.exp{background:linear-gradient(180deg,#ffd84a,#f2b10a);color:#3a2a00;box-shadow:0 0 0 1px #c98f00,0 3px 8px #c98f0040}

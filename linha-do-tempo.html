@@ -429,7 +429,7 @@ body.ep-xp .lt-top small{color:#fff}
 </main>
 
 <script src="common.js?v=20261125d"></script>
-<script src="data.js?v=20261125b"></script>
+<script src="data.js?v=20261127b"></script>
 <script src="player.js?v=20261125b"></script>
 <script src="viewer.js?v=20261125b"></script>
 <script src="alertas.js?v=20261125b"></script>
@@ -468,7 +468,7 @@ const DETALHE={
  "2008":["✨ Windows Vista com vidro","Funk do Créu · Caetano: como você é burro · Orkut com tema rosa"],
  "2009":["🐦 Trending topics","Stefhany do Crossfox · Twitter chega forte · Iaririarai, dorgas mano"],
  "2010":["📯 Vuuuuuuuuuu","Copa da África · Cala Boca Galvão · Restart e Avassaladores"],
- "2011":["👍 Curtir","Ai se eu te pego · Mamilos polêmicos · Facebook passa a bombar"],
+ "2011":["👉 Cutucar","Ai se eu te pego · Mamilos polêmicos · Facebook passa a bombar"],
  "2012":["⏳ Contagem para o fim do mundo: 21/12/2012","Para Nossa Alegria · Grávida de Taubaté · Gina Indelicada · Fim do mundo?"],
  "2013":["❓ Você tem 5 perguntas anônimas","Junho de 2013 · Rei do Camarote · Ave Maria, doido!"],
  "2014":["⚽ Brasil 1 x 7 Alemanha","Copa no Brasil · Taca-le pau, Marcos! · Eita, Giovana!"],
@@ -479,7 +479,7 @@ const DETALHE={
  "2019":["🎧 Áudio de 2 minutos","Panificadora Alfa · Joelma triste e feliz · Galo cego"],
  "2020":["🏠 #FiqueEmCasa","Live do Bruno e Marrone · Vira-lata caramelo na nota de 200 · Uma sopa pá nóis"],
  "2021":["🪙 O Kwai pagando para você assistir vídeo","Pior que é · Um gnomo estava andando · Tô cagado de fome · Kwai paga para assistir"],
- "2022":["🐤 Todo mundo foi pro Koo (e a piada com o nome veio junto)","Salada da Dona Eleni · Leandro, o cachorro · Tubarão te amo · Koo, o novo Twitter · Copa no Catar"],
+ "2022":["🐤 Todo mundo queria entrar no Koo um do outro","Salada da Dona Eleni · Leandro, o cachorro · Tubarão te amo · Koo, o novo Twitter · Copa no Catar"],
  "2023":["🔵 indo ali","Não gostei, amei · Ô Denise, sai da live · Ai, Zé da Manga"],
  "2024":["🌭 Calma, Calabreso!","Que show da Xuxa é esse? · Luva de horror cósmico · X bloqueado no Brasil: todo mundo no Bluesky 🦋"],
  "2025":["🤖 feito por IA","Marisa Maiô · Morango do amor · Passinho do Jamal"],
@@ -492,7 +492,7 @@ const ALL=MEMES.slice();
 const doAno=k=>ALL.filter(m=>yKey(m.y)===k);
 const foto=m=>m.img?m.img:m.yt?`https://i.ytimg.com/vi/${m.yt}/mqdefault.jpg`:"";
 const dataTxt=m=>{const d=m.date?new Date(m.date+"T12:00:00"):null;if(!d||isNaN(d))return String(m.y);return d.getDate()===1?`${MES[d.getMonth()][0].toUpperCase()+MES[d.getMonth()].slice(1)} de ${d.getFullYear()}`:`${d.getDate()} de ${MES[d.getMonth()]} de ${d.getFullYear()}`};
-const rodape={"95":()=>"🔗 Adicionar aos Favoritos · Assinar livro de visitas","xp":()=>"📎 FW: FW: olha isso kkkk","ork":m=>`💬 ${1+m.id.length%9} scraps · ⭐ fã`,"msn":()=>"🦋 compartilhar no MSN","fb":()=>"Curtir · Comentar · Compartilhar","zap":m=>`${String(8+m.id.length%12).padStart(2,"0")}:${String(m.id.length*7%60).padStart(2,"0")} ✔✔`,"ig":m=>`♥ ${fmt(m.saves||100)} curtidas`,"tt":m=>`♥ ${short(Math.round((m.views||1000)/3))} · 💬 ${short(m.saves||100)} · ↗ compartilhar`,"flog":m=>`📖 livro de visitas (${1+m.id.length%14}) · ✚ adicionar aos flogs favoritos`,"tw":m=>`há ${1+m.id.length%11} horas via web · ↩ Responder · ⟲ Retweetar · ★ Favoritar`,"ask":m=>`👍 ${short(m.saves||100)} curtidas · respondida há ${1+m.id.length%9} horas`,"vine":m=>`🔁 ${short((m.views||1000)*12)} loops · 💚 ${short(m.saves||100)} · ⟲ revine`,"snap":m=>`⏱ 10s · 👀 visto por ${short(m.views||1000)} · some em 24h`,"kwai":m=>`🪙 ganhe moedas assistindo · ♥ ${short(m.saves||100)} · ↗ ${short(Math.round((m.views||1000)/9))}`,"bsky":m=>`💬 ${short(Math.round((m.saves||100)/7))} · 🔁 ${short(Math.round((m.saves||100)/2))} · ♡ ${short(m.saves||100)}`,"koo":m=>`🐤 ${1+m.id.length%30} reKoos · 💛 ${short(m.saves||100)} · todo mundo achou o nome engraçado`};
+const rodape={"95":()=>"🔗 Adicionar aos Favoritos · Assinar livro de visitas","xp":()=>"📎 FW: FW: olha isso kkkk","ork":m=>`💬 ${1+m.id.length%9} scraps · ⭐ fã`,"msn":()=>"🦋 compartilhar no MSN","fb":()=>(ST.ano==="2011"?"Cutucar · Comentar · Compartilhar":"Curtir · Comentar · Compartilhar"),"zap":m=>`${String(8+m.id.length%12).padStart(2,"0")}:${String(m.id.length*7%60).padStart(2,"0")} ✔✔`,"ig":m=>`♥ ${fmt(m.saves||100)} curtidas`,"tt":m=>`♥ ${short(Math.round((m.views||1000)/3))} · 💬 ${short(m.saves||100)} · ↗ compartilhar`,"flog":m=>`📖 livro de visitas (${1+m.id.length%14}) · ✚ adicionar aos flogs favoritos`,"tw":m=>`há ${1+m.id.length%11} horas via web · ↩ Responder · ⟲ Retweetar · ★ Favoritar`,"ask":m=>`👍 ${short(m.saves||100)} curtidas · respondida há ${1+m.id.length%9} horas`,"vine":m=>`🔁 ${short((m.views||1000)*12)} loops · 💚 ${short(m.saves||100)} · ⟲ revine`,"snap":m=>`⏱ 10s · 👀 visto por ${short(m.views||1000)} · some em 24h`,"kwai":m=>`🪙 ganhe moedas assistindo · ♥ ${short(m.saves||100)} · ↗ ${short(Math.round((m.views||1000)/9))}`,"bsky":m=>`💬 ${short(Math.round((m.saves||100)/7))} · 🔁 ${short(Math.round((m.saves||100)/2))} · ♡ ${short(m.saves||100)}`,"koo":m=>`🐤 ${1+m.id.length%30} reKoos · 💛 ${short(m.saves||100)} · todo mundo achou o nome engraçado`};
 
 const COR={"95":"#00a3a3","xp":"#2a6bff","ork":"#e3007a","msn":"#4caf2a","fb":"#3b5998","zap":"#25d366","ig":"#dc2743","tt":"#fe2c55","flog":"#8cc63f","tw":"#33ccff","ask":"#2ea8d6","vine":"#00a478","snap":"#e6d800","kwai":"#ff6a00","bsky":"#0a7aff","koo":"#e0b400"};
 function anos(){

@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import vm from 'node:vm';
 import { criarPoolDoAmbiente, migrar } from '../migrate.js';
+import { semearMemepedia } from '../lib/memepedia-acervo.js';
 
 const aqui = dirname(fileURLToPath(import.meta.url));
 const arg = process.argv.find((a) => a.startsWith('--data='));
@@ -191,5 +192,6 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   try {
     await migrar(pool); // garante o esquema antes de carregar
     await carregarAcervo(pool);
+    await semearMemepedia(pool);
   } catch (e) { console.error(e.message); process.exitCode = 1; } finally { await pool.end(); }
 }

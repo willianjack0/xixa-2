@@ -1,4 +1,4 @@
-// Perfil: grade de visuais com contador, Facebook sem roles falsos, acessibilidade do diálogo, fontes e contraste nos 15 visuais.
+// Perfil: grade de visuais com contador, Facebook sem roles falsos, acessibilidade do diálogo, fontes e contraste nos 13 visuais.
 // Roda com arquivo explícito: node --test tests/front-perfil-grade-facebook.test.js (precisa do Playwright; sem ele os testes são pulados).
 const test = require("node:test");
 const assert = require("node:assert");
@@ -92,24 +92,24 @@ async function contrastes(page, raiz = "#pf") {
   }, raiz);
 }
 
-const TODOS = ["homepage", "icq", "orkut", "fotolog", "msn", "twitter", "facebook", "ask", "whatsapp", "vine", "snapchat", "instagram", "tiktok", "kwai", "bluesky"];
+const TODOS = ["homepage", "icq", "orkut", "fotolog", "msn", "twitter", "facebook", "ask", "whatsapp", "vine", "snapchat", "instagram", "tiktok"];
 const VPS = [{ width: 390, height: 844 }, { width: 360, height: 740 }, { width: 1280, height: 900 }];
 const REC = [{ id: 1, texto: "oi, que perfil legal", em: "2026-11-20T10:00:00Z", autor: { apelido: "Caio", avatar_gato: GATO, avatar_url: null }, pode_apagar: false }];
 
 for (const vp of VPS) {
-  test(`grade de visuais ${vp.width}px: contador Visual N de 15 acompanha a escolha, atual rolado para a vista, miniaturas uniformes`, opts, async () => {
-    const { ctx, page, erros } = await abrir("bluesky", vp);
+  test(`grade de visuais ${vp.width}px: contador Visual N de 13 acompanha a escolha, atual rolado para a vista, miniaturas uniformes`, opts, async () => {
+    const { ctx, page, erros } = await abrir("tiktok", vp);
     await page.click("[data-ed=visual]");
     await page.waitForSelector("#dlg[open]");
-    assert.strictEqual(await page.$eval("#laysN", (e) => e.textContent), "Visual 15 de 15");
-    assert.ok(await page.$eval("#lays input:checked", (i) => { const l = i.closest("label").getBoundingClientRect(), c = document.getElementById("dlgCorpo").getBoundingClientRect(); return l.top >= c.top - 1 && l.bottom <= c.bottom + 1; }), "o 15º (último) já abre à vista");
+    assert.strictEqual(await page.$eval("#laysN", (e) => e.textContent), "Visual 13 de 13");
+    assert.ok(await page.$eval("#lays input:checked", (i) => { const l = i.closest("label").getBoundingClientRect(), c = document.getElementById("dlgCorpo").getBoundingClientRect(); return l.top >= c.top - 1 && l.bottom <= c.bottom + 1; }), "o 13º (último) já abre à vista");
     const cols = await page.$eval("#lays", (e) => getComputedStyle(e).gridTemplateColumns.split(" ").length);
     assert.strictEqual(cols, vp.width <= 520 ? 2 : 3, "colunas");
     assert.strictEqual(await page.$$eval("#lays .mini", (l) => new Set(l.map((x) => Math.round(x.getBoundingClientRect().height))).size), 1, "miniaturas com a mesma altura");
     await page.keyboard.press("ArrowLeft");
-    assert.strictEqual(await page.$eval("#laysN", (e) => e.textContent), "Visual 14 de 15");
+    assert.strictEqual(await page.$eval("#laysN", (e) => e.textContent), "Visual 12 de 13");
     await page.click("#lays label.l-orkut");
-    assert.strictEqual(await page.$eval("#laysN", (e) => e.textContent), "Visual 3 de 15");
+    assert.strictEqual(await page.$eval("#laysN", (e) => e.textContent), "Visual 3 de 13");
     assert.match(await page.$eval("#favN", (e) => e.textContent), /^14 cartas$/);
     assert.deepStrictEqual(erros, []);
     await ctx.close();
@@ -144,7 +144,7 @@ test("diálogo: aria-modal, padding próprio, radiogroups nomeados e Tab real co
 });
 
 for (const vp of VPS) {
-  test(`perfil nos 15 visuais ${vp.width}px: sem overflow, sem erro de console, texto de leitura >= 12px e contraste >= 4,5:1`, opts, async () => {
+  test(`perfil nos 13 visuais ${vp.width}px: sem overflow, sem erro de console, texto de leitura >= 12px e contraste >= 4,5:1`, opts, async () => {
     for (const layout of TODOS) {
       const { ctx, page, erros } = await abrir(layout, vp, { recados: REC });
       await page.waitForSelector(".pf [class]");

@@ -1,4 +1,4 @@
-// Perfil (PR #50 integrado): lápis de edição e Copiar link nos 15 visuais, por teclado e toque, 44px, aria-label e aria-live.
+// Perfil (PR #50 integrado): lápis de edição e Copiar link nos 13 visuais, por teclado e toque, 44px, aria-label e aria-live.
 // Roda com arquivo explícito: node --test tests/front-perfil-lapis.test.js (precisa do Playwright; sem ele os testes são pulados).
 const test = require("node:test");
 const assert = require("node:assert");
@@ -94,13 +94,13 @@ async function contrastes(page, raiz = "#pf") {
   }, raiz);
 }
 
-const TODOS = ["homepage", "icq", "orkut", "fotolog", "msn", "twitter", "facebook", "ask", "whatsapp", "vine", "snapchat", "instagram", "tiktok", "kwai", "bluesky"];
+const TODOS = ["homepage", "icq", "orkut", "fotolog", "msn", "twitter", "facebook", "ask", "whatsapp", "vine", "snapchat", "instagram", "tiktok"];
 const VPS = [{ width: 390, height: 844 }, { width: 360, height: 740 }, { width: 1280, height: 900 }];
 const REC = [{ id: 1, texto: "oi, que perfil legal", em: "2026-11-20T10:00:00Z", autor: { apelido: "Caio", avatar_gato: GATO, avatar_url: null }, pode_apagar: false }];
 
 for (const vp of VPS) {
   for (const tema of ["light", "dark"]) {
-    test(`15 visuais ${vp.width}px (${tema}): lápis e copiar link presentes, 44px, aria-label, sem overflow e sem erro de console`, opts, async () => {
+    test(`13 visuais ${vp.width}px (${tema}): lápis e copiar link presentes, 44px, aria-label, sem overflow e sem erro de console`, opts, async () => {
       for (const layout of TODOS) {
         const { ctx, page, erros } = await abrir(layout, vp, { recados: REC, tema });
         await page.waitForSelector(".pf-tools");
@@ -194,7 +194,7 @@ test("copiar link sem a API de área de transferência: usa execCommand de reser
 
 // ---- ajustes do Vigia-PR: contraste dos botões (normal e "Link copiado!"), foco depois de salvar, anúncio na falha ----
 for (const tema of ["light", "dark"]) {
-  test(`contraste >= 4,5:1 dos botões (.pf-tb, normal e "Link copiado!") e do lápis nos 15 visuais (${tema})`, opts, async () => {
+  test(`contraste >= 4,5:1 dos botões (.pf-tb, normal e "Link copiado!") e do lápis nos 13 visuais (${tema})`, opts, async () => {
     for (const layout of TODOS) {
       const { ctx, page } = await abrir(layout, VPS[0], { recados: REC, tema });
       await ctx.grantPermissions(["clipboard-read", "clipboard-write"], { origin: base });

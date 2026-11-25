@@ -75,7 +75,7 @@ function criarApi(over = {}) {
       const chave = `${m} ${p}`;
       st.log.push(chave);
       if (p === "/api/eu" && st.euStatus !== 200) return json(route, st.euStatus, { erro: "falhou" });
-      if (p === "/api/eu") return json(route, 200, { usuario: { id: 1, apelido: "teste", avatar_gato: null, avatar_url: null }, patente: st.patente, proxima_patente: st.proxima, moedas: st.moedas, xp: st.xp, csrf: "tok" });
+      if (p === "/api/eu") return json(route, 200, { usuario: { id: 1, apelido: "teste", avatar_gato: null, avatar_url: null, perfil_layout: st.layout || "orkut" }, patente: st.patente, proxima_patente: st.proxima, moedas: st.moedas, xp: st.xp, csrf: "tok" });
       if (p === "/api/carteira") return st.carteiraStatus === 200 ? json(route, 200, carteira()) : json(route, st.carteiraStatus, { erro: "não autenticado" });
       if (p === "/api/album") return json(route, 200, album());
       if (p === "/api/visita") return json(route, 200, { dia: "2026-11-19", primeira_visita_do_dia: true, xp_ganho: 10, pacotes_ganhos: [], carteira: { xp: st.xp, moedas: st.moedas } });
@@ -96,6 +96,7 @@ function criarApi(over = {}) {
         Object.keys(st.qtd).forEach((k) => { st.qtd[k] = 1; });
         return json(route, 200, { convertidas: 3, cartas_afetadas: 2, moedas_ganhas: ganhas, carteira: { xp: st.xp, moedas: st.moedas } });
       }
+      if (p === "/api/publicacoes" && m === "POST") { st.corpoPublicar = JSON.parse(req.postData() || "{}"); return json(route, 201, { id: "f1", tipo: "figurinha", em: "2026-11-25T10:00:00Z", legenda: st.corpoPublicar.legenda || null, carta: { id: st.corpoPublicar.carta_id }, pode_apagar: true }); }
       if (p === "/api/eventos") return json(route, 202, { ok: true });
       return json(route, 404, { erro: "não mockado" });
     });
@@ -299,5 +300,22 @@ test("402 ao abrir pacote não dispara toast genérico por cima", opts, async ()
   await page.waitForFunction(() => /Moedas insuficientes/.test(document.getElementById("toast")?.textContent || ""));
   await page.waitForTimeout(400);
   assert.match(await page.textContent("#toast"), /Moedas insuficientes/);
+  await ctx.close();
+});
+
+test("compartilhar figurinha: vira publicação no perfil, no jeito da rede escolhida", opts, async () => {
+  const id = `${COLECOES[0].id}-0`;
+  const { ctx, page, api, erros } = await abrirPagina("/album.html", { pacotes: [], qtd: { [id]: 1 }, layout: "twitter" });
+  await esperarEconomia(page);
+  await page.evaluate((id) => pick(id), id);
+  await page.click("text=COMPARTILHAR");
+  await page.waitForSelector("#shrOk");
+  assert.match(await page.$eval("#mbox", (e) => e.innerText), /um tweet/);
+  for (const sel of ["#shrOk", ".shr-bt .ghost2"]) assert.ok((await page.$eval(sel, (e) => e.getBoundingClientRect().height)) >= 44, sel + " >= 44px");
+  await page.fill("#shrL", "  saiu!!  ");
+  await page.click("#shrOk");
+  await page.waitForSelector('.shr-bt a[href="perfil.html?u=teste"]');
+  assert.deepStrictEqual(api.st.corpoPublicar, { carta_id: id, legenda: "saiu!!" });
+  assert.deepStrictEqual(erros, []);
   await ctx.close();
 });

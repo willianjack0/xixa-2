@@ -68,7 +68,7 @@ async function abrir(layout, vp, { recados = [] } = {}) {
   return { ctx, page, st, erros };
 }
 const VPS = [{ width: 390, height: 844 }, { width: 360, height: 740 }, { width: 1280, height: 900 }];
-const VISUAIS = ["orkut", "tiktok", "whatsapp", "facebook", "instagram", "msn", "kwai", "homepage"];
+const VISUAIS = ["orkut", "tiktok", "whatsapp", "facebook", "instagram", "msn", "snapchat", "homepage"];
 
 for (const vp of VPS) {
   for (const layout of VISUAIS) {
@@ -90,7 +90,7 @@ for (const vp of VPS) {
       // visual atual: marcado, com foco e à vista dentro do corpo rolável do diálogo
       const foco = await page.evaluate(() => { const a = document.activeElement; return a && a.name === "lay" && a.checked && a.value; });
       assert.strictEqual(foco, layout, "foco inicial no visual atual");
-      assert.strictEqual(await page.$eval("#laysN", (e) => e.textContent), `Visual ${Object.keys(await page.evaluate(() => LAYOUTS)).indexOf(layout) + 1} de 15`, "contador");
+      assert.strictEqual(await page.$eval("#laysN", (e) => e.textContent), `Visual ${Object.keys(await page.evaluate(() => LAYOUTS)).indexOf(layout) + 1} de 13`, "contador");
       if (vp.width <= 520) {
         assert.strictEqual(await page.$eval("#lays", (e) => getComputedStyle(e).display), "grid", "grade");
         const lefts = await page.$$eval("#lays .pf-lay", (l) => new Set(l.map((x) => Math.round(x.getBoundingClientRect().left))).size);
@@ -135,12 +135,12 @@ for (const vp of VPS) {
 test("trocar o visual na grade mobile atualiza o contador e salva o visual novo", opts, async () => {
   const { ctx, page, st, erros } = await abrir("orkut", VPS[0]);
   await page.click("[data-ed=visual]");
-  await page.locator('#lays input[value="bluesky"]').evaluate((i) => i.closest("label").scrollIntoView({ block: "center" }));
-  await page.click('#lays label.l-bluesky');
-  assert.strictEqual(await page.$eval("#laysN", (e) => e.textContent), "Visual 15 de 15");
+  await page.locator('#lays input[value="tiktok"]').evaluate((i) => i.closest("label").scrollIntoView({ block: "center" }));
+  await page.click('#lays label.l-tiktok');
+  assert.strictEqual(await page.$eval("#laysN", (e) => e.textContent), "Visual 13 de 13");
   await page.click("#btSalvar");
-  await page.waitForSelector(".pf-bluesky");
-  assert.strictEqual(st.patches.at(-1).perfil_layout, "bluesky");
+  await page.waitForSelector(".pf-tiktok");
+  assert.strictEqual(st.patches.at(-1).perfil_layout, "tiktok");
   assert.deepStrictEqual(erros, []);
   await ctx.close();
 });

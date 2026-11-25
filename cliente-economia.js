@@ -98,6 +98,8 @@
     recados: function (apelido, o) { return pedir('GET', '/api/perfil/' + encodeURIComponent(apelido) + '/recados', undefined, o); },
     recadar: function (apelido, texto, o) { return pedir('POST', '/api/perfil/' + encodeURIComponent(apelido) + '/recados', { texto: texto }, o); },
     apagarRecado: function (id, o) { return pedir('DELETE', '/api/recados/' + encodeURIComponent(id), undefined, o); },
+    publicar: function (p, o) { return pedir('POST', '/api/publicacoes', p, o); },
+    apagarPublicacao: function (id, o) { return pedir('DELETE', '/api/publicacoes/' + encodeURIComponent(id), undefined, o); },
     ranking: function (metrica, limite, o) {
       return pedir('GET', '/api/ranking?metrica=' + encodeURIComponent(metrica || 'xp') + '&limite=' + encodeURIComponent(limite || 50), undefined, o);
     }

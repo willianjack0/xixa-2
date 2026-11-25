@@ -82,6 +82,18 @@ a.card:hover{border-color:var(--brand)}
 .spin{display:inline-block;width:16px;height:16px;border:2px solid var(--line2);border-top-color:var(--brand);border-radius:50%;vertical-align:-3px;margin-right:8px;animation:gira .8s linear infinite}
 @keyframes gira{to{transform:rotate(360deg)}}
 
+/* MCP: chaves e llms.txt */
+.form-chave{display:flex;flex-direction:column;gap:14px;max-width:640px}
+.escopos{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.escopos legend{font-size:13px;font-weight:700;padding:0 6px;color:var(--mut-strong)}
+.opc{display:flex;gap:10px;align-items:flex-start;min-height:44px;padding:8px 4px;cursor:pointer;font-size:14px}
+.opc input{flex:none;margin-top:2px}
+.opc .dica{font-size:13px;color:var(--mut-strong)}
+.segredo{border-color:var(--ok);margin-top:14px;max-width:720px}
+.chave-linha{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chave-linha input{flex:1 1 260px;min-width:0}
+pre.llms{white-space:pre-wrap;overflow-wrap:anywhere;max-height:440px;overflow:auto;background:var(--panel);border:1px solid var(--line2);border-radius:12px;padding:12px 14px;font:13px/1.5 ui-monospace,Consolas,monospace;margin:10px 0}
+
 /* log */
 .det{list-style:none;font-size:13px;display:flex;flex-direction:column;gap:2px;margin-top:4px}
 .det .de{text-decoration:line-through;color:var(--mut-strong)}

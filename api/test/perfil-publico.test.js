@@ -111,3 +111,45 @@ test('recados: autor banido some da lista; limite de 10 por 10 min', { skip }, a
   await q('UPDATE usuarios SET banido = true WHERE id = $1', [chato.id]);
   assert.equal((await GET(`/api/perfil/${dono.u}/recados`, dono.u)).json.itens.length, 0);
 });
+
+test('visuais kwai e bluesky saíram (422); a migração 018 leva quem usava para tiktok e twitter', { skip }, async () => {
+  const a = await novo();
+  for (const l of ['kwai', 'bluesky']) {
+    const r = await PATCH('/api/eu', { perfil_layout: l }, a.u);
+    assert.equal(r.status, 422); assert.equal(r.json.campo, 'perfil_layout');
+  }
+  for (const l of ['tiktok', 'twitter', 'instagram', 'snapchat']) assert.equal((await PATCH('/api/eu', { perfil_layout: l }, a.u)).status, 200);
+  // o CHECK do banco também recusa
+  await assert.rejects(q("UPDATE usuarios SET perfil_layout = 'kwai' WHERE id = $1", [a.id]));
+});
+
+test('publicações: compartilhar figurinha que tem (sobe de novo sem duplicar), legenda, apagar só o dono, memes aprovados', { skip }, async () => {
+  const a = await novo(), b = await novo();
+  const [c1, c2] = await darCartas(a.id, 2);
+  const nao = (await q('SELECT id FROM cartas WHERE id <> ALL($1) ORDER BY id DESC LIMIT 1', [[c1, c2]]))[0].id;
+  assert.equal((await s.post('/api/publicacoes', { carta_id: c1 })).status, 401);
+  let r = await POST('/api/publicacoes', { carta_id: nao }, a.u); assert.equal(r.status, 422);
+  r = await POST('/api/publicacoes', { carta_id: '../x' }, a.u); assert.equal(r.status, 422);
+  r = await POST('/api/publicacoes', { carta_id: c1, legenda: 'a'.repeat(141) }, a.u); assert.equal(r.status, 422);
+  r = await POST('/api/publicacoes', { carta_id: c1, legenda: '  olha  essa\n' }, a.u);
+  assert.equal(r.status, 201); assert.equal(r.json.tipo, 'figurinha'); assert.equal(r.json.carta.id, c1); assert.equal(r.json.legenda, 'olha essa');
+  const id1 = r.json.id;
+  assert.equal((await POST('/api/publicacoes', { carta_id: c2 }, a.u)).status, 201);
+  r = await POST('/api/publicacoes', { carta_id: c1 }, a.u); assert.equal(r.status, 201); assert.equal(r.json.id, id1, 'mesma publicação');
+  // meme enviado e aprovado vira publicação; pendente não
+  const meme = (await q('SELECT id, titulo FROM memes ORDER BY id LIMIT 1'))[0];
+  await q("INSERT INTO envios (usuario_id, titulo, ano, url, status, meme_id, decidido_em) VALUES ($1, 'Meu meme', 2012, 'https://x.y/1', 'aprovado', $2, now() - interval '1 day')", [a.id, meme.id]);
+  await q("INSERT INTO envios (usuario_id, titulo, ano, url, status) VALUES ($1, 'Pendente', 2013, 'https://x.y/2', 'aberto')", [a.id]);
+  let p = (await GET('/api/perfil/' + a.u, b.u)).json.publicacoes;
+  assert.deepEqual(p.map((x) => x.tipo), ['figurinha', 'figurinha', 'meme']);
+  assert.equal(p[0].carta.id, c1, 'compartilhar de novo sobe para o topo');
+  assert.equal(p[2].meme.id, meme.id); assert.equal(p[2].meme.titulo, meme.titulo);
+  assert.ok(p.every((x) => x.pode_apagar === false), 'visitante não apaga');
+  assert.equal((await DEL('/api/publicacoes/' + id1, b.u)).status, 404, 'outro usuário não apaga');
+  assert.equal((await DEL('/api/publicacoes/xyz', a.u)).status, 404);
+  p = (await GET('/api/perfil/' + a.u, a.u)).json.publicacoes;
+  assert.ok(p.filter((x) => x.tipo === 'figurinha').every((x) => x.pode_apagar === true));
+  assert.equal((await DEL('/api/publicacoes/' + id1, a.u)).status, 200);
+  p = (await GET('/api/perfil/' + a.u, b.u)).json.publicacoes;
+  assert.equal(p.length, 2); assert.ok(!p.some((x) => x.id === id1));
+});

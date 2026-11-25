@@ -1,4 +1,4 @@
-// Perfil, redes modernas (vine, snapchat, instagram, tiktok, kwai, bluesky): um detalhe típico em cada, XP na cor da patente, reduced-motion.
+// Perfil, redes modernas (vine, snapchat, instagram, tiktok): um detalhe típico em cada, XP na cor da patente, reduced-motion.
 // Roda com arquivo explícito: node --test tests/front-perfil-modernos.test.js (precisa do Playwright; sem ele os testes são pulados).
 const test = require("node:test");
 const assert = require("node:assert");
@@ -93,16 +93,14 @@ async function contrastes(page, raiz = "#pf") {
   }, raiz);
 }
 
-const MODERNOS = ["vine", "snapchat", "instagram", "tiktok", "kwai", "bluesky"];
+const MODERNOS = ["vine", "snapchat", "instagram", "tiktok"];
 const VPS = [{ width: 390, height: 844 }, { width: 360, height: 740 }, { width: 1280, height: 900 }];
 const REC = [{ id: 1, texto: "oi, que perfil legal", em: "2026-11-20T10:00:00Z", autor: { apelido: "Caio", avatar_gato: GATO, avatar_url: null }, pode_apagar: false }];
 // copy exata de cada detalhe (a mesma da descrição do PR); membro_desde = 2026-11-01 e 14 cartas
 const COPY = {
   vine: "↻ 6 segundos em loop. Pode repetir à vontade.",
   instagram: "♥ Curtido por Caio e outras 43 pessoas que só olharam",
-  tiktok: "♫ som original · Ana · com chiado de conexão discada",
-  kwai: "🪙 Assista e ganhe moedas! Aqui o prêmio é a nostalgia.",
-  bluesky: "@ana.nostalgia.social ✔ domínio verificado, é gato mesmo"
+  tiktok: "♫ som original · Ana · com chiado de conexão discada"
 };
 const norm = (t) => t.replace(/\s+/g, " ").trim();
 
@@ -131,7 +129,7 @@ for (const layout of MODERNOS) {
 }
 
 test("animações dos detalhes: ligadas por padrão e desligadas com prefers-reduced-motion", opts, async () => {
-  const anim = { vine: ".loop i", snapchat: ".chama", tiktok: ".trilho", kwai: ".moeda" };
+  const anim = { vine: ".loop i", snapchat: ".chama", tiktok: ".trilho" };
   for (const [layout, sel] of Object.entries(anim)) {
     const { ctx, page } = await abrir(layout, VPS[0], { recados: REC });
     await page.waitForSelector(`.pf-${layout} .det`);
@@ -243,9 +241,4 @@ test("vine: a barrinha do loop anima transform (sem layout por quadro) mantendo 
   await ctx.close();
 });
 
-test("bluesky: espaço real entre handle, selo e texto no DOM", opts, async () => {
-  const { ctx, page } = await abrir("bluesky", VPS[0]);
-  await page.waitForSelector(".det-bluesky");
-  assert.strictEqual(await page.$eval(".det-bluesky", (e) => e.textContent), "@ana.nostalgia.social ✔ domínio verificado, é gato mesmo");
-  await ctx.close();
-});
+

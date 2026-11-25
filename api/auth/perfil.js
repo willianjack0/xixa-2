@@ -39,7 +39,7 @@ export function validarApelido(v) {
 }
 
 // visual do perfil público (lista fechada; a mesma do CHECK da migração 015)
-export const LAYOUTS = Object.freeze(['homepage', 'icq', 'orkut', 'fotolog', 'msn', 'twitter', 'facebook', 'ask', 'whatsapp', 'vine', 'snapchat', 'instagram', 'tiktok', 'kwai', 'bluesky']);
+export const LAYOUTS = Object.freeze(['homepage', 'icq', 'orkut', 'fotolog', 'msn', 'twitter', 'facebook', 'ask', 'whatsapp', 'vine', 'snapchat', 'instagram', 'tiktok']);
 const CARTA_ID = /^[a-z0-9_-]{1,60}$/i;
 
 const CAMPOS = ['apelido', 'avatar_gato', 'usar_foto', 'perfil_layout', 'carta_favorita'];

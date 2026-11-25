@@ -7,6 +7,7 @@ import { criarAutenticador } from './auth/autenticador.js';
 import { lerConfigDiscord } from './auth/discord.js';
 import { limparExpiradas } from './auth/sessao.js';
 import { agendarLimpezaEventosIp } from './lib/limpeza.js';
+import { semearMemepedia } from './lib/memepedia-acervo.js';
 
 // falha ANTES de tocar no banco se o stub estiver ligado fora da allowlist (ver auth-stub.js)
 const stub = criarAutenticadorStub();
@@ -15,6 +16,8 @@ const pool = criarPoolDoAmbiente();
 
 // esquema do banco: migrações numeradas em api/migrations/ (executor em migrate.js)
 await migrar(pool);
+// Memepédia: textos do acervo (pesquisados, com fonte) que ainda não foram publicados; nunca sobrescreve a comunidade
+await semearMemepedia(pool);
 
 // login com Discord: segredos só por arquivo (DISCORD_CLIENT_ID_FILE, DISCORD_CLIENT_SECRET_FILE, DISCORD_GUILD_ID_FILE)
 const discord = lerConfigDiscord();

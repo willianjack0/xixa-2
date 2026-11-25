@@ -1,4 +1,4 @@
-// Perfil público (perfil.html) com a API mockada via page.route: 15 visuais (as redes da linha do tempo), recados, edição e menu da conta.
+// Perfil público (perfil.html) com a API mockada via page.route: 13 visuais (as redes da linha do tempo), recados, edição e menu da conta.
 // Roda com arquivo explícito: node --test tests/front-perfil.test.js (precisa do Playwright; sem ele os testes são pulados).
 const test = require("node:test");
 const assert = require("node:assert");
@@ -146,7 +146,7 @@ test("visitar outro perfil (Fotolog): recado escapado, enviar recado com CSRF, s
   await ctx.close();
 });
 
-for (const lay of ["homepage", "icq", "orkut", "fotolog", "msn", "twitter", "facebook", "ask", "whatsapp", "vine", "snapchat", "instagram", "tiktok", "kwai", "bluesky"]) {
+for (const lay of ["homepage", "icq", "orkut", "fotolog", "msn", "twitter", "facebook", "ask", "whatsapp", "vine", "snapchat", "instagram", "tiktok"]) {
   for (const vp of [{ width: 360, height: 780 }, { width: 768, height: 1024 }, { width: 1280, height: 900 }]) {
     test(`visual ${lay} em ${vp.width}px: sem rolagem lateral e alvos de toque ≥ 44px`, opts, async () => {
       const { ctx, page, erros } = await abrir("/perfil.html?u=Beto", { perfis: { ana: { layout: "orkut", gato: GATO, fav: null }, beto: { layout: lay, gato: GATO2, fav: CARTAS[0] } } }, vp);

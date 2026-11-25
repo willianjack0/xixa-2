@@ -217,7 +217,8 @@ const ABAS = [
   { id: "cartas", nome: "Cartas e coleções", papeis: ["admin"], montar: abaCartas },
   { id: "eras", nome: "Eras", papeis: ["admin"], montar: abaEras },
   { id: "comunidade", nome: "Comunidade", papeis: ["admin"], montar: abaComunidade },
-  { id: "log", nome: "Log", papeis: ["admin"], montar: abaLog }
+  { id: "log", nome: "Log", papeis: ["admin"], montar: abaLog },
+  { id: "mcp", nome: "MCP", papeis: ["admin"], montar: abaMcp }
 ];
 
 function painel() {
@@ -490,6 +491,138 @@ function abaLog(p) {
     h("div", { class: "campo larg" }, h("label", { for: idA }, "Ação (ex.: meme.editar)"), acao, h("datalist", { id: idA + "l" }, ACOES.map((a) => h("option", { value: a })))),
     h("div", { class: "campo" }, h("label", { for: idU }, "ID do usuário"), usu, erroU), h("button", { class: "b pri", type: "submit" }, "Filtrar")), box);
   filtrar();
+}
+
+// ---------- MCP: chaves de API e llms.txt ----------
+const ESCOPOS_MCP = [
+  ["ler", "Ler", "Buscar memes, conferir duplicados e listar valores válidos. Não altera nada."],
+  ["escrever", "Escrever", "Criar e editar memes como rascunho oculto, anexar mídias e criar cartas."],
+  ["publicar", "Publicar", "Publicar direto, sem passar pelo painel. Use só em chave de confiança."]
+];
+const ROTULO_ESCOPO = { ler: "Ler", escrever: "Escrever", publicar: "Publicar" };
+const ESTADO_CHAVE = { ativa: ["Ativa", "ok"], expirada: ["Expirada", "warn"], revogada: ["Revogada", "bad"] };
+
+function copiarTexto(texto, ok) {
+  const fim = () => aviso(ok || "Copiado.", "ok");
+  const falha = () => aviso("Não consegui copiar. Selecione o texto e copie à mão.", "erro");
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(fim, falha); else falha();
+}
+
+function linhaChave(c, recarregar) {
+  const [rotEstado, clsEstado] = ESTADO_CHAVE[c.estado] || [c.estado, ""];
+  const revogar = async () => {
+    const r = await confirmar({ titulo: "Revogar a chave?", texto: `A chave "${c.nome}" (ns_mcp_${c.prefixo}…) para de funcionar na hora e não dá para reativar.`, ok: "Revogar", perigo: true });
+    if (!r) return;
+    const x = await api("DELETE", "/api/admin/mcp/chaves/" + c.id);
+    if (x.ok) { aviso("Chave revogada.", "ok"); recarregar(); } else aviso(msgErro(x), "erro");
+  };
+  return h("li", { class: "item" + (c.estado === "ativa" ? "" : " feito") },
+    h("div", { class: "item-h" }, h("h3", null, c.nome), chip(rotEstado, clsEstado), c.minha ? chip("Minha", "info") : null),
+    h("div", { class: "meta" },
+      h("span", { class: "cod" }, "ns_mcp_" + c.prefixo + "…"),
+      h("span", null, "Dono: " + c.dono),
+      h("span", null, "Escopos: " + (c.escopos || []).map((e) => ROTULO_ESCOPO[e] || e).join(", "))),
+    h("div", { class: "meta" },
+      h("span", null, "Criada: " + quando(c.criada_em)),
+      h("span", null, "Expira: " + quando(c.expira_em)),
+      h("span", null, "Último uso: " + (c.ultimo_uso_em ? quando(c.ultimo_uso_em) : "nunca"))),
+    c.estado === "ativa" ? h("div", { class: "acts" }, h("button", { class: "b bad", type: "button", on: { click: revogar } }, "Revogar")) : null);
+}
+
+function abaMcp(p) {
+  const lista = h("div"), segredoBox = h("div");
+  const idN = uid("mn"), idV = uid("mv");
+  const nome = h("input", { id: idN, type: "text", maxLength: 60, autocomplete: "off", required: true, "aria-describedby": idN + "e" });
+  const erroNome = h("p", { class: "erro", id: idN + "e" });
+  const validade = h("select", { id: idV, value: "90" }, [30, 90, 180, 365].map((d) => h("option", { value: String(d) }, d + " dias")));
+  const caixas = {};
+  const escopoCampos = ESCOPOS_MCP.map(([v, rot, dica]) => {
+    const id = uid("me-" + v + "-");
+    const cx = h("input", { id, type: "checkbox", checked: v !== "publicar", disabled: v === "ler" });
+    caixas[v] = cx;
+    return h("label", { class: "opc", for: id }, cx, h("span", null, h("b", null, rot), h("span", { class: "dica" }, " " + dica)));
+  });
+  const geral = h("p", { class: "erro", role: "alert" });
+  const enviar = h("button", { class: "b pri", type: "submit" }, "Criar chave");
+
+  async function criar(e) {
+    e.preventDefault();
+    erroNome.textContent = ""; geral.textContent = ""; nome.removeAttribute("aria-invalid");
+    const n = nome.value.trim();
+    if (!n) { erroNome.textContent = "Dê um nome para reconhecer a chave (ex.: Notebook do Xet)."; nome.setAttribute("aria-invalid", "true"); nome.focus(); return; }
+    enviar.disabled = true;
+    const escopos = ESCOPOS_MCP.map(([v]) => v).filter((v) => v === "ler" || caixas[v].checked);
+    const r = await api("POST", "/api/admin/mcp/chaves", { nome: n, escopos, dias: Number(validade.value) });
+    enviar.disabled = false;
+    if (!r.ok) {
+      const c = r.data && r.data.campos;
+      if (c && c.nome) { erroNome.textContent = c.nome; nome.setAttribute("aria-invalid", "true"); nome.focus(); } else geral.textContent = msgErro(r);
+      return;
+    }
+    nome.value = "";
+    mostrarSegredo(r.data.chave, r.data.item);
+    carregar();
+  }
+
+  function mostrarSegredo(chave, item) {
+    const cmd = 'claude mcp add --transport http naosalvo ' + location.origin + '/mcp --header "Authorization: Bearer ' + chave + '"';
+    const idS = uid("ms");
+    const campo = h("input", { id: idS, class: "cod", type: "text", readOnly: false, value: chave, "aria-label": "Chave criada", spellcheck: "false", autocomplete: "off" });
+    campo.readOnly = true;
+    trocar(segredoBox, h("section", { class: "card segredo", role: "status" },
+      h("h2", null, "Chave criada: copie agora"),
+      h("p", { class: "txt" }, "Esta é a única vez que a chave aparece. Guarde num gerenciador de senhas. Se perder, revogue e crie outra."),
+      h("div", { class: "chave-linha" }, campo, h("button", { class: "b pri", type: "button", on: { click: () => copiarTexto(chave, "Chave copiada.") } }, "Copiar chave")),
+      h("p", { class: "mini" }, `Nome: ${item.nome} · escopos: ${item.escopos.map((e) => ROTULO_ESCOPO[e]).join(", ")} · expira em ${quando(item.expira_em)}`),
+      h("p", { class: "txt" }, "Para conectar o Claude Code:"),
+      h("pre", { class: "llms" }, cmd),
+      h("div", { class: "acts" },
+        h("button", { class: "b", type: "button", on: { click: () => copiarTexto(cmd, "Comando copiado.") } }, "Copiar comando"),
+        h("button", { class: "b", type: "button", on: { click: () => { trocar(segredoBox); nome.focus(); } } }, "Já guardei, fechar"))));
+    campo.focus(); campo.select();
+  }
+
+  async function carregar() {
+    trocar(lista, carregando("Carregando as chaves…"));
+    const r = await api("GET", "/api/admin/mcp/chaves");
+    if (!r.ok) return trocar(lista, erroEstado(msgErro(r), carregar));
+    const itens = r.data.items || [];
+    if (!itens.length) return trocar(lista, vazio("Nenhuma chave criada ainda."));
+    trocar(lista, h("ul", { class: "lista" }, itens.map((c) => linhaChave(c, carregar))));
+  }
+
+  // llms.txt: texto para a IA, com as habilidades e o modo de uso (gerado pelo servidor a partir do registro de ferramentas)
+  const llmsBox = h("div");
+  let llmsTexto = "";
+  async function carregarLlms() {
+    trocar(llmsBox, carregando("Carregando o llms.txt…"));
+    let r;
+    try { r = await fetch("/api/admin/mcp/llms.txt", { credentials: "same-origin" }); } catch (e) { return trocar(llmsBox, erroEstado("Sem conexão com o servidor.", carregarLlms)); }
+    if (!r.ok) return trocar(llmsBox, erroEstado("Não consegui carregar o llms.txt (código " + r.status + ").", carregarLlms));
+    llmsTexto = await r.text();
+    trocar(llmsBox,
+      h("div", { class: "acts" },
+        h("button", { class: "b", type: "button", on: { click: () => copiarTexto(llmsTexto, "llms.txt copiado.") } }, "Copiar"),
+        h("button", { class: "b", type: "button", on: { click: () => {
+          const a = h("a", { href: URL.createObjectURL(new Blob([llmsTexto], { type: "text/plain;charset=utf-8" })), download: "llms.txt" });
+          document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+        } } }, "Baixar llms.txt")),
+      h("pre", { class: "llms", tabindex: "0", "aria-label": "Conteúdo do llms.txt" }, llmsTexto));
+  }
+
+  trocar(p,
+    h("section", { class: "sec" }, h("h2", null, "Criar chave de API"),
+      h("p", { class: "mini" }, "Cada admin cria a sua. A chave age como você: se você deixar de ser admin, ela para de valer. Máximo de 5 chaves ativas por admin."),
+      h("form", { class: "card form-chave", on: { submit: criar }, novalidate: true },
+        h("div", { class: "campo" }, h("label", { for: idN }, "Nome da chave"), nome, erroNome),
+        h("fieldset", { class: "escopos" }, h("legend", null, "O que a chave pode fazer"), escopoCampos),
+        h("div", { class: "campo" }, h("label", { for: idV }, "Validade"), validade),
+        geral, h("div", { class: "acts" }, enviar)),
+      segredoBox),
+    h("section", { class: "sec" }, h("h2", null, "Chaves"), lista),
+    h("section", { class: "sec" }, h("h2", null, "llms.txt: habilidades e uso"),
+      h("p", { class: "mini" }, "Texto para colar no assistente de IA (ou deixar o cliente MCP ler). É gerado a partir das ferramentas do servidor, então acompanha o que está ativo."), llmsBox));
+  carregar(); carregarLlms();
 }
 
 // ---------- Memes ----------

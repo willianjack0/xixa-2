@@ -114,15 +114,19 @@ O perfil que outras pessoas visitam (`perfil.html?u=<apelido>`). Tudo exige logi
 
 | Campo | Tipo | Regra |
 |---|---|---|
-| `perfil_layout` | string | Visual do perfil, as mesmas redes da linha do tempo: `homepage` (anos 90), `icq`, `orkut` (padrão), `fotolog`, `msn`, `twitter`, `facebook`, `ask`, `whatsapp`, `vine`, `snapchat`, `instagram`, `tiktok`, `kwai` ou `bluesky`. Outro valor = `422 { campo: "perfil_layout" }` |
+| `perfil_layout` | string | Visual do perfil, as mesmas redes da linha do tempo: `homepage` (anos 90), `icq`, `orkut` (padrão), `fotolog`, `msn`, `twitter`, `facebook`, `ask`, `whatsapp`, `vine`, `snapchat`, `instagram` ou `tiktok` (`kwai` e `bluesky` saíram na migração 018; quem usava foi para `tiktok` e `twitter`). Outro valor = `422 { campo: "perfil_layout" }` |
 | `carta_favorita` | string \| null | Id da carta em destaque. **Só uma carta que a pessoa tem** (`quantidade > 0`), senão `422 { campo: "carta_favorita" }`. `null` tira a favorita. Se a pessoa reciclar a carta depois, ela some do perfil (conferido na leitura) |
 
 | Rota | Resposta |
 |---|---|
-| `GET /api/perfil/:apelido` | `{ perfil: { apelido, avatar_gato, avatar_url, layout, membro_desde, eh_meu }, patente: { id, nome, cor }, proxima_patente: { nome, faltam } \| null, xp, carta_favorita: carta \| null, album: { total, tenho, colecoes_completas, colecoes: [{ id, nome, icone, cor, total, tenho, completa }], cartas: [carta] }, recados: <quantidade> }`. `carta` = `{ id, colecao_id, numero, nome, emoji, raridade, meme_id }`. Apelido sem diferenciar maiúsculas. **Não vaza** id, moedas, csrf nem banido. Inexistente, banido ou apelido fora da regra = `404` |
+| `GET /api/perfil/:apelido` | `{ perfil: { apelido, avatar_gato, avatar_url, layout, membro_desde, eh_meu }, patente: { id, nome, cor }, proxima_patente: { nome, faltam } \| null, xp, carta_favorita: carta \| null, album: { total, tenho, colecoes_completas, colecoes: [{ id, nome, icone, cor, total, tenho, completa }], cartas: [carta] }, recados: <quantidade>, publicacoes: [publicação] }`. `carta` = `{ id, colecao_id, numero, nome, emoji, raridade, meme_id }`. Apelido sem diferenciar maiúsculas. **Não vaza** id, moedas, csrf nem banido. Inexistente, banido ou apelido fora da regra = `404` |
 | `GET /api/perfil/:apelido/recados` | `{ itens: [{ id, texto, em, autor: { apelido, avatar_gato, avatar_url }, pode_apagar }] }`, os 50 mais recentes primeiro. Recado de autor banido não aparece. `pode_apagar` = você é o dono do perfil ou quem escreveu |
 | `POST /api/perfil/:apelido/recados` (exige `X-CSRF`) | Corpo `{ texto }`: 1 a 300 caracteres depois de limpar (controle e caracteres invisíveis viram espaço, espaços repetidos juntos). `201` com o recado. `422` texto vazio/longo ou recado no próprio perfil; `404` perfil inexistente; `429` mais de 10 recados em 10 min |
 | `DELETE /api/recados/:id` (exige `X-CSRF`) | `200 { ok: true }`. Só o dono do perfil ou o autor; qualquer outro caso (inclusive id inválido) = `404`, para não revelar nada |
+| `POST /api/publicacoes` (exige `X-CSRF`) | Compartilhar figurinha do álbum no próprio perfil. Corpo `{ carta_id, legenda? }` (legenda 1 a 140 caracteres, mesma limpeza do recado; vazia = sem legenda). Só carta que a pessoa tem (`quantidade > 0`), senão `422`. Compartilhar a mesma de novo sobe a publicação (não duplica). `201` com a publicação. `429` mais de 20 em 10 min. Migração 018 |
+| `DELETE /api/publicacoes/:id` (exige `X-CSRF`) | `200 { ok: true }`. Só o dono; qualquer outro caso = `404` |
+
+`publicação` = `{ id, tipo: "figurinha" \| "meme", em, legenda, carta? (figurinha), meme?: { id, titulo, ano, youtube_id, emoji } (meme), pode_apagar }`. Entram as figurinhas compartilhadas e os memes que a pessoa enviou e foram aprovados (`envios.status = 'aprovado'`), os 30 mais recentes primeiro. Só figurinha pode ser apagada, e só pelo dono.
 
 O texto do recado é guardado como texto puro: **o front sempre escapa** antes de mostrar. Os visuais são inspirados em cada rede, sem logos oficiais. A interação é a mesma em todos (recado) e só muda o nome (scrap no Orkut, livro de visitas no Fotolog e na home page, mensagem offline no MSN, menção no Twitter, mural no Facebook, pergunta no Ask.fm, comentário no Instagram/TikTok/Kwai/Vine etc.).
 
