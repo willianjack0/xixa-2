@@ -15,6 +15,7 @@ import adminUsuarios from './routes/admin-usuarios.js';
 import adminAcervo from './routes/admin-acervo.js';
 import envios from './routes/envios.js';
 import adminMcp from './routes/admin-mcp.js';
+import mcp from './routes/mcp.js';
 import economia from './routes/economia.js';
 import authRotas from './routes/auth.js';
 import sobedesce from './routes/sobedesce.js';
@@ -25,6 +26,6 @@ import perfis from './routes/perfis.js';
 export function criarApp({ pool, adminToken = '', ytKey = '', autenticar = null, auth = {} } = {}) {
   const cfgAuth = { discord: null, fetch: globalThis.fetch, cookieSecure: true, origemSite: '', ...auth };
   const router = criarRouter({ pool, adminToken, autenticar, extras: { ytKey, auth: cfgAuth } });
-  for (const modulo of [saude, acervo, contribuidores, votos, feedback, comentarios, links, yt, authRotas, economia, sobedesce, memepedia, perfis, admin, adminUsuarios, adminAcervo, envios, adminMcp]) modulo(router);
+  for (const modulo of [saude, acervo, contribuidores, votos, feedback, comentarios, links, yt, authRotas, economia, sobedesce, memepedia, perfis, admin, adminUsuarios, adminAcervo, envios, adminMcp, mcp]) modulo(router);
   return { router, server: http.createServer((req, res) => router.tratar(req, res)) };
 }

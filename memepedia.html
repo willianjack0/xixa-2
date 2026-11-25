@@ -93,10 +93,10 @@
   <main class="wk-main" id="wm"></main>
 </div>
 
-<script src="common.js?v=20261125d"></script>
+<script src="common.js?v=20261125e"></script>
 <script src="data.js?v=20261127b"></script>
 <script src="player.js?v=20261125b"></script>
-<script src="viewer.js?v=20261125b"></script>
+<script src="viewer.js?v=20261126b"></script>
 <script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("memepedia",{sub:[
@@ -179,6 +179,11 @@ async function enviar(ev,c){ev.preventDefault();const f=ev.target,m=MEMES.find(x
   const texto=f.t.value.trim(),fonte=f.fonte.value.trim(),out=f.querySelector(".msg"),bt=f.querySelector("button[type=submit]");
   if(texto.length<10){out.textContent="Escreva pelo menos 10 caracteres.";return}
   bt.disabled=true;out.textContent="Enviando…";
+  // equipe e moderação: publica direto, sem fila
+  if(editaDireto()){try{await postComSessao("/api/memepedia/direto",{id:m.id,campo:c,texto,fonte});
+      (WK.srv[m.id]=WK.srv[m.id]||{})[c]={texto,fonte:/^https?:\/\//i.test(fonte)?fonte:"",autor:meuApelido()};
+      bt.disabled=false;f.reset();f.classList.remove("open");toast("Publicado na Memepédia!",3000);rota();return}
+    catch(e){out.textContent=(e&&e.erro)||"Não deu para publicar agora.";bt.disabled=false;return}}
   let ok=false;try{const r=await fetch("/api/memepedia",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:m.id,campo:c,texto,fonte,autor:meuApelido(),"bot-field":f["bot-field"].value})});ok=r.ok;if(!r.ok&&r.status!==404&&r.status<500){const j=await r.json().catch(()=>null);out.textContent=(j&&j.erro)||"Não deu para enviar.";bt.disabled=false;return}}catch(e){}
   NS.wikiSugs=NS.wikiSugs||[];NS.wikiSugs.push({id:"w"+Date.now(),meme:m.id,t:m.t,campo:c,texto,fonte,by:meuApelido(),status:"pending",online:ok,ts:Date.now()});nsSave();
   bt.disabled=false;f.reset();f.classList.remove("open");

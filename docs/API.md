@@ -184,6 +184,11 @@ O texto do recado é guardado como texto puro: **o front sempre escapa** antes d
 
 **Memepédia** (migração 010): `GET /api/memepedia[?id=]` (último texto aprovado de cada parte), `POST /api/memepedia` `{id, campo, texto, fonte?, autor}` entra como pendente; moderação em `GET /api/admin/memepedia` e `POST /api/admin/memepedia/:id {status}`. Campos: origem, porque, usos, rede, hoje, curiosidades. Limites de uso por IP seguem em memória.
 
+**Equipe do site** (migração 019, tabela `equipe` pelo **ID do Discord**, que não muda; o apelido muda e pode ser pego por outro):
+- Papel da equipe (`moderador`) aplicado **uma vez** (na migração para quem já tem conta, ou no 1º login). Só sobe quem está como `usuario`; depois, quem decide é o admin.
+- `patente_fixa`: patente mostrada sem o XP (vale a maior entre a do XP e a fixa) em `/api/eu`, carteira, perfil e ranking; conta para `exigePatente`. Não dá XP nem moedas.
+- `edita_direto` (ou papel moderador/admin): `POST /api/memepedia/direto` `{ id, campo, texto, fonte? }` e `POST /api/links/direto` `{ id, yt }` (🔒, `X-CSRF`) entram **publicados**, sem fila; autor = apelido da conta; `403` para os demais. Não dá XP (por enquanto). `GET /api/eu` devolve `edita_direto`.
+
 ## Testes
 
 `cd api && npm test` roda `node --test`. Testes que precisam de Postgres só rodam com um banco **descartável** (`TEST_DB_NAME` precisa conter `test` ou `descart`; cada arquivo usa um schema próprio):

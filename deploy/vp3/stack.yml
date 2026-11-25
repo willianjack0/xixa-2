@@ -8,6 +8,7 @@
 #   - secrets externos criados à mão (valores nunca ficam no repositório):
 #       naosalvo_db_password  naosalvo_admin_token  naosalvo_discord_client_id
 #       naosalvo_discord_client_secret  naosalvo_discord_guild_id
+#       naosalvo_s3_access_key  naosalvo_s3_secret_key   (usuário de serviço do MinIO, só no bucket naosalvo)
 #   - DNS naosalvo.fishlab.com.br apontando para este servidor (certificado sai pelo Traefik, desafio HTTP).
 version: '3.8'
 
@@ -53,12 +54,20 @@ services:
       # Saltos de proxy confiáveis entre o cliente e a API: 2 = Cloudflare + Traefik (registro com nuvem laranja).
       # Se o DNS ficar SÓ DNS (nuvem cinza), troque para 1, senão o IP do cliente pode ser forjado.
       TRUSTED_PROXY_HOPS: "2"
+      # Mídias enviadas pelo MCP: MinIO da própria rede (bucket naosalvo, prefixo midias/). O site serve /midias/ por proxy (nginx).
+      S3_ENDPOINT: http://minio_minio:9000
+      S3_BUCKET: naosalvo
+      S3_REGION: eu-south
+      S3_ACCESS_KEY_FILE: /run/secrets/naosalvo_s3_access_key
+      S3_SECRET_KEY_FILE: /run/secrets/naosalvo_s3_secret_key
     secrets:
       - naosalvo_db_password
       - naosalvo_admin_token
       - naosalvo_discord_client_id
       - naosalvo_discord_client_secret
       - naosalvo_discord_guild_id
+      - naosalvo_s3_access_key
+      - naosalvo_s3_secret_key
     deploy:
       replicas: 1
       restart_policy:
@@ -88,6 +97,10 @@ secrets:
   naosalvo_discord_client_secret:
     external: true
   naosalvo_discord_guild_id:
+    external: true
+  naosalvo_s3_access_key:
+    external: true
+  naosalvo_s3_secret_key:
     external: true
 
 networks:

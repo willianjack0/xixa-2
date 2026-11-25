@@ -7,6 +7,7 @@
 //     enfileiram, então não há saldo negativo nem pacote aberto duas vezes por corrida.
 //  3. Valores de recompensa vêm de regras_economia (tabela), preços e chances de pacotes_tipo.
 import { RARIDADES, criarRng, novaSemente, sortearPacote } from './sorteio.js';
+import { equipeDoUsuario, comPatenteFixa, PATENTE_FIXA_SQL } from '../lib/equipe.js';
 
 export class ErroNegocio extends Error {
   constructor(status, mensagem) { super(mensagem); this.status = status; }
@@ -80,7 +81,6 @@ function criarRazao(cli, usuarioId) {
   };
 }
 
-const patenteDe = (patentes, xp) => patentes.reduce((p, k) => (xp >= k.xp_minimo ? k : p), patentes[0]);
 
 async function patentes(db) {
   return (await db.query('SELECT id, nome, xp_minimo, cor FROM patentes ORDER BY xp_minimo')).rows;
@@ -100,7 +100,7 @@ const diaNoFuso = (data, fuso) => new Intl.DateTimeFormat('en-CA', { timeZone: f
 // ---- leitura ----
 export async function carteira(pool, usuario) {
   const regras = await carregarRegras(pool);
-  const [{ rows: [u] }, { rows: [m] }, { rows: [x] }, pats, { rows: est }, { rows: inv }] = await Promise.all([
+  const [{ rows: [u] }, { rows: [m] }, { rows: [x] }, pats, { rows: est }, { rows: inv }, eq] = await Promise.all([
     pool.query('SELECT id, apelido, xp, moedas FROM usuarios WHERE id = $1', [usuario.id]),
     pool.query('SELECT COALESCE(sum(valor),0)::bigint AS saldo FROM movimentos_moeda WHERE usuario_id = $1', [usuario.id]),
     pool.query('SELECT COALESCE(sum(valor),0)::bigint AS total FROM eventos_xp WHERE usuario_id = $1', [usuario.id]),
@@ -109,12 +109,12 @@ export async function carteira(pool, usuario) {
       `SELECT e.tipo, t.nome, e.colecao_id, count(*)::int AS quantidade FROM pacotes_estoque e JOIN pacotes_tipo t ON t.id = e.tipo
         WHERE e.usuario_id = $1 AND e.usado_em IS NULL GROUP BY e.tipo, t.nome, e.colecao_id, t.ordem ORDER BY t.ordem, e.colecao_id`, [usuario.id]),
     pool.query(
-      `SELECT i.quantidade, c.raridade FROM inventario_cartas i JOIN cartas c ON c.id = i.carta_id WHERE i.usuario_id = $1 AND i.quantidade > 0`, [usuario.id])
+      `SELECT i.quantidade, c.raridade FROM inventario_cartas i JOIN cartas c ON c.id = i.carta_id WHERE i.usuario_id = $1 AND i.quantidade > 0`, [usuario.id]),
+    equipeDoUsuario(pool, usuario.id)
   ]);
   // o saldo e o XP oficiais são a soma do razão; o cache em usuarios deve bater (conferido nos testes)
   const moedas = Number(m.saldo), xp = Number(x.total);
-  const atual = patenteDe(pats, xp);
-  const prox = pats.find((p) => p.xp_minimo > xp) || null;
+  const { atual, proxima: prox } = comPatenteFixa(pats, xp, eq && eq.patente_fixa); // equipe pode ter patente fixa
   const totalAlbum = Number((await pool.query('SELECT count(*)::int AS n FROM cartas')).rows[0].n);
   return {
     usuario: { id: Number(u.id), apelido: u.apelido },
@@ -319,17 +319,17 @@ export async function ranking(pool, { metrica = 'xp', limite = 50 } = {}) {
   const pats = await patentes(pool);
   if (metrica === 'cartas') {
     const { rows } = await pool.query(
-      `SELECT u.id, u.apelido, u.avatar_gato, count(*)::int AS valor, u.xp, u.papel, ${FOTO_DO_RANKING}
+      `SELECT u.id, u.apelido, u.avatar_gato, count(*)::int AS valor, u.xp, u.papel, ${FOTO_DO_RANKING}, ${PATENTE_FIXA_SQL}
          FROM inventario_cartas i JOIN usuarios u ON u.id = i.usuario_id
         WHERE i.quantidade > 0 AND NOT u.banido GROUP BY u.id ORDER BY valor DESC, u.xp DESC, u.id LIMIT $1`, [lim]);
-    return rows.map((r, i) => ({ posicao: i + 1, apelido: r.apelido, avatar_gato: r.avatar_gato, avatar_url: r.avatar_url, valor: r.valor, patente: patenteDe(pats, Number(r.xp)).nome, moderador: r.papel === 'moderador' }));
+    return rows.map((r, i) => ({ posicao: i + 1, apelido: r.apelido, avatar_gato: r.avatar_gato, avatar_url: r.avatar_url, valor: r.valor, patente: comPatenteFixa(pats, Number(r.xp), r.patente_fixa).atual?.nome, moderador: r.papel === 'moderador' }));
   }
   // xp: soma do razão (eventos reais), não o cache
   const { rows } = await pool.query(
-    `SELECT u.id, u.apelido, u.avatar_gato, sum(e.valor)::bigint AS valor, u.papel, ${FOTO_DO_RANKING}
+    `SELECT u.id, u.apelido, u.avatar_gato, sum(e.valor)::bigint AS valor, u.papel, ${FOTO_DO_RANKING}, ${PATENTE_FIXA_SQL}
        FROM eventos_xp e JOIN usuarios u ON u.id = e.usuario_id
       WHERE NOT u.banido GROUP BY u.id HAVING sum(e.valor) > 0 ORDER BY valor DESC, u.id LIMIT $1`, [lim]);
-  return rows.map((r, i) => ({ posicao: i + 1, apelido: r.apelido, avatar_gato: r.avatar_gato, avatar_url: r.avatar_url, valor: Number(r.valor), patente: patenteDe(pats, Number(r.valor)).nome, moderador: r.papel === 'moderador' }));
+  return rows.map((r, i) => ({ posicao: i + 1, apelido: r.apelido, avatar_gato: r.avatar_gato, avatar_url: r.avatar_url, valor: Number(r.valor), patente: comPatenteFixa(pats, Number(r.valor), r.patente_fixa).atual?.nome, moderador: r.papel === 'moderador' }));
 }
 
 export { RARIDADES, indisponivel, criarRazao, carregarRegras, travarUsuario };

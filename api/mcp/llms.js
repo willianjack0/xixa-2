@@ -40,11 +40,17 @@ export function gerarLlmsTxt({ base = 'https://naosalvo.fishlab.com.br', ferrame
   }
   L.push('');
   L.push('## Fluxo recomendado');
-  L.push('1. listar_referencias para saber categorias, raridades e limites válidos.');
-  L.push('2. conferir_duplicado com o link e o título. Se já existir, não crie de novo: use editar_meme.');
-  L.push('3. criar_meme (rascunho). Só use publicar=true se tiver o escopo publicar e a informação estiver conferida.');
-  L.push('4. anexar_midia quando o meme não for só um vídeo do YouTube.');
-  L.push('5. Avise o admin do que foi criado (ids dos memes) para revisar no painel.');
+  // só cita passos de ferramentas que existem (as inativas ainda não aparecem aqui nem no tools/list)
+  const tem = (n) => ferramentas.some((f) => f.nome === n);
+  const passos = [
+    tem('listar_referencias') && 'listar_referencias para saber categorias, raridades e limites válidos.',
+    tem('conferir_duplicado') && 'conferir_duplicado com o link e o título. Se já existir, não crie de novo' + (tem('editar_meme') ? ': use editar_meme.' : '.'),
+    tem('buscar_memes') && 'buscar_memes para ver o que já existe sobre o assunto (inclui rascunhos ocultos).',
+    tem('criar_meme') && 'criar_meme (rascunho). Só use publicar=true se tiver o escopo publicar e a informação estiver conferida.',
+    tem('anexar_midia') && 'anexar_midia quando o meme não for só um vídeo do YouTube.',
+    'Avise o admin do que foi encontrado ou criado (ids dos memes) para revisar no painel.'
+  ].filter(Boolean);
+  passos.forEach((p, i) => L.push(`${i + 1}. ${p}`));
   L.push('');
   L.push('## Regras e limites');
   L.push('- O acervo é público: não cadastre dados pessoais, conteúdo ofensivo ou material sem fonte. Cite a fonte na descrição.');

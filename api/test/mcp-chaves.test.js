@@ -32,10 +32,13 @@ test('estadoDaChave: ativa, expirada, revogada (revogada vence expirada)', () =>
   assert.equal(estadoDaChave({ expira_em: '2026-05-01T00:00:00Z', revogada_em: '2026-04-01T00:00:00Z' }, agora), 'revogada');
 });
 
-test('llms.txt: sem ferramentas ativas avisa; com ferramentas lista nome, escopo e parâmetros; nunca cita ferramenta inativa', () => {
-  const vazio = gerarLlmsTxt();
+test('llms.txt: lista ferramentas ativas com nome, escopo e parâmetros; avisa quando vazio; nunca cita ferramenta inativa', () => {
+  const vazio = gerarLlmsTxt({ ferramentas: [] });
   assert.match(vazio, /^# Não Salvo · MCP do acervo/); assert.match(vazio, /Nenhuma ferramenta está ativa ainda/);
-  for (const f of FERRAMENTAS.filter((x) => !x.ativa)) assert.ok(!vazio.includes('### ' + f.nome), 'ferramenta inativa não aparece: ' + f.nome);
+  const padrao = gerarLlmsTxt();
+  assert.ok(!/Nenhuma ferramenta está ativa/.test(padrao));
+  for (const f of FERRAMENTAS.filter((x) => x.ativa)) assert.ok(padrao.includes('### ' + f.nome), 'ferramenta ativa aparece: ' + f.nome);
+  for (const f of FERRAMENTAS.filter((x) => !x.ativa)) assert.ok(!padrao.includes('### ' + f.nome), 'ferramenta inativa não aparece: ' + f.nome);
   const com = gerarLlmsTxt({ base: 'https://exemplo.test', ferramentas: [{ nome: 'buscar_memes', escopo: 'ler', resumo: 'Busca.', params: { busca: { tipo: 'texto', obrigatorio: true, descricao: 'trecho' } } }] });
   assert.match(com, /### buscar_memes {2}\(escopo: ler\)/); assert.match(com, /- busca \(texto, obrigatório\): trecho/);
   assert.match(com, /https:\/\/exemplo\.test\/mcp/); assert.ok(!/Nenhuma ferramenta/.test(com));

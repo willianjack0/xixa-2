@@ -2,6 +2,8 @@
 import { hashIp } from '../lib/ip.js';
 import { send, lerJson, clean, limited } from '../lib/http.js';
 import { VOTE_ID } from './votos.js';
+import { podeEditarDireto } from '../lib/equipe.js';
+import { auditar } from '../lib/auditoria.js';
 
 export const LINKS_PENDENTES_POR_IP = 3;    // sugestões pendentes por meme e IP
 export const LINKS_PENDENTES_POR_MEME = 20; // teto de pendentes por meme
@@ -42,4 +44,27 @@ export default function registrar(r) {
     }
     return send(res, ins.rowCount ? 201 : 200, { ok: true, repetido: !ins.rowCount });
   });
+
+  // equipe (edita_direto) ou admin: adiciona ou troca o link do vídeo, publicado na hora (vale o aprovado mais recente). Não dá XP.
+  r.post('/api/links/direto', async (ctx) => {
+    const { req, res, pool, usuario } = ctx;
+    if (!(await podeEditarDireto(pool, usuario.id))) return send(res, 403, { erro: 'Só a equipe publica direto. Use o envio normal.' });
+    if (limited('ld:' + usuario.id, 60)) return send(res, 429, { erro: 'Muitos envios seguidos. Aguarde um pouco.' });
+    const b = await lerJson(req);
+    if (!b || typeof b !== 'object' || Array.isArray(b)) return send(res, 400, { erro: 'json inválido' });
+    const id = String(b.id || ''), yt = String(b.yt || '');
+    if (!VOTE_ID.test(id)) return send(res, 400, { erro: 'id inválido' });
+    if (!/^[\w-]{11}$/.test(yt)) return send(res, 422, { erro: 'Link do YouTube inválido.' });
+    const { rows: [u] } = await pool.query('SELECT apelido FROM usuarios WHERE id = $1', [usuario.id]);
+    try {
+      await pool.query(
+        `INSERT INTO links_sugeridos (meme_id, yt, autor, status, revisado_em) VALUES ($1,$2,$3,'aprovado',now())
+         ON CONFLICT (meme_id, yt) DO UPDATE SET status = 'aprovado', revisado_em = now()`, [id, yt, u.apelido]);
+      await auditar(ctx, 'link.direto', 'memes:' + id, { yt });
+    } catch (e) {
+      if (e.code === '23503') return send(res, 404, { erro: 'meme não encontrado' });
+      throw e;
+    }
+    return send(res, 201, { ok: true, publicado: true });
+  }, { autenticada: true });
 }

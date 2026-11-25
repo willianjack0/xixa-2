@@ -81,7 +81,10 @@ const headBar=e=>{
   return`<header class="yh5"><i class="mn">${icon("menu")}</i>${logo}<div class="sr"><input placeholder="Pesquisar"><button>${icon("search")}</button><i class="mc">${icon("mic")}</i></div><div class="lk"><i>${icon("upload")}</i><i>${icon("bell")}</i>${snd}${x}</div></header>`;
 };
 const btns=y=>`<div class="vbs"><button class="vb" data-act="year">Ver o ano ${y}</button><button class="vb mp" data-act="wiki">${icon("book","in")}Memepédia</button><button class="vb sec" data-act="close">Fechar</button></div>`;
-const linkBox=m=>m.yt?"":`<div class="lbx"><b>Vídeo original não encontrado.</b> Conhece o link no YouTube? Envie para a moderação conferir.<div class="in"><input class="ol" placeholder="https://youtube.com/watch?v=…"><button data-act="savelink">Enviar para a moderação</button></div><div class="olm"></div></div>`;
+// equipe/moderação (editaDireto): adiciona ou troca o link de qualquer meme, publicado na hora
+const linkEquipe=()=>typeof editaDireto==="function"&&editaDireto();
+const linkBox=m=>linkEquipe()?`<div class="lbx"><b>${m.yt?"Trocar o link do vídeo":"Vídeo original não encontrado."}</b> Você é da equipe: o link entra direto, sem moderação.<div class="in"><input class="ol" placeholder="https://youtube.com/watch?v=…"><button data-act="savelink">${m.yt?"Trocar link":"Publicar link"}</button></div><div class="olm"></div></div>`
+  :m.yt?"":`<div class="lbx"><b>Vídeo original não encontrado.</b> Conhece o link no YouTube? Envie para a moderação conferir.<div class="in"><input class="ol" placeholder="https://youtube.com/watch?v=…"><button data-act="savelink">Enviar para a moderação</button></div><div class="olm"></div></div>`;
 const descTxt=m=>escapeHtml(m.d||"");
 
 // ---- notas: estrelas (2004–2009) ou curtidas (2010+) ----
@@ -209,6 +212,10 @@ function ytDoLink(u){u=(u||"").trim();if(!u)return"";try{const x=new URL(/^https
 function enviarLinkSugerido(m,u){
   if(!temConta()){needAccount("enviar o link");return'<div class="chk bad">Entre na sua conta para enviar o link.</div>'}
   const yt=ytDoLink(u);if(!yt)return'<div class="chk bad">Cole um link do YouTube (youtube.com/watch?v=… ou youtu.be/…).</div>';
+  if(linkEquipe())return postComSessao("/api/links/direto",{id:m.id,yt}).then(()=>{m.yt=yt;LINKS_OK[m.id]=yt;
+      if(typeof buildAll==="function"){buildAll();if(typeof renderAll==="function")renderAll()}
+      return'<div class="chk ok">Link publicado! Ele já vale para todo mundo (feche e abra o vídeo para ver).</div>'},
+    e=>`<div class="chk bad">${escapeHtml((e&&e.erro)||"Não deu para publicar agora.")}</div>`);
   NS.linkSugs=NS.linkSugs||[];
   if(NS.linkSugs.some(x=>x.meme===m.id&&x.yt===yt))return'<div class="chk warn">Você já enviou esse link. Ele está na fila da moderação.</div>';
   const sug={id:"l"+Date.now(),meme:m.id,t:m.t,yt,by:meuApelido(),status:"pending",ts:Date.now()};
@@ -218,7 +225,7 @@ function enviarLinkSugerido(m,u){
 // links aprovados pelos moderadores entram no acervo para todo mundo
 const LINKS_OK={};
 apiGet("/api/links/aprovados").then(d=>{if(!d||typeof d!=="object")return;let n=0;
-  for(const [id,yt] of Object.entries(d)){if(!/^[\w-]{11}$/.test(yt))continue;LINKS_OK[id]=yt;const m=(typeof MEMES!=="undefined"?MEMES:[]).find(x=>x.id===id);if(m&&!m.yt){m.yt=yt;n++}}
+  for(const [id,yt] of Object.entries(d)){if(!/^[\w-]{11}$/.test(yt))continue;LINKS_OK[id]=yt;const m=(typeof MEMES!=="undefined"?MEMES:[]).find(x=>x.id===id);if(m&&m.yt!==yt){m.yt=yt;n++}}
   if(n&&typeof buildAll==="function"){buildAll();if(typeof renderAll==="function")renderAll()}});
 
 // compartilhar: sempre o link do vídeo original no YouTube (desligado em memes com selo de cuidado)

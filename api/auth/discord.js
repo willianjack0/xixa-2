@@ -1,5 +1,6 @@
 // Login com Discord (OAuth2, scope identify). Funções puras + chamadas HTTP injetáveis (fetch) para teste sem rede.
 // Segredos só por arquivo (*_FILE); nada daqui é logado: nem client secret, nem code, nem access token.
+import { aplicarEquipe } from '../lib/equipe.js';
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { segredo } from '../lib/config.js';
 import { stubPermitido } from '../auth-stub.js';
@@ -190,6 +191,7 @@ export async function acharOuCriarUsuario(pool, perfil) {
       // um único UPDATE (atômico): nome e foto acompanham o Discord a cada login (a pessoa pode ter trocado)
       await pool.query("UPDATE contas_oauth SET nome_exibicao = $2, avatar_url = $3 WHERE provedor = 'discord' AND provedor_id = $1", [perfil.id, nomeExibicao, perfil.avatar_url ?? null]);
       if (!ex[0].banido) await pool.query('UPDATE usuarios SET ultimo_acesso = now() WHERE id = $1', [ex[0].id]);
+      await aplicarEquipe(pool, ex[0].id); // equipe do site: papel aplicado uma vez, pelo ID do Discord
       return { id: Number(ex[0].id), apelido: ex[0].apelido, banido: ex[0].banido, novo: false };
     }
     const cli = await pool.connect();
@@ -201,6 +203,7 @@ export async function acharOuCriarUsuario(pool, perfil) {
       await cli.query(
         "INSERT INTO contas_oauth (usuario_id, provedor, provedor_id, nome_exibicao, avatar_url) VALUES ($1,'discord',$2,$3,$4)", [u.id, perfil.id, nomeExibicao, perfil.avatar_url ?? null]);
       await cli.query('COMMIT');
+      await aplicarEquipe(pool, u.id);
       return { id: Number(u.id), apelido: u.apelido, banido: false, novo: true };
     } catch (e) {
       await cli.query('ROLLBACK').catch(() => {});

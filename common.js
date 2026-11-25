@@ -392,6 +392,11 @@ async function carregarSessao(){
   try{SESSAO=await Api.eu()}catch(e){SESSAO=null;updateAccount();throw e}
   updateAccount();
 }
+const editaDireto=()=>!!(SESSAO&&SESSAO.edita_direto);
+// POST com a sessão (cookie + X-CSRF), para as rotas da equipe
+async function postComSessao(url,corpo){
+  const r=await fetch(url,{method:"POST",credentials:"same-origin",headers:{"content-type":"application/json","X-CSRF":(SESSAO&&SESSAO.csrf)||""},body:JSON.stringify(corpo)});
+  const j=await r.json().catch(()=>null);if(!r.ok)throw Object.assign({},j||{},{status:r.status});return j}
 async function sairDaConta(){
   try{await fetch("/api/auth/sair",{method:"POST",credentials:"same-origin",headers:{"X-CSRF":(SESSAO&&SESSAO.csrf)||""}})}catch(e){}
   SESSAO=null;location.reload();

@@ -212,10 +212,10 @@ main{display:flex;flex-direction:column}
 <div class="modal" id="modal" onclick="if(event.target===this)closeM()"><div class="box" id="box"></div></div>
 
 <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="tipo"><textarea name="msg"></textarea><input name="contato"><input name="pagina"><input name="bot-field"></form>
-<script src="common.js?v=20261125d"></script>
+<script src="common.js?v=20261125e"></script>
 <script src="data.js?v=20261127b"></script>
 <script src="player.js?v=20261125b"></script>
-<script src="viewer.js?v=20261125b"></script>
+<script src="viewer.js?v=20261126b"></script>
 <script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("inicio",{search:true,sub:[]});
@@ -267,7 +267,7 @@ const SUB_ITEMS=[
   {k:"rank",ic:"ranking",label:"Ranking",fn:()=>openRank()},
   {k:"wiki",ic:"book",label:"Memepédia",href:"memepedia.html"},
   {k:"album",ic:"album",label:"Álbum de figurinhas",href:"album.html"},
-  {k:"mod",ic:"moderation",label:"Moderação",fn:()=>openMod()},
+  {k:"mod",ic:"moderation",label:"Moderação",so:"mod",fn:()=>openMod()},
   {sp:1},
   {k:"send",ic:"send",label:"Enviar meme",cta:1,fn:()=>openSubmit()}
 ];
