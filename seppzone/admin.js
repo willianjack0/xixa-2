@@ -384,7 +384,85 @@ function abaVisao(p) {
       return { valor: n, texto: "esperando aprovação" };
     }),
     cartao("Feedback", "comunidade", async () => ({ valor: (ok(await api("GET", "/api/admin/feedback")).items || []).length, texto: "mensagens recebidas" }))
-  ));
+  ), painelNavegacao());
+}
+
+// ---------- Navegação do site (Visão geral) ----------
+const NOMES_PAGINA = { home: "Início", "linha-do-tempo": "Linha do tempo", memepedia: "Memepédia", album: "Álbum", perfil: "Perfil", entrar: "Entrar", contribuir: "Contribuir", equipe: "Equipe", "404": "Página não encontrada", outras: "Outras" };
+const NOMES_ORIGEM = { direto: "Direto / link salvo", google: "Google", bing: "Bing", duckduckgo: "DuckDuckGo", instagram: "Instagram", facebook: "Facebook", x: "X (Twitter)", tiktok: "TikTok", youtube: "YouTube", whatsapp: "WhatsApp", telegram: "Telegram", reddit: "Reddit", discord: "Discord", outros: "Outros sites" };
+const NOMES_DISP = { celular: "Celular", desktop: "Computador", tablet: "Tablet" };
+const PERIODOS_NAV = [["hoje", "Hoje"], ["7d", "7 dias"], ["30d", "30 dias"], ["total", "Todo o tempo"]];
+const fmtN = (n) => Number(n || 0).toLocaleString("pt-BR");
+function fmtTempo(s) {
+  s = Math.max(0, Math.round(Number(s) || 0));
+  if (s < 60) return s + " s";
+  const m = Math.floor(s / 60);
+  if (m < 60) return m + " min " + String(s % 60).padStart(2, "0") + " s";
+  return Math.floor(m / 60) + " h " + String(m % 60).padStart(2, "0") + " min";
+}
+
+function painelNavegacao() {
+  let per = "hoje", tipoMeme = "visita";
+  const raiz = h("section", { class: "sec", "aria-labelledby": "nav-t" });
+  const botoes = PERIODOS_NAV.map(([k, r]) => h("button", { type: "button", "aria-pressed": String(k === per), on: { click: () => { per = k; marca(); carregar(); } } }, r));
+  const barra = h("div", { class: "sub", role: "group", "aria-label": "Período" }, botoes);
+  const corpo = h("div", { "aria-live": "polite" });
+  const memes = h("div", { class: "mem-blk" });
+  const marca = () => botoes.forEach((b, i) => b.setAttribute("aria-pressed", String(PERIODOS_NAV[i][0] === per)));
+
+  const kpi = (titulo, valor, mini) => h("div", { class: "card" }, h("h3", null, titulo), h("p", { class: "num" }, valor), h("p", { class: "mini" }, mini || ""));
+  function ranking(titulo, itens, nomes, comTempo) {
+    const max = Math.max(1, ...itens.map((x) => x.visualizacoes));
+    return h("div", { class: "card" }, h("h3", null, titulo),
+      itens.length ? h("ul", { class: "rk" }, itens.map((x) => h("li", null,
+        h("span", { class: "rk-n" }, nomes[x.nome] || x.nome),
+        h("span", { class: "rk-v" }, fmtN(x.visualizacoes) + " vis." + (comTempo && x.sessoes ? " · " + fmtTempo(x.segundos / x.sessoes) + "/sessão" : "")),
+        h("span", { class: "rk-b", "aria-hidden": "true" }, h("span", { style: "width:" + Math.max(2, Math.round((x.visualizacoes / max) * 100)) + "%" })))))
+        : h("p", { class: "mini" }, "Sem dados neste período."));
+  }
+  function grafico(serie) {
+    const max = Math.max(1, ...serie.map((d) => d.visualizacoes));
+    const fmtDia = (d) => d.slice(8, 10) + "/" + d.slice(5, 7);
+    return h("div", { class: "card" }, h("h3", null, "Visualizações por dia (últimos 30 dias)"),
+      h("div", { class: "barras", role: "img", "aria-label": "Gráfico de barras com as visualizações dos últimos 30 dias. Detalhes na tabela abaixo." },
+        serie.map((d) => h("span", { title: fmtDia(d.dia) + ": " + fmtN(d.visualizacoes) + " visualizações", style: "height:" + Math.max(2, Math.round((d.visualizacoes / max) * 100)) + "%" }))),
+      h("p", { class: "mini" }, fmtDia(serie[0].dia) + " a " + fmtDia(serie[serie.length - 1].dia) + " · pico de " + fmtN(max) + " em um dia"),
+      h("details", null, h("summary", null, "Ver em tabela"),
+        h("div", { class: "tabela-rol" }, h("table", null, h("thead", null, h("tr", null, ["Dia", "Visualizações", "Visitantes", "Sessões", "Tempo"].map((t) => h("th", { scope: "col" }, t)))),
+          h("tbody", null, [...serie].reverse().map((d) => h("tr", null, h("th", { scope: "row" }, fmtDia(d.dia)), h("td", null, fmtN(d.visualizacoes)), h("td", null, fmtN(d.visitantes)), h("td", null, fmtN(d.sessoes)), h("td", null, fmtTempo(d.segundos)))))))));
+  }
+  async function carregar() {
+    trocar(corpo, carregando("Carregando navegação…"));
+    const r = await api("GET", "/api/admin/analytics?periodo=" + per);
+    if (!r.ok) return trocar(corpo, erroEstado(r.status === 404 ? "Indisponível ainda neste servidor." : msgErro(r), carregar));
+    const d = r.data, p = d.periodos[per];
+    trocar(corpo,
+      h("div", { class: "grid g4" },
+        kpi("Visualizações", fmtN(p.visualizacoes), "páginas abertas"),
+        kpi("Visitantes", fmtN(p.visitantes), per === "hoje" ? "pessoas diferentes hoje" : "únicos por dia, somados"),
+        kpi("Sessões", fmtN(p.sessoes), "visitas ao site"),
+        kpi("Tempo por sessão", fmtTempo(p.tempo_medio_sessao), fmtTempo(p.segundos) + " no total")),
+      h("div", { class: "grid g2" }, grafico(d.serie)),
+      h("div", { class: "grid g3" }, ranking("Páginas mais vistas", d.paginas, NOMES_PAGINA, true), ranking("De onde vêm", d.origens, NOMES_ORIGEM, false), ranking("Dispositivos", d.dispositivos, NOMES_DISP, false)));
+    carregarMemes();
+  }
+  async function carregarMemes() {
+    const tipos = [["visita", "Mais visitados"], ["clique", "Mais clicados (play)"]];
+    const bt = tipos.map(([k, r]) => h("button", { type: "button", "aria-pressed": String(k === tipoMeme), on: { click: () => { tipoMeme = k; carregarMemes(); } } }, r));
+    const cab = h("div", { class: "sub", role: "group", "aria-label": "Tipo de contagem" }, bt);
+    trocar(memes, h("h2", null, "Memes · " + PERIODOS_NAV.find((x) => x[0] === per)[1].toLowerCase()), cab, carregando("Carregando memes…"));
+    const r = await api("GET", "/api/admin/analytics/memes?periodo=" + per + "&tipo=" + tipoMeme);
+    const lista = !r.ok ? erroEstado(msgErro(r), carregarMemes)
+      : (r.data.itens || []).length ? h("ol", { class: "rk rk-memes" }, r.data.itens.map((x) => h("li", null,
+          h("span", { class: "rk-n" }, x.titulo, x.status !== "publicado" ? h("span", { class: "chip" }, STATUS_MEME[x.status] || x.status) : null),
+          h("span", { class: "rk-v" }, fmtN(x.total) + (tipoMeme === "visita" ? " visitas" : " plays")),
+          h("span", { class: "rk-b", "aria-hidden": "true" }, h("span", { style: "width:" + Math.max(2, Math.round((x.total / r.data.itens[0].total) * 100)) + "%" })))))
+        : vazio("Nenhum meme com " + (tipoMeme === "visita" ? "visita" : "play") + " neste período.");
+    trocar(memes, h("h2", null, "Memes · " + PERIODOS_NAV.find((x) => x[0] === per)[1].toLowerCase()), cab, lista);
+  }
+  trocar(raiz, h("h2", { id: "nav-t" }, "Navegação do site"), h("p", { class: "mini" }, "Contagem anônima: sem IP, sem cookie, só totais por dia. Quem ativa “Não rastrear” no navegador não entra na conta."), barra, corpo, memes);
+  carregar();
+  return raiz;
 }
 
 // ---------- Moderação ----------

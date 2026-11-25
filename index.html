@@ -581,5 +581,6 @@ if(["rank","mod","send","rand","tl","todos"].includes(h))setTimeout(()=>{ftGo(h)
 function placeRays(){const im=document.querySelector(".hero .sun img"),r=$("rays");if(!im||!r)return;const b=im.getBoundingClientRect();r.style.left=(b.left+b.width/2+scrollX)+"px";r.style.top=(b.top+b.height*0.42+scrollY)+"px"}
 placeRays();addEventListener("resize",placeRays);addEventListener("load",placeRays);document.querySelector(".hero .sun img").addEventListener("load",placeRays);
 </script>
+<script src="/nav.js?v=20261129a"></script>
 </body>
 </html>

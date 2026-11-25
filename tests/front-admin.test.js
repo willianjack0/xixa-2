@@ -105,6 +105,8 @@ function criarApi(over = {}) {
       if (p === "/api/admin/comentarios") return json(route, 200, { items: [] });
       if (p === "/api/admin/contribuidores") return json(route, 200, { items: [{ id: 7, nome: "Dani", nick: "dani", discord: "dani#1", areas: ["Código"], area_outros: null, horas_semana: 4, experiencia: "pouca", ferramentas: "git", mensagem: null, criado_em: "2026-11-20T10:00:00Z" }] });
       if ((x = p.match(/^\/api\/admin\/feedback\/(\d+)$/)) && m === "DELETE") return json(route, 200, { ok: true });
+      if (p === "/api/admin/analytics" && m === "GET") { const per = q.get("periodo") || "hoje"; const z = { visualizacoes: 0, sessoes: 0, visitantes: 0, segundos: 0, tempo_medio_sessao: 0 }; return json(route, 200, { periodo: per, periodos: { hoje: { visualizacoes: 1234, sessoes: 300, visitantes: 210, segundos: 36000, tempo_medio_sessao: 120 }, "7d": z, "30d": z, total: z }, serie: Array.from({ length: 30 }, (_, i) => ({ dia: "2026-11-" + String(i + 1).padStart(2, "0"), visualizacoes: i * 10, sessoes: i, visitantes: i, segundos: i * 60 })), paginas: [{ nome: "home", visualizacoes: 900, sessoes: 250, segundos: 30000 }, { nome: "album", visualizacoes: 334, sessoes: 50, segundos: 6000 }], origens: [{ nome: "google", visualizacoes: 700, sessoes: 200, segundos: 0 }, { nome: "direto", visualizacoes: 534, sessoes: 100, segundos: 0 }], dispositivos: [{ nome: "celular", visualizacoes: 1000, sessoes: 250, segundos: 0 }, { nome: "desktop", visualizacoes: 234, sessoes: 50, segundos: 0 }] }); }
+      if (p === "/api/admin/analytics/memes" && m === "GET") return json(route, 200, { periodo: q.get("periodo"), tipo: q.get("tipo"), itens: q.get("tipo") === "clique" ? [] : [{ id: "nyan-cat", titulo: XSS, status: "publicado", total: 80 }, { id: "velho", titulo: "Velho", status: "oculto", total: 20 }] });
       if (p === "/api/admin/uploads/imagem" && m === "POST") { const b = req.postDataBuffer() || Buffer.alloc(0); st.uploads = (st.uploads || []).concat({ perfil: q.get("perfil"), ct: req.headers()["content-type"], bytes: b.length }); if (st.uploadErro) return json(route, st.uploadErro, { erro: "não consegui gravar a imagem no armazenamento" }); return json(route, 201, { ok: true, caminho: "midias/" + q.get("perfil") + "-aabbccddeeff.webp", url_publica: "/midias/" + q.get("perfil") + "-aabbccddeeff.webp", largura: 800, altura: 533, bytes: 20480, bytes_original: 2097152 }); }
       if ((p === "/api/admin/cartas" && m === "POST") || (m === "PATCH" && p.startsWith("/api/admin/cartas/"))) return json(route, m === "POST" ? 201 : 200, { ok: true, carta: { id: "c1-02", ...corpo } });
       return json(route, 404, { erro: "não mockado: " + p });
@@ -161,7 +163,7 @@ test("admin: todas as abas, visão geral só com números das rotas, sem Ver com
   await page.waitForSelector("#p-visao .num");
   assert.deepStrictEqual(await abas(page), ["Visão geral", "Moderação", "Usuários", "Memes", "Cartas e coleções", "Eras", "Comunidade", "Log", "MCP"]);
   await page.waitForFunction(() => [...document.querySelectorAll("#p-visao .num")].every((n) => n.textContent !== "…"));
-  const nums = await page.$$eval("#p-visao .card", (c) => c.map((x) => x.querySelector("h2").textContent + "=" + x.querySelector(".num").textContent));
+  const nums = await page.$$eval("#p-visao .card:has(h2)", (c) => c.map((x) => x.querySelector("h2").textContent + "=" + x.querySelector(".num").textContent));
   assert.deepStrictEqual(nums, ["Memes=1", "Moderação=1", "Remoções=2", "Links sugeridos=1", "Feedback=1"]);
   const corpo = await page.textContent("body");
   for (const proibido of ["Ver como", "Reiniciar exemplo", "Tela de exemplo"]) assert.ok(!corpo.includes(proibido), proibido);
@@ -369,6 +371,26 @@ test("meme: o editor de mídias não oferece vídeo-arquivo novo, o botão envia
   assert.strictEqual(await page.inputValue("dialog .midia input[id$=w]"), "800");
   assert.strictEqual(await page.inputValue("dialog .midia input[id$=a]"), "533");
   assert.strictEqual(api.st.uploads[0].perfil, "meme");
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+test("visão geral: navegação do site (números, gráfico, páginas, origens, dispositivos e memes) troca de período e de tipo; título com HTML vira texto", opts, async () => {
+  const { ctx, page, api, erros } = await abrir();
+  await page.waitForSelector("#p-visao .barras");
+  const txt = await page.textContent("#p-visao");
+  assert.match(txt, /Navegação do site/); assert.match(txt, /1\.234/); assert.match(txt, /2 min 00 s/); assert.match(txt, /Google/); assert.match(txt, /Celular/); assert.match(txt, /Início/);
+  assert.strictEqual(await page.$$eval("#p-visao .barras span", (n) => n.length), 30);
+  assert.ok(await page.$('#p-visao [role="img"][aria-label*="Gráfico"]'));
+  await page.waitForSelector("#p-visao .rk-memes li");
+  assert.strictEqual(await page.evaluate(() => window.__xss), undefined, "título com HTML não executa");
+  assert.match(await page.textContent("#p-visao .rk-memes"), /80 visitas/); assert.match(await page.textContent("#p-visao .rk-memes"), /Oculto/);
+  await page.click('#p-visao button:has-text("7 dias")');
+  await page.waitForFunction(() => document.querySelector('#p-visao button[aria-pressed="true"]').textContent === "7 dias");
+  assert.ok(api.st.log.some((l) => l.p === "/api/admin/analytics" && /periodo=7d/.test(l.q || "") || l.p === "/api/admin/analytics"));
+  await page.click('#p-visao button:has-text("Mais clicados")');
+  await page.waitForFunction(() => /Nenhum meme com play/.test(document.getElementById("p-visao").textContent));
+  assert.match(await page.textContent("#p-visao"), /Nenhum meme com play/);
   assert.deepStrictEqual(erros, []);
   await ctx.close();
 });

@@ -201,5 +201,6 @@ function onAccountChange(){rota()}
 (window.acervoPronto||Promise.resolve()).then(()=>{buildL();rota()});
 fetch("/api/memepedia",{headers:{accept:"application/json"}}).then(r=>r.ok&&(r.headers.get("content-type")||"").includes("json")?r.json():null).then(d=>{if(d&&typeof d==="object"){WK.srv=d;rota()}}).catch(()=>{});
 </script>
+<script src="/nav.js?v=20261129a"></script>
 </body>
 </html>
