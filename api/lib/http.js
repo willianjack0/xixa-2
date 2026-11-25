@@ -20,6 +20,14 @@ export const readBody = (req, max = 20_000) => new Promise((resolve, reject) => 
   req.on('error', reject);
 });
 
+/** Lê o corpo como bytes (Buffer), até `max`. Estoura com Error('too-large') e encerra a conexão. */
+export const readBodyBuffer = (req, max) => new Promise((resolve, reject) => {
+  let size = 0; const chunks = [];
+  req.on('data', (c) => { size += c.length; if (size > max) { reject(new Error('too-large')); req.destroy(); } else chunks.push(c); });
+  req.on('end', () => resolve(Buffer.concat(chunks)));
+  req.on('error', reject);
+});
+
 /** Lê o corpo como JSON. Devolve undefined se inválido (quem chama responde 400 com a mensagem do seu formato). */
 export const lerJson = async (req) => {
   try { return JSON.parse(await readBody(req)); } catch { return undefined; }

@@ -1,18 +1,19 @@
-// anexar_midia: grava uma imagem no S3 (MinIO) e a liga a um meme. A imagem vem de uma URL pública (download com proteção
-// contra SSRF) ou de base64. Só jpeg, png e webp (conferido pelos BYTES), até 5 MB, nome gerado pelo servidor.
-// O arquivo fica em midias/<meme>-<aleatório>.<ext> no bucket e é servido pelo site em /midias/<arquivo>.
+// anexar_midia: otimiza uma imagem (reduz e converte para WebP, sem metadados) e a grava no S3 (MinIO), ligada a um meme. A imagem
+// vem de uma URL pública (download com proteção contra SSRF) ou de base64. Só jpeg, png e webp estáticos (conferido pelos BYTES),
+// até 5 MB de entrada, nome gerado pelo servidor. O arquivo fica em midias/<meme>-<aleatório>.webp e o site serve em /midias/<arquivo>.
 import { randomBytes } from 'node:crypto';
 import { auditar } from '../lib/auditoria.js';
 import { ID_MEME, textoOuNulo, urlOuNula, Erro422 } from '../lib/acervo-validacao.js';
 import { ErroArgumento, validarChavesConhecidas } from './ferramentas.js';
 import { configDoAmbiente, criarS3 } from './s3.js';
-import { baixarImagem, detectarImagem, MAX_BYTES } from './imagem.js';
+import { baixarImagem, MAX_BYTES } from './imagem.js';
+import { otimizarImagem, ErroImagem } from '../lib/imagens.js';
 
 const MAX_MIDIAS = 20;
 const BASE64 = /^[A-Za-z0-9+/]+={0,2}$/;
 
 /** Fábrica com dependências injetáveis (nos testes entram um S3 e um downloader falsos). */
-export function fazerAnexarMidia({ s3 = null, baixar = baixarImagem } = {}) {
+export function fazerAnexarMidia({ s3 = null, baixar = baixarImagem, otimizar = otimizarImagem } = {}) {
   return async function anexar_midia(pool, args = {}, ctx = {}) {
     validarChavesConhecidas(args, ['id', 'url', 'base64', 'credito_por', 'credito_url']);
     if (typeof args.id !== 'string' || !ID_MEME.test(args.id)) throw new ErroArgumento('campo "id" obrigatório: slug a-z, 0-9 e hífen, até 80 caracteres');
@@ -48,12 +49,12 @@ export function fazerAnexarMidia({ s3 = null, baixar = baixarImagem } = {}) {
       if (typeof args.url !== 'string' || args.url.length > 500) throw new ErroArgumento('campo "url" deve ser um link de até 500 caracteres');
       try { buf = await baixar(args.url.trim()); } catch (e) { throw new ErroArgumento(String(e.message || 'não consegui baixar a imagem')); }
     }
-    const img = detectarImagem(buf);
-    if (!img) throw new ErroArgumento('o arquivo não é uma imagem jpeg, png ou webp');
+    let img;
+    try { img = await otimizar(buf, 'meme'); } catch (e) { throw e instanceof ErroImagem ? new ErroArgumento(e.message) : e; }
 
     const nome = `${args.id}-${randomBytes(4).toString('hex')}.${img.ext}`;
     const chave = 'midias/' + nome;
-    try { await cliente.put(chave, buf, img.tipo); } catch { throw new ErroArgumento('não consegui gravar a imagem no armazenamento; tente de novo'); }
+    try { await cliente.put(chave, img.buffer, img.tipo); } catch { throw new ErroArgumento('não consegui gravar a imagem no armazenamento; tente de novo'); }
 
     // liga ao meme (trava a linha para contar e ordenar sem corrida); se falhar, desfaz o arquivo
     const cli = await pool.connect();
@@ -75,8 +76,8 @@ export function fazerAnexarMidia({ s3 = null, baixar = baixarImagem } = {}) {
       throw e;
     } finally { cli.release(); }
 
-    await auditar({ ...ctx, pool }, 'meme.midia', 'memes:' + args.id, { caminho: chave, bytes: buf.length, tipo: img.tipo, origem: temUrl ? 'url' : 'base64' });
-    return { ok: true, midia: { caminho: chave, url_publica: '/' + chave, tipo: 'imagem', largura: img.largura ?? null, altura: img.altura ?? null, ordem } };
+    await auditar({ ...ctx, pool }, 'meme.midia', 'memes:' + args.id, { caminho: chave, bytes: img.bytes, bytes_original: img.original.bytes, tipo: img.tipo, origem: temUrl ? 'url' : 'base64' });
+    return { ok: true, midia: { caminho: chave, url_publica: '/' + chave, tipo: 'imagem', largura: img.largura ?? null, altura: img.altura ?? null, ordem, bytes: img.bytes, bytes_original: img.original.bytes } };
   };
 }
 

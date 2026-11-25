@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import http from 'node:http';
 import { servidor, bancoDeTeste, semBanco } from './helpers.js';
 import { criarAutenticadorStub } from '../auth-stub.js';
+import sharp from 'sharp';
 import { fazerAnexarMidia } from '../mcp/midias.js';
 
 const skip = semBanco();
@@ -12,7 +13,8 @@ let db, s;
 const q = async (sql, v = []) => (await db.pool.query(sql, v)).rows;
 const como = (apelido) => ({ headers: { 'X-Test-User': apelido } });
 
-const PNG = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13]), Buffer.from('IHDR', 'latin1'), (() => { const b = Buffer.alloc(8); b.writeUInt32BE(320, 0); b.writeUInt32BE(200, 4); return b; })(), Buffer.alloc(20)]);
+const PNG = await sharp({ create: { width: 320, height: 200, channels: 3, background: '#336699' } }).png().toBuffer();
+const ehWebp = (b) => b.subarray(0, 4).toString('latin1') === 'RIFF' && b.subarray(8, 12).toString('latin1') === 'WEBP';
 
 function s3Falso({ falhaPut = false } = {}) {
   const puts = [], removes = [];
@@ -34,16 +36,26 @@ after(async () => { if (skip) return; if (s) await s.fechar(); await db.fechar()
 test('base64: grava no S3 com tipo e nome gerado, liga ao meme com tamanho e ordem, e loga com o dono da chave e via mcp', { skip }, async () => {
   const f = s3Falso(); const anexar = fazerAnexarMidia({ s3: f });
   const r = await anexar(db.pool, { id: 'meme-img', base64: PNG.toString('base64'), credito_por: 'Fulano', credito_url: 'https://exemplo.com/fonte' }, ctxMcp());
-  assert.equal(r.ok, true); assert.match(r.midia.caminho, /^midias\/meme-img-[0-9a-f]{8}\.png$/);
+  assert.equal(r.ok, true); assert.match(r.midia.caminho, /^midias\/meme-img-[0-9a-f]{8}\.webp$/);
   assert.equal(r.midia.url_publica, '/' + r.midia.caminho); assert.equal(r.midia.largura, 320); assert.equal(r.midia.altura, 200); assert.equal(r.midia.ordem, 0);
-  assert.equal(f.puts.length, 1); assert.equal(f.puts[0].chave, r.midia.caminho); assert.equal(f.puts[0].tipo, 'image/png'); assert.deepEqual(f.puts[0].buf, PNG);
+  assert.equal(f.puts.length, 1); assert.equal(f.puts[0].chave, r.midia.caminho); assert.equal(f.puts[0].tipo, 'image/webp'); assert.ok(ehWebp(f.puts[0].buf), 'o arquivo gravado no S3 é WebP');
+  assert.equal(r.midia.bytes, f.puts[0].buf.length); assert.equal(r.midia.bytes_original, PNG.length);
   const [m] = await q("SELECT tipo, caminho, origem_url, credito_por, credito_url, largura, altura, ordem FROM midias WHERE meme_id = 'meme-img'");
   assert.deepEqual(m, { tipo: 'imagem', caminho: r.midia.caminho, origem_url: null, credito_por: 'Fulano', credito_url: 'https://exemplo.com/fonte', largura: 320, altura: 200, ordem: 0 });
   const [l] = await q("SELECT usuario_id, alvo, detalhe FROM log_auditoria WHERE acao = 'meme.midia' ORDER BY id DESC LIMIT 1");
-  assert.equal(Number(l.usuario_id), DONO); assert.equal(l.alvo, 'memes:meme-img'); assert.equal(l.detalhe.via, 'mcp'); assert.equal(l.detalhe.chave_id, 7); assert.equal(l.detalhe.origem, 'base64');
+  assert.equal(Number(l.usuario_id), DONO); assert.equal(l.alvo, 'memes:meme-img'); assert.equal(l.detalhe.via, 'mcp'); assert.equal(l.detalhe.chave_id, 7); assert.equal(l.detalhe.origem, 'base64'); assert.equal(l.detalhe.bytes_original, PNG.length);
   // a segunda imagem ganha a próxima ordem; data URL com quebras de linha também vale
   const r2 = await anexar(db.pool, { id: 'meme-img', base64: 'data:image/png;base64,' + PNG.toString('base64').replace(/(.{40})/g, '$1\n') }, ctxMcp());
   assert.equal(r2.midia.ordem, 1);
+});
+
+test('imagem grande é reduzida para no máximo 1600 px e vai para o S3 bem menor que o original', { skip }, async () => {
+  const grande = await sharp({ create: { width: 3200, height: 2400, channels: 3, background: '#c85028' } }).composite([{ input: { create: { width: 500, height: 400, channels: 3, noise: { type: 'gaussian', mean: 128, sigma: 60 } } }, top: 100, left: 100 }]).jpeg({ quality: 95 }).toBuffer();
+  const f = s3Falso(); const anexar = fazerAnexarMidia({ s3: f });
+  const r = await anexar(db.pool, { id: 'meme-img', base64: grande.toString('base64') }, ctxMcp());
+  assert.deepEqual([r.midia.largura, r.midia.altura], [1600, 1200]);
+  assert.ok(r.midia.bytes < grande.length, 'otimizado: ' + r.midia.bytes + ' < ' + grande.length);
+  const m = await sharp(f.puts[0].buf).metadata(); assert.deepEqual([m.format, m.width, m.height], ['webp', 1600, 1200]);
 });
 
 test('url: usa o downloader (que já faz a proteção contra SSRF), guarda a origem e repassa o erro dele em português', { skip }, async () => {
@@ -123,12 +135,12 @@ test('pelo /mcp: chave com escopo escrever anexa a imagem; o S3 recebe PUT assin
     const r = await chamar(await chaveDe(['ler', 'escrever']), { id: 'meme-img', base64: PNG.toString('base64') });
     assert.equal(r.json.result.isError, false, JSON.stringify(r.json));
     const dados = JSON.parse(r.json.result.content[0].text);
-    assert.match(dados.midia.caminho, /^midias\/meme-img-[0-9a-f]{8}\.png$/);
+    assert.match(dados.midia.caminho, /^midias\/meme-img-[0-9a-f]{8}\.webp$/);
     assert.equal(recebidos.length, 1);
     const p = recebidos[0];
-    assert.equal(p.metodo, 'PUT'); assert.equal(p.url, '/naosalvo/' + dados.midia.caminho); assert.deepEqual(p.corpo, PNG);
+    assert.equal(p.metodo, 'PUT'); assert.equal(p.url, '/naosalvo/' + dados.midia.caminho); assert.ok(ehWebp(p.corpo), 'o corpo enviado ao S3 é WebP');
     assert.match(p.headers.authorization, /^AWS4-HMAC-SHA256 Credential=ACESSOTESTE\/\d{8}\/eu-south\/s3\/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=[0-9a-f]{64}$/);
-    assert.equal(p.headers['content-type'], 'image/png');
+    assert.equal(p.headers['content-type'], 'image/webp');
     assert.ok(!JSON.stringify(p.headers).includes('SEGREDOTESTE'), 'a chave secreta não vai no pedido');
     assert.ok(!JSON.stringify(r.json).includes('SEGREDOTESTE'));
     // a mídia aparece na API pública do acervo só quando o meme estiver publicado; no admin já aparece

@@ -105,6 +105,8 @@ function criarApi(over = {}) {
       if (p === "/api/admin/comentarios") return json(route, 200, { items: [] });
       if (p === "/api/admin/contribuidores") return json(route, 200, { items: [{ id: 7, nome: "Dani", nick: "dani", discord: "dani#1", areas: ["Código"], area_outros: null, horas_semana: 4, experiencia: "pouca", ferramentas: "git", mensagem: null, criado_em: "2026-11-20T10:00:00Z" }] });
       if ((x = p.match(/^\/api\/admin\/feedback\/(\d+)$/)) && m === "DELETE") return json(route, 200, { ok: true });
+      if (p === "/api/admin/uploads/imagem" && m === "POST") { const b = req.postDataBuffer() || Buffer.alloc(0); st.uploads = (st.uploads || []).concat({ perfil: q.get("perfil"), ct: req.headers()["content-type"], bytes: b.length }); if (st.uploadErro) return json(route, st.uploadErro, { erro: "não consegui gravar a imagem no armazenamento" }); return json(route, 201, { ok: true, caminho: "midias/" + q.get("perfil") + "-aabbccddeeff.webp", url_publica: "/midias/" + q.get("perfil") + "-aabbccddeeff.webp", largura: 800, altura: 533, bytes: 20480, bytes_original: 2097152 }); }
+      if ((p === "/api/admin/cartas" && m === "POST") || (m === "PATCH" && p.startsWith("/api/admin/cartas/"))) return json(route, m === "POST" ? 201 : 200, { ok: true, carta: { id: "c1-02", ...corpo } });
       return json(route, 404, { erro: "não mockado: " + p });
     });
   }
@@ -295,6 +297,78 @@ test("cartas, coleções e eras carregam e abrem o formulário de edição", opt
   await page.click('dialog button:has-text("Cancelar")');
   await irPara(page, "Eras");
   await page.waitForSelector("#p-eras .item");
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+const PNG1 = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64");
+
+test("carta: busca de meme por título com teclado, ligar/desligar, enviar imagem (CSRF, perfil carta) e salvar com meme_id e imagem", opts, async () => {
+  const { ctx, page, api, erros } = await abrir();
+  await irPara(page, "Cartas e coleções");
+  await page.waitForSelector("#p-cartas .item");
+  await page.click('#p-cartas button:has-text("Nova carta")');
+  await page.fill('dialog input[id^="f-nome-"]', "Carta Nova");
+  const busca = page.locator('dialog input[role="combobox"]');
+  await busca.fill("ny");
+  await page.waitForSelector('dialog [role="option"]');
+  assert.match(await page.textContent('dialog [role="listbox"]'), /Nyan/i);
+  assert.strictEqual(await busca.getAttribute("aria-expanded"), "true");
+  await busca.press("Enter");
+  assert.match(await page.textContent("dialog .pick-atual"), /Ligado a:/);
+  assert.strictEqual(await busca.getAttribute("aria-expanded"), "false");
+  await page.click('dialog button:has-text("Desligar do meme")');
+  assert.match(await page.textContent("dialog .pick-atual"), /Sem meme ligado/);
+  await busca.fill("ny"); await page.waitForSelector('dialog [role="option"]'); await page.click('dialog [role="option"]');
+  // vídeo e GIF nunca saem do navegador
+  await page.setInputFiles('dialog input[type="file"]', { name: "v.mp4", mimeType: "video/mp4", buffer: Buffer.from("xxxx") });
+  await page.waitForSelector("#av-erro .aviso");
+  assert.match(await page.textContent("#av-erro"), /Vídeo não pode ser enviado/);
+  await page.setInputFiles('dialog input[type="file"]', { name: "a.gif", mimeType: "image/gif", buffer: Buffer.from("GIF89a") });
+  await page.waitForFunction(() => /GIF e SVG/.test(document.getElementById("av-erro").textContent));
+  assert.strictEqual(api.st.uploads, undefined, "nada foi enviado ao servidor");
+  // imagem válida
+  await page.setInputFiles('dialog input[type="file"]', { name: "c.png", mimeType: "image/png", buffer: PNG1 });
+  await page.waitForSelector("dialog .preview img");
+  assert.match(await page.textContent("dialog .up-linha"), /Pronta: 20 KB .original 2,0 MB./);
+  assert.deepStrictEqual(api.st.uploads, [{ perfil: "carta", ct: "image/png", bytes: PNG1.length }]);
+  assert.strictEqual(api.st.log.find((l) => l.p === "/api/admin/uploads/imagem").csrf, "tok-csrf");
+  assert.strictEqual(await page.getAttribute("dialog .preview img", "src"), "/midias/carta-aabbccddeeff.webp");
+  await page.click('dialog button:has-text("Criar carta")');
+  await page.waitForSelector("#av-ok .aviso");
+  const post = api.st.log.find((l) => l.m === "POST" && l.p === "/api/admin/cartas");
+  assert.strictEqual(post.corpo.imagem, "midias/carta-aabbccddeeff.webp");
+  assert.match(post.corpo.meme_id, /^[a-z0-9-]+$/);
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+test("carta: erro do armazenamento aparece como aviso e não muda a imagem", opts, async () => {
+  const { ctx, page, api, erros } = await abrir({ uploadErro: 502 });
+  await irPara(page, "Cartas e coleções");
+  await page.waitForSelector("#p-cartas .item");
+  await page.click('#p-cartas .item button:has-text("Editar")');
+  await page.setInputFiles('dialog input[type="file"]', { name: "c.png", mimeType: "image/png", buffer: PNG1 });
+  await page.waitForFunction(() => /não consegui gravar/.test(document.getElementById("av-erro").textContent));
+  assert.match(await page.textContent("dialog .preview"), /Sem imagem/);
+  assert.deepStrictEqual(erros.filter((e) => !/502/.test(e)), []);
+  await ctx.close();
+});
+
+test("meme: o editor de mídias não oferece vídeo-arquivo novo, o botão envia a imagem (perfil meme) e preenche caminho e tamanho; YouTube aceita link", opts, async () => {
+  const { ctx, page, api, erros } = await abrir();
+  await irPara(page, "Memes");
+  await page.waitForSelector("#p-memes .item");
+  await page.click('#p-memes button:has-text("Novo meme")');
+  assert.match(await page.textContent('dialog label[for^="f-youtube_id-"]'), /link ou ID do YouTube/);
+  await page.click('dialog button:has-text("Adicionar mídia")');
+  assert.strictEqual(await page.$('dialog .midia select option[value="video_arquivo"]'), null, "sem vídeo-arquivo");
+  await page.setInputFiles('dialog .midia input[type="file"]', { name: "m.png", mimeType: "image/png", buffer: PNG1 });
+  await page.waitForFunction(() => document.querySelector("dialog .midia input[id$=c]").value !== "");
+  assert.strictEqual(await page.inputValue("dialog .midia input[id$=c]"), "midias/meme-aabbccddeeff.webp");
+  assert.strictEqual(await page.inputValue("dialog .midia input[id$=w]"), "800");
+  assert.strictEqual(await page.inputValue("dialog .midia input[id$=a]"), "533");
+  assert.strictEqual(api.st.uploads[0].perfil, "meme");
   assert.deepStrictEqual(erros, []);
   await ctx.close();
 });

@@ -1,5 +1,6 @@
 // Validações e esquemas compartilhados do acervo: memes, cartas, coleções, eras.
 // Reutilizado pelo painel admin (/api/admin/...) e pelas ferramentas do MCP (/mcp).
+import { youtubeId } from './envios.js';
 
 export const ID_MEME = /^[a-z0-9-]{1,80}$/;
 export const ID_CARTA = /^[a-z0-9-]{1,100}$/;
@@ -36,9 +37,19 @@ export const dataOuNula = (v) => {
   return v;
 };
 
+/** Aceita o id de 11 caracteres OU o link do YouTube (watch, youtu.be, shorts, embed) e devolve só o id. Vídeo é sempre link externo. */
 export const youtubeOuNulo = (v) => {
   if (v === null || v === '') return null;
-  if (typeof v !== 'string' || !/^[A-Za-z0-9_-]{11}$/.test(v)) falha('id do YouTube com 11 caracteres');
+  if (typeof v === 'string' && /^[A-Za-z0-9_-]{11}$/.test(v.trim())) return v.trim();
+  const viaLink = typeof v === 'string' ? youtubeId(v.trim()) : null;
+  if (!viaLink) falha('id do YouTube (11 caracteres) ou link do YouTube');
+  return viaLink;
+};
+
+/** Imagem que o próprio site guardou no S3 (nome gerado pelo servidor): midias/<arquivo> */
+export const imagemDoSite = (v) => {
+  if (v === null || v === '') return null;
+  if (typeof v !== 'string' || !/^midias\/[A-Za-z0-9._-]{1,120}$/.test(v) || v.includes('..')) falha('imagem enviada pelo painel (midias/arquivo.webp)');
   return v;
 };
 
@@ -78,7 +89,8 @@ export const ESQUEMA_CARTA = {
   nome: texto(1, 80),
   emoji: textoOuNulo(16),
   raridade: um(RARIDADES_CARTA),
-  meme_id: (v) => (v === null || v === '' ? null : (ID_MEME.test(String(v)) ? String(v) : falha('id de meme inválido')))
+  meme_id: (v) => (v === null || v === '' ? null : (ID_MEME.test(String(v)) ? String(v) : falha('id de meme inválido'))),
+  imagem: imagemDoSite
 };
 
 export const ESQUEMA_COLECAO = {
@@ -118,7 +130,11 @@ export function lerCampos(corpo, esquema, obrigatorios = []) {
   return { dados, erros, desconhecidos };
 }
 
-export function lerMidias(lista) {
+/**
+ * Vídeo só por link externo (youtube_id): NÃO se cria mídia nova do tipo 'video_arquivo'. As que já existem no meme
+ * (legado estático) podem ser mantidas: passe os caminhos atuais em `videosExistentes`.
+ */
+export function lerMidias(lista, videosExistentes = []) {
   if (!Array.isArray(lista) || lista.length > 20) return { erro: 'midias: lista de até 20 itens' };
   const out = [];
   for (const [i, m] of lista.entries()) {
@@ -138,6 +154,8 @@ export function lerMidias(lista) {
       throw e;
     }
   }
+  const videoNovo = out.find((m) => m.tipo === 'video_arquivo' && !videosExistentes.includes(m.caminho));
+  if (videoNovo) return { erro: 'vídeo só por link externo (campo "ID ou link do YouTube"): envio de arquivo de vídeo não é permitido' };
   if (new Set(out.map((m) => m.tipo + '|' + m.caminho)).size !== out.length) return { erro: 'midias repetidas (mesmo tipo e caminho)' };
   return { midias: out };
 }

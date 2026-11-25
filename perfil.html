@@ -42,6 +42,7 @@
 
 <script src="common.js?v=20261125e"></script>
 <script src="data.js?v=20261127b"></script>
+<script src="acervo-api.js?v=20261128a"></script>
 <script src="player.js?v=20261125b"></script>
 <script src="viewer.js?v=20261126b"></script>
 <script src="alertas.js?v=20261125b"></script>
@@ -343,7 +344,7 @@ $("dlgF").onsubmit=async ev=>{ev.preventDefault();
 function estado(titulo,texto,botao){$("pf").className="";$("pf").innerHTML=`<div class="pf-st"><b>${esc(titulo)}</b>${esc(texto)}${botao||""}</div>`}
 async function carregar(ap){
   try{
-    const [p,r]=await Promise.all([Api.perfilDe(ap,{silencioso:true}),Api.recados(ap,{silencioso:true})]);
+    const [p,r]=await Promise.all([Api.perfilDe(ap,{silencioso:true}),Api.recados(ap,{silencioso:true}),window.acervoPronto||Promise.resolve()]);
     P=p;REC=(r&&r.itens)||[];
     document.title=`${P.perfil.apelido} · Perfil · NÃO SALVO`;
     barra();montar();

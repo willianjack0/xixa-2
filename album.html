@@ -219,6 +219,7 @@
 <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="tipo"><textarea name="msg"></textarea><input name="contato"><input name="pagina"><input name="bot-field"></form>
 <script src="common.js?v=20261125e"></script>
 <script src="data.js?v=20261127b"></script>
+<script src="acervo-api.js?v=20261128a"></script>
 <script src="player.js?v=20261125b"></script>
 <script src="viewer.js?v=20261126b"></script>
 <script src="alertas.js?v=20261125b"></script>
@@ -244,6 +245,9 @@ async function carregarTipos(){try{const r=await Api.tipos({silencioso:true});TI
 // cartas
 const CARDS=[];
 COLLECTIONS.forEach((c,ci)=>c.cards.forEach((x,i)=>CARDS.push({id:c.id+"-"+i,ci,i,num:String(i+1).padStart(3,"0"),...x,desc:x.meme?(MEMES.find(m=>m.id===x.meme)||{}).d:`${x.name}: ${c.about}`})));
+function atualizarDescricoesCards(){
+  CARDS.forEach(c=>{if(c.meme)c.desc=(MEMES.find(m=>m.id===c.meme)||{}).d||c.desc});
+}
 const byId=Object.fromEntries(CARDS.map(c=>[c.id,c]));
 const COL_IC={orkut:"heart",lendas:"star",expansao:"reblog",comunidades:"user",plataformas:"tv",blogs:"comment",sites:"link",fotolog:"photo",youtube:"video",redes:"share",grupinhos:"mic"};
 const cardYt=c=>{const m=c.meme&&MEMES.find(x=>x.id===c.meme);return m&&m.yt};
@@ -546,12 +550,14 @@ function onConvidado(){location.replace("index.html")}
 // sessão, visita e carteira prontas (common.js): busca álbum e tipos e desenha
 async function onEconomiaPronta(){
   let albumOk=true;
-  await Promise.all([carregarAlbum().catch(()=>{albumOk=false}),carregarTipos()]);
+  await Promise.all([carregarAlbum().catch(()=>{albumOk=false}),carregarTipos(),window.acervoPronto||Promise.resolve()]);
+  atualizarDescricoesCards();
   if(!albumOk){ECO.indisponivel=true;avisoEconomiaOff(true)}
   const first=CARDS.find(c=>owned(c));if(first){ci=first.ci;sel=first.id}
   renderAll();
   if(invCount())setTimeout(()=>{bumpFab();const t=$("toast");if(!albumOk||(t&&t.style.display==="block"))return;toast(ECO.pacotes.some(p=>p.tipo==="boas")?"Seu pacote de boas-vindas está esperando!":`Você tem ${invCount()} pacote${invCount()>1?"s":""} para abrir`,3200)},600);
 }
+(window.acervoPronto||Promise.resolve()).then(()=>{atualizarDescricoesCards();renderAll()});
 const first=CARDS.find(c=>owned(c));if(first){ci=first.ci;sel=first.id}
 renderWallet();renderAll();
 </script>

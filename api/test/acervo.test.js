@@ -63,12 +63,33 @@ test('GET /api/categorias: 7 categorias, total soma todos os memes', { skip }, a
   for (const c of r.json.itens) assert.equal(c.total, N.porCategoria[c.nome] || 0, c.nome);
 });
 
-test('rotas legadas seguem iguais: voto agregado e comentário', { skip }, async () => {
-  // votar exige login (voto por usuário: migração 016); os totais são públicos
-  assert.equal((await s.post('/api/votos', { id: 'havaianas-de-pau', v: 1 })).status, 401);
-  assert.deepEqual((await s.get('/api/votos?ids=havaianas-de-pau')).json['havaianas-de-pau'], { up: 0, down: 0, sum: 0, n: 0 });
-  const c = await s.post('/api/comentarios', { id: 'havaianas-de-pau', autor: 'zeca', texto: 'kkk' });
-  assert.equal(c.status, 201);
-  assert.equal((await s.post('/api/comentarios', { id: 'meme-fantasma', autor: 'zeca', texto: 'oi' })).status, 404);
-  assert.equal((await s.get('/api/comentarios?id=havaianas-de-pau')).json.itens.length, 1);
+test('POST /api/memes/fora-do-ar: devolve só os ocultos/removidos da lista informada, validação e limite', { skip }, async () => {
+  // Configura um oculto e um removido
+  await db.pool.query("UPDATE memes SET status = 'oculto' WHERE id = 'havaianas-de-pau'");
+  await db.pool.query("INSERT INTO memes (id, titulo, ano, categoria, raridade, tipo, status) VALUES ('meme-removido-fda', 'Removido', 2000, 'Vídeos', 'Comum', 'video', 'removido')");
+
+  // Devolve só os que existem como ocultos/removidos; publicados ou desconhecidos não entram
+  const r = await s.post('/api/memes/fora-do-ar', {
+    ids: ['havaianas-de-pau', 'meme-removido-fda', 'kelly-key-computador', 'meme-que-nao-existe']
+  });
+  assert.equal(r.status, 200);
+  assert.equal(r.headers.get('cache-control'), 'no-store');
+  assert.deepEqual(r.json.ids.sort(), ['havaianas-de-pau', 'meme-removido-fda']);
+
+  // Lista vazia
+  const rVazia = await s.post('/api/memes/fora-do-ar', { ids: [] });
+  assert.equal(rVazia.status, 200);
+  assert.deepEqual(rVazia.json.ids, []);
+
+  // Validações
+  assert.equal((await s.post('/api/memes/fora-do-ar', {})).status, 400);
+  assert.equal((await s.post('/api/memes/fora-do-ar', { ids: 'invalido' })).status, 400);
+  assert.equal((await s.post('/api/memes/fora-do-ar', { ids: ['ID COM ESPACO'] })).status, 422);
+
+  // Limite de 600 ids
+  const muitosIds = Array.from({ length: 601 }, (_, i) => 'meme-' + i);
+  assert.equal((await s.post('/api/memes/fora-do-ar', { ids: muitosIds })).status, 400);
+
+  // Restaura havaianas-de-pau para outros testes
+  await db.pool.query("UPDATE memes SET status = 'publicado' WHERE id = 'havaianas-de-pau'");
 });

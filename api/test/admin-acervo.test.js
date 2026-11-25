@@ -55,10 +55,10 @@ test('memes: validação (campos, desconhecidos, id, categoria inexistente, míd
 });
 
 test('memes: editar campos, ocultar some do site, trocar mídias e log com de/para', { skip }, async () => {
-  const r = await s.patch('/api/admin/memes/meme-de-teste', { titulo: 'Meme Editado', raridade: 'Mítico', midias: [{ tipo: 'imagem', caminho: 'memes/novo.jpg' }, { tipo: 'video_arquivo', caminho: 'memes/novo.mp4' }] }, T);
+  const r = await s.patch('/api/admin/memes/meme-de-teste', { titulo: 'Meme Editado', raridade: 'Mítico', midias: [{ tipo: 'imagem', caminho: 'memes/novo.jpg' }, { tipo: 'imagem', caminho: 'midias/meme-aabbccddeeff.webp' }] }, T);
   assert.equal(r.status, 200, JSON.stringify(r.json)); assert.equal(r.json.meme.titulo, 'Meme Editado');
   const adm = await s.get('/api/admin/memes/meme-de-teste', T);
-  assert.deepEqual(adm.json.midias.map((m) => m.caminho), ['memes/novo.jpg', 'memes/novo.mp4']);
+  assert.deepEqual(adm.json.midias.map((m) => m.caminho), ['memes/novo.jpg', 'midias/meme-aabbccddeeff.webp']);
   const l = (await log('meme.editar')).at(-1);
   assert.deepEqual(l.detalhe.campos.titulo, { de: 'Meme de Teste', para: 'Meme Editado' }); assert.equal(l.detalhe.midias, 2);
   assert.equal((await s.patch('/api/admin/memes/meme-de-teste', { status: 'oculto' }, T)).status, 200);

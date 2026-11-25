@@ -87,7 +87,7 @@ export default function registrar(r) {
     const lido = lerCampos(resto, ESQUEMA_MEME, OBRIGATORIOS_MEME);
     if (rejeitar(res, lido)) return;
     let midias = [];
-    if (midiasBrutas !== undefined) { const m = lerMidias(midiasBrutas); if (m.erro) return send(res, 422, { erro: m.erro }); midias = m.midias; }
+    if (midiasBrutas !== undefined) { const m = lerMidias(midiasBrutas, []); if (m.erro) return send(res, 422, { erro: m.erro }); midias = m.midias; }
     const d = { tipo: 'video', status: 'publicado', ...lido.dados };
     try {
       const novo = await emTransacao(pool, async (cli) => {
@@ -111,7 +111,10 @@ export default function registrar(r) {
     const lido = lerCampos(resto, ESQUEMA_MEME);
     if (rejeitar(res, lido)) return;
     let midias = null;
-    if (midiasBrutas !== undefined) { const m = lerMidias(midiasBrutas); if (m.erro) return send(res, 422, { erro: m.erro }); midias = m.midias; }
+    if (midiasBrutas !== undefined) {
+      const { rows: vids } = await pool.query("SELECT caminho FROM midias WHERE meme_id = $1 AND tipo = 'video_arquivo'", [params[0]]);
+      const m = lerMidias(midiasBrutas, vids.map((v) => v.caminho)); if (m.erro) return send(res, 422, { erro: m.erro }); midias = m.midias;
+    }
     if (!Object.keys(lido.dados).length && midias === null) return send(res, 400, { erro: 'nada para alterar' });
     try {
       const resultado = await emTransacao(pool, async (cli) => {
@@ -138,7 +141,8 @@ export default function registrar(r) {
   r.get('/api/admin/cartas', async ({ res, pool, url }) => {
     const col = url.searchParams.get('colecao');
     const { rows } = await pool.query(
-      `SELECT id, colecao_id, numero, nome, emoji, raridade, meme_id FROM cartas ${col && ID_CARTA.test(col) ? 'WHERE colecao_id = $1' : ''} ORDER BY colecao_id, numero`,
+      `SELECT c.id, c.colecao_id, c.numero, c.nome, c.emoji, c.raridade, c.meme_id, c.imagem, m.titulo AS meme_titulo
+         FROM cartas c LEFT JOIN memes m ON m.id = c.meme_id ${col && ID_CARTA.test(col) ? 'WHERE c.colecao_id = $1' : ''} ORDER BY c.colecao_id, c.numero`,
       col && ID_CARTA.test(col) ? [col] : []);
     return send(res, 200, { itens: rows });
   });
@@ -158,8 +162,8 @@ export default function registrar(r) {
         if (!c) return null;
         const { rows: [{ prox }] } = await cli.query('SELECT COALESCE(max(numero), 0) + 1 AS prox FROM cartas WHERE colecao_id = $1', [colecao]);
         const { rows: [x] } = await cli.query(
-          'INSERT INTO cartas (id, colecao_id, numero, nome, emoji, raridade, meme_id) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id, colecao_id, numero, nome, emoji, raridade, meme_id',
-          [`${colecao}-${prox - 1}`, colecao, prox, d.nome, d.emoji ?? null, d.raridade, d.meme_id ?? null]);
+          'INSERT INTO cartas (id, colecao_id, numero, nome, emoji, raridade, meme_id, imagem) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id, colecao_id, numero, nome, emoji, raridade, meme_id, imagem',
+          [`${colecao}-${prox - 1}`, colecao, prox, d.nome, d.emoji ?? null, d.raridade, d.meme_id ?? null, d.imagem ?? null]);
         return x;
       });
       if (!nova) return send(res, 404, { erro: 'coleção não encontrada' });
@@ -180,7 +184,7 @@ export default function registrar(r) {
         const { rows: [antes] } = await cli.query('SELECT * FROM cartas WHERE id = $1 FOR UPDATE', [params[0]]);
         if (!antes) return null;
         const sets = campos.map((c, i) => `${c} = $${i + 2}`).join(', ');
-        const { rows: [novo] } = await cli.query(`UPDATE cartas SET ${sets} WHERE id = $1 RETURNING id, colecao_id, numero, nome, emoji, raridade, meme_id`, [params[0], ...campos.map((c) => lido.dados[c])]);
+        const { rows: [novo] } = await cli.query(`UPDATE cartas SET ${sets} WHERE id = $1 RETURNING id, colecao_id, numero, nome, emoji, raridade, meme_id, imagem`, [params[0], ...campos.map((c) => lido.dados[c])]);
         return { antes, novo };
       });
       if (!out) return send(res, 404, { erro: 'carta não encontrada' });

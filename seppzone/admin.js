@@ -118,11 +118,13 @@ function formulario({ titulo, intro, campos, valores, ok, salvar }) {
       else if (c.t === "num") { entrada = h("input", { id, type: "number", inputmode: "numeric", value: norm(v0), "aria-describedby": desc }); ler = () => (entrada.value.trim() === "" ? (c.nulo ? null : undefined) : Number(entrada.value)); }
       else if (c.t === "data") { entrada = h("input", { id, type: "date", value: norm(v0), "aria-describedby": desc }); ler = () => entrada.value || null; }
       else if (c.t === "lista") { entrada = h("input", { id, type: "text", value: (v0 || []).join(", "), "aria-describedby": desc }); ler = () => entrada.value.split(",").map((s) => s.trim()).filter(Boolean); }
+      else if (c.t === "meme") { const ed = campoMeme(v0, valores.meme_titulo, id, desc); entrada = ed.el; ler = ed.ler; }
+      else if (c.t === "imagemCarta") { const ed = campoImagem(v0, "carta", id, desc); entrada = ed.el; ler = ed.ler; }
       else if (c.t === "midias") { const ed = editorMidias(v0 || [], id, desc); entrada = ed.el; ler = ed.ler; }
       else { entrada = h("input", { id, type: "text", maxLength: c.max, value: norm(v0), disabled: !!c.ro, "aria-describedby": desc }); ler = () => { const v = entrada.value.trim(); return v === "" && c.nulo ? null : v; }; }
-      if (c.req && c.t !== "midias") entrada.setAttribute("aria-required", "true");
+      if (c.req && !["midias", "meme", "imagemCarta"].includes(c.t)) entrada.setAttribute("aria-required", "true");
       refs[c.n] = { entrada, erro, ler };
-      const bloco = h("div", { class: "campo" }, c.t === "midias" ? h("span", { class: "rot", id: id + "-l" }, c.r) : h("label", { for: id }, c.r + (c.req ? " (obrigatório)" : "")), entrada, dicaEl, erro);
+      const bloco = h("div", { class: "campo" }, ["midias", "meme", "imagemCarta"].includes(c.t) ? h("span", { class: "rot", id: id + "-l" }, c.r) : h("label", { for: id }, c.r + (c.req ? " (obrigatório)" : "")), entrada, dicaEl, erro);
       if (c.meia) { if (!linhaDupla) { linhaDupla = h("div", { class: "duas" }); corpo.append(linhaDupla); } linhaDupla.append(bloco); }
       else { linhaDupla = null; corpo.append(bloco); }
     }
@@ -152,7 +154,7 @@ function formulario({ titulo, intro, campos, valores, ok, salvar }) {
         h("footer", null, h("button", { class: "b", type: "button", on: { click: () => dlg.close() } }, "Cancelar"), salvarBtn)));
     dlg.addEventListener("close", () => { if (!feito) resolve(null); });
     abrirDialogo(dlg);
-    const primeiro = $("input:not([disabled]),textarea,select", corpo); if (primeiro) primeiro.focus();
+    const primeiro = $("input:not([disabled]):not([type=file]),textarea,select", corpo); if (primeiro) primeiro.focus();
   });
 }
 
@@ -163,15 +165,18 @@ function editorMidias(inicial, id, desc) {
     m = m || {};
     const k = uid("m");
     const f = (nome, rot, val, max) => { const e = h("input", { id: k + nome, type: "text", maxLength: max, value: norm(val) }); return [e, h("div", { class: "campo" }, h("label", { for: k + nome }, rot), e)]; };
-    const tipo = h("select", { id: k + "t", value: m.tipo || "imagem" }, h("option", { value: "imagem" }, "Imagem"), h("option", { value: "video_arquivo" }, "Vídeo (arquivo)"));
-    const [cam, camB] = f("c", "Caminho no site (ex.: memes/arquivo.jpg)", m.caminho, 200);
+    const legado = m.tipo === "video_arquivo";
+    const tipo = h("select", { id: k + "t", value: m.tipo || "imagem", disabled: !legado }, h("option", { value: "imagem" }, "Imagem"), legado ? h("option", { value: "video_arquivo" }, "Vídeo (arquivo antigo)") : null);
+    const [cam, camB] = f("c", "Caminho no site (preenchido ao enviar a imagem)", m.caminho, 200);
     const [ori, oriB] = f("o", "Link de origem (opcional)", m.origem_url, 500);
     const [cpor, cporB] = f("p", "Crédito: quem (opcional)", m.credito_por, 120);
     const [curl, curlB] = f("u", "Crédito: link (opcional)", m.credito_url, 500);
     const larg = h("input", { id: k + "w", type: "number", inputmode: "numeric", value: norm(m.largura) });
     const alt = h("input", { id: k + "a", type: "number", inputmode: "numeric", value: norm(m.altura) });
+    const envio = botaoEnviarImagem({ perfil: "meme", rotulo: "Enviar imagem do computador", aoEnviar: (d) => { cam.value = d.caminho; larg.value = d.largura; alt.value = d.altura; } });
     const el = h("div", { class: "midia" },
       h("div", { class: "duas" }, h("div", { class: "campo" }, h("label", { for: k + "t" }, "Tipo"), tipo), camB),
+      legado ? null : envio.el,
       oriB, h("div", { class: "duas" }, cporB, curlB),
       h("div", { class: "duas" }, h("div", { class: "campo" }, h("label", { for: k + "w" }, "Largura (px)"), larg), h("div", { class: "campo" }, h("label", { for: k + "a" }, "Altura (px)"), alt)),
       h("div", null, h("button", { class: "b bad peq", type: "button", on: { click: () => { el.remove(); linhas.splice(linhas.indexOf(l), 1); } } }, "Remover esta mídia")));
@@ -182,6 +187,103 @@ function editorMidias(inicial, id, desc) {
   inicial.forEach(nova);
   raiz.append(lista, h("div", null, h("button", { class: "b peq", type: "button", on: { click: () => nova().el.querySelector("input").focus() } }, "Adicionar mídia")));
   return { el: raiz, ler: () => linhas.map((l) => l.ler()) };
+}
+
+// ---------- upload de imagem (vai para o S3, otimizada pelo servidor) ----------
+const TIPOS_IMAGEM = ["image/jpeg", "image/png", "image/webp"];
+const MAX_UPLOAD_MB = 10;
+const kb = (n) => (n >= 1048576 ? (n / 1048576).toFixed(1).replace(".", ",") + " MB" : Math.max(1, Math.round(n / 1024)) + " KB");
+
+/** Valida no navegador e envia o arquivo; resolve { ok, data } como api(). Vídeo, GIF e SVG nunca saem do navegador. */
+async function enviarImagem(arquivo, perfil) {
+  if (!arquivo) return { ok: false, status: 0, data: { erro: "Escolha um arquivo." } };
+  if (!TIPOS_IMAGEM.includes(arquivo.type)) {
+    const video = /^video\//.test(arquivo.type);
+    return { ok: false, status: 415, data: { erro: video ? "Vídeo não pode ser enviado: use o link do YouTube no campo do vídeo." : "Só imagens jpeg, png ou webp (GIF e SVG não são aceitos)." } };
+  }
+  if (arquivo.size > MAX_UPLOAD_MB * 1048576) return { ok: false, status: 413, data: { erro: "A imagem passa de " + MAX_UPLOAD_MB + " MB." } };
+  let r;
+  try {
+    r = await fetch("/api/admin/uploads/imagem?perfil=" + encodeURIComponent(perfil), { method: "POST", credentials: "same-origin", headers: { "X-CSRF": (eu && eu.csrf) || "", "Content-Type": arquivo.type }, body: arquivo });
+  } catch (e) { return { ok: false, status: 0, data: {} }; }
+  let data = null; try { data = await r.json(); } catch (e) { /* sem corpo JSON */ }
+  if (r.status === 401) sessaoExpirou();
+  return { ok: r.ok, status: r.status, data: data || {} };
+}
+
+/** Botão + seletor de arquivo. aoEnviar(dados) recebe a resposta do servidor. Devolve { el, botao }. */
+function botaoEnviarImagem({ perfil, rotulo, aoEnviar, classe }) {
+  const id = uid("up");
+  const entrada = h("input", { id, type: "file", accept: TIPOS_IMAGEM.join(","), class: "so-leitor", tabindex: "-1", "aria-hidden": "true" });
+  const estado = h("span", { class: "mini", role: "status" });
+  const botao = h("button", { class: classe || "b peq", type: "button", on: { click: () => entrada.click() } }, rotulo || "Enviar imagem");
+  entrada.addEventListener("change", async () => {
+    const arq = entrada.files && entrada.files[0]; entrada.value = "";
+    if (!arq) return;
+    botao.disabled = true; estado.textContent = "Enviando e otimizando…";
+    const r = await enviarImagem(arq, perfil);
+    botao.disabled = false;
+    if (!r.ok) { estado.textContent = ""; aviso(msgErro(r), "erro"); return; }
+    estado.textContent = "Pronta: " + kb(r.data.bytes) + " (original " + kb(r.data.bytes_original) + ")";
+    aoEnviar(r.data);
+  });
+  return { el: h("span", { class: "up-linha" }, botao, entrada, estado), botao };
+}
+
+/** Campo de imagem da carta: mostra a arte atual, envia outra ou remove. ler() devolve o caminho (midias/...) ou null. */
+function campoImagem(valorInicial, perfil, id, desc) {
+  let atual = valorInicial || null;
+  const prev = h("div", { class: "preview" });
+  function pinta() {
+    trocar(prev, atual ? h("img", { src: "/" + atual, alt: "Arte atual", width: 96, height: 128, loading: "lazy" }) : h("span", { class: "mini" }, "Sem imagem."),
+      atual ? h("button", { class: "b bad peq", type: "button", on: { click: () => { atual = null; pinta(); } } }, "Remover imagem") : null);
+  }
+  const envio = botaoEnviarImagem({ perfil, rotulo: atual ? "Trocar imagem" : "Enviar imagem", aoEnviar: (d) => { atual = d.caminho; pinta(); } });
+  pinta();
+  const raiz = h("div", { class: "campo", id, role: "group", "aria-describedby": desc, "aria-label": "Imagem" }, prev, envio.el);
+  return { el: raiz, ler: () => atual };
+}
+
+/** Busca de meme com lista de resultados (combobox): digite parte do título; escolha com clique ou setas + Enter. ler() = id ou null. */
+function campoMeme(idInicial, tituloInicial, id, desc) {
+  let escolhido = idInicial ? { id: idInicial, titulo: tituloInicial || idInicial } : null, timer = null, aba = 0;
+  const entrada = h("input", { id, type: "search", role: "combobox", "aria-autocomplete": "list", "aria-expanded": "false", "aria-controls": id + "-lb", autocomplete: "off", maxLength: 60, placeholder: "Digite parte do título do meme…", "aria-describedby": desc });
+  const lista = h("ul", { id: id + "-lb", class: "pick-lista", role: "listbox", hidden: true });
+  const atual = h("div", { class: "pick-atual", role: "status" });
+  function pintaAtual() {
+    trocar(atual, escolhido
+      ? [h("span", { class: "chip info" }, "Ligado a: " + escolhido.titulo), h("span", { class: "chip cod" }, escolhido.id), h("button", { class: "b peq", type: "button", on: { click: () => { escolhido = null; pintaAtual(); entrada.focus(); } } }, "Desligar do meme")]
+      : h("span", { class: "mini" }, "Sem meme ligado."));
+  }
+  function fecha() { lista.hidden = true; entrada.setAttribute("aria-expanded", "false"); entrada.removeAttribute("aria-activedescendant"); }
+  function escolhe(m) { escolhido = { id: m.id, titulo: m.titulo }; entrada.value = ""; fecha(); pintaAtual(); }
+  const opcoes = () => [...lista.querySelectorAll("[role=option]")];
+  function marca(i) { opcoes().forEach((o, k) => o.setAttribute("aria-selected", String(k === i))); const o = opcoes()[i]; if (o) { entrada.setAttribute("aria-activedescendant", o.id); o.scrollIntoView({ block: "nearest" }); } }
+  async function busca() {
+    const t = entrada.value.trim();
+    if (t.length < 2) { fecha(); return; }
+    const minha = ++aba;
+    trocar(lista, h("li", { class: "pick-st", role: "presentation" }, "Buscando…")); lista.hidden = false; entrada.setAttribute("aria-expanded", "true");
+    const r = await api("GET", "/api/admin/memes?" + new URLSearchParams({ busca: t, limite: "8" }));
+    if (minha !== aba) return;
+    if (!r.ok) { trocar(lista, h("li", { class: "pick-st", role: "presentation" }, msgErro(r))); return; }
+    const itens = r.data.itens || [];
+    if (!itens.length) { trocar(lista, h("li", { class: "pick-st", role: "presentation" }, "Nenhum meme com “" + t + "”.")); return; }
+    trocar(lista, itens.map((m, i) => h("li", { id: id + "-o" + i, role: "option", "aria-selected": "false", class: "pick-op", on: { mousedown: (e) => e.preventDefault(), click: () => escolhe(m) } },
+      h("b", null, m.titulo), h("span", { class: "mini" }, m.ano + " · " + m.categoria + (m.status !== "publicado" ? " · " + (STATUS_MEME[m.status] || m.status) : "") + " · " + m.id))));
+    marca(0);
+  }
+  entrada.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(busca, 250); });
+  entrada.addEventListener("blur", () => setTimeout(fecha, 150));
+  entrada.addEventListener("keydown", (e) => {
+    const ops = opcoes(); const i = ops.findIndex((o) => o.getAttribute("aria-selected") === "true");
+    if (e.key === "ArrowDown" && ops.length) { e.preventDefault(); marca((i + 1) % ops.length); }
+    else if (e.key === "ArrowUp" && ops.length) { e.preventDefault(); marca((i - 1 + ops.length) % ops.length); }
+    else if (e.key === "Enter" && !lista.hidden && ops[i]) { e.preventDefault(); e.stopPropagation(); ops[i].click(); }
+    else if (e.key === "Escape" && !lista.hidden) { e.stopPropagation(); fecha(); }
+  });
+  pintaAtual();
+  return { el: h("div", { class: "campo pick" }, atual, entrada, lista), ler: () => (escolhido ? escolhido.id : null), entrada };
 }
 
 // ---------- lista paginada (cursor ou offset) ----------
@@ -643,7 +745,7 @@ function camposMeme(criando) {
     { n: "categoria", r: "Categoria", t: "sel", req: true, ops: cats, meia: true }, { n: "raridade", r: "Raridade", t: "sel", req: true, ops: RARIDADES_MEME, meia: true },
     { n: "tipo", r: "Tipo", t: "sel", ops: [["video", "Vídeo"], ["foto", "Foto"]], meia: true }, { n: "status", r: "Situação", t: "sel", ops: Object.entries(STATUS_MEME), meia: true },
     { n: "emoji", r: "Emoji", t: "texto", nulo: true, max: 16, meia: true }, { n: "autor", r: "Autor", t: "texto", nulo: true, max: 80, meia: true },
-    { n: "duracao", r: "Duração (segundos)", t: "num", nulo: true, meia: true }, { n: "youtube_id", r: "ID do YouTube", t: "texto", nulo: true, max: 11, dica: "11 caracteres, o que vem depois de v= no link.", meia: true },
+    { n: "duracao", r: "Duração (segundos)", t: "num", nulo: true, meia: true }, { n: "youtube_id", r: "Vídeo: link ou ID do YouTube", t: "texto", nulo: true, max: 200, dica: "Cole o link do YouTube. Vídeo só por link externo; não há envio de arquivo.", meia: true },
     { n: "descricao", r: "Descrição", t: "area", nulo: true, max: 2000 },
     { n: "midias", r: "Mídias (substituem a lista inteira ao salvar)", t: "midias" }
   ];
@@ -764,12 +866,13 @@ function abaCartas(p) {
     aviso("Coleção salva.", "ok"); carregarColecoes(c.id);
   }
   const camposCarta = [{ n: "nome", r: "Nome", t: "texto", req: true, max: 80 }, { n: "emoji", r: "Emoji", t: "texto", nulo: true, max: 16, meia: true }, { n: "raridade", r: "Raridade", t: "sel", req: true, ops: RARIDADES_CARTA, meia: true },
-    { n: "meme_id", r: "Meme ligado (identificador, opcional)", t: "texto", nulo: true, max: 80, dica: "Deixe vazio se a carta não tem meme." }];
+    { n: "meme_id", r: "Meme ligado (opcional)", t: "meme", dica: "Digite parte do título e escolha na lista." },
+    { n: "imagem", r: "Imagem da carta (opcional)", t: "imagemCarta", dica: "jpeg, png ou webp até 10 MB; é reduzida e convertida para WebP." }];
   async function cartaForm(carta) {
     const c = atual(), criando = !carta;
     const r = await formulario({ titulo: criando ? "Nova carta em " + c.nome : "Editar carta: " + carta.nome, ok: criando ? "Criar carta" : "Salvar carta", campos: camposCarta, valores: carta || { raridade: "Comum" },
-      salvar: async (v) => { if (criando) { const corpo = { colecao_id: c.id, nome: v.nome, raridade: v.raridade }; if (v.emoji) corpo.emoji = v.emoji; if (v.meme_id) corpo.meme_id = v.meme_id; return api("POST", "/api/admin/cartas", corpo); }
-        const corpo = {}; for (const k of ["nome", "emoji", "raridade", "meme_id"]) if (norm(v[k]) !== norm(carta[k])) corpo[k] = v[k];
+      salvar: async (v) => { if (criando) { const corpo = { colecao_id: c.id, nome: v.nome, raridade: v.raridade }; if (v.emoji) corpo.emoji = v.emoji; if (v.meme_id) corpo.meme_id = v.meme_id; if (v.imagem) corpo.imagem = v.imagem; return api("POST", "/api/admin/cartas", corpo); }
+        const corpo = {}; for (const k of ["nome", "emoji", "raridade", "meme_id", "imagem"]) if (norm(v[k]) !== norm(carta[k])) corpo[k] = v[k];
         if (!Object.keys(corpo).length) return { ok: true, data: { semMudanca: true } }; return api("PATCH", "/api/admin/cartas/" + encodeURIComponent(carta.id), corpo); } });
     if (!r) return; if (r.data.semMudanca) return aviso("Nada mudou.", "ok");
     aviso(criando ? "Carta criada na próxima posição." : "Carta salva.", "ok"); criando ? carregarColecoes(c.id) : carregarCartas();
@@ -782,7 +885,7 @@ function abaCartas(p) {
     trocar(cartas, h("div", { class: "sec" }, h("h2", null, "Cartas", h("button", { class: "b pri peq", type: "button", on: { click: () => cartaForm(null) } }, "Nova carta")),
       it.length ? h("ul", { class: "lista" }, it.map((x) => h("li", { class: "item" },
         h("div", { class: "item-h" }, h("h3", null, "#" + x.numero + " " + (x.emoji ? x.emoji + " " : "") + x.nome), chip(x.raridade)),
-        h("div", { class: "meta" }, h("span", { class: "chip cod" }, x.id), x.meme_id ? h("span", null, "Meme: " + x.meme_id) : h("span", null, "Sem meme ligado")),
+        h("div", { class: "meta" }, h("span", { class: "chip cod" }, x.id), x.meme_id ? h("span", null, "Meme: " + (x.meme_titulo || x.meme_id)) : h("span", null, "Sem meme ligado"), x.imagem ? h("img", { class: "mini-arte", src: "/" + x.imagem, alt: "Arte da carta " + x.nome, width: 36, height: 48, loading: "lazy" }) : h("span", null, "Sem imagem")),
         h("div", { class: "acts" }, h("button", { class: "b", type: "button", on: { click: () => cartaForm(x) } }, "Editar"))))) : vazio("Esta coleção ainda não tem cartas.")));
   }
   sel.addEventListener("change", mostrar);

@@ -430,6 +430,7 @@ body.ep-xp .lt-top small{color:#fff}
 
 <script src="common.js?v=20261125e"></script>
 <script src="data.js?v=20261127b"></script>
+<script src="acervo-api.js?v=20261128a"></script>
 <script src="player.js?v=20261125b"></script>
 <script src="viewer.js?v=20261126b"></script>
 <script src="alertas.js?v=20261125b"></script>
@@ -488,7 +489,9 @@ const DETALHE={
 const ST={ano:"2012",cat:"Todas"};
 const calmo=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 const rolar=()=>calmo()?"auto":"smooth";
-const ALL=MEMES.slice();
+let ALL=[];
+function buildAll(){ALL=MEMES.slice()}
+buildAll();
 const doAno=k=>ALL.filter(m=>yKey(m.y)===k);
 const foto=m=>m.img?m.img:m.yt?`https://i.ytimg.com/vi/${m.yt}/mqdefault.jpg`:"";
 const dataTxt=m=>{const d=m.date?new Date(m.date+"T12:00:00"):null;if(!d||isNaN(d))return String(m.y);return d.getDate()===1?`${MES[d.getMonth()][0].toUpperCase()+MES[d.getMonth()].slice(1)} de ${d.getFullYear()}`:`${d.getDate()} de ${MES[d.getMonth()]} de ${d.getFullYear()}`};
@@ -542,7 +545,7 @@ $("yl").onclick=()=>{const i=KEYS.indexOf(ST.ano);if(KEYS[i-1])ir(KEYS[i-1],()=>
 addEventListener("keydown",e=>{if(document.querySelector(".vw"))return;const i=KEYS.indexOf(ST.ano);if(e.key==="ArrowRight"&&KEYS[i+1])ir(KEYS[i+1]);if(e.key==="ArrowLeft"&&KEYS[i-1])ir(KEYS[i-1])});
 addEventListener("hashchange",()=>{const h=decodeURIComponent(location.hash.slice(1));const k=temAno(h)?h:/^\d{4}$/.test(h)?yKey(h):null;if(k&&k!==ST.ano)ir(k)});
 const h0=decodeURIComponent(location.hash.slice(1));ST.ano=temAno(h0)?h0:/^\d{4}$/.test(h0)?yKey(h0):"2012";
-anos();palco();
+(window.acervoPronto||Promise.resolve()).then(()=>{buildAll();anos();palco()});
 </script>
 </body>
 </html>
