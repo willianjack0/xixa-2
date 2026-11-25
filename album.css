@@ -294,7 +294,7 @@ body.mesa-on{overflow:hidden}
 .mesa-nav .mbt{font-size:20px}
 .mesa .dica{display:none;margin:0;color:#fff;font:600 13px Inter,sans-serif;text-shadow:0 1px 3px #000a}
 @media (orientation:portrait) and (max-width:760px){.mesa .dica{display:block}}
-.livro{position:relative;width:min(96vw,calc((100vh - 150px)*1.48),1500px);width:min(96vw,calc((100dvh - 150px)*1.48),1500px);aspect-ratio:6/4.05;display:grid;grid-template-columns:1fr 1fr;perspective:2400px;filter:drop-shadow(0 26px 30px #0007);touch-action:pan-y}
+.livro{position:relative;width:min(96vw,calc((100vh - 150px)*1.48),1500px);width:min(96vw,calc((100dvh - 150px)*1.48),1500px);aspect-ratio:6/4.05;display:grid;grid-template-columns:1fr 1fr;perspective:4600px;filter:drop-shadow(0 26px 30px #0007);touch-action:pan-y}
 .livro .lado{position:relative;min-width:0}
 .livro .pg{height:100%;border-radius:0;padding:5% 6% 4%}
 .livro .lado.e .pg{border-radius:6px 0 0 6px}.livro .lado.d .pg{border-radius:0 6px 6px 0}
@@ -322,7 +322,9 @@ body.mesa-on{overflow:hidden}
 /* folha molinha: tiras encadeadas que dobram em sequência */
 .mola{position:absolute;top:0;bottom:0;width:50%;z-index:8;transform-style:preserve-3d;pointer-events:none}
 .mola.prox{left:50%}.mola.ant{left:0}
-.tira{position:absolute;top:0;bottom:0;transform-style:preserve-3d}
+.tira{position:absolute;top:0;bottom:0;transform-style:preserve-3d;will-change:transform}
+/* no livro as figurinhas já estão coladas: sem a animação de "distribuir" (ela repetia a cada virada e dentro da folha que vira) */
+.livro .slot{animation:none}
 .mola.prox .tira{transform-origin:left center}.mola.ant .tira{transform-origin:right center}
 .tira>.cara{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .tira>.cara.v{transform:rotateY(180deg)}

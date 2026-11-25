@@ -28,7 +28,7 @@ export async function perfilPublico(pool, apelido, visitante) {
     patenteComXp(pool, u.id),
     pool.query('SELECT id, nome, icone, cor, ordem FROM colecoes ORDER BY ordem, id'),
     pool.query(
-      `SELECT c.id, c.colecao_id, c.numero, c.nome, c.emoji, c.raridade, c.meme_id, (i.usuario_id IS NOT NULL) AS tem
+      `SELECT c.id, c.colecao_id, c.numero, c.nome, c.emoji, c.raridade, c.meme_id, c.imagem, (i.usuario_id IS NOT NULL) AS tem
          FROM cartas c LEFT JOIN inventario_cartas i ON i.carta_id = c.id AND i.usuario_id = $1 AND i.quantidade > 0
         ORDER BY c.colecao_id, c.numero`, [u.id]),
     pool.query('SELECT count(*)::int AS n FROM recados WHERE dono_id = $1', [u.id])
@@ -65,25 +65,26 @@ export async function perfilPublico(pool, apelido, visitante) {
 
 export const LIMITE_PUBLICACOES = 30;
 export const MAX_LEGENDA = 140;
-const cartaDe = (r) => ({ id: r.carta_id, colecao_id: r.colecao_id, numero: r.numero, nome: r.nome, emoji: r.emoji, raridade: r.raridade, meme_id: r.carta_meme });
+const cartaDe = (r) => ({ id: r.carta_id, colecao_id: r.colecao_id, numero: r.numero, nome: r.nome, emoji: r.emoji, raridade: r.raridade, meme_id: r.carta_meme, imagem: r.carta_imagem || null });
 
 /** Publicações do perfil, mais recentes primeiro: figurinhas que a pessoa compartilhou do álbum
  *  e memes que ela enviou e a moderação aprovou (envios.status = 'aprovado'). */
 export async function listarPublicacoes(pool, usuarioId, ehMeu) {
   const [{ rows: figs }, { rows: envs }] = await Promise.all([
     pool.query(
-      `SELECT p.id, p.legenda, p.criado_em, p.carta_id, c.colecao_id, c.numero, c.nome, c.emoji, c.raridade, c.meme_id AS carta_meme
+      `SELECT p.id, p.legenda, p.criado_em, p.carta_id, c.colecao_id, c.numero, c.nome, c.emoji, c.raridade, c.meme_id AS carta_meme, c.imagem AS carta_imagem
          FROM publicacoes p JOIN cartas c ON c.id = p.carta_id
         WHERE p.usuario_id = $1 ORDER BY p.criado_em DESC, p.id DESC LIMIT $2`, [usuarioId, LIMITE_PUBLICACOES]),
     pool.query(
-      `SELECT e.id, e.titulo, e.ano, coalesce(e.decidido_em, e.criado_em) AS em, m.id AS meme_id, m.titulo AS meme_titulo, m.ano AS meme_ano, m.youtube_id, m.emoji
+      `SELECT e.id, e.titulo, e.ano, coalesce(e.decidido_em, e.criado_em) AS em, m.id AS meme_id, m.titulo AS meme_titulo, m.ano AS meme_ano, m.youtube_id, m.emoji,
+              (SELECT md.caminho FROM midias md WHERE md.meme_id = m.id AND md.tipo = 'imagem' ORDER BY md.ordem, md.id LIMIT 1) AS meme_imagem
          FROM envios e LEFT JOIN memes m ON m.id = e.meme_id AND m.status = 'publicado'
         WHERE e.usuario_id = $1 AND e.status = 'aprovado' ORDER BY em DESC, e.id DESC LIMIT $2`, [usuarioId, LIMITE_PUBLICACOES])
   ]);
   const l = [
     ...figs.map((r) => ({ id: 'f' + r.id, tipo: 'figurinha', em: r.criado_em, legenda: r.legenda || null, carta: cartaDe(r), pode_apagar: !!ehMeu })),
     ...envs.map((r) => ({ id: 'm' + r.id, tipo: 'meme', em: r.em, legenda: null, pode_apagar: false,
-      meme: { id: r.meme_id || null, titulo: r.meme_titulo || r.titulo, ano: r.meme_ano || r.ano || null, youtube_id: r.youtube_id || null, emoji: r.emoji || null } }))
+      meme: { id: r.meme_id || null, titulo: r.meme_titulo || r.titulo, ano: r.meme_ano || r.ano || null, youtube_id: r.youtube_id || null, imagem: r.meme_imagem || null, emoji: r.emoji || null } }))
   ];
   l.sort((a, b) => new Date(b.em) - new Date(a.em));
   return l.slice(0, LIMITE_PUBLICACOES);
@@ -111,7 +112,7 @@ export async function publicarFigurinha(pool, usuario, cartaId, legenda) {
      ON CONFLICT (usuario_id, carta_id) DO UPDATE SET criado_em = now(), legenda = EXCLUDED.legenda
      RETURNING id, legenda, criado_em, carta_id`, [usuario.id, cartaId, leg]);
   const { rows: [c] } = await pool.query(
-    'SELECT colecao_id, numero, nome, emoji, raridade, meme_id AS carta_meme FROM cartas WHERE id = $1', [cartaId]);
+    'SELECT colecao_id, numero, nome, emoji, raridade, meme_id AS carta_meme, imagem AS carta_imagem FROM cartas WHERE id = $1', [cartaId]);
   return { id: 'f' + r.id, tipo: 'figurinha', em: r.criado_em, legenda: r.legenda || null, carta: cartaDe({ ...r, ...c }), pode_apagar: true };
 }
 

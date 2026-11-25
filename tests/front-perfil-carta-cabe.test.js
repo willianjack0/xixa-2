@@ -82,6 +82,15 @@ for (const vp of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
           for (const s of c.querySelectorAll(".tp,.nm,.ft")) {
             const q = s.getBoundingClientRect();
             if (q.width && (q.bottom > r.bottom + 1 || q.right > r.right + 1 || q.left < r.left - 1)) out.push(`${s.className}: ${s.textContent.trim().slice(0, 30)}`);
+            // coleção: cada palavra inteira numa linha só (sem "COMUNIDADE / S"), então nada passa da largura da caixa
+            if (s.classList.contains("ft") && q.width) {
+              const t = s.firstChild, txt = (t && t.textContent) || "";
+              for (const m of txt.matchAll(/\S+/g)) {
+                const rg = document.createRange(); rg.setStart(t, m.index); rg.setEnd(t, m.index + m[0].length);
+                const linhas = new Set([...rg.getClientRects()].filter((x) => x.width > 0).map((x) => Math.round(x.top)));
+                if (linhas.size > 1 || rg.getBoundingClientRect().right > q.right + 1) out.push(`ft com palavra cortada: ${m[0]}`);
+              }
+            }
           }
         }
         return out;

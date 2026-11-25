@@ -231,6 +231,56 @@ export async function publicar_meme(pool, args = {}, ctx = {}) {
   };
 }
 
+export async function ocultar_meme(pool, args = {}, ctx = {}) {
+  validarChavesConhecidas(args, ['id']);
+
+  if (!args.id || typeof args.id !== 'string' || !ID_MEME.test(args.id)) {
+    throw new ErroArgumento('campo "id" obrigatório: slug a-z, 0-9 e hífen, até 80 caracteres');
+  }
+
+  const { id } = args;
+
+  const resultado = await emTransacao(pool, async (cli) => {
+    const { rows: [antes] } = await cli.query('SELECT id, titulo, status FROM memes WHERE id = $1 FOR UPDATE', [id]);
+    if (!antes) return null;
+
+    if (antes.status === 'removido') {
+      throw new ErroArgumento('meme removido só o painel reativa');
+    }
+
+    if (antes.status === 'oculto') {
+      return { antes, novo: antes, sem_mudanca: true };
+    }
+
+    const { rows: [novo] } = await cli.query(
+      `UPDATE memes SET status = 'oculto' WHERE id = $1 RETURNING id, titulo, status`,
+      [id]
+    );
+    return { antes, novo, sem_mudanca: false };
+  });
+
+  if (!resultado) {
+    throw new ErroArgumento('meme não encontrado');
+  }
+
+  if (resultado.sem_mudanca) {
+    return {
+      ok: true,
+      sem_mudanca: true,
+      meme: { id: resultado.novo.id, titulo: resultado.novo.titulo, status: resultado.novo.status }
+    };
+  }
+
+  await auditar({ ...ctx, pool }, 'meme.editar', 'memes:' + id, {
+    campos: { status: { de: resultado.antes.status, para: resultado.novo.status } }
+  });
+
+  return {
+    ok: true,
+    meme: { id: resultado.novo.id, titulo: resultado.novo.titulo, status: resultado.novo.status }
+  };
+}
+
 export async function criar_carta(pool, args = {}, ctx = {}) {
   validarChavesConhecidas(args, ['colecao_id', 'nome', 'raridade', 'emoji', 'meme_id']);
 

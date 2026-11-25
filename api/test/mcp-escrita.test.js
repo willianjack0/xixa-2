@@ -71,22 +71,22 @@ async function callTool(chave, name, args = {}) {
   return r;
 }
 
-test('tools/list traz 8 ferramentas para chave com 3 escopos e 3 ferramentas para chave só ler', { skip }, async () => {
+test('tools/list traz 13 ferramentas para chave com 3 escopos e 5 ferramentas para chave só ler', { skip }, async () => {
   await criarAdmin('admList');
   const { chave: kLer } = await criarChave('admList', ['ler']);
   const { chave: kTudo } = await criarChave('admList', ['ler', 'escrever', 'publicar']);
 
   const rLer = await s.post('/mcp', { jsonrpc: '2.0', id: 1, method: 'tools/list' }, { headers: authHeader(kLer) });
   assert.equal(rLer.status, 200);
-  assert.equal(rLer.json.result.tools.length, 3);
+  assert.equal(rLer.json.result.tools.length, 5);
 
   const rTudo = await s.post('/mcp', { jsonrpc: '2.0', id: 2, method: 'tools/list' }, { headers: authHeader(kTudo) });
   assert.equal(rTudo.status, 200);
-  assert.equal(rTudo.json.result.tools.length, 8);
+  assert.equal(rTudo.json.result.tools.length, 13);
   const nomesTudo = rTudo.json.result.tools.map((t) => t.name).sort();
   assert.deepEqual(nomesTudo, [
-    'anexar_midia', 'buscar_memes', 'conferir_duplicado', 'criar_carta', 'criar_meme',
-    'editar_meme', 'listar_referencias', 'publicar_meme'
+    'anexar_midia', 'buscar_cartas', 'buscar_memes', 'conferir_duplicado', 'criar_carta', 'criar_meme',
+    'editar_carta', 'editar_meme', 'listar_referencias', 'obter_meme', 'ocultar_meme', 'publicar_meme', 'remover_midia'
   ]);
 });
 

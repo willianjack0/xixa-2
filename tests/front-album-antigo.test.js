@@ -211,7 +211,7 @@ test("expandir: a folha vira molinha (tiras) e some no fim; clicar numa figurinh
   await page.click("#btProx");
   await page.waitForSelector(".mola .tira");
   const n = await page.$$eval(".mola .tira", (l) => l.length);
-  assert.strictEqual(n, 16);
+  assert.strictEqual(n, 12);
   const angulos = await page.$$eval(".mola .tira", (l) => l.map((t) => t.style.transform));
   assert.ok(new Set(angulos).size > 2, "as tiras dobram em ângulos diferentes (papel curvando)");
   await page.waitForFunction(() => !document.querySelector(".mola"), null, { timeout: 4000 });

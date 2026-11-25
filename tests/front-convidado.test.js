@@ -19,7 +19,9 @@ const RAIZ = path.join(__dirname, "..");
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".png": "image/png", ".webp": "image/webp", ".jpg": "image/jpeg", ".svg": "image/svg+xml" };
 const servidor = () => new Promise((ok) => {
   const s = http.createServer((req, res) => {
-    const arq = path.join(RAIZ, decodeURIComponent(new URL(req.url, "http://x").pathname));
+    let pn = decodeURIComponent(new URL(req.url, "http://x").pathname);
+    if (pn === "/") pn = "/index.html";
+    const arq = path.join(RAIZ, pn);
     if (!arq.startsWith(RAIZ) || !fs.existsSync(arq) || fs.statSync(arq).isDirectory()) { res.writeHead(404); return res.end(); }
     res.writeHead(200, { "content-type": MIME[path.extname(arq)] || "application/octet-stream" });
     fs.createReadStream(arq).pipe(res);

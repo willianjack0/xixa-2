@@ -82,3 +82,44 @@ export function fazerAnexarMidia({ s3 = null, baixar = baixarImagem, otimizar = 
 }
 
 export const anexar_midia = fazerAnexarMidia();
+
+/** Fábrica com dependências injetáveis para remover mídia de meme. */
+export function fazerRemoverMidia({ s3 = null } = {}) {
+  return async function remover_midia(pool, args = {}, ctx = {}) {
+    validarChavesConhecidas(args, ['id', 'midia_id']);
+    if (typeof args.id !== 'string' || !ID_MEME.test(args.id)) {
+      throw new ErroArgumento('campo "id" obrigatório: slug a-z, 0-9 e hífen, até 80 caracteres');
+    }
+    if (!Number.isInteger(args.midia_id)) {
+      throw new ErroArgumento('campo "midia_id" deve ser inteiro');
+    }
+
+    const { rows: [meme] } = await pool.query('SELECT id, status FROM memes WHERE id = $1', [args.id]);
+    if (!meme) throw new ErroArgumento('meme não encontrado');
+    if (meme.status === 'removido') throw new ErroArgumento('não é possível remover mídia de meme removido');
+
+    const { rows: [midia] } = await pool.query('SELECT id, caminho, tipo FROM midias WHERE id = $1 AND meme_id = $2', [args.midia_id, args.id]);
+    if (!midia) throw new ErroArgumento('mídia não encontrada para este meme');
+
+    await pool.query('DELETE FROM midias WHERE id = $1 AND meme_id = $2', [args.midia_id, args.id]);
+
+    // Se o caminho começa com 'midias/' e nenhuma outra linha de midias nem cartas.imagem usa o mesmo caminho, apaga do S3 (melhor esforço)
+    if (typeof midia.caminho === 'string' && midia.caminho.startsWith('midias/')) {
+      try {
+        const { rows: [{ usos }] } = await pool.query(
+          'SELECT (SELECT count(*) FROM midias WHERE caminho = $1) + (SELECT count(*) FROM cartas WHERE imagem = $1) AS usos',
+          [midia.caminho]
+        );
+        if (Number(usos) === 0) {
+          const cliente = s3 || (() => { const cfg = configDoAmbiente(); return cfg ? criarS3(cfg) : null; })();
+          if (cliente) await cliente.remove(midia.caminho).catch(() => {});
+        }
+      } catch { /* melhor esforço */ }
+    }
+
+    await auditar({ ...ctx, pool }, 'meme.midia', 'memes:' + args.id, { removida: true, caminho: midia.caminho });
+    return { ok: true, removida: true, midia_id: Number(args.midia_id) };
+  };
+}
+
+export const remover_midia = fazerRemoverMidia();

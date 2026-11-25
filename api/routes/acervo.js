@@ -1,10 +1,9 @@
 // Leitura do acervo (público): memes, eras, categorias. Só memes com status 'publicado'.
 // Cache curto: o acervo muda raramente (aprovação de envio/edição) e o site pode tolerar ~1 min.
-import { send, lerJson, limited, ipDe } from '../lib/http.js';
+import { send } from '../lib/http.js';
 import { VOTE_ID } from './votos.js';
 
 const CACHE = { 'Cache-Control': 'public, max-age=60' };
-const NO_STORE = { 'Cache-Control': 'no-store' };
 const LIMITE_MAX = 500;
 
 const COLUNAS = `m.id, m.titulo, m.ano, m.data, m.categoria, m.tipo, m.raridade, m.emoji, m.descricao, m.autor,
@@ -20,34 +19,6 @@ const inteiro = (v, padrao, min, max) => {
 };
 
 export default function registrar(r) {
-  // confere quais dos ids informados pelo cliente estão fora do ar (oculto ou removido)
-  r.post('/api/memes/fora-do-ar', async ({ req, res, pool }) => {
-    const ip = ipDe(req);
-    if (limited('fda:' + ip, 150)) {
-      return send(res, 429, { erro: 'Muitas consultas. Aguarde um momento.' }, NO_STORE);
-    }
-    const b = await lerJson(req);
-    if (!b || typeof b !== 'object' || Array.isArray(b) || !Array.isArray(b.ids)) {
-      return send(res, 400, { erro: 'corpo deve conter { ids: string[] }' }, NO_STORE);
-    }
-    if (b.ids.length > 600) {
-      return send(res, 400, { erro: 'limite de até 600 ids por consulta' }, NO_STORE);
-    }
-    for (const id of b.ids) {
-      if (typeof id !== 'string' || !VOTE_ID.test(id)) {
-        return send(res, 422, { erro: `id inválido: ${id}` }, NO_STORE);
-      }
-    }
-    const unicos = [...new Set(b.ids)];
-    if (!unicos.length) return send(res, 200, { ids: [] }, NO_STORE);
-
-    const { rows } = await pool.query(
-      `SELECT id FROM memes WHERE id = ANY($1) AND status IN ('oculto', 'removido')`,
-      [unicos]
-    );
-    return send(res, 200, { ids: rows.map((x) => x.id) }, NO_STORE);
-  });
-
   // filtros: ?ano=2008 ?categoria=Vídeos ?raridade=Mítico ?limite=100 ?offset=0
   r.get('/api/memes', async ({ res, url, pool }) => {
     const q = url.searchParams;

@@ -3,6 +3,7 @@
 // - buscar_memes: busca memes por texto, ano, categoria, status, com paginação
 // - conferir_duplicado: confere memes e envios por mesmo vídeo, mesmo link, título igual ou parecido
 import { normalizarUrl, youtubeId } from '../lib/envios.js';
+import { ID_MEME } from '../lib/acervo-validacao.js';
 
 export const RARIDADES_CARTA = ['Comum', 'Relevante', 'Raro', 'Relíquia', 'Lendário', 'Mítico'];
 export const RARIDADES_MEME = [...RARIDADES_CARTA, 'Clássico'];
@@ -180,6 +181,44 @@ export async function buscar_memes(pool, args = {}) {
   };
 }
 
+export async function obter_meme(pool, args = {}) {
+  validarChavesConhecidas(args, ['id']);
+  if (!args.id || typeof args.id !== 'string' || !ID_MEME.test(args.id)) {
+    throw new ErroArgumento('campo "id" obrigatório: slug a-z, 0-9 e hífen, até 80 caracteres');
+  }
+
+  const { rows: [meme] } = await pool.query(
+    `SELECT id, titulo, ano, data, categoria, raridade, status, youtube_id, descricao, autor, duracao
+       FROM memes WHERE id = $1`,
+    [args.id]
+  );
+  if (!meme) {
+    throw new ErroArgumento('meme não encontrado');
+  }
+
+  const { rows: midias } = await pool.query(
+    `SELECT id, tipo, caminho, origem_url, credito_por, credito_url, largura, altura, ordem
+       FROM midias WHERE meme_id = $1 ORDER BY ordem, id`,
+    [args.id]
+  );
+
+  return {
+    ...meme,
+    midias: midias.map((m) => ({
+      id: Number(m.id),
+      tipo: m.tipo,
+      caminho: m.caminho,
+      url_publica: '/' + m.caminho,
+      origem_url: m.origem_url,
+      credito_por: m.credito_por,
+      credito_url: m.credito_url,
+      largura: m.largura,
+      altura: m.altura,
+      ordem: m.ordem
+    }))
+  };
+}
+
 export async function conferir_duplicado(pool, args = {}) {
   validarChavesConhecidas(args, ['url', 'titulo']);
 
@@ -318,16 +357,22 @@ export async function conferir_duplicado(pool, args = {}) {
   };
 }
 
-import { criar_meme, editar_meme, publicar_meme, criar_carta } from './escrita.js';
-import { anexar_midia } from './midias.js';
+import { criar_meme, editar_meme, publicar_meme, ocultar_meme, criar_carta } from './escrita.js';
+import { anexar_midia, remover_midia } from './midias.js';
+import { buscar_cartas, editar_carta } from './cartas.js';
 
 export const FERRAMENTAS_MAP = {
   listar_referencias,
   buscar_memes,
+  obter_meme,
   conferir_duplicado,
   criar_meme,
   editar_meme,
   publicar_meme,
+  ocultar_meme,
   criar_carta,
-  anexar_midia
+  anexar_midia,
+  remover_midia,
+  buscar_cartas,
+  editar_carta
 };

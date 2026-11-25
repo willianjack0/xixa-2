@@ -153,3 +153,23 @@ test('publicações: compartilhar figurinha que tem (sobe de novo sem duplicar),
   p = (await GET('/api/perfil/' + a.u, b.u)).json.publicacoes;
   assert.equal(p.length, 2); assert.ok(!p.some((x) => x.id === id1));
 });
+
+test('imagens do painel chegam ao perfil: carta (álbum, favorita, figurinha publicada) e meme publicado', { skip }, async () => {
+  const a = await novo(); await darCartas(a.id, 2);
+  const [c1, c2] = (await q('SELECT carta_id AS id FROM inventario_cartas WHERE usuario_id = $1 ORDER BY carta_id', [a.id])).map((x) => x.id);
+  await q("UPDATE cartas SET imagem = 'midias/carta-aabbccddeeff.webp' WHERE id = $1", [c1]);
+  assert.equal((await PATCH('/api/eu', { carta_favorita: c1 }, a.u)).status, 200);
+  let p = (await GET('/api/perfil/' + a.u, a.u)).json;
+  assert.equal(p.carta_favorita.imagem, 'midias/carta-aabbccddeeff.webp');
+  assert.equal(p.album.cartas.find((x) => x.id === c1).imagem, 'midias/carta-aabbccddeeff.webp');
+  assert.equal(p.album.cartas.find((x) => x.id === c2).imagem, null);
+  const r = await POST('/api/publicacoes', { carta_id: c1 }, a.u);
+  assert.equal(r.json.carta.imagem, 'midias/carta-aabbccddeeff.webp', 'resposta de publicar');
+  const meme = (await q('SELECT id FROM memes ORDER BY id LIMIT 1'))[0];
+  await q("DELETE FROM midias WHERE meme_id = $1", [meme.id]);
+  await q("INSERT INTO midias (meme_id, tipo, caminho, ordem) VALUES ($1, 'imagem', 'midias/meme-segunda.webp', 2), ($1, 'imagem', 'midias/meme-primeira.webp', 1), ($1, 'video_arquivo', 'memes/v.mp4', 0)", [meme.id]);
+  await q("INSERT INTO envios (usuario_id, titulo, ano, url, status, meme_id, decidido_em) VALUES ($1, 'Meu meme', 2012, 'https://x.y/9', 'aprovado', $2, now())", [a.id, meme.id]);
+  p = (await GET('/api/perfil/' + a.u, a.u)).json;
+  assert.equal(p.publicacoes.find((x) => x.tipo === 'figurinha').carta.imagem, 'midias/carta-aabbccddeeff.webp');
+  assert.equal(p.publicacoes.find((x) => x.tipo === 'meme').meme.imagem, 'midias/meme-primeira.webp', 'primeira imagem por ordem; vídeo-arquivo não conta');
+});

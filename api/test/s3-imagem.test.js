@@ -61,6 +61,81 @@ test('S3: caracteres especiais na chave são codificados; erro do S3 vira exceç
   await assert.rejects(criarS3(cfg, { fetchImpl: fetchFalso(500).impl }).head('midias/x.png'), /s3 head 500/);
 });
 
+test('S3: list usa ListObjectsV2 com SigV4, query canônica e paginação por continuation-token', async () => {
+  const chamadas = [];
+  const xmlPagina1 = `<?xml version="1.0" encoding="UTF-8"?>
+<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+  <Name>naosalvo</Name>
+  <Prefix>midias/</Prefix>
+  <KeyCount>2</KeyCount>
+  <MaxKeys>2</MaxKeys>
+  <IsTruncated>true</IsTruncated>
+  <NextContinuationToken>token-proxima-pagina==</NextContinuationToken>
+  <Contents>
+    <Key>midias/foto1.webp</Key>
+    <LastModified>2026-11-20T10:00:00.000Z</LastModified>
+    <Size>12345</Size>
+  </Contents>
+  <Contents>
+    <Key>midias/foto2 &amp; teste.jpg</Key>
+    <LastModified>2026-11-21T12:30:00.000Z</LastModified>
+    <Size>67890</Size>
+  </Contents>
+</ListBucketResult>`;
+
+  const xmlPagina2 = `<?xml version="1.0" encoding="UTF-8"?>
+<ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+  <Name>naosalvo</Name>
+  <Prefix>midias/</Prefix>
+  <KeyCount>1</KeyCount>
+  <MaxKeys>2</MaxKeys>
+  <IsTruncated>false</IsTruncated>
+  <Contents>
+    <Key>midias/foto3.png</Key>
+    <LastModified>2026-11-22T15:00:00.000Z</LastModified>
+    <Size>54321</Size>
+  </Contents>
+</ListBucketResult>`;
+
+  const impl = async (url, o) => {
+    chamadas.push({ url, ...o });
+    const isPag2 = url.includes('continuation-token=token-proxima-pagina%3D%3D');
+    return {
+      ok: true,
+      status: 200,
+      text: async () => (isPag2 ? xmlPagina2 : xmlPagina1)
+    };
+  };
+
+  const s3 = criarS3(cfg, { fetchImpl: impl, agora: () => new Date('2026-11-25T21:00:00Z') });
+  const itens = await s3.list('midias/', { max: 10 });
+
+  assert.equal(chamadas.length, 2);
+  const u1 = new URL(chamadas[0].url);
+  assert.equal(u1.origin + u1.pathname, 'http://minio_minio:9000/naosalvo');
+  assert.equal(u1.searchParams.get('list-type'), '2');
+  assert.equal(u1.searchParams.get('prefix'), 'midias/');
+  assert.equal(u1.searchParams.get('continuation-token'), null);
+  assert.match(chamadas[0].headers.authorization, /^AWS4-HMAC-SHA256 Credential=CHAVEACESSO1\/20261125\/eu-south\/s3\/aws4_request/);
+
+  const u2 = new URL(chamadas[1].url);
+  assert.equal(u2.searchParams.get('continuation-token'), 'token-proxima-pagina==');
+
+  assert.equal(itens.length, 3);
+  assert.deepEqual(itens[0], { chave: 'midias/foto1.webp', tamanho: 12345, modificado: new Date('2026-11-20T10:00:00.000Z') });
+  assert.deepEqual(itens[1], { chave: 'midias/foto2 & teste.jpg', tamanho: 67890, modificado: new Date('2026-11-21T12:30:00.000Z') });
+  assert.deepEqual(itens[2], { chave: 'midias/foto3.png', tamanho: 54321, modificado: new Date('2026-11-22T15:00:00.000Z') });
+
+  // respeita max
+  const itensLimitados = await s3.list('midias/', { max: 1 });
+  assert.equal(itensLimitados.length, 1);
+  assert.equal(itensLimitados[0].chave, 'midias/foto1.webp');
+
+  // erro do s3
+  const erroS3 = criarS3(cfg, { fetchImpl: fetchFalso(500).impl });
+  await assert.rejects(erroS3.list('midias/'), /s3 list 500/);
+});
+
 test('configDoAmbiente: lê endpoint/bucket/região e as chaves de arquivos (Docker secrets); sem algum item = null', () => {
   const dir = mkdtempSync(join(tmpdir(), 's3cfg-'));
   try {

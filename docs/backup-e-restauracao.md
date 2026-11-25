@@ -110,3 +110,54 @@ Independente da opção:
 - **Cópia fora do servidor.** Dump no mesmo disco do banco não protege contra perda do disco. Copie `/srv/backups/naosalvo` para outro lugar (outra máquina ou bucket) por `rclone` ou `rsync`.
 - **Antes de migração arriscada** (ex.: promoção `dev` → `main`), rode o script manualmente. É o "backup feito" do checklist de release.
 - **Alerta de falha:** o script sai com `1` se qualquer banco falhar; ligue isso ao canal de alertas.
+
+---
+
+# Backup do Bucket S3 (MinIO)
+
+Script: `scripts/backup/s3-backup.sh`. Faz espelhamento do bucket S3 (`naosalvo/midias/`) via `mc mirror --overwrite` para uma pasta de destino, gera um snapshot diário compactado (`.tar.gz`) e gerencia retenção com `RETENTION_DAYS` e `MIN_KEEP`.
+
+## Configuração
+
+| Variável | Padrão | Para quê |
+|---|---|---|
+| `S3_ENDPOINT` | `https://s3.fishlab.com.br` | URL da API do MinIO/S3 |
+| `S3_BUCKET` | `naosalvo` | Nome do bucket |
+| `S3_PREFIX` | `midias` | Prefixo das imagens do acervo |
+| `S3_ACCESS_KEY` / `S3_SECRET_KEY` | — | Credenciais de acesso ao bucket |
+| `S3_ACCESS_KEY_FILE` / `S3_SECRET_KEY_FILE` | — | Alternativa: caminho de arquivos contendo as credenciais |
+| `BACKUP_DIR` | `./backups` | Pasta de saída (`s3_mirror/` e `s3_snapshots/`) |
+| `RETENTION_DAYS` | `14` | Apaga snapshots com mais de N dias (`0` = nunca apaga) |
+| `MIN_KEEP` | `3` | Nunca deixa menos que N snapshots |
+
+Arquivos gerados:
+- Espelho sincronizado: `<BACKUP_DIR>/s3_mirror/<bucket>/<prefixo>/`
+- Snapshots compactados: `<BACKUP_DIR>/s3_snapshots/<bucket>_<prefixo>_AAAAMMDD_HHMMSSZ.tar.gz`
+
+## Como agendar junto do `pg-backup`
+
+No host `lab4`, é recomendável agendar o backup do S3 imediatamente antes ou logo após o backup do banco de dados (exemplo às 03:45 UTC):
+
+```cron
+# /etc/cron.d/naosalvo-backup
+30 3 * * * root docker run --rm --network v0net \
+  -e PGHOST=postgres -e PGPASSFILE=/secrets/pgpass \
+  -e BACKUP_DIR=/backups -e RETENTION_DAYS=14 \
+  -v /srv/backups/naosalvo:/backups \
+  -v /srv/secrets/naosalvo_pgpass:/secrets/pgpass:ro \
+  -v /srv/naosalvo/scripts/backup/pg-backup.sh:/pg-backup.sh:ro \
+  postgres:14 bash /pg-backup.sh >> /var/log/naosalvo-backup.log 2>&1
+
+45 3 * * * root docker run --rm \
+  -e S3_ENDPOINT=https://s3.fishlab.com.br \
+  -e S3_BUCKET=naosalvo -e S3_PREFIX=midias \
+  -e S3_ACCESS_KEY_FILE=/secrets/s3_access \
+  -e S3_SECRET_KEY_FILE=/secrets/s3_secret \
+  -e BACKUP_DIR=/backups -e RETENTION_DAYS=14 \
+  -v /srv/backups/naosalvo:/backups \
+  -v /srv/secrets/s3_access:/secrets/s3_access:ro \
+  -v /srv/secrets/s3_secret:/secrets/s3_secret:ro \
+  -v /srv/naosalvo/scripts/backup/s3-backup.sh:/s3-backup.sh:ro \
+  minio/mc:latest bash /s3-backup.sh >> /var/log/naosalvo-s3-backup.log 2>&1
+```
+

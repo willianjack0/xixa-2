@@ -63,37 +63,6 @@ test('GET /api/categorias: 7 categorias, total soma todos os memes', { skip }, a
   for (const c of r.json.itens) assert.equal(c.total, N.porCategoria[c.nome] || 0, c.nome);
 });
 
-test('POST /api/memes/fora-do-ar: devolve só os ocultos/removidos da lista informada, validação e limite', { skip }, async () => {
-  // Configura um oculto e um removido
-  await db.pool.query("UPDATE memes SET status = 'oculto' WHERE id = 'havaianas-de-pau'");
-  await db.pool.query("INSERT INTO memes (id, titulo, ano, categoria, raridade, tipo, status) VALUES ('meme-removido-fda', 'Removido', 2000, 'Vídeos', 'Comum', 'video', 'removido')");
-
-  // Devolve só os que existem como ocultos/removidos; publicados ou desconhecidos não entram
-  const r = await s.post('/api/memes/fora-do-ar', {
-    ids: ['havaianas-de-pau', 'meme-removido-fda', 'kelly-key-computador', 'meme-que-nao-existe']
-  });
-  assert.equal(r.status, 200);
-  assert.equal(r.headers.get('cache-control'), 'no-store');
-  assert.deepEqual(r.json.ids.sort(), ['havaianas-de-pau', 'meme-removido-fda']);
-
-  // Lista vazia
-  const rVazia = await s.post('/api/memes/fora-do-ar', { ids: [] });
-  assert.equal(rVazia.status, 200);
-  assert.deepEqual(rVazia.json.ids, []);
-
-  // Validações
-  assert.equal((await s.post('/api/memes/fora-do-ar', {})).status, 400);
-  assert.equal((await s.post('/api/memes/fora-do-ar', { ids: 'invalido' })).status, 400);
-  assert.equal((await s.post('/api/memes/fora-do-ar', { ids: ['ID COM ESPACO'] })).status, 422);
-
-  // Limite de 600 ids
-  const muitosIds = Array.from({ length: 601 }, (_, i) => 'meme-' + i);
-  assert.equal((await s.post('/api/memes/fora-do-ar', { ids: muitosIds })).status, 400);
-
-  // Restaura havaianas-de-pau para outros testes
-  await db.pool.query("UPDATE memes SET status = 'publicado' WHERE id = 'havaianas-de-pau'");
-});
-
 test('GET /api/cartas: cartas na ordem das coleções, com imagem do painel e cache curto; público', { skip }, async () => {
   await db.pool.query("UPDATE cartas SET imagem = 'midias/carta-aabbccddeeff.webp', nome = 'Editada no painel' WHERE id = 'orkut-0'");
   const r = await s.get('/api/cartas');

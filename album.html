@@ -164,7 +164,7 @@
 @media(max-width:1100px){.layout{grid-template-columns:210px minmax(0,1fr)}.det{grid-column:1/-1;border:0;padding:0;position:static;max-width:380px;margin:0 auto}}
 @media(max-width:720px){.layout{grid-template-columns:1fr;padding:12px}.cards{grid-template-columns:repeat(2,1fr)}.album{padding-left:34px}.pack{grid-template-columns:repeat(3,1fr);gap:8px}}
 </style>
-<link rel="stylesheet" href="album.css?v=20261127a">
+<link rel="stylesheet" href="album.css?v=20261128a">
 </head>
 <body>
 
@@ -218,8 +218,8 @@
 
 <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="tipo"><textarea name="msg"></textarea><input name="contato"><input name="pagina"><input name="bot-field"></form>
 <script src="common.js?v=20261125e"></script>
-<script src="data.js?v=20261127b"></script>
-<script src="player.js?v=20261125b"></script>
+<script src="data.js?v=20261129b"></script>
+<script src="player.js?v=20261129a"></script>
 <script src="viewer.js?v=20261127a"></script>
 <script src="alertas.js?v=20261125b"></script>
 <script>
@@ -326,7 +326,7 @@ function fecharMesa(){
 function pickMesa(id){const c=byId[id];$("mesa").hidden=true;document.body.classList.remove("mesa-on");ci=c.ci;page=Math.floor(c.i/PER);sel=id;renderAll();$("det").scrollIntoView({block:"nearest",behavior:reduzMov()?"auto":"smooth"});const b=document.querySelector("#cards .vaga.sel");b&&b.focus({preventScroll:true})}
 // folha molinha: N tiras encadeadas; a tira k (contando da lombada) tem ângulo θk(p) e a ponta da folha vai na frente,
 // então a página curva como papel fino. Cada tira mostra a sua fatia da página da frente e, no verso, a da próxima.
-const TIRAS=16;
+const TIRAS=12;
 function virar(dir){
   if(virando)return;const novo=esq+2*dir;if(novo<0||novo>=PAGS.length)return;
   // movimento reduzido (ex.: "efeitos de animação" desligados no Windows): a folha ainda vira, mas inteira, rápida e sem dobrar
@@ -345,7 +345,7 @@ function virar(dir){
     pai.appendChild(t);tiras.push(t);pai=t;
   }
   $("livro").appendChild(m);
-  const dur=calmo?520:1100,atraso=calmo?0:.42,t0=performance.now(),ease=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2,s=dir>0?-1:1;
+  const dur=calmo?520:1000,atraso=calmo?0:.3,t0=performance.now(),ease=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2,s=dir>0?-1:1;
   const ang=(p,k)=>180*ease(Math.min(1,Math.max(0,(p-atraso*(1-(N>1?k/(N-1):1)))/(1-atraso))));
   const sb=a=>Math.sin(a*Math.PI/180)*.22,g=(x,y)=>`linear-gradient(90deg,rgba(0,0,0,${x.toFixed(3)}),rgba(0,0,0,${y.toFixed(3)}))`;
   function quadro(agora){

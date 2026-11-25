@@ -21,7 +21,19 @@ Continuação da Fase 3 de `PLANO-IMPLEMENTACAO.md`. Começa pelo backend; o fro
 | 5 | **Moderação** | `GET /api/mod/fila`, voto por consenso, `edicoes`, `remocoes` (prazo de 72 h) | aba Moderação (só moderador/admin) | um envio aprovado entra no acervo, o autor ganha XP e moedas |
 | 6 | **Admin único** | `GET /api/admin/resumo`, `/regras` (XP editável) | trocar os dados fictícios por chamadas, mover Contribuidores/Feedback/Comentários, aposentar `/dashboard`, tirar o token fixo | `/admin` sem dados de exemplo |
 
-## Fatia 1 (em andamento)
+## Estado em 25/11/2026
+| # | Fatia | Estado |
+|---|---|---|
+| 1 | Papéis e acesso | **pronta** (papel no banco, `/api/eu` devolve `papel`, menu por papel) |
+| 2 | Log de auditoria | **pronta** (aba Log; `auditar` em toda ação, inclusive via MCP) |
+| 3 | Usuários | **pronta** (papel e banimento) |
+| 4 | Acervo: memes e cartas | **pronta**, com **upload de imagem** (S3, WebP), **busca de meme** na carta e **imagem da carta**; o site lê o banco (álbum, perfil e páginas de meme) |
+| 5 | Moderação | **pronta** (fila, consenso, remoções com prazo de 72 h; insígnia de moderador no ranking) |
+| 6 | Admin único | **parcial**: o painel mudou de `/admin` para `/seppzone` e a **Visão geral** tem números reais e **Navegação do site** (visitas, sessões, tempo, origens, dispositivos, memes mais vistos). Falta aposentar `/dashboard` e tirar o token fixo (`ADMIN_TOKEN` segue como chave de emergência) |
+
+Pendências do admin: aposentar `/dashboard` e o token fixo; `/api/admin/resumo` e regras de XP editáveis (fatia 6); visitantes únicos de 7 e 30 dias são únicos por dia somados (limite do analytics sem dado pessoal).
+
+## Fatia 1 (histórico)
 
 Arquivos: `api/migrations/017_papeis.sql`, `api/lib/papel.js`, `api/lib/router.js`, `api/routes/auth.js`, `api/test/papel.test.js`.
 

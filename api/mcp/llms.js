@@ -47,7 +47,9 @@ export function gerarLlmsTxt({ base = 'https://naosalvo.fishlab.com.br', ferrame
     tem('conferir_duplicado') && 'conferir_duplicado com o link e o título. Se já existir, não crie de novo' + (tem('editar_meme') ? ': use editar_meme.' : '.'),
     tem('buscar_memes') && 'buscar_memes para ver o que já existe sobre o assunto (inclui rascunhos ocultos).',
     tem('criar_meme') && 'criar_meme (rascunho). Só use publicar=true se tiver o escopo publicar e a informação estiver conferida.',
-    tem('anexar_midia') && 'anexar_midia quando o meme não for só um vídeo do YouTube.',
+    tem('anexar_midia') && 'anexar_midia quando o meme não for só um vídeo do YouTube. Use obter_meme para conferir as mídias e remover_midia se precisar tirar.',
+    tem('ocultar_meme') && 'Para tirar do ar: ocultar_meme muda o meme de publicado para oculto (só com o escopo publicar).',
+    tem('editar_carta') && 'Para arte de carta: buscar_cartas (ache o id, ex.: plataformas-2) e editar_carta com imagem_url; a imagem é otimizada e aparece no álbum e no perfil.',
     'Avise o admin do que foi encontrado ou criado (ids dos memes) para revisar no painel.'
   ].filter(Boolean);
   passos.forEach((p, i) => L.push(`${i + 1}. ${p}`));

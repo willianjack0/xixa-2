@@ -7,6 +7,9 @@ export const FERRAMENTAS = [
   { nome: 'buscar_memes', escopo: 'ler', ativa: true,
     resumo: 'Busca memes por texto, ano, categoria ou situação (publicado, oculto, removido). Paginado.',
     params: { busca: { tipo: 'texto', descricao: 'trecho do título' }, ano: { tipo: 'inteiro' }, categoria: { tipo: 'texto' }, status: { tipo: 'texto', descricao: 'publicado | oculto | removido' }, limite: { tipo: 'inteiro', descricao: 'até 50' }, offset: { tipo: 'inteiro' } } },
+  { nome: 'obter_meme', escopo: 'ler', ativa: true,
+    resumo: 'Obtém os dados completos de um meme pelo id, incluindo a lista de mídias anexadas ordenadas.',
+    params: { id: { tipo: 'texto', obrigatorio: true, descricao: 'id do meme (slug a-z, 0-9 e hífen)' } } },
   { nome: 'conferir_duplicado', escopo: 'ler', ativa: true,
     resumo: 'Confere se um link ou título já existe no acervo ou na fila de envios. Use sempre antes de criar_meme.',
     params: { url: { tipo: 'texto', descricao: 'link do vídeo ou da imagem' }, titulo: { tipo: 'texto' } } },
@@ -46,9 +49,14 @@ export const FERRAMENTAS = [
     } },
   { nome: 'publicar_meme', escopo: 'publicar', ativa: true,
     resumo: 'Muda um meme de oculto para publicado.', params: { id: { tipo: 'texto', obrigatorio: true } } },
+  { nome: 'ocultar_meme', escopo: 'publicar', ativa: true,
+    resumo: 'Muda um meme de publicado para oculto.', params: { id: { tipo: 'texto', obrigatorio: true, descricao: 'id do meme (slug a-z, 0-9 e hífen)' } } },
   { nome: 'anexar_midia', escopo: 'escrever', ativa: true,
     resumo: 'Anexa uma imagem (jpeg, png ou webp, até 5 MB) a um meme existente. Informe exatamente um entre url (link público, baixado pelo servidor) e base64 (só imagens pequenas, até uns 700 KB, por causa do limite de 1 MB da requisição).',
     params: { id: { tipo: 'texto', obrigatorio: true, descricao: 'id do meme' }, url: { tipo: 'texto', descricao: 'link público http/https da imagem (portas 80 e 443)' }, base64: { tipo: 'texto', descricao: 'conteúdo da imagem em base64' }, credito_por: { tipo: 'texto', descricao: 'quem fez a imagem (até 120 caracteres)' }, credito_url: { tipo: 'texto', descricao: 'link da fonte/crédito' } } },
+  { nome: 'remover_midia', escopo: 'escrever', ativa: true,
+    resumo: 'Remove uma mídia de um meme existente. Apaga a mídia do banco e, se for arquivo no armazenamento sem outros usos, apaga o arquivo.',
+    params: { id: { tipo: 'texto', obrigatorio: true, descricao: 'id do meme' }, midia_id: { tipo: 'inteiro', obrigatorio: true, descricao: 'id da mídia' } } },
   { nome: 'criar_carta', escopo: 'escrever', ativa: true,
     resumo: 'Cria uma carta no fim de uma coleção, ligada ou não a um meme.',
     params: {
@@ -57,6 +65,26 @@ export const FERRAMENTAS = [
       raridade: { tipo: 'texto', obrigatorio: true },
       emoji: { tipo: 'texto' },
       meme_id: { tipo: 'texto' }
+    } },
+  { nome: 'buscar_cartas', escopo: 'ler', ativa: true,
+    resumo: 'Busca cartas do álbum por parte do nome e/ou coleção, na ordem das coleções. Devolve id (ex.: plataformas-2), coleção, número, nome, raridade, meme ligado e a imagem atual. Use sem_imagem para achar as que ainda não têm arte.',
+    params: {
+      busca: { tipo: 'texto', descricao: 'parte do nome da carta (até 60 caracteres)' },
+      colecao_id: { tipo: 'texto', descricao: 'id da coleção (ver listar_referencias), ex.: plataformas' },
+      sem_imagem: { tipo: 'booleano', descricao: 'true: só cartas sem imagem' },
+      limite: { tipo: 'inteiro', descricao: '1 a 50 (padrão 20)' }
+    } },
+  { nome: 'editar_carta', escopo: 'escrever', ativa: true,
+    resumo: 'Edita uma carta existente: nome, emoji, raridade, meme ligado e a imagem. Para a imagem informe só um entre imagem_url (link público http/https, baixado pelo servidor) e imagem_base64 (só imagens pequenas, até uns 700 KB) ou remover_imagem. A imagem é reduzida (800 px) e convertida para WebP; o álbum e o perfil passam a mostrá-la.',
+    params: {
+      id: { tipo: 'texto', obrigatorio: true, descricao: 'id da carta, ex.: plataformas-2 (use buscar_cartas)' },
+      nome: { tipo: 'texto' },
+      emoji: { tipo: 'texto' },
+      raridade: { tipo: 'texto', descricao: 'Comum, Relevante, Raro, Relíquia, Lendário ou Mítico' },
+      meme_id: { tipo: 'texto', descricao: 'id do meme ligado; vazio desliga' },
+      imagem_url: { tipo: 'texto', descricao: 'link público http/https da imagem (portas 80 e 443)' },
+      imagem_base64: { tipo: 'texto', descricao: 'conteúdo da imagem em base64' },
+      remover_imagem: { tipo: 'booleano', descricao: 'true: tira a imagem da carta' }
     } }
 ];
 

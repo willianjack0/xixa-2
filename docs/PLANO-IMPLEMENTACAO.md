@@ -6,6 +6,8 @@ Este documento reúne as etapas para transformar o protótipo visual (que roda c
 
 > **Atualizado em 19/11/2026.** Fase 1 pronta em dev e prod; Fase 2 pronta no dev (acervo, economia, login com Discord); Fase 4 em andamento por fatias (carteira, XP e álbum já ligados à API; ranking e criador de gato em curso); Fase 3 (admin) ainda não começou; Fase 5 parcial. Decisões da Fase 4 em `docs/decisoes-fase4.md`. Legenda das tarefas: `[x]` feito, `[ ]` pendente, "parcial" quando falta uma parte.
 
+> **Estado em 25/11/2026.** Produção no vp3 (`naosalvo.fishlab.com.br`), com deploy automático (GitHub Actions + Portainer em modo Git, a cada 30 min). Fases 1 e 2 prontas; Fase 3 (admin) prontas as fatias 1 a 5 e parte da 6 (ver `PLANO-ADMIN.md`); **MCP** M1 a M5 em produção (ver `PLANO-MCP.md`); Fase 4: o site lê o acervo e as cartas do banco (`viewer.js`, `GET /api/cartas`), com imagens no S3 (otimizadas para WebP); **analytics** de navegação anônimo (`nav.js`, migração 024). Próximos: teste com cliente MCP real, política do bucket (sem listagem pública), backup do bucket, aposentar `/dashboard` e o token fixo.
+
 ## Sumário
 
 1. [Onde estamos](#1-onde-estamos)

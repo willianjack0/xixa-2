@@ -727,8 +727,9 @@ button.pf-semfav:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
 .pf-carta .tp>*{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pf-carta .tp em{flex:1;text-align:right}
 .pf-carta .nm{overflow-wrap:break-word;hyphens:auto;flex:none;padding-bottom:0;border-bottom-width:4px;border-bottom-color:#06070b;box-shadow:0 1px 0 color-mix(in srgb,var(--rc) 70%,#000);max-height:calc(2.4em + 9px)}
-.pf-carta .ft{flex:none;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.15;overflow-wrap:break-word;text-transform:none;letter-spacing:0}
+.pf-carta{container-type:inline-size}
+/* coleção: palavra nunca quebra no meio; letra 12px um pouco mais junta para caber */
+.pf-carta .ft{flex:none;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.15;overflow-wrap:normal;word-break:keep-all;hyphens:none;text-transform:none;letter-spacing:-.3px;font-size:12px}
 /* carta bem pequena (ex.: WhatsApp no desktop, 4 por linha): a raridade sai do topo (a borda já tem a cor) e a coleção fica em 1 linha */
-.pf-figs .pf-carta{container-type:inline-size}
-@container (max-width:96px){.pf-carta .tp em{display:none}.pf-carta .ft{-webkit-line-clamp:1}.pf-carta .art{font-size:22px}.pf-carta .nm{padding:3px 2px}}
+@container (max-width:96px){.pf-carta .tp em{display:none}.pf-carta .art{font-size:22px}.pf-carta .nm{padding:3px 2px}}
 @container (max-width:74px){.pf-carta .ft{display:none}.pf-carta .art{min-height:24px}}
