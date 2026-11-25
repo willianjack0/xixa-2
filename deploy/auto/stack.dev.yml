@@ -50,7 +50,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=v0net"
-        - "traefik.http.routers.naosalvo-dev-api.rule=Host(`naosalvo-dev.fishlab.com.br`) && PathPrefix(`/api`)"
+        - "traefik.http.routers.naosalvo-dev-api.rule=Host(`naosalvo-dev.fishlab.com.br`) && (PathPrefix(`/api`) || Path(`/mcp`))"
         - "traefik.http.routers.naosalvo-dev-api.priority=100"
         - "traefik.http.routers.naosalvo-dev-api.entrypoints=websecure"
         - "traefik.http.routers.naosalvo-dev-api.tls.certresolver=letsencryptresolver"

@@ -95,9 +95,8 @@
 
 <script src="common.js?v=20261125e"></script>
 <script src="data.js?v=20261127b"></script>
-<script src="acervo-api.js?v=20261128a"></script>
 <script src="player.js?v=20261125b"></script>
-<script src="viewer.js?v=20261126b"></script>
+<script src="viewer.js?v=20261127a"></script>
 <script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("memepedia",{sub:[
@@ -122,9 +121,7 @@ const CAMPOS=[
 ];
 const yKey=y=>{y=parseInt(y)||2020;return y<2000?"1995–1999":y<=2003?"2000–2003":y>=2026?"2026":String(y)};
 const yLab=k=>(YEAR_INFO[k]&&YEAR_INFO[k].rot)||k;
-let L=[];
-function buildL(){L=[...MEMES].sort((a,b)=>a.t.localeCompare(b.t,"pt-BR"))}
-buildL();
+const L=[...MEMES].sort((a,b)=>a.t.localeCompare(b.t,"pt-BR"));
 const WK={srv:{},ano:"",q:""};
 // rede provável pela época (marcado como estimativa até a comunidade escrever)
 function redeEstimada(m){const y=parseInt(m.y)||2020;
@@ -194,12 +191,14 @@ async function enviar(ev,c){ev.preventDefault();const f=ev.target,m=MEMES.find(x
 }
 function ver(id){const m=MEMES.find(x=>x.id===id);if(!m)return;const relL=MEMES.filter(x=>x.id!==id).sort((p,q)=>Math.abs(p.y-m.y)-Math.abs(q.y-m.y));
   openViewer(m,{related:relL,onPick:ver,onYear:y=>{location.href="linha-do-tempo.html#"+y}})}
-function rota(){buildL();const id=decodeURIComponent(location.hash.slice(1)),m=MEMES.find(x=>x.id===id);lista();if(m)verbete(m);else home();
+function rota(){const id=decodeURIComponent(location.hash.slice(1)),m=MEMES.find(x=>x.id===id);lista();if(m)verbete(m);else home();
   $("side").classList.remove("open");window.scrollTo({top:0,behavior:"instant"})}
 addEventListener("hashchange",rota);
 function onAccountChange(){rota()}
-(window.acervoPronto||Promise.resolve()).then(()=>{buildL();rota()});
 fetch("/api/memepedia",{headers:{accept:"application/json"}}).then(r=>r.ok&&(r.headers.get("content-type")||"").includes("json")?r.json():null).then(d=>{if(d&&typeof d==="object"){WK.srv=d;rota()}}).catch(()=>{});
+rota();
+// o acervo do servidor chegou (link trocado, meme novo ou oculto): refaz a página aberta
+document.addEventListener("ns:acervo",()=>{try{rota()}catch(e){}});
 </script>
 <script src="/nav.js?v=20261129a"></script>
 </body>

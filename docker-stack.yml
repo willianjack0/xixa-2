@@ -38,7 +38,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=v0net"
-        - "traefik.http.routers.naosalvo-api.rule=Host(`naosalvo-local.fishlab.com.br`) && PathPrefix(`/api`)"
+        - "traefik.http.routers.naosalvo-api.rule=Host(`naosalvo-local.fishlab.com.br`) && (PathPrefix(`/api`) || Path(`/mcp`))"
         - "traefik.http.routers.naosalvo-api.priority=100"
         - "traefik.http.routers.naosalvo-api.entrypoints=websecure"
         - "traefik.http.routers.naosalvo-api.tls.certresolver=letsencryptresolver"

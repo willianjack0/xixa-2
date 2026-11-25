@@ -212,8 +212,7 @@ function ytDoLink(u){u=(u||"").trim();if(!u)return"";try{const x=new URL(/^https
 function enviarLinkSugerido(m,u){
   if(!temConta()){needAccount("enviar o link");return'<div class="chk bad">Entre na sua conta para enviar o link.</div>'}
   const yt=ytDoLink(u);if(!yt)return'<div class="chk bad">Cole um link do YouTube (youtube.com/watch?v=… ou youtu.be/…).</div>';
-  if(linkEquipe())return postComSessao("/api/links/direto",{id:m.id,yt}).then(()=>{m.yt=yt;LINKS_OK[m.id]=yt;
-      if(typeof buildAll==="function"){buildAll();if(typeof renderAll==="function")renderAll()}
+  if(linkEquipe())return postComSessao("/api/links/direto",{id:m.id,yt}).then(()=>{LINKS_OK[m.id]=yt;trocarYt(m,yt);avisarAcervo();
       return'<div class="chk ok">Link publicado! Ele já vale para todo mundo (feche e abra o vídeo para ver).</div>'},
     e=>`<div class="chk bad">${escapeHtml((e&&e.erro)||"Não deu para publicar agora.")}</div>`);
   NS.linkSugs=NS.linkSugs||[];
@@ -224,9 +223,54 @@ function enviarLinkSugerido(m,u){
 }
 // links aprovados pelos moderadores entram no acervo para todo mundo
 const LINKS_OK={};
-apiGet("/api/links/aprovados").then(d=>{if(!d||typeof d!=="object")return;let n=0;
-  for(const [id,yt] of Object.entries(d)){if(!/^[\w-]{11}$/.test(yt))continue;LINKS_OK[id]=yt;const m=(typeof MEMES!=="undefined"?MEMES:[]).find(x=>x.id===id);if(m&&m.yt!==yt){m.yt=yt;n++}}
-  if(n&&typeof buildAll==="function"){buildAll();if(typeof renderAll==="function")renderAll()}});
+// troca o vídeo de um meme: a miniatura passa a ser a do vídeo novo (a imagem antiga era captura do vídeo anterior)
+function trocarYt(m,yt){if(!m||m.yt===yt)return false;m.yt=yt;if(m.tipo!=="foto"){delete m.img;delete m.credit;delete m.srcImg}return true}
+function aplicarLinks(){let n=0;const L=typeof MEMES!=="undefined"?MEMES:[];for(const [id,yt] of Object.entries(LINKS_OK))if(trocarYt(L.find(x=>x.id===id),yt))n++;return n}
+// avisa a página que o acervo mudou: cada página refaz o que mostra (home, linha do tempo, Memepédia…)
+function avisarAcervo(){if(typeof buildAll==="function"){buildAll();if(typeof renderAll==="function")renderAll()}
+  try{document.dispatchEvent(new CustomEvent("ns:acervo"))}catch(e){}}
+
+// ---- acervo do servidor: o banco é a fonte da verdade (edições do painel, memes novos pelo MCP, ocultos) ----
+// O data.js é só o ponto de partida (abre rápido e funciona sem API); quando /api/memes responde, ele é atualizado.
+const ytDaUrl=u=>{const x=String(u||"").match(/(?:youtu\.be\/|[?&]v=|\/shorts\/|\/embed\/)([\w-]{11})/);return x?x[1]:null};
+// imagem que é captura de outro vídeo (o link do meme foi trocado depois): não serve mais de miniatura
+const capturaVelha=(d,yt)=>{const y=ytDaUrl(d.origem_url)||ytDaUrl(d.credito_url);return !!(y&&yt&&y!==yt)};
+function memeDoServidor(m,s){
+  const yt=s.youtube_id&&/^[\w-]{11}$/.test(s.youtube_id)?s.youtube_id:undefined;
+  m.t=s.titulo;m.y=s.ano;m.c=s.categoria;m.r=s.raridade;
+  if(s.tipo==="foto")m.tipo="foto";else delete m.tipo;
+  const data=s.data?String(s.data).slice(0,10):"";if(/^\d{4}-\d{2}-\d{2}$/.test(data))m.date=data;
+  if(s.emoji)m.e=s.emoji;if(s.descricao)m.d=s.descricao;
+  if(s.autor)m.by=s.autor;else delete m.by;
+  if(Number.isFinite(s.duracao))m.dur=s.duracao;
+  if(s.adicionado_em)m.added=String(s.adicionado_em).slice(0,10);
+  if(yt)m.yt=yt;else delete m.yt;
+  const md=Array.isArray(s.midias)?s.midias:[];
+  const im=md.find(d=>d.tipo==="imagem"&&d.caminho&&!capturaVelha(d,yt));
+  if(im){m.img=im.caminho;if(im.origem_url)m.srcImg=im.origem_url;else delete m.srcImg;
+    if(im.credito_por||im.credito_url)m.credit={by:im.credito_por||"",url:im.credito_url||""};else delete m.credit}
+  else{delete m.img;delete m.srcImg;delete m.credit}
+  const vd=md.find(d=>d.tipo==="video_arquivo"&&d.caminho);if(vd)m.vid=vd.caminho;else delete m.vid;
+  if(m.views==null)m.views=0;if(m.saves==null)m.saves=0;
+}
+async function sincronizarAcervo(){
+  if(typeof MEMES==="undefined")return false;
+  const itens=[];let total=Infinity;
+  for(let off=0;off<total&&off<20000;off+=500){
+    const d=await apiGet(`/api/memes?limite=500&offset=${off}`);
+    if(!d||!Array.isArray(d.itens)||!Number.isFinite(d.total))return false;
+    total=d.total;itens.push(...d.itens);if(!d.itens.length)break}
+  if(!itens.length||itens.length<total)return false;           // banco vazio ou resposta pela metade: fica o data.js
+  const porId=new Map(MEMES.map(m=>[m.id,m])),vistos=new Set();
+  for(const s of itens){if(!s||!s.id)continue;let m=porId.get(s.id);if(!m){m={id:s.id};MEMES.push(m);porId.set(s.id,m)}vistos.add(s.id);memeDoServidor(m,s)}
+  for(let i=MEMES.length-1;i>=0;i--)if(!vistos.has(MEMES[i].id))MEMES.splice(i,1);   // oculto ou removido no painel sai do site
+  return true;
+}
+const ACERVO_PRONTO=sincronizarAcervo().catch(()=>false).then(ok=>{
+  return apiGet("/api/links/aprovados").then(d=>{
+    if(d&&typeof d==="object")for(const [id,yt] of Object.entries(d))if(/^[\w-]{11}$/.test(yt))LINKS_OK[id]=yt;
+    const n=aplicarLinks();if(ok||n)avisarAcervo();return ok});
+});
 
 // compartilhar: sempre o link do vídeo original no YouTube (desligado em memes com selo de cuidado)
 async function compartilharYT(m){if(m.cuidado){avisoCuidadoOff();return}

@@ -72,6 +72,14 @@ export default function registrar(r) {
     return send(res, 200, rows[0], CACHE);
   });
 
+  // cartas do álbum como estão no banco (edições do painel: nome, emoji, raridade, meme e imagem; carta nova entra no fim da coleção)
+  r.get('/api/cartas', async ({ res, pool }) => {
+    const { rows } = await pool.query(
+      `SELECT c.id, c.colecao_id, c.numero, c.nome, c.emoji, c.raridade, c.meme_id, c.imagem
+         FROM cartas c JOIN colecoes k ON k.id = c.colecao_id ORDER BY k.ordem, c.numero`);
+    return send(res, 200, { itens: rows }, CACHE);
+  });
+
   r.get('/api/eras', async ({ res, pool }) => {
     const { rows } = await pool.query('SELECT ano, ano_fim, rotulo, lema, texto FROM eras ORDER BY ano');
     return send(res, 200, { itens: rows }, CACHE);

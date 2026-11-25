@@ -82,7 +82,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=jknet"
-        - "traefik.http.routers.naosalvo-api.rule=Host(`naosalvo.fishlab.com.br`) && PathPrefix(`/api`)"
+        - "traefik.http.routers.naosalvo-api.rule=Host(`naosalvo.fishlab.com.br`) && (PathPrefix(`/api`) || Path(`/mcp`))"
         - "traefik.http.routers.naosalvo-api.priority=100"
         - "traefik.http.routers.naosalvo-api.entrypoints=websecure"
         - "traefik.http.routers.naosalvo-api.tls.certresolver=letsencryptresolver"

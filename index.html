@@ -214,9 +214,8 @@ main{display:flex;flex-direction:column}
 <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="tipo"><textarea name="msg"></textarea><input name="contato"><input name="pagina"><input name="bot-field"></form>
 <script src="common.js?v=20261125e"></script>
 <script src="data.js?v=20261127b"></script>
-<script src="acervo-api.js?v=20261128a"></script>
 <script src="player.js?v=20261125b"></script>
-<script src="viewer.js?v=20261126b"></script>
+<script src="viewer.js?v=20261127a"></script>
 <script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("inicio",{search:true,sub:[]});
@@ -573,9 +572,7 @@ const timerTick=setInterval(()=>{
   b.textContent=m<1?"Você chegou agora":"Você está aqui há";el.textContent=m<1?"Bem-vindo ao museu.":m+" min passeando pelo museu.";
 },15000);
 const h=decodeURIComponent(location.hash.slice(1)).replace("mais","+");if(Object.hasOwn(YEAR_INFO,h))cur=h;else if(/^\d{4}$/.test(h))cur=yKey(h);
-renderWallet();renderAll();
-(window.acervoPronto||Promise.resolve()).then(()=>{buildAll();renderAll()});
-scheduleApprovals();
+renderWallet();renderAll();scheduleApprovals();
 if(["rank","mod","send","rand","tl","todos"].includes(h))setTimeout(()=>{ftGo(h);history.replaceState(null,"",location.pathname)},300);
 // centraliza os raios do fundo no logo
 function placeRays(){const im=document.querySelector(".hero .sun img"),r=$("rays");if(!im||!r)return;const b=im.getBoundingClientRect();r.style.left=(b.left+b.width/2+scrollX)+"px";r.style.top=(b.top+b.height*0.42+scrollY)+"px"}

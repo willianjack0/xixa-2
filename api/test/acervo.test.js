@@ -93,3 +93,16 @@ test('POST /api/memes/fora-do-ar: devolve só os ocultos/removidos da lista info
   // Restaura havaianas-de-pau para outros testes
   await db.pool.query("UPDATE memes SET status = 'publicado' WHERE id = 'havaianas-de-pau'");
 });
+
+test('GET /api/cartas: cartas na ordem das coleções, com imagem do painel e cache curto; público', { skip }, async () => {
+  await db.pool.query("UPDATE cartas SET imagem = 'midias/carta-aabbccddeeff.webp', nome = 'Editada no painel' WHERE id = 'orkut-0'");
+  const r = await s.get('/api/cartas');
+  assert.equal(r.status, 200); assert.match(r.headers.get('cache-control'), /max-age=60/);
+  assert.equal(r.json.itens.length, N.cartas);
+  const c = r.json.itens.find((x) => x.id === 'orkut-0');
+  assert.deepEqual([c.colecao_id, c.numero, c.nome, c.imagem], ['orkut', 1, 'Editada no painel', 'midias/carta-aabbccddeeff.webp']);
+  assert.equal(r.json.itens.find((x) => x.id === 'orkut-1').imagem, null);
+  assert.deepEqual(Object.keys(c).sort(), ['colecao_id', 'emoji', 'id', 'imagem', 'meme_id', 'nome', 'numero', 'raridade']);
+  const orkut = r.json.itens.filter((x) => x.colecao_id === 'orkut').map((x) => x.numero);
+  assert.deepEqual(orkut, [...orkut].sort((a, b) => a - b));
+});

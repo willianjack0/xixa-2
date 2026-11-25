@@ -66,6 +66,8 @@ function criarApi(over = {}) {
   async function instalar(ctx) {
     // nada de rede externa (fontes do Google etc.): deixa o evento load rápido e o teste determinístico
     await ctx.route((url) => url.hostname !== "127.0.0.1", (r) => r.abort());
+    // imagens do S3 (/midias/...): um PNG de 1 pixel, para a imagem carregar de verdade
+    await ctx.route("**/midias/**", (r) => r.fulfill({ status: 200, contentType: "image/png", body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64") }));
     await ctx.route("**/api/**", async (route) => {
       const req = route.request(), u = new URL(req.url()), p = u.pathname, m = req.method();
       const chave = `${m} ${p}`;
@@ -73,6 +75,7 @@ function criarApi(over = {}) {
       if (p === "/api/eu" && st.euStatus !== 200) return json(route, st.euStatus, { erro: "falhou" });
       if (p === "/api/eu") return json(route, 200, { usuario: { id: 1, apelido: "teste", avatar_gato: null, avatar_url: null }, patente: st.patente, proxima_patente: st.proxima, moedas: st.moedas, xp: st.xp, csrf: "tok" });
       if (p === "/api/carteira") return st.carteiraStatus === 200 ? json(route, 200, carteira()) : json(route, st.carteiraStatus, { erro: "não autenticado" });
+      if (p === "/api/cartas") return st.cartas ? json(route, 200, { itens: st.cartas }) : json(route, 404, { erro: "não mockado" });
       if (p === "/api/album") return json(route, 200, album());
       if (p === "/api/visita") return json(route, 200, { dia: "2026-11-19", primeira_visita_do_dia: true, xp_ganho: 10, pacotes_ganhos: [], carteira: { xp: st.xp, moedas: st.moedas } });
       if (p === "/api/pacotes/tipos") return json(route, 200, { itens: TIPOS });
@@ -190,9 +193,9 @@ test("expandir: abre na página atual, setas viram de 2 em 2, Esc fecha e o foco
   assert.ok(await page.evaluate(() => { const gi = PAGS.findIndex((P) => P.ci === 2 && P.pg === 1); return gi === esq || gi === esq + 1; }));
   const e0 = await page.evaluate(() => esq);
   await page.keyboard.press("ArrowRight");
-  assert.strictEqual(await page.evaluate(() => esq), e0 + 2);
+  await page.waitForFunction((e) => esq === e + 2 && !document.querySelector(".mola"), e0, { timeout: 2000 });
   await page.keyboard.press("ArrowLeft");
-  assert.strictEqual(await page.evaluate(() => esq), e0);
+  await page.waitForFunction((e) => esq === e && !document.querySelector(".mola"), e0, { timeout: 2000 });
   for (let i = 0; i < 6; i++) await page.keyboard.press("Tab");
   assert.ok(await page.evaluate(() => document.getElementById("mesa").contains(document.activeElement)), "foco preso na mesa");
   await page.keyboard.press("Escape");
@@ -222,11 +225,52 @@ test("expandir: a folha vira molinha (tiras) e some no fim; clicar numa figurinh
   await ctx.close();
 });
 
-test("expandir com prefers-reduced-motion: vira sem animação de tiras", opts, async () => {
+test("expandir com prefers-reduced-motion: a folha ainda vira, inteira e rápida (sem dobrar em tiras)", opts, async () => {
   const { ctx, page } = await abrirAlbum({ reduz: true });
   await page.click("#btExp");
   await page.click("#btProx");
-  assert.strictEqual(await page.$$eval(".mola", (l) => l.length), 0);
+  await page.waitForSelector(".mola .tira");
+  assert.strictEqual(await page.$$eval(".mola .tira", (l) => l.length), 1);
+  await page.waitForFunction(() => !document.querySelector(".mola"), null, { timeout: 2000 });
   assert.strictEqual(await page.evaluate(() => esq), 2);
+  await ctx.close();
+});
+
+// ---------- cartas do banco no álbum: imagem enviada no painel, edição e carta nova ----------
+const NOVA_ID = `orkut-${COLECOES.find((c) => c.id === "orkut").cards.length}`;
+const cartasApi = () => {
+  const col = COLECOES.find((c) => c.id === "orkut");
+  return col.cards.map((x, i) => ({ id: `orkut-${i}`, colecao_id: "orkut", numero: i + 1, nome: i === 0 ? "Carta Editada" : x.name, emoji: x.e, raridade: x.r, meme_id: x.meme || null, imagem: i === 0 ? "midias/carta-aabbccddeeff.webp" : null }))
+    .concat({ id: NOVA_ID, colecao_id: "orkut", numero: col.cards.length + 1, nome: "Carta Nova do Painel", emoji: "🆕", raridade: "Raro", meme_id: null, imagem: "midias/carta-112233445566.webp" });
+};
+
+test("álbum: carta do painel com imagem mostra a imagem do S3, nome editado e carta nova no fim da coleção", opts, async () => {
+  const { ctx, page, erros } = await abrirAlbum({ cartas: cartasApi(), qtd: { ...QTD, [NOVA_ID]: 1 } });
+  await page.waitForFunction(() => typeof CARDS !== "undefined" && CARDS.some((c) => c.id === "orkut-0" && c.img));
+  const r = await page.evaluate((nid) => ({ img: byId["orkut-0"].img, nome: byId["orkut-0"].name, nova: !!byId[nid], num: byId[nid] && byId[nid].num, pags: PAGS.filter((p) => p.ci === 0).reduce((s, p) => s + p.l.length, 0), total: COLLECTIONS[0].cards.length }), NOVA_ID);
+  assert.strictEqual(r.img, "midias/carta-aabbccddeeff.webp"); assert.strictEqual(r.nome, "Carta Editada");
+  assert.strictEqual(r.nova, true); assert.strictEqual(r.pags, r.total, "a carta nova entrou nas páginas do álbum expandido");
+  await page.waitForSelector('#cards img[src="/midias/carta-aabbccddeeff.webp"]');
+  assert.ok(await page.$('#cards img[src="/midias/carta-aabbccddeeff.webp"]'), "a imagem da carta aparece na vaga");
+  assert.strictEqual(await page.evaluate(() => document.querySelector('#cards img[src="/midias/carta-aabbccddeeff.webp"]').nextElementSibling.hidden), true, "emoji escondido atrás da imagem");
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+test("álbum: sem /api/cartas (404) segue com o data.js, sem erro", opts, async () => {
+  const { ctx, page, erros } = await abrirAlbum();
+  await page.waitForTimeout(800);
+  assert.strictEqual(await page.evaluate(() => byId["orkut-0"].img), undefined);
+  assert.ok(await page.$("#cards .slot"));
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+test("álbum: carta que perde a imagem no painel volta para a miniatura do vídeo ou emoji", opts, async () => {
+  const lista = cartasApi(); lista[0].imagem = null;
+  const { ctx, page } = await abrirAlbum({ cartas: lista });
+  await page.waitForFunction(() => byId["orkut-0"].name === "Carta Editada");
+  assert.strictEqual(await page.evaluate(() => byId["orkut-0"].img), undefined);
+  assert.strictEqual(await page.$('#cards img[src^="/midias/"]'), null);
   await ctx.close();
 });

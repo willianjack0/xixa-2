@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css?v=20261125b">
 <link rel="stylesheet" href="viewer.css?v=20261125b">
-<link rel="stylesheet" href="perfil.css?v=20261125c">
+<link rel="stylesheet" href="perfil.css?v=20261127a">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 </head>
 <body>
@@ -42,9 +42,8 @@
 
 <script src="common.js?v=20261125e"></script>
 <script src="data.js?v=20261127b"></script>
-<script src="acervo-api.js?v=20261128a"></script>
 <script src="player.js?v=20261125b"></script>
-<script src="viewer.js?v=20261126b"></script>
+<script src="viewer.js?v=20261127a"></script>
 <script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("perfil",{sub:[
@@ -344,7 +343,7 @@ $("dlgF").onsubmit=async ev=>{ev.preventDefault();
 function estado(titulo,texto,botao){$("pf").className="";$("pf").innerHTML=`<div class="pf-st"><b>${esc(titulo)}</b>${esc(texto)}${botao||""}</div>`}
 async function carregar(ap){
   try{
-    const [p,r]=await Promise.all([Api.perfilDe(ap,{silencioso:true}),Api.recados(ap,{silencioso:true}),window.acervoPronto||Promise.resolve()]);
+    const [p,r]=await Promise.all([Api.perfilDe(ap,{silencioso:true}),Api.recados(ap,{silencioso:true})]);
     P=p;REC=(r&&r.itens)||[];
     document.title=`${P.perfil.apelido} · Perfil · NÃO SALVO`;
     barra();montar();

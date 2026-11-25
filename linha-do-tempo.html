@@ -430,9 +430,8 @@ body.ep-xp .lt-top small{color:#fff}
 
 <script src="common.js?v=20261125e"></script>
 <script src="data.js?v=20261127b"></script>
-<script src="acervo-api.js?v=20261128a"></script>
 <script src="player.js?v=20261125b"></script>
-<script src="viewer.js?v=20261126b"></script>
+<script src="viewer.js?v=20261127a"></script>
 <script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("tl",{sub:[
@@ -489,9 +488,7 @@ const DETALHE={
 const ST={ano:"2012",cat:"Todas"};
 const calmo=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 const rolar=()=>calmo()?"auto":"smooth";
-let ALL=[];
-function buildAll(){ALL=MEMES.slice()}
-buildAll();
+let ALL=MEMES.slice();
 const doAno=k=>ALL.filter(m=>yKey(m.y)===k);
 const foto=m=>m.img?m.img:m.yt?`https://i.ytimg.com/vi/${m.yt}/mqdefault.jpg`:"";
 const dataTxt=m=>{const d=m.date?new Date(m.date+"T12:00:00"):null;if(!d||isNaN(d))return String(m.y);return d.getDate()===1?`${MES[d.getMonth()][0].toUpperCase()+MES[d.getMonth()].slice(1)} de ${d.getFullYear()}`:`${d.getDate()} de ${MES[d.getMonth()]} de ${d.getFullYear()}`};
@@ -535,7 +532,7 @@ function palco(){
 }
 function avisar(t){const a=$("aviso");a.textContent="";setTimeout(()=>a.textContent=t,30)}
 function ir(k,foco){if(!temAno(k))return;const veioDaRegua=document.activeElement&&document.activeElement.closest&&document.activeElement.closest("#yrs,.lt-rail");
-  ST.ano=k;ST.cat="Todas";history.replaceState(null,"","#"+encodeURIComponent(k));anos();palco();
+  ST.ano=k;ST.cat="Todas";history.replaceState(null,"","#"+encodeURIComponent(k));marcarAnoVisto(k);anos();palco();
   const n=doAno(k).length;avisar(`Ano ${yLab(k)}, ${n} ${n===1?"viral":"virais"}`);
   // devolve o foco ao botão equivalente (a régua e o palco foram refeitos)
   const alvo=typeof foco==="function"?foco():veioDaRegua?($("yrs").querySelector(".ry.on")):null;if(alvo)alvo.focus({preventScroll:true})}
@@ -544,8 +541,16 @@ function ver(id){const m=ALL.find(x=>x.id===id);if(!m)return;const rel=ALL.filte
 $("yl").onclick=()=>{const i=KEYS.indexOf(ST.ano);if(KEYS[i-1])ir(KEYS[i-1],()=>$("yl").disabled?$("yr"):$("yl"))};$("yr").onclick=()=>{const i=KEYS.indexOf(ST.ano);if(KEYS[i+1])ir(KEYS[i+1],()=>$("yr").disabled?$("yl"):$("yr"))};
 addEventListener("keydown",e=>{if(document.querySelector(".vw"))return;const i=KEYS.indexOf(ST.ano);if(e.key==="ArrowRight"&&KEYS[i+1])ir(KEYS[i+1]);if(e.key==="ArrowLeft"&&KEYS[i-1])ir(KEYS[i-1])});
 addEventListener("hashchange",()=>{const h=decodeURIComponent(location.hash.slice(1));const k=temAno(h)?h:/^\d{4}$/.test(h)?yKey(h):null;if(k&&k!==ST.ano)ir(k)});
-const h0=decodeURIComponent(location.hash.slice(1));ST.ano=temAno(h0)?h0:/^\d{4}$/.test(h0)?yKey(h0):"2012";
-(window.acervoPronto||Promise.resolve()).then(()=>{buildAll();anos();palco()});
+// sem ano no endereço (veio pelo menu "Linha do tempo"): abre num ano sorteado que a pessoa ainda não viu, como na home
+// (a lista de anos vistos é a mesma da home: ns_anos_vistos)
+function anosVistos(){try{const v=JSON.parse(localStorage.getItem("ns_anos_vistos")||"[]");return Array.isArray(v)?v.filter(x=>typeof x==="string"):[]}catch(e){return[]}}
+function marcarAnoVisto(k){try{const v=anosVistos();if(!v.includes(k)){v.push(k);localStorage.setItem("ns_anos_vistos",JSON.stringify(v.slice(-60)))}}catch(e){}}
+function anoSorteado(){const vis=anosVistos(),novos=KEYS.filter(k=>!vis.includes(k));const L=novos.length?novos:KEYS;return L[Math.floor(Math.random()*L.length)]||"2012"}
+const h0=decodeURIComponent(location.hash.slice(1));ST.ano=temAno(h0)?h0:/^\d{4}$/.test(h0)?yKey(h0):anoSorteado();
+marcarAnoVisto(ST.ano);
+anos();palco();
+// o acervo do servidor chegou (link trocado, meme novo ou oculto): refaz a régua e o palco no mesmo ano
+document.addEventListener("ns:acervo",()=>{ALL=MEMES.slice();anos();palco()});
 </script>
 <script src="/nav.js?v=20261129a"></script>
 </body>
