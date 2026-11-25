@@ -54,8 +54,9 @@ services:
       # Saltos de proxy confiáveis entre o cliente e a API: 2 = Cloudflare + Traefik (registro com nuvem laranja).
       # Se o DNS ficar SÓ DNS (nuvem cinza), troque para 1, senão o IP do cliente pode ser forjado.
       TRUSTED_PROXY_HOPS: "2"
-      # Mídias enviadas pelo MCP: MinIO da própria rede (bucket naosalvo, prefixo midias/). O site serve /midias/ por proxy (nginx).
-      S3_ENDPOINT: http://minio_minio:9000
+      # Mídias enviadas pelo MCP/painel: MinIO (bucket naosalvo, prefixo midias/). O site serve /midias/ por proxy (nginx).
+      # Domínio público, não minio_minio:9000: o MinIO recusa nome com "_" (400 "invalid hostname").
+      S3_ENDPOINT: https://s3.fishlab.com.br
       S3_BUCKET: naosalvo
       S3_REGION: eu-south
       S3_ACCESS_KEY_FILE: /run/secrets/naosalvo_s3_access_key
