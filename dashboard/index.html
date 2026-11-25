@@ -2,6 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
+<link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Dashboard de contribuidores · NÃO SALVO</title>
@@ -122,6 +124,18 @@
         <p class="empty" id="lkNone" hidden>Nenhum link enviado ainda.</p>
       </div>
 
+      <div class="card" id="mpCard" style="margin-top:18px">
+        <h2>Memepédia: textos enviados <span id="mpCount" style="color:var(--text)"></span></h2>
+        <p style="margin:0 0 10px;color:var(--muted,#9aa)">A comunidade escreve cada parte do verbete. Confira se a informação é verdadeira (de preferência com fonte) e se não tem ofensa. Ao aprovar, o texto passa a aparecer na Memepédia.</p>
+        <div class="tablewrap">
+          <table style="min-width:760px">
+            <thead><tr><th>Quando</th><th>Meme</th><th>Parte</th><th>Texto</th><th>Por</th><th>Status</th><th></th></tr></thead>
+            <tbody id="mpRows"></tbody>
+          </table>
+        </div>
+        <p class="empty" id="mpNone" hidden>Nenhum texto enviado ainda.</p>
+      </div>
+
       <div class="card" id="cmCard" style="margin-top:18px">
         <h2>Comentários das fotos <span id="cmCount" style="color:var(--text)"></span></h2>
         <div class="tablewrap">
@@ -152,7 +166,7 @@
     return api('/api/admin/contribuidores').then(function (r) {
       if (r.status === 401) { logout(); $('loginMsg').textContent = 'Token inválido.'; return; }
       if (!r.ok) throw new Error('erro');
-      return r.json().then(function (j) { items = j.items; $('login').hidden = true; $('app').hidden = false; render(); loadFeedback(); loadLinks(); loadComentarios(); });
+      return r.json().then(function (j) { items = j.items; $('login').hidden = true; $('app').hidden = false; render(); loadFeedback(); loadLinks(); loadMemepedia(); loadComentarios(); });
     }).catch(function () { $('loginMsg').textContent = 'Falha ao carregar. Tente novamente.'; });
   }
 
@@ -199,6 +213,23 @@
           : '<button class="del" data-lk="' + esc(l.id) + '" data-st="' + (l.status === 'aprovado' ? 'recusado' : 'aprovado') + '" type="button">' + (l.status === 'aprovado' ? 'Desfazer' : 'Aprovar') + '</button>';
         return '<tr><td style="white-space:nowrap">' + quando(l.criado_em) + '</td><td><b>' + esc(l.meme_id) + '</b></td>' +
           '<td><a href="https://www.youtube.com/watch?v=' + esc(l.yt) + '" target="_blank" rel="noopener">youtu.be/' + esc(l.yt) + '</a></td>' +
+          '<td>' + esc(l.autor) + '</td><td><span class="tag">' + esc(ST[l.status] || l.status) + '</span></td><td style="white-space:nowrap">' + acts + '</td></tr>';
+      }).join('');
+    }).catch(function () {});
+  }
+  var CAMPO = { origem: 'De onde surgiu', porque: 'Por que viralizou', usos: 'Como é usado', rede: 'Onde ficou famoso', hoje: 'Onde está hoje', curiosidades: 'Curiosidades' };
+  function loadMemepedia() {
+    return api('/api/admin/memepedia').then(function (r) { return r.ok ? r.json() : { items: [] }; }).then(function (j) {
+      var it = j.items || [];
+      var pend = it.filter(function (l) { return l.status === 'pendente'; }).length;
+      $('mpCount').textContent = it.length ? '(' + pend + ' pendente' + (pend === 1 ? '' : 's') + ')' : '';
+      $('mpNone').hidden = it.length > 0;
+      $('mpRows').innerHTML = it.map(function (l) {
+        var acts = l.status === 'pendente'
+          ? '<button class="del" style="background:#1f7a3a;border-color:#1f7a3a;color:#fff" data-mp="' + esc(l.id) + '" data-st="aprovado" type="button">Aprovar</button> <button class="del" data-mp="' + esc(l.id) + '" data-st="recusado" type="button">Recusar</button>'
+          : '<button class="del" data-mp="' + esc(l.id) + '" data-st="' + (l.status === 'aprovado' ? 'recusado' : 'aprovado') + '" type="button">' + (l.status === 'aprovado' ? 'Desfazer' : 'Aprovar') + '</button>';
+        return '<tr><td style="white-space:nowrap">' + quando(l.criado_em) + '</td><td><a href="/memepedia.html#' + esc(l.meme_id) + '" target="_blank" rel="noopener"><b>' + esc(l.meme_id) + '</b></a></td>' +
+          '<td>' + esc(CAMPO[l.campo] || l.campo) + '</td><td style="white-space:pre-wrap;max-width:420px">' + esc(l.texto) + (l.fonte ? '<br><small><a href="' + esc(l.fonte) + '" target="_blank" rel="noopener nofollow">fonte</a></small>' : '') + '</td>' +
           '<td>' + esc(l.autor) + '</td><td><span class="tag">' + esc(ST[l.status] || l.status) + '</span></td><td style="white-space:nowrap">' + acts + '</td></tr>';
       }).join('');
     }).catch(function () {});
@@ -285,6 +316,10 @@
   $('lkRows').addEventListener('click', function (e) {
     var btn = e.target.closest('[data-lk]'); if (!btn) return;
     api('/api/admin/links/' + encodeURIComponent(btn.dataset.lk), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: btn.dataset.st }) }).then(loadLinks);
+  });
+  $('mpRows').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-mp]'); if (!btn) return;
+    api('/api/admin/memepedia/' + encodeURIComponent(btn.dataset.mp), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: btn.dataset.st }) }).then(loadMemepedia);
   });
   $('cmRows').addEventListener('click', function (e) {
     var btn = e.target.closest('[data-cm]'); if (!btn) return;

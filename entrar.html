@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
+<link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Entrar · Não Salvo</title>
+<meta name="description" content="Entre com o Discord para visitar o Não Salvo, o museu da internet brasileira.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css?v=20261125b">
+<link rel="stylesheet" href="entrar.css?v=20261120c">
+<!-- esta tela não carrega o script da barreira de login (senão entra em laço de redirecionamento) -->
+<script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
+</head>
+<body class="entrar">
+<div class="rays-wrap" aria-hidden="true"><div class="rays"></div></div>
+<button class="ent-tema" id="tema" type="button" role="switch" aria-checked="false" aria-label="Modo escuro">
+  <svg class="t-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5"/></svg>
+  <svg class="t-d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+</button>
+
+<main class="ent">
+  <section class="ent-box" aria-labelledby="ent-h">
+    <picture><source srcset="logo-hero.webp?v=4" type="image/webp"><img class="ent-logo" src="logo-hero.png?v=4" alt="Não Salvo" width="640" height="528"></picture>
+    <span class="ent-kicker">Museu da internet brasileira</span>
+    <h1 id="ent-h">E no fim, o plano do <b>Não Salvo</b> era salvar.</h1>
+    <p class="ent-lead">Os memes, os virais e as figurinhas estão te esperando. Entre com o seu Discord para visitar o museu e guardar o seu álbum.</p>
+
+    <div class="ent-aviso" id="aviso" role="alert" aria-live="assertive"></div>
+
+    <a class="ent-discord" id="entrar" href="/api/auth/discord">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.6 19.6 0 0 0 15.4 3l-.6 1.3a18 18 0 0 0-5.6 0L8.6 3a19.5 19.5 0 0 0-4.9 1.5C.6 9.1-.3 13.6.1 18.1a19.8 19.8 0 0 0 6 3l1.3-2.1a12.8 12.8 0 0 1-2-1l.5-.4a14 14 0 0 0 12.1 0l.5.4-2 1 1.3 2.1a19.7 19.7 0 0 0 6-3c.5-5.2-.9-9.7-3.5-13.7zM8 15.4c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.6 8 10.6s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg>
+      <span class="rot">Continuar com Discord</span>
+      <span class="discando" aria-hidden="true">Discando para o Discord…</span>
+    </a>
+    <p class="ent-seg">Usamos o Discord só para saber quem é você. Nada é postado no seu nome.</p>
+
+    <button type="button" class="ent-conv" id="convidado" aria-describedby="convnota">Continuar sem login</button>
+    <p class="ent-convnota" id="convnota">Sem login você pode navegar, mas álbum, moedas, pacotes e perfil precisam de conta.</p>
+
+    <details class="ent-novo">
+      <summary>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>
+        Sou novo, como faço?
+        <svg class="ico seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <ol class="ent-passos">
+        <li><span><b>Entre com o Discord</b>Não precisa cadastro: no primeiro login a sua conta já é criada.</span></li>
+        <li><span><b>Monte o seu gatinho</b>Logo depois você escolhe o avatar que vai aparecer no ranking.</span></li>
+        <li><span><b>Explore o museu</b>Linha do tempo, Memepédia e o álbum de figurinhas da internet.</span></li>
+      </ol>
+    </details>
+  </section>
+
+  <div class="ent-pols" aria-hidden="true">
+    <figure style="--r:-6deg;--d:0s"><img src="memes/para-nossa-alegria.jpg" alt="" loading="lazy"><figcaption>Para Nossa Alegria</figcaption></figure>
+    <figure style="--r:3deg;--d:-1.5s"><img src="memes/nazare-tedesco-pensando.webp" alt="" loading="lazy"><figcaption>Nazaré Confusa</figcaption></figure>
+    <figure style="--r:-2deg;--d:-3s"><img src="memes/vestido-axzul-ou-dourado.webp" alt="" loading="lazy"><figcaption>O Vestido</figcaption></figure>
+    <figure style="--r:5deg;--d:-4.5s"><img src="memes/canarinho-pistola.webp" alt="" loading="lazy"><figcaption>Canarinho Pistola</figcaption></figure>
+  </div>
+
+  <p class="ent-rod">Não Salvo · projeto do Xet, sem fins lucrativos. Os vídeos e fotos pertencem aos seus autores.</p>
+</main>
+
+<script>
+(function(){
+  // avisos que a API manda de volta em ?login=
+  var MSG={
+    negado:["leve","Login cancelado","Você fechou a janela do Discord antes de terminar. Sem problema: é só clicar no botão de novo."],
+    erro:["serio","A conexão caiu","Não deu para falar com o Discord agora (parece internet discada). Espere um pouquinho e tente de novo."],
+    banido:["serio","Conta bloqueada","Esta conta não pode entrar no Não Salvo. Se achar que é engano, fale com a moderação no Discord da comunidade."],
+    nao_membro:["leve","Falta entrar no servidor","Para visitar o museu, você precisa fazer parte do servidor do Discord da comunidade. Entre no servidor e tente de novo."]
+  };
+  var ICO={leve:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5h.01"/></svg>',
+           serio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>'};
+  var q=new URLSearchParams(location.search);
+  // só aceita caminho do próprio site (a API valida de novo). Igual ao caminhoSeguro da API: nada de caracteres de
+  // controle/espaço (o navegador remove TAB/LF/CR e "/<TAB>/evil.com" viraria "//evil.com"), de "\", de "//" no início,
+  // e a URL resolvida precisa continuar na mesma origem.
+  function caminhoSeguro(c){
+    if(typeof c!=="string"||c.charAt(0)!=="/"||c.charAt(1)==="/"||/[\u0000-\u001f\u007f\s\\]/.test(c)||/entrar\.html/.test(c))return false;
+    try{return new URL(c,location.origin).origin===location.origin}catch(e){return false}
+  }
+  var v=q.get("voltar")||"/";
+  if(!caminhoSeguro(v))v="/";
+  var a=document.getElementById("entrar");
+  a.href="/api/auth/discord?voltar="+encodeURIComponent(v);
+  a.addEventListener("click",function(){a.classList.add("indo");a.setAttribute("aria-busy","true")});
+  // modo convidado: grava a marca e volta para a página de origem (o gate.js e o cliente de economia respeitam a marca)
+  document.getElementById("convidado").addEventListener("click",function(){
+    var gravou=false;try{localStorage.setItem("ns_convidado","1");gravou=localStorage.getItem("ns_convidado")==="1"}catch(e){}
+    if(!gravou){mostraAviso(["leve","Armazenamento bloqueado","Seu navegador bloqueou o armazenamento do site. Ative para continuar sem login, ou entre com o Discord."]);return}
+    location.href=v;
+  });
+  // ao voltar pelo "voltar" do navegador, o botão não fica preso em "discando"
+  addEventListener("pageshow",function(){a.classList.remove("indo");a.removeAttribute("aria-busy")});
+  var av=document.getElementById("aviso");
+  function mostraAviso(d){
+    av.className="ent-aviso on "+d[0];av.innerHTML=ICO[d[0]]+"<span><b></b><span></span></span>";
+    av.querySelector("b").textContent=d[1];av.querySelector("b+span").textContent=d[2];
+  }
+  var m=q.get("login");
+  if(m)mostraAviso(Object.prototype.hasOwnProperty.call(MSG,m)?MSG[m]:MSG.erro);
+  // tema claro/escuro (mesma chave do resto do site)
+  var tb=document.getElementById("tema"),html=document.documentElement;
+  var pinta=function(){var esc=html.dataset.theme==="dark";tb.setAttribute("aria-checked",String(esc));tb.title=esc?"Modo escuro ativo · clique para o modo claro":"Modo claro ativo · clique para o modo escuro"};
+  pinta();tb.addEventListener("click",function(){html.dataset.theme=html.dataset.theme==="dark"?"light":"dark";try{localStorage.setItem("ns_theme",html.dataset.theme)}catch(e){}pinta()});
+  // já logado? volta para onde estava
+  fetch("/api/eu",{credentials:"same-origin",cache:"no-store"}).then(function(r){if(r.ok){try{localStorage.removeItem("ns_convidado")}catch(e){}location.replace(v)}}).catch(function(){});
+})();
+</script>
+</body>
+</html>

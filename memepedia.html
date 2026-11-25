@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
+<link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
+<script src="gate.js?v=20261120c"></script>
+<script src="cliente-economia.js?v=20261125c"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memepédia · NÃO SALVO</title>
+<meta name="description" content="Memepédia: a enciclopédia dos memes brasileiros, escrita pela comunidade do Não Salvo. De onde vieram, por que viralizaram, como são usados e onde estão hoje.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Baloo+2:wght@700;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css?v=20261125b">
+<link rel="stylesheet" href="viewer.css?v=20261125b">
+<script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
+<style>
+.wk{display:grid;grid-template-columns:260px minmax(0,1fr);gap:26px;max-width:1240px;margin:0 auto;padding:22px 22px 60px}
+.wk-side{position:sticky;top:calc(var(--hdh,64px) + 14px);align-self:start;max-height:calc(100vh - var(--hdh,64px) - 28px);display:flex;flex-direction:column;min-height:0}
+.wk-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--txt);margin-bottom:12px}
+.wk-logo .ico{width:34px;height:34px;padding:7px;border-radius:10px;background:var(--brand-soft);color:var(--brand)}
+.wk-logo b{font:700 22px/1 "Source Serif 4",Georgia,serif}
+.wk-logo small{display:block;font-size:12px;color:var(--mut);margin-top:2px}
+.wk-q{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line2);background:var(--panel);color:var(--txt);font:inherit;font-size:14px}
+.wk-yrs{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0}
+.wk-yrs button{font:600 12px Inter,sans-serif;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--mut);cursor:pointer}
+.wk-yrs button.on{background:var(--brand-fill);border-color:var(--brand-fill);color:var(--on-brand)}
+.wk-list{overflow:auto;min-height:0;margin:0 -6px;padding:0 6px;scrollbar-width:thin}
+.wk-list a{display:flex;justify-content:space-between;gap:8px;padding:7px 8px;border-radius:8px;color:var(--txt);text-decoration:none;font-size:13px;line-height:1.3}
+.wk-list a small{color:var(--faint);font-size:12px;flex:none}
+.wk-list a:hover{background:var(--sunk)}.wk-list a.on{background:var(--brand-soft);color:var(--brand-text);font-weight:600}
+.wk-main{min-width:0}
+.wk-bc{font-size:12px;color:var(--mut);margin-bottom:6px}.wk-bc a{color:var(--brand-text);text-decoration:none}
+.wk h1{font:700 clamp(28px,4vw,40px)/1.1 "Source Serif 4",Georgia,serif;margin:0 0 4px;color:var(--txt);letter-spacing:-.3px}
+.wk-sub{font-size:13px;color:var(--mut);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.wk-art{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:28px;align-items:start}
+.wk-box{border:1px solid var(--line2);border-radius:14px;background:var(--panel);overflow:hidden;font-size:13px}
+.wk-box .im{position:relative;aspect-ratio:16/10;background:var(--sunk);overflow:hidden}
+.wk-box .im img{width:100%;height:100%;object-fit:cover;display:block}
+.wk-box .im .cdo-t{position:absolute}
+.wk-box h3{font:700 15px/1.3 "Source Serif 4",Georgia,serif;margin:0;padding:12px 14px 4px;text-align:center}
+.wk-box dl{display:grid;grid-template-columns:96px 1fr;margin:0;padding:6px 14px 12px;gap:7px 10px}
+.wk-box dt{color:var(--mut);font-weight:600}.wk-box dd{margin:0;color:var(--txt)}
+.wk-box .wk-play{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 14px 14px;padding:10px;border-radius:10px;background:var(--brand-fill);color:var(--on-brand);font:600 13px Inter,sans-serif;border:0;cursor:pointer;width:calc(100% - 28px)}
+.wk-sec{margin:0 0 22px}
+.wk-sec h2{display:flex;align-items:center;gap:10px;font:700 21px/1.25 "Source Serif 4",Georgia,serif;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid var(--line);color:var(--txt)}
+.wk-sec h2 .ed{margin-left:auto;font:600 12px Inter,sans-serif;color:var(--brand-text);background:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:4px 6px;border-radius:6px}
+.wk-sec h2 .ed:hover{background:var(--brand-soft)}.wk-sec h2 .ed .ico{width:14px;height:14px}
+.wk-sec p{font-size:15.5px;line-height:1.7;color:var(--txt);margin:0 0 6px;white-space:pre-line}
+.wk-sec .vz{color:var(--mut);font-style:italic;font-size:14px}
+.wk-sec .cr{font-size:12px;color:var(--faint)}.wk-sec .cr a{color:inherit}
+.wk-sec .est{display:inline-block;font-size:12px;color:var(--mut);background:var(--sunk);border-radius:6px;padding:2px 6px;margin-left:4px}
+.wk-form{display:none;margin-top:10px;padding:12px;border-radius:12px;background:var(--sunk);border:1px solid var(--line)}
+.wk-form.open{display:block}
+.wk-form textarea,.wk-form input{width:100%;box-sizing:border-box;border-radius:8px;border:1px solid var(--line2);background:var(--panel);color:var(--txt);font:inherit;font-size:14px;padding:9px 10px;margin-bottom:8px}
+.wk-form textarea{min-height:110px;resize:vertical}
+.wk-form .r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.wk-form small{color:var(--mut);font-size:12px}
+.wk-form .msg{font-size:12.5px;margin-top:6px}
+.wk-btn{font:600 13px Inter,sans-serif;padding:9px 14px;border-radius:9px;border:1px solid var(--brand-fill);background:var(--brand-fill);color:var(--on-brand);cursor:pointer}
+.wk-btn.gh{background:none;color:var(--brand-text)}
+.wk-care{border:1px solid #f0c060;background:#fff8e6;color:#3b2a00;border-radius:14px;padding:14px 16px;margin-bottom:20px;font-size:14px;line-height:1.55}
+:root[data-theme="dark"] .wk-care{background:#2b2210;color:#f7e6c0;border-color:#7a5b16}
+.wk-care p{margin:6px 0}.wk-care .cdo-lei{background:#0000000d;color:inherit}.wk-care .cdo-orgs a{color:#1a56db}
+:root[data-theme="dark"] .wk-care .cdo-orgs a{color:#8ab4f8}
+.wk-rel{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.wk-rel a{display:block;text-decoration:none;color:var(--txt);border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);font-size:12.5px}
+.wk-rel a span{display:block;aspect-ratio:16/9;background:var(--sunk) center/cover}
+.wk-rel a b{display:block;padding:7px 9px;font-weight:600;line-height:1.3}
+.wk-home p.lead{font-size:16px;line-height:1.6;color:var(--mut);max-width:66ch}
+.wk-home .wk-rel{margin-top:16px}
+.wk-hint{font-size:12px;color:var(--mut);margin-top:16px;border-top:1px dashed var(--line);padding-top:10px}
+.wk-side .mtog{display:none}
+@media(max-width:980px){.wk-art{grid-template-columns:1fr}.wk-box{max-width:420px}}
+@media(max-width:820px){
+  .wk{grid-template-columns:1fr;padding:14px 14px 50px;gap:14px}
+  .wk-side{position:static;max-height:none}
+  .wk-list{max-height:0;overflow:hidden;transition:max-height .25s}
+  .wk-side.open .wk-list{max-height:50vh;overflow:auto}
+  .wk-side .mtog{display:block;margin-top:6px;font:600 13px Inter,sans-serif;background:none;border:0;color:var(--brand-text);cursor:pointer;padding:6px 0;text-align:left}
+}
+</style>
+</head>
+<body>
+<div class="wk">
+  <aside class="wk-side" id="side">
+    <a class="wk-logo" href="memepedia.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/><path d="M9 7.5h7M9 11h5"/></svg><span><b>Memepédia</b><small>a enciclopédia dos memes brasileiros</small></span></a>
+    <input class="wk-q" id="wq" type="search" placeholder="Procurar um meme…" aria-label="Procurar na Memepédia">
+    <div class="wk-yrs" id="wy"></div>
+    <button class="mtog" id="mtog" onclick="document.getElementById('side').classList.toggle('open')">Ver todos os verbetes ▾</button>
+    <nav class="wk-list" id="wl" aria-label="Verbetes"></nav>
+  </aside>
+  <main class="wk-main" id="wm"></main>
+</div>
+
+<script src="common.js?v=20261125d"></script>
+<script src="data.js?v=20261125b"></script>
+<script src="player.js?v=20261125b"></script>
+<script src="viewer.js?v=20261125b"></script>
+<script src="alertas.js?v=20261125b"></script>
+<script>
+renderHeader("memepedia",{sub:[
+  {k:"inicio",ic:"home",label:"Início",href:"index.html"},
+  {k:"tl",ic:"timeline",label:"Linha do tempo",href:"linha-do-tempo.html"},
+  {k:"wiki",ic:"book",label:"Memepédia",href:"memepedia.html"},
+  {k:"album",ic:"album",label:"Álbum de figurinhas",href:"album.html"},
+  {sp:1},
+  {k:"send",ic:"send",label:"Enviar meme",cta:1,href:"index.html#send"}
+]});
+setSubOn("wiki");renderWallet();
+const $=id=>document.getElementById(id);
+
+// ---- seções do verbete ----
+const CAMPOS=[
+  ["origem","De onde surgiu","Quem fez, onde e quando apareceu pela primeira vez."],
+  ["porque","Por que viralizou","O que fez todo mundo compartilhar."],
+  ["usos","Como é usado","Em que situações o meme aparece, frases e variações."],
+  ["rede","Onde ficou famoso","Rede social, programa ou site onde estourou."],
+  ["hoje","Onde está hoje","O que aconteceu com as pessoas ou o meme depois."],
+  ["curiosidades","Curiosidades","Bastidores, processos, remixes, homenagens."]
+];
+const yKey=y=>{y=parseInt(y)||2020;return y<2000?"1995–1999":y<=2003?"2000–2003":y>=2026?"2026":String(y)};
+const yLab=k=>(YEAR_INFO[k]&&YEAR_INFO[k].rot)||k;
+const L=[...MEMES].sort((a,b)=>a.t.localeCompare(b.t,"pt-BR"));
+const WK={srv:{},ano:"",q:""};
+// rede provável pela época (marcado como estimativa até a comunidade escrever)
+function redeEstimada(m){const y=parseInt(m.y)||2020;
+  if(m.tipo==="foto")return y<=2006?"Fotolog e e-mail":y<=2011?"Orkut":y<=2014?"Facebook e Tumblr":y<=2019?"Instagram, Twitter e WhatsApp":"TikTok, Instagram e X";
+  return y<=2004?"TV, e-mail e CD gravado":y<=2011?"YouTube e Orkut":y<=2015?"YouTube e Facebook":y<=2019?"YouTube, Facebook e WhatsApp":"TikTok, Reels e YouTube Shorts"}
+const fotoDe=m=>m.img?m.img:m.yt?`https://i.ytimg.com/vi/${m.yt}/hqdefault.jpg`:"";
+function texto(m,c){
+  const s=(WK.srv[m.id]||{})[c];if(s)return{t:s.texto,by:s.autor,fonte:s.fonte};
+  const l=((NS.wiki||{})[m.id]||{})[c];if(l)return{t:l.texto,by:l.autor,fonte:l.fonte,local:1};
+  if(c==="origem")return{t:m.d,by:"acervo do Não Salvo"};
+  if(c==="rede")return{t:redeEstimada(m),est:1};
+  return null}
+
+function lista(){
+  const fold=x=>String(x).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+  const q=fold(WK.q),cur=decodeURIComponent(location.hash.slice(1));
+  const R=L.filter(m=>(!WK.ano||yKey(m.y)===WK.ano)&&(!q||fold(m.t+" "+m.d+" "+m.y).includes(q)));
+  $("wl").innerHTML=R.map(m=>`<a href="#${encodeURIComponent(m.id)}" class="${m.id===cur?"on":""}">${escapeHtml(m.t)}<small>${m.y}</small></a>`).join("")||`<p class="wk-hint">Nada encontrado.</p>`;
+  $("wy").innerHTML=[["","Todos"],...Object.keys(YEAR_INFO).sort((a,b)=>parseInt(a)-parseInt(b)).map(k=>[k,yLab(k)])].map(([k,l])=>`<button class="${WK.ano===k?"on":""}" onclick="WK.ano='${k}';lista()">${l}</button>`).join("");
+}
+$("wq").oninput=e=>{WK.q=e.target.value;lista();if(innerWidth<=820)$("side").classList.add("open")};
+
+function home(){
+  document.title="Memepédia · NÃO SALVO";
+  const dest=[...MEMES].sort((a,b)=>b.views-a.views).slice(0,12);
+  $("wm").innerHTML=`<div class="wk-home"><div class="wk-bc">Não Salvo › Memepédia</div><h1>Memepédia</h1>
+    <div class="wk-sub">A enciclopédia dos memes brasileiros, escrita pela comunidade · ${MEMES.length} verbetes</div>
+    <p class="lead">Cada meme do acervo tem um verbete: de onde surgiu, por que viralizou, como é usado, em qual rede estourou e onde as pessoas estão hoje. Qualquer pessoa com conta pode escrever ou corrigir uma seção. Tudo passa pela moderação antes de aparecer.</p>
+    <div class="wk-sec" style="margin-top:22px"><h2>Mais acessados</h2><div class="wk-rel">${dest.map(rel).join("")}</div></div>
+    <p class="wk-hint">Dica: escreva com suas palavras e coloque a fonte (link de notícia, vídeo original, perfil). Informação sem fonte pode ser recusada.</p></div>`;
+}
+const rel=m=>`<a href="#${encodeURIComponent(m.id)}"><span style="background-image:url('${fotoDe(m)}')${m.cuidado?";filter:blur(10px)":""}"></span><b>${escapeHtml(m.t)}</b></a>`;
+
+function verbete(m){
+  document.title=m.t+" · Memepédia";
+  const k=yKey(m.y),irmaos=MEMES.filter(x=>x.id!==m.id&&yKey(x.y)===k).slice(0,6);
+  const sec=([c,h,dica])=>{const t=texto(m,c);
+    return`<section class="wk-sec" id="s-${c}"><h2>${h}<button class="ed" onclick="editar('${c}')">${icon("edit")}${t&&!t.est&&c!=="origem"?"Editar":"Escrever"}</button></h2>
+      ${t?`<p>${escapeHtml(t.t)}${t.est?`<span class="est">estimativa pela época · ajude a confirmar</span>`:""}</p>${t.by?`<div class="cr">Escrito por ${escapeHtml(t.by)}${t.fonte?` · <a href="${escapeHtml(t.fonte)}" target="_blank" rel="noopener nofollow">fonte</a>`:""}${t.local?" · esperando moderação (só você vê)":""}</div>`:""}`:`<p class="vz">Ninguém escreveu esta parte ainda. ${dica}</p>`}
+      <form class="wk-form" id="f-${c}" onsubmit="enviar(event,'${c}')"><textarea name="t" maxlength="2000" placeholder="${dica}" required minlength="10">${t&&!t.est&&!t.local&&c!=="origem"?escapeHtml(t.t):""}</textarea>
+        <input name="fonte" type="url" placeholder="Fonte (link de notícia, vídeo original…), opcional"><input class="ch" name="bot-field" tabindex="-1" aria-hidden="true" style="display:none">
+        <div class="r"><button class="wk-btn" type="submit">Enviar para a moderação</button><button class="wk-btn gh" type="button" onclick="editar('${c}')">Cancelar</button><small>${temConta()?`como <b>${escapeHtml(meuApelido())}</b>`:"precisa de conta"}</small></div><div class="msg"></div></form></section>`};
+  $("wm").innerHTML=`<div class="wk-bc"><a href="memepedia.html">Memepédia</a> › <a href="#" onclick="WK.ano='${k}';lista();return false">${yLab(k)}</a> › ${escapeHtml(m.t)}</div>
+    <h1>${escapeHtml(m.t)}</h1><div class="wk-sub">Verbete da Memepédia · ${m.y} · ${escapeHtml(m.c)}</div>
+    ${m.cuidado?`<div class="wk-care">${cuidadoHTML(m)}</div>`:""}
+    <div class="wk-art"><div>${CAMPOS.map(sec).join("")}
+      ${irmaos.length?`<section class="wk-sec"><h2>Memes da mesma época</h2><div class="wk-rel">${irmaos.map(rel).join("")}</div></section>`:""}</div>
+      <aside class="wk-box"><div class="im">${m.cuidado?`<span class="cdo-t">${icon("care","in")}<b>Selo de cuidado</b></span>`:""}${fotoDe(m)?`<img src="${escapeHtml(fotoDe(m))}" alt=""${m.cuidado?' class="cdo-blur"':""}>`:""}</div>
+        <h3>${escapeHtml(m.t)}</h3><dl><dt>Ano</dt><dd>${m.y}</dd><dt>Tipo</dt><dd>${m.tipo==="foto"?"Foto":m.vert?"Vídeo vertical":"Vídeo"}</dd><dt>Categoria</dt><dd>${escapeHtml(m.c)}</dd><dt>Raridade</dt><dd>${escapeHtml(m.r)}</dd>${m.by?`<dt>Origem</dt><dd>${escapeHtml(m.by)}</dd>`:""}${m.canal?`<dt>Canal</dt><dd>${escapeHtml(m.canal)}</dd>`:""}${m.credit?`<dt>Imagem</dt><dd><a href="${escapeHtml(m.credit.url)}" target="_blank" rel="noopener">${escapeHtml(m.credit.by)}</a></dd>`:""}</dl>
+        <button class="wk-play" onclick="ver('${m.id}')">${icon(m.tipo==="foto"?"photo":"video","in")}Ver meme</button></aside></div>`;
+}
+function editar(c){const f=$("f-"+c);if(!f)return;if(!temConta()&&!f.classList.contains("open")){needAccount("sugerir uma edição");return}f.classList.toggle("open");if(f.classList.contains("open"))f.t.focus()}
+async function enviar(ev,c){ev.preventDefault();const f=ev.target,m=MEMES.find(x=>x.id===decodeURIComponent(location.hash.slice(1)));if(!m)return;
+  if(!temConta()){needAccount("sugerir uma edição");return}
+  const texto=f.t.value.trim(),fonte=f.fonte.value.trim(),out=f.querySelector(".msg"),bt=f.querySelector("button[type=submit]");
+  if(texto.length<10){out.textContent="Escreva pelo menos 10 caracteres.";return}
+  bt.disabled=true;out.textContent="Enviando…";
+  let ok=false;try{const r=await fetch("/api/memepedia",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:m.id,campo:c,texto,fonte,autor:meuApelido(),"bot-field":f["bot-field"].value})});ok=r.ok;if(!r.ok&&r.status!==404&&r.status<500){const j=await r.json().catch(()=>null);out.textContent=(j&&j.erro)||"Não deu para enviar.";bt.disabled=false;return}}catch(e){}
+  NS.wikiSugs=NS.wikiSugs||[];NS.wikiSugs.push({id:"w"+Date.now(),meme:m.id,t:m.t,campo:c,texto,fonte,by:meuApelido(),status:"pending",online:ok,ts:Date.now()});nsSave();
+  bt.disabled=false;f.reset();f.classList.remove("open");
+  toast(ok?"Enviado! Um moderador vai revisar antes de publicar.":"Salvo neste navegador. Vai para a moderação quando o site estiver no ar.",3600);
+}
+function ver(id){const m=MEMES.find(x=>x.id===id);if(!m)return;const relL=MEMES.filter(x=>x.id!==id).sort((p,q)=>Math.abs(p.y-m.y)-Math.abs(q.y-m.y));
+  openViewer(m,{related:relL,onPick:ver,onYear:y=>{location.href="linha-do-tempo.html#"+y}})}
+function rota(){const id=decodeURIComponent(location.hash.slice(1)),m=MEMES.find(x=>x.id===id);lista();if(m)verbete(m);else home();
+  $("side").classList.remove("open");window.scrollTo({top:0,behavior:"instant"})}
+addEventListener("hashchange",rota);
+function onAccountChange(){rota()}
+fetch("/api/memepedia",{headers:{accept:"application/json"}}).then(r=>r.ok&&(r.headers.get("content-type")||"").includes("json")?r.json():null).then(d=>{if(d&&typeof d==="object"){WK.srv=d;rota()}}).catch(()=>{});
+rota();
+</script>
+</body>
+</html>

@@ -16,6 +16,12 @@ body.vw-open{overflow:hidden}
 .vw .snd .ico{width:16px;height:16px}
 .vw .snd:hover{opacity:1}
 .vw .yl{height:30px;width:auto;display:block}
+/* logo do topo: desenho próprio (TV antiga + nome), lembra o YouTube sem copiar o logo oficial */
+.vw .ylt{display:inline-flex;align-items:center;gap:6px;flex:none;color:#282828;font:bold 22px/1 Arial,Helvetica,sans-serif;letter-spacing:-.5px;white-space:nowrap}
+.vw .ylt svg{height:100%;width:auto}
+.vw .ylt .tela{fill:#fff}
+.vw .yh5 .ylt{color:#f1f1f1}
+.vw .yh5 .ylt .tela{fill:#0f0f0f}
 .vw .vbs{display:flex;gap:8px;margin:16px 0 6px;flex-wrap:wrap}
 .vw .lbx{margin-top:12px;padding:10px 12px;font-size:12px;border:1px dashed #9ab;border-radius:4px;line-height:1.5}
 .vw .lbx .in{display:flex;gap:6px;margin-top:6px}.vw .lbx input{flex:1;padding:5px 7px;border:1px solid #aaa;font:inherit;font-size:12px}
@@ -331,7 +337,7 @@ body.vw-open{overflow:hidden}
   .vw-win .yh1 .t1{flex-wrap:nowrap}
   .vw-win .yh1 .lk a{display:none}
   .vw-win .yh1 .lk{font-size:0}
-  .vw-win .yl{height:24px}
+  .vw-win .yl{height:24px}.vw-win .ylt{font-size:18px}
   .vw-win .lk{display:flex;align-items:center;gap:6px;margin-left:auto}
   .vw-win h1{font-size:18px!important;line-height:1.25}
   .vw-win .vbs .vb{flex:1}
@@ -518,3 +524,104 @@ body.vw-open{overflow:hidden}
 .vw .lbx .chk.ok{border-color:#2f9a2a;background:#eaf7e8;color:#1d6b19}
 .vw .lbx .chk.bad{border-color:#c33;background:#fdeaea;color:#a11}
 .vw .lbx .chk.warn{border-color:#c90;background:#fff6e0;color:#8a5a00}
+
+/* ===== janela do player: abre inteira, centralizada, sem rolagem interna ===== */
+.vw{display:flex!important;align-items:flex-start;justify-content:center;overflow-y:auto!important;overflow-x:hidden;padding:24px;overscroll-behavior:contain}
+.vw-win{height:auto!important;max-height:none!important;overflow:hidden!important;margin:auto 0;max-width:760px;width:100%;flex:none;position:relative}
+.vw-win .xtask{position:static;margin:16px -18px -50px}
+.vw-win .pimg{max-height:min(460px,52vh);object-fit:contain;background:#0001}
+.vw-win .cmt .cl{max-height:150px;overflow:auto}
+.vw-win .vp-stage{transition:max-width .15s ease}
+@media(max-width:700px){.vw{padding:8px}.vw-win{border-radius:10px}}
+
+/* avisos da época agora ficam dentro da janela */
+.vw-win .etoast{position:absolute!important;right:14px!important;bottom:14px!important;left:auto!important;top:auto!important;max-width:min(320px,calc(100% - 28px))!important;z-index:30}
+.vw-win .etoast.top{top:12px!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%);width:min(360px,calc(100% - 24px));max-width:none!important;border-radius:18px!important;
+  background:rgba(250,250,252,.92)!important;color:#111!important;border:0!important;box-shadow:0 10px 30px #0006!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font:13px/1.35 -apple-system,"Segoe UI",Roboto,Inter,sans-serif!important;animation:etdown .45s cubic-bezier(.2,.9,.3,1.2)}
+.vw-win .etoast.top .ei{border-radius:9px!important;width:34px;height:34px}
+.vw-win .etoast.top .et em{font-size:12px;opacity:.75;text-transform:none}
+.vw-win .etoast.top .etx{font-weight:500}
+@keyframes etdown{from{transform:translate(-50%,-140%);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+.vw-win .lan{position:absolute!important;right:12px!important;bottom:12px!important;left:auto!important;top:auto!important;z-index:25;pointer-events:none;display:flex!important;flex-direction:column!important;gap:1px!important;padding:8px 12px!important;font-size:11px!important;border:2px solid #0a0!important;box-shadow:0 0 12px #0f03!important;width:auto}
+/* XP: fica acima da barra de tarefas; avisos que somem sobem para não ficar embaixo do cronômetro */
+.vw-win.vw-e0 .lan{bottom:46px!important}
+.vw-win.tem-lan .etoast:not(.top){bottom:96px!important}
+.vw-win.vw-e0.tem-lan .etoast:not(.top){bottom:130px!important}
+@media(max-width:700px){.vw-win .lan{right:8px!important;bottom:8px!important;padding:4px 8px!important;font-size:9px!important}.vw-win.vw-e0 .lan{bottom:44px!important}.vw-win.tem-lan .etoast:not(.top){bottom:70px!important}}
+@media(max-width:700px){.vw-win .etoast{right:8px!important;bottom:8px!important;max-width:calc(100% - 16px)!important}.vw-win .etoast.top{top:8px!important}}
+
+/* botão da Memepédia nos botões de baixo */
+.vw .vbs .vb.mp{display:inline-flex;align-items:center;gap:6px}
+.vw .vbs .vb.mp .ico.in{margin:0}
+
+/* ===== vídeos verticais: visual de app de vídeo curto ===== */
+.vw-win.vw-short{max-width:880px!important}
+.tkp{background:#000;color:#fff;font:14px/1.4 -apple-system,"Segoe UI",Roboto,Inter,sans-serif}
+.tkh{display:flex;align-items:center;justify-content:center;position:relative;padding:12px 14px;border-bottom:1px solid #ffffff14}
+.tkt{display:flex;gap:18px;font-weight:700;font-size:15px}.tkt span{opacity:.55}
+.tkt b{position:relative}.tkt b::after{content:"";position:absolute;left:25%;right:25%;bottom:-6px;height:3px;border-radius:2px;background:#fff}
+.tkh .lk{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:10px}
+.tkh .vx{color:#fff}.tkh .snd{color:#fff}
+.tkw{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;padding:16px 20px 20px;align-items:start}
+.tkv{position:relative;width:min(340px,calc((100vh - 130px)*9/16));min-width:200px}
+.tkv .vp-stage{max-width:none!important}
+.tkv .vp-screen{border-radius:14px}
+.vp-vert .vp-screen{aspect-ratio:9/16!important}
+.vp-vert .vp-thumb{object-fit:cover;width:100%;height:100%}
+.vp-vert .vp-yt{width:100%;height:100%}
+.tko{position:absolute;left:12px;right:64px;bottom:44px;z-index:4;pointer-events:none;text-shadow:0 1px 3px #000c}
+.tko b{font-size:14px}.tko p{margin:4px 0;font-size:13px}.tko small{font-size:12px;opacity:.9}
+.tkr{position:absolute;right:8px;bottom:56px;z-index:5;display:flex;flex-direction:column;align-items:center;gap:14px}
+.tka{position:relative;width:44px;height:44px}.tka img{width:44px;height:44px;border-radius:50%;border:2px solid #fff}
+.tka i{position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:#fe2c55;color:#fff;font:700 13px/18px sans-serif;text-align:center;font-style:normal}
+.tki,.tkl{display:flex;flex-direction:column;align-items:center;gap:2px;color:#fff;background:none;border:0;cursor:pointer;font-size:11px;text-shadow:0 1px 3px #000c}
+.tki .ico,.tkl .ico{width:30px;height:30px;padding:6px;border-radius:50%;background:#0006;stroke-width:2}
+.tkl.on .ico{color:#fe2c55;fill:#fe2c55}
+.tkd{min-width:0}
+.tkc{display:flex;align-items:center;gap:10px;margin-bottom:12px}.tkc img{width:42px;height:42px;border-radius:50%}
+.tkc b{display:block}.tkc small{opacity:.6;font-size:12px}
+.tkf{margin-left:auto;background:#fe2c55;color:#fff;font-weight:700;border-radius:6px;padding:6px 18px;font-size:13px}
+.tkd h1{font-size:20px;margin:0 0 8px;line-height:1.25}
+.tkd p{margin:0 0 8px;opacity:.85}.tkd .tg{color:#8ab4f8;font-size:13px}
+.tkd .vwc5{font-size:12px;opacity:.6;margin:8px 0}
+.tkd .vbs .vb{background:#ffffff1a;color:#fff;border-color:#ffffff33}
+.tkd .vbs .vb:first-child{background:#fe2c55;border-color:#fe2c55}
+@media(max-width:700px){.tkw{grid-template-columns:1fr;padding:10px}.tkv{width:min(100%,calc((100vh - 120px)*9/16));margin:0 auto}}
+
+/* ===== selo de cuidado ===== */
+.cdo{position:absolute;inset:0;z-index:40;display:grid;place-items:center;padding:18px;background:rgba(10,12,20,.55);backdrop-filter:blur(22px) saturate(.6);-webkit-backdrop-filter:blur(22px) saturate(.6);transition:opacity .3s}
+.cdo.ok{opacity:0;pointer-events:none}
+.cdo-in{max-width:520px;background:#fff;color:#1c1f2a;border-radius:16px;padding:20px 22px;box-shadow:0 20px 60px #0008;font:14px/1.5 Inter,system-ui,sans-serif;max-height:calc(100% - 20px);overflow:auto}
+.cdo-in p{margin:8px 0}
+.cdo-selo{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:#fff4d6;color:#7a4b00;border:1px solid #f0c060;font-size:12px}
+.cdo-selo .ico.in{width:16px;height:16px;margin:0}
+.cdo-selo span{opacity:.8}
+.cdo-lei{background:#f6f7fb;border-left:3px solid #d33;padding:8px 10px;border-radius:6px;font-size:13px}
+.cdo-orgs{display:flex;flex-direction:column;gap:6px;margin:10px 0 14px}
+.cdo-orgs small{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:#667}
+.cdo-orgs a{display:flex;align-items:center;gap:8px;color:#1a56db;text-decoration:none;font-weight:600;font-size:13px}
+.cdo-orgs a .ico.in{width:14px;height:14px;margin:0}
+.cdo-ver,.cdo-sair{font:600 13px Inter,system-ui,sans-serif;border-radius:10px;padding:10px 16px;cursor:pointer;border:1px solid #1c1f2a}
+.cdo-ver{background:#1c1f2a;color:#fff;display:inline-flex;align-items:center;gap:8px;margin-right:8px}
+.cdo-ver .ico.in{width:16px;height:16px;margin:0}
+.cdo-sair{background:transparent;color:#1c1f2a}
+.cdo-faixa{display:flex;align-items:center;gap:10px;margin:14px 0 4px;flex-wrap:wrap}
+.cdo-faixa button{border:0;background:none;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;font-size:12px;opacity:.8}
+@media(max-height:800px) and (min-width:701px){.vw{padding:8px 24px}}
+.tkd .vbs{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tkd .vbs .vb{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:999px;border:1px solid #ffffff33;background:#ffffff1a;color:#fff;font:600 13px -apple-system,"Segoe UI",Roboto,Inter,sans-serif;cursor:pointer}
+.tkd .vbs .vb:hover{background:#ffffff2a}
+.tkd .vbs .vb .ico.in{width:15px;height:15px;margin:0}
+
+/* selo de cuidado: interações desligadas (nota, curtida, comentário, compartilhar) */
+.vw-cdo .cdo-off{opacity:.45;cursor:not-allowed!important;filter:grayscale(1)}
+.vw-cdo .cdo-off-txt{opacity:1;font-style:normal;display:flex;align-items:center;gap:8px;padding:10px 12px;margin:8px 0;border-radius:8px;background:#fff4d6;color:#5c3900;border:1px solid #f0c060;font:13px/1.4 Inter,system-ui,sans-serif}
+.vw-cdo .cdo-off-txt .ico.in{width:16px;height:16px;margin:0;flex:none}
+/* topo das versões 2008–2012: busca encolhe para caber na janela (o "Sons da época" não corta mais) */
+.vw-win .yh2 .sr,.vw-win .yh3 .sr{flex:1 1 auto;min-width:0}
+.vw-win .yh2 .sr input,.vw-win .yh3 .sr input{width:auto;flex:1 1 auto;min-width:60px}
+.vw-win .yh2 .lk,.vw-win .yh3 .lk,.vw-win .yh2 .up,.vw-win .yh3 .up{flex:none}
+
+/* aviso de época: a classe .top colidia com ".top{display:contents}" da home (no celular o aviso sumia) */
+.vw-win .etoast{display:flex!important}

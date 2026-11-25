@@ -4,6 +4,8 @@ Este documento reúne as etapas para transformar o protótipo visual (que roda c
 
 > Estado de partida: tag `v0.1-prototipo` (`main`). O trabalho novo acontece no branch `dev`, que publica sozinho em `naosalvo-dev.fishlab.com.br`. O `main` publica em `naosalvo-local.fishlab.com.br`.
 
+> **Atualizado em 19/11/2026.** Fase 1 pronta em dev e prod; Fase 2 pronta no dev (acervo, economia, login com Discord); Fase 4 em andamento por fatias (carteira, XP e álbum já ligados à API; ranking e criador de gato em curso); Fase 3 (admin) ainda não começou; Fase 5 parcial. Decisões da Fase 4 em `docs/decisoes-fase4.md`. Legenda das tarefas: `[x]` feito, `[ ]` pendente, "parcial" quando falta uma parte.
+
 ## Sumário
 
 1. [Onde estamos](#1-onde-estamos)
@@ -23,19 +25,19 @@ Este documento reúne as etapas para transformar o protótipo visual (que roda c
 
 | Parte | Hoje | Falta para ser real |
 |---|---|---|
-| Acervo de memes | `data.js` (68 registros, imagens em `memes/`) | Tabelas no Postgres e rota de leitura |
-| Contas, XP, moedas, cartas | `localStorage` do navegador | Contas no servidor, razão (ledger) de moedas e XP |
-| Álbum e pacotes | Sorteio no navegador | Sorteio no servidor (não dá para fraudar) |
-| Votos | Tabela `votos` + `/api/votos` (sem conta) | Voto ligado a uma conta, um por pessoa |
+| Acervo de memes | Postgres é a fonte (75 memes, 109 cartas, seed) e já há `GET /api/memes`, `/api/eras`, `/api/categorias`; o site ainda lê o `data.js` | Ligar as telas à API e gerar o `data.js` a partir do banco |
+| Contas, XP, moedas, cartas | **Servidor é a autoridade**: contas por Discord, razão de moedas e XP, estoque de pacotes e inventário no Postgres; cabeçalho e álbum já usam a API | Criador de gato salvo no servidor, boas-vindas ao concluir, recompensas sem regra (jujuba, envio aprovado, link salvo) |
+| Álbum e pacotes | Sorteio no servidor, abrir/comprar/reciclar pela API, com revelação sem spoiler no front | Preço e acúmulo do diário a confirmar (seção 9 e `docs/API.md`) |
+| Votos | `/api/votos` ainda lê `votos_legado` (anônima); a tabela nova `votos` é por usuário | Ligar o voto à conta, um por pessoa |
 | Comentários | Tabela `comentarios` (nome digitado, não verificado) | Autor vem da conta autenticada |
 | Feedback | Tabela `feedback` + lista no `/dashboard` | Ir para o admin único |
 | Contribuidores | Formulário `/contribuir/` + `/dashboard` | Ir para o admin único |
 | Envio de vídeos e moderação | Fila de exemplo, só no navegador | Fila no banco e decisão por consenso no servidor |
-| Ranking | Dados de exemplo | Calculado dos eventos reais de XP |
+| Ranking | `GET /api/ranking?metrica=xp\|cartas` pronto (dos eventos reais); a tela ainda usa dados de exemplo | Ligar a tela (Fase 4, fatia 3) |
 | Admin | `/admin` com dados fictícios | Ligado à API com permissão por patente |
-| Login Google/Discord | Botões de enfeite | OAuth de verdade (Discord primeiro) |
+| Login Google/Discord | **Discord real** (OAuth2, sessão em cookie, CSRF, patente); o site inteiro fica atrás do login. Google segue como "em breve" | Modo convidado (issue #35); `DISCORD_EXIGIR_MEMBRO=1` em produção na promoção |
 
-O que **já é real**: API Node + Postgres em `/api` (contribuidores, votos, feedback, comentários, visualizações do YouTube opcional), dois ambientes isolados, deploy automático e segredos no Docker.
+O que **já é real**: API Node + Postgres modular em `/api` (acervo, economia, login, contribuidores, votos legados, feedback, comentários, links sugeridos, Sobe.Desce, Memepédia), migrações versionadas 001 a 013, seed do acervo, dois ambientes isolados, deploy automático, CI nos PRs, backup agendado 2x ao dia e segredos no Docker.
 
 ---
 
@@ -138,13 +140,13 @@ erDiagram
 
 ### 3.3 Tarefas
 
-- [ ] Criar `api/migrations/` e o executor de migrações (aplica em ordem, registra em `schema_migrations`, roda na subida da API).
-- [ ] Escrever as migrações `001` a `00N` seguindo as tabelas acima, uma por domínio.
-- [ ] Converter as tabelas atuais (`votos`, `comentarios`, `feedback`, `contribuidores`) por migração, **sem perder dados**.
-- [ ] Script de carga `api/seed/acervo.js`: lê o `data.js` atual e preenche `memes`, `midias`, `eras`, `categorias`, `colecoes`, `cartas`, `patentes`, `pacotes_tipo`.
-- [ ] Índices: `memes(ano)`, `memes(categoria)`, `votos(meme_id)`, `comentarios(meme_id, criado_em)`, `eventos_xp(usuario_id)`, `envios(status)`.
-- [ ] Backup: `pg_dump` agendado dos dois bancos, com cópia fora do servidor e um teste de restauração documentado.
-- [ ] Testar tudo primeiro no `naosalvo_dev`; só então replicar no `naosalvo`.
+- [x] Criar `api/migrations/` e o executor de migrações (aplica em ordem, registra em `schema_migrations`, roda na subida da API). — **feito**: `api/migrate.js` com trava, checksum, `lock_timeout` e `statement_timeout`.
+- [x] Escrever as migrações `001` a `00N` seguindo as tabelas acima, uma por domínio. — **feito**: migrações 001 a 013 aplicadas em dev e prod (008 economia, 009 Sobe.Desce, 010 Memepédia, 011 índice de eventos, 012 avatar do Discord, 013 perfil e cadastro).
+- [x] Converter as tabelas atuais (`votos`, `comentarios`, `feedback`, `contribuidores`) por migração, **sem perder dados**. — **feito**: `votos` virou `votos_legado` e o resto foi preservado.
+- [x] Script de carga `api/seed/acervo.js`: lê o `data.js` atual e preenche `memes`, `midias`, `eras`, `categorias`, `colecoes`, `cartas`, `patentes`, `pacotes_tipo`. — **feito**: carrega 75 memes e 109 cartas (a contagem subiu com os PRs da comunidade); rodar só uma vez por ambiente, ver `docs/runbook-banco.md`.
+- [x] Índices: `memes(ano)`, `memes(categoria)`, `votos(meme_id)`, `comentarios(meme_id, criado_em)`, `eventos_xp(usuario_id)`, `envios(status)`.
+- [ ] Backup: `pg_dump` agendado dos dois bancos, com cópia fora do servidor e um teste de restauração documentado. — **parcial**: dump agendado às 03:00 e 12:00 (Brasília) no host do servidor 2, retenção de 14 dias, restauração testada num Postgres descartável (`docs/backup-e-restauracao.md`). Falta uma cópia fora do servidor.
+- [x] Testar tudo primeiro no `naosalvo_dev`; só então replicar no `naosalvo`.
 
 **Pronto quando:** um banco vazio sobe do zero até o esquema completo só com as migrações, o seed popula o acervo, e o `naosalvo_dev` tem os mesmos 68 memes e 109 cartas que o protótipo.
 
@@ -156,12 +158,12 @@ erDiagram
 
 ### 4.1 Autenticação
 
-- [ ] Criar o aplicativo no Discord Developer Portal (um para dev e um para local) e guardar `client_id`/`client_secret` como Docker secrets.
-- [ ] Rotas `GET /api/auth/discord` (inicia), `GET /api/auth/discord/callback`, `POST /api/auth/sair`, `GET /api/eu`.
-- [ ] Sessão em cookie `httpOnly`, `Secure`, `SameSite=Lax`; proteção CSRF nas rotas que alteram dados.
-- [ ] Primeiro login cria o usuário e o gato inicial; migrar a conta local do navegador (opcional, ver seção 9).
-- [ ] Middleware `exigePatente("moderador")` lendo a patente do XP no servidor.
-- [ ] O token fixo de admin atual passa a ser só "chave de emergência" e depois sai.
+- [x] Criar o aplicativo no Discord Developer Portal (um para dev e um para local) e guardar `client_id`/`client_secret` como Docker secrets. — **feito**: apps criados e segredos no Docker (`naosalvo_*_discord_*`).
+- [x] Rotas `GET /api/auth/discord` (inicia), `GET /api/auth/discord/callback`, `POST /api/auth/sair`, `GET /api/eu`. — **feito**: inclui foto do Discord (`avatar_url`) e `PATCH /api/eu` para o perfil.
+- [x] Sessão em cookie `httpOnly`, `Secure`, `SameSite=Lax`; proteção CSRF nas rotas que alteram dados. — **feito**: só o hash da sessão vai ao banco; `state` do OAuth assinado, IP do cliente por `TRUSTED_PROXY_HOPS`.
+- [x] Primeiro login cria o usuário e o gato inicial; migrar a conta local do navegador (opcional, ver seção 9). — **feito**: a conta local do navegador foi descartada (decisão do dono).
+- [x] Middleware `exigePatente("moderador")` lendo a patente do XP no servidor. — **feito**: opção de rota `{ patente }`; será usada nas rotas de moderação da Fase 3.
+- [ ] O token fixo de admin atual passa a ser só "chave de emergência" e depois sai. — segue como chave de emergência até o admin da Fase 3.
 
 ### 4.2 Rotas por domínio
 
@@ -182,17 +184,17 @@ erDiagram
 
 ### 4.3 Regras que ficam no servidor
 
-- [ ] **Pacotes:** o sorteio usa as chances da tabela `pacotes_tipo`, grava em `pacotes_abertos` e credita cartas, moedas e XP numa só transação. A economia segue `docs/subversivo011/economia-e-escassez.md`.
-- [ ] **Moedas e XP:** só mudam por linhas novas em `movimentos_moeda` e `eventos_xp`. Valores de recompensa (envio aprovado, link salvo, coleção completa) ficam numa tabela de configuração, não no código.
-- [ ] **Consenso de moderação:** 2 votos iguais fecham o envio; votos divididos esperam o desempate de um Dono. Quem votou alinhado ao resultado ganha XP.
-- [ ] **Limites:** rate limit por usuário e por IP em todas as escritas; validação de entrada em cada rota; tamanho máximo de corpo.
-- [ ] **Anti-duplicação de envio:** comparar URL normalizada e título parecido com o acervo.
-- [ ] **Documentação:** descrever as rotas num `docs/API.md` (ou OpenAPI) mantido junto do código.
+- [x] **Pacotes:** o sorteio usa as chances da tabela `pacotes_tipo`, grava em `pacotes_abertos` e credita cartas, moedas e XP numa só transação. A economia segue `docs/subversivo011/economia-e-escassez.md`. — **feito**: sorteio com semente gravada em `pacotes_abertos`, tudo numa transação.
+- [ ] **Moedas e XP:** só mudam por linhas novas em `movimentos_moeda` e `eventos_xp`. Valores de recompensa (envio aprovado, link salvo, coleção completa) ficam numa tabela de configuração, não no código. — **parcial**: razão e cache na mesma transação, regras em `regras_economia`. Faltam as recompensas de envio aprovado, link salvo e jujuba, hoje desligadas no cliente.
+- [ ] **Consenso de moderação:** 2 votos iguais fecham o envio; votos divididos esperam o desempate de um Dono. Quem votou alinhado ao resultado ganha XP. — depende da Fase 3.
+- [x] **Limites:** rate limit por usuário e por IP em todas as escritas; validação de entrada em cada rota; tamanho máximo de corpo. — **feito**: rate limit por usuário e por IP, validação de entrada e `CSRF`.
+- [ ] **Anti-duplicação de envio:** comparar URL normalizada e título parecido com o acervo. — depende do fluxo de envios (Fase 3).
+- [x] **Documentação:** descrever as rotas num `docs/API.md` (ou OpenAPI) mantido junto do código. — **feito**: `docs/API.md`.
 
 ### 4.4 Testes
 
-- [ ] Testes automatizados com `node:test` para: migrações, permissões por patente, sorteio de pacotes (distribuição), consenso de moderação e razão de moedas.
-- [ ] Rodar no CI a cada PR (ver Fase 5).
+- [x] Testes automatizados com `node:test` para: migrações, permissões por patente, sorteio de pacotes (distribuição), consenso de moderação e razão de moedas. — **feito**: migrações, auth, sessão, redirect, CSRF, perfil, sorteio, razão e concorrência. Faltam os testes de consenso de moderação.
+- [x] Rodar no CI a cada PR (ver Fase 5). — **feito**: jobs de sintaxe, imagens, `?v=`, testes e migrações do zero.
 
 **Pronto quando:** dá para logar com Discord no `naosalvo-dev`, abrir um pacote e ver cartas e saldo mudarem **no banco**, e uma rota de moderação recusa quem não tem a patente.
 
@@ -235,11 +237,11 @@ erDiagram
 
 ### 6.1 Ligar as telas à API
 
-- [ ] **Acervo:** trocar `data.js` por `GET /api/memes`, `/api/eras`, `/api/categorias` (com cache curto e fallback).
-- [ ] **Conta:** substituir a conta local pelo login com Discord; mostrar gato, XP, moedas e patente do servidor. O criador de gato salva o JSON no usuário.
-- [ ] **Álbum:** pacotes, compra, reciclagem e cartas via API; as animações continuam no front, o resultado vem do servidor.
+- [ ] **Acervo:** trocar `data.js` por `GET /api/memes`, `/api/eras`, `/api/categorias` (com cache curto e fallback). — a API já existe; falta trocar o `data.js` nas telas.
+- [ ] **Conta:** substituir a conta local pelo login com Discord; mostrar gato, XP, moedas e patente do servidor. O criador de gato salva o JSON no usuário. — **parcial**: login com Discord, cabeçalho com moedas, XP e patente do servidor e botão Sair prontos. Falta o criador de gato salvo no servidor e as boas-vindas ao concluir (fatia 3).
+- [x] **Álbum:** pacotes, compra, reciclagem e cartas via API; as animações continuam no front, o resultado vem do servidor. — **feito**: abrir, comprar, reciclar e ler o álbum pela API, sem spoiler antes da revelação (`cliente-economia.js`).
 - [ ] **Votos e comentários:** exigem login; um voto por pessoa; o autor do comentário vem da sessão (acaba a falsificação de nome).
-- [ ] **Ranking:** calculado dos eventos de XP; filtros por métrica.
+- [ ] **Ranking:** calculado dos eventos de XP; filtros por métrica. — em andamento (fatia 3).
 - [ ] **Envio de vídeos:** formulário grava em `envios`; o usuário acompanha o status.
 - [ ] **Moderação no site:** a fila e o "ver como moderador" usam as mesmas rotas do admin.
 - [ ] **Remoção:** o botão "Peça a remoção" do rodapé cria um registro em `remocoes` com prazo.
@@ -267,16 +269,16 @@ erDiagram
 
 Acontece em paralelo, mas precisa estar pronta antes de abrir ao público.
 
-- [ ] **CI (GitHub Actions) nos PRs:** checagem de sintaxe dos JS e da API, testes da Fase 2, conferência de que toda imagem citada existe em `memes/`, e um aviso quando CSS/JS mudar sem trocar a versão `?v=` dos assets.
-- [ ] **Proteção do `main`:** exigir PR com aprovação. Reduz o risco do deploy automático publicar código sem revisão.
-- [ ] **Modelo de PR, `CONTRIBUTING.md` e `CODEOWNERS`.**
-- [ ] **Backups:** diários, com retenção e teste de restauração.
-- [ ] **Observabilidade:** `/api/health` com checagem do banco, logs do serviço e alerta quando o deployer falhar.
+- [x] **CI (GitHub Actions) nos PRs:** checagem de sintaxe dos JS e da API, testes da Fase 2, conferência de que toda imagem citada existe em `memes/`, e um aviso quando CSS/JS mudar sem trocar a versão `?v=` dos assets. — **feito**: jobs de sintaxe, imagens, `?v=` (aviso), testes e migrações do zero.
+- [ ] **Proteção do `main`:** exigir PR com aprovação. Reduz o risco do deploy automático publicar código sem revisão. — passo a passo em `docs/protecao-main.md`, ainda não aplicado.
+- [x] **Modelo de PR, `CONTRIBUTING.md` e `CODEOWNERS`.** — **feito**: `CODEOWNERS` com o dono como placeholder.
+- [ ] **Backups:** diários, com retenção e teste de restauração. — **parcial**: 2x ao dia (03:00 e 12:00), retenção de 14 dias e restauração testada. Falta a cópia fora do servidor.
+- [ ] **Observabilidade:** `/api/health` com checagem do banco, logs do serviço e alerta quando o deployer falhar. — **parcial**: `/api/health` com checagem do banco. Faltam alerta de falha do backup e do deployer.
 - [ ] **Cloudflare:** regras de cache para imagens e estáticos; revisar o modo SSL (hoje o certificado de origem é o padrão do Traefik).
 - [ ] **LGPD:** base legal, retenção, exclusão de conta e de cadastro de contribuidor.
 - [ ] **Antiabuso:** captcha ou verificação nos pontos públicos (comentário, feedback, formulário de contribuidor) se houver spam.
-- [ ] **Segredos:** nunca no repositório; rotação do token de admin e das credenciais.
-- [ ] **Promoção `dev` → `main`:** checklist de release (migrações testadas, backup feito, rollback conhecido), com tag a cada versão.
+- [ ] **Segredos:** nunca no repositório; rotação do token de admin e das credenciais. — **parcial**: tudo em Docker secrets; falta a rotação do token de admin e das credenciais.
+- [ ] **Promoção `dev` → `main`:** checklist de release (migrações testadas, backup feito, rollback conhecido), com tag a cada versão. — feita três vezes (PRs #11, #14 e #21) com backup antes e verificação depois; falta virar um checklist escrito.
 
 ---
 
@@ -296,10 +298,10 @@ flowchart LR
 
 | Fase | Entrega | Depende de | Como validar no `naosalvo-dev` |
 |---|---|---|---|
-| 1 | Esquema, migrações, seed | nada | Banco novo sobe do zero; 68 memes e 109 cartas |
-| 2 | API, login Discord, regras no servidor | 1 | Logar, abrir pacote, ver saldo mudar no banco |
+| 1 | Esquema, migrações, seed | nada | Banco novo sobe do zero; 75 memes e 109 cartas (**pronta**) |
+| 2 | API, login Discord, regras no servidor | 1 | Logar, abrir pacote, ver saldo mudar no banco (**pronta no dev**; faltam consenso de moderação e recompensas sem regra) |
 | 3 | Admin real | 2 | Aprovar um envio de ponta a ponta e ver no log |
-| 4 | Front ligado à API | 2 e 3 | Telas sem `data.js` nem `localStorage` de dados |
+| 4 | Front ligado à API | 2 e 3 | Telas sem `data.js` nem `localStorage` de dados (**em andamento**: carteira, XP e álbum ligados; ranking e gato em curso) |
 | 5 | CI, backup, observabilidade | em paralelo | PR bloqueado por teste falho; restauração testada |
 
 **Regra de ouro:** nada vai ao `main` sem passar pelo `naosalvo-dev`. A promoção `dev` → `main` acontece por PR, com migração testada e backup feito antes.
@@ -310,15 +312,15 @@ flowchart LR
 
 | # | Pergunta | Opções | Quem decide |
 |---|---|---|---|
-| 1 | Quem cria o app OAuth do Discord e em qual conta? | Conta do projeto / conta pessoal | Dono do projeto |
+| 1 | Quem cria o app OAuth do Discord e em qual conta? | Conta do projeto / conta pessoal | Dono do projeto — **decidido**: o dono criou os apps de dev e de produção |
 | 2 | Onde ficam os uploads de usuários (se houver upload de arquivo)? | Só links (YouTube) / MinIO próprio / Cloudflare R2 | Equipe |
-| 3 | Migrar a conta local (XP, cartas) de quem já testou? | Importar uma vez no primeiro login / começar do zero | Equipe |
-| 4 | Haverá login com Google e e-mail, ou só Discord? | Só Discord / Discord + Google | Equipe |
+| 3 | Migrar a conta local (XP, cartas) de quem já testou? | Importar uma vez no primeiro login / começar do zero | Equipe — **decidido**: começar do zero (`docs/decisoes-fase4.md`) |
+| 4 | Haverá login com Google e e-mail, ou só Discord? | Só Discord / Discord + Google | Equipe — **decidido por ora**: só Discord; Google aparece como "em breve" |
 | 5 | Quanto tempo guardar dados pessoais e logs? | Prazos de retenção | Dono do projeto |
 | 6 | Quem pode virar Moderador e como? | Só por XP / convite do Dono / ambos | Equipe |
 | 7 | O que fazer com as fotos hospedadas de terceiros? | Manter com crédito / só link / pedir autorização | Dono do projeto |
-| 8 | Valores finais de XP e moedas | Revisar a tabela da economia com os dados reais | Equipe |
-| 9 | A tabela `votos` atual (agregada, anônima) migra ou recomeça? | Migrar como voto "sem dono" / zerar | Equipe |
+| 8 | Valores finais de XP e moedas | Revisar a tabela da economia com os dados reais | Equipe — **em aberto**: preço do pacote Clássico (150), diário acumulando até 7 e tiragem dos Míticos (`docs/API.md`) |
+| 9 | A tabela `votos` atual (agregada, anônima) migra ou recomeça? | Migrar como voto "sem dono" / zerar | Equipe — **parcial**: os dados antigos foram preservados em `votos_legado`; o voto por usuário ainda não está ligado |
 
 ---
 
@@ -332,4 +334,4 @@ flowchart LR
 - **Segredos:** `.secrets/` fica fora do git. Senhas de banco e tokens de admin são Docker secrets, um conjunto por ambiente.
 - **Commits:** mensagens curtas no formato `tipo(escopo): resumo`, sem trailer de co-autoria do Claude.
 - **Créditos de imagens:** toda imagem de terceiros precisa de `credit` no registro e de uma linha em `docs/CREDITOS-IMAGENS.md`.
-- **Documentos relacionados:** `README.md` (visão do produto, diagramas e telas), `docs/subversivo011/economia-e-escassez.md` (simulação da economia do álbum), `docs/CREDITOS-IMAGENS.md`.
+- **Documentos relacionados:** `README.md` (visão do produto, diagramas e telas), `docs/subversivo011/economia-e-escassez.md` (simulação da economia do álbum), `docs/CREDITOS-IMAGENS.md`, `docs/API.md` (contrato da API), `docs/decisoes-fase4.md`, `docs/runbook-banco.md` e `docs/backup-e-restauracao.md`.

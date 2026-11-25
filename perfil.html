@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
+<link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
+<script src="gate.js?v=20261120c"></script>
+<script src="cliente-economia.js?v=20261125c"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perfil · NÃO SALVO</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css?v=20261125b">
+<link rel="stylesheet" href="viewer.css?v=20261125b">
+<link rel="stylesheet" href="perfil.css?v=20261123d">
+<script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
+</head>
+<body>
+<main class="pf-wrap">
+  <div id="barra"></div>
+  <section id="pf" aria-live="polite"><p class="pf-st" role="status">Carregando o perfil…</p></section>
+  <p id="aviso" class="sr-only" aria-live="polite"></p>
+</main>
+
+<dialog class="pf-dlg" id="dlg" aria-labelledby="dlgT" aria-modal="true">
+  <form method="dialog" id="dlgF">
+    <h2 id="dlgT">Editar o meu perfil</h2>
+    <div class="dlg-corpo" id="dlgCorpo">
+    <p>Escolha a rede da sua época e a carta que vai ficar em destaque. A foto do perfil é o seu gatinho.</p>
+    <fieldset><legend><span id="laysL">Visual do perfil</span> <span class="dica" id="laysN" aria-live="polite"></span></legend><div class="pf-lays" id="lays" role="radiogroup" aria-labelledby="laysL"></div></fieldset>
+    <fieldset><legend><span id="favL">Carta favorita</span> <span class="dica" id="favN"></span></legend><div class="pf-favs" id="fav" role="radiogroup" aria-labelledby="favL"></div></fieldset>
+    <p class="erro" id="dlgErro" role="alert"></p>
+    </div>
+    <div class="rod">
+      <button type="button" class="pf-bt" id="btGato">Editar gatinho e apelido</button>
+      <span class="rod-bt"><button type="button" class="pf-bt" id="btCancelar">Cancelar</button><button type="submit" class="pf-bt pri" id="btSalvar">Salvar</button></span>
+    </div>
+  </form>
+</dialog>
+
+<script src="common.js?v=20261125d"></script>
+<script src="data.js?v=20261125b"></script>
+<script src="player.js?v=20261125b"></script>
+<script src="viewer.js?v=20261125b"></script>
+<script src="alertas.js?v=20261125b"></script>
+<script>
+renderHeader("perfil",{sub:[
+  {k:"inicio",ic:"home",label:"Início",href:"index.html"},
+  {k:"tl",ic:"timeline",label:"Linha do tempo",href:"linha-do-tempo.html"},
+  {k:"wiki",ic:"book",label:"Memepédia",href:"memepedia.html"},
+  {k:"album",ic:"album",label:"Álbum de figurinhas",href:"album.html"},
+  {sp:1},
+  {k:"send",ic:"send",label:"Enviar meme",cta:1,href:"index.html#send"}
+]});
+renderWallet();
+
+// ---- visuais do perfil: nomes e textos de cada rede (a interação é sempre um recado; o nome muda) ----
+const LAYOUTS={
+  homepage:{nome:"Home page anos 90",dica:"livro de visitas",cor:"linear-gradient(90deg,#008080,#ff00ff,#ffff00)",recados:"Livro de visitas",acao:"Assinar!!!",ph:()=>"Assine meu livro de visitas!!!",vazio:"Ninguém assinou ainda. Seja o primeiro!!!",ok:"Livro de visitas assinado!"},
+  icq:{nome:"ICQ",dica:"uh-oh! mensagens",cor:"linear-gradient(90deg,#3a8ee6,#7ec850)",recados:"Mensagens recebidas",acao:"Enviar",ph:a=>`Mensagem para ${a}…`,vazio:"Nenhuma mensagem ainda.",ok:"Uh-oh! Mensagem enviada."},
+  orkut:{nome:"Orkut",dica:"scraps e comunidades",cor:"linear-gradient(90deg,#c4006a,#bfd0ea)",recados:"Scraps",acao:"enviar scrap",ph:a=>`escreva um scrap para ${a}…`,vazio:"Ninguém deixou scrap ainda. Seja o primeiro!",ok:"Scrap enviado!"},
+  fotolog:{nome:"Fotolog",dica:"livro de visitas",cor:"linear-gradient(90deg,#262626,#8cc63f)",recados:"livro de visitas",acao:"assinar",ph:()=>"assine o livro de visitas…",vazio:"Ninguém assinou o livro de visitas ainda.",ok:"Você assinou o livro de visitas!"},
+  msn:{nome:"MSN",dica:"mensagens offline",cor:"linear-gradient(90deg,#1a6fc2,#4caf2a)",recados:"Mensagens offline",acao:"Enviar",ph:a=>`Digite uma mensagem para ${a}…`,vazio:"Nenhuma mensagem ainda. Mande um oi!",ok:"Mensagem enviada!"},
+  twitter:{nome:"Twitter antigo",dica:"o do passarinho",cor:"linear-gradient(90deg,#33ccff,#c0deed)",recados:"Menções",acao:"Tweetar",ph:a=>`@${a} `,vazio:"Ninguém mencionou ainda.",ok:"Tweet enviado!"},
+  facebook:{nome:"Facebook antigo",dica:"o mural azul",cor:"linear-gradient(90deg,#3b5998,#e9ebee)",recados:"Mural",acao:"Publicar",ph:a=>`Escreva algo para ${a}…`,vazio:"O mural está vazio. Escreva algo!",ok:"Publicado no mural!"},
+  ask:{nome:"Ask.fm",dica:"perguntas e respostas",cor:"linear-gradient(90deg,#1679a0,#d0353e)",recados:"Perguntas",acao:"Perguntar",ph:a=>`Pergunte algo para ${a}…`,vazio:"Ninguém perguntou nada ainda.",ok:"Pergunta enviada!"},
+  whatsapp:{nome:"WhatsApp",dica:"conversa no zap",cor:"linear-gradient(90deg,#075e54,#dcf8c6)",recados:"Conversa",acao:"Enviar",ph:()=>"Mensagem",vazio:"Nenhuma mensagem ainda. Mande um oi!",ok:"Mensagem enviada ✔✔"},
+  vine:{nome:"Vine",dica:"6 segundos em loop",cor:"linear-gradient(90deg,#00805d,#e1f4ed)",recados:"Comentários",acao:"Comentar",ph:()=>"Adicione um comentário…",vazio:"Nenhum comentário ainda.",ok:"Comentário enviado!",mod:1,st:["figurinhas","coleções","loops"]},
+  snapchat:{nome:"Snapchat",dica:"stories e filtros",cor:"linear-gradient(90deg,#fffc00,#9b4dca)",recados:"Chat",acao:"Enviar",ph:()=>"Enviar um chat",vazio:"Nenhum chat ainda.",ok:"Chat enviado!",mod:1,st:["figurinhas","coleções","snapscore"]},
+  instagram:{nome:"Instagram",dica:"feed e stories",cor:"linear-gradient(90deg,#f09433,#dc2743,#bc1888)",recados:"Comentários",acao:"Publicar",ph:()=>"Adicione um comentário…",vazio:"Nenhum comentário ainda.",ok:"Comentário publicado!",mod:1,st:["publicações","coleções","XP"]},
+  tiktok:{nome:"TikTok",dica:"vídeo curto",cor:"linear-gradient(90deg,#25f4ee,#000,#fe2c55)",recados:"Comentários",acao:"Postar",ph:()=>"Adicionar comentário…",vazio:"Seja o primeiro a comentar!",ok:"Comentário postado!",mod:1,st:["figurinhas","coleções","curtidas"]},
+  kwai:{nome:"Kwai",dica:"vídeo curto laranja",cor:"linear-gradient(90deg,#c45200,#ffb36b)",recados:"Comentários",acao:"Enviar",ph:()=>"Diga algo legal…",vazio:"Ninguém comentou ainda.",ok:"Comentário enviado!",mod:1,st:["figurinhas","coleções","moedas de XP"]},
+  bluesky:{nome:"Bluesky",dica:"a fuga de 2024",cor:"linear-gradient(90deg,#0a5cc2,#5aa9ff)",recados:"Respostas",acao:"Responder",ph:a=>`Responder a @${a}…`,vazio:"Nenhuma resposta ainda.",ok:"Resposta publicada!",mod:1,st:["figurinhas","coleções","XP"]}
+};
+const MAX=300;
+const $=id=>document.getElementById(id);
+const esc=v=>escapeHtml(String(v??""));
+const RORD=["Mítico","Lendário","Relíquia","Raro","Relevante","Comum"];
+let P=null,REC=[],ALVO="",MOSTRAR_TODAS=false;
+
+const params=new URLSearchParams(location.search);
+const pedido=(params.get("u")||"").trim();
+
+function avisar(t){const a=$("aviso");a.textContent="";setTimeout(()=>a.textContent=t,30)}
+// a foto do perfil é sempre o gatinho (se o gato não for válido, a inicial)
+function gato(o,ap,cls){return gatoValido(o)?`<span class="${cls||"pf-gato"}" role="img" aria-label="Gatinho de ${esc(ap)}">${catSVG(o)}</span>`:`<span class="${cls||"pf-gato"} ini" aria-hidden="true">${esc(String(ap||"?").charAt(0).toUpperCase())}</span>`}
+const linkPerfil=ap=>`perfil.html?u=${encodeURIComponent(ap)}`;
+const dataBR=d=>{const x=new Date(d);return isNaN(x)?"":x.toLocaleDateString("pt-BR")};
+const quando=d=>{const x=new Date(d);if(isNaN(x))return"";const s=(Date.now()-x)/1000;if(s<60)return"agora";if(s<3600)return`há ${Math.floor(s/60)} min`;if(s<86400)return`há ${Math.floor(s/3600)} h`;return x.toLocaleDateString("pt-BR")};
+function colecao(id){return (typeof COLLECTIONS!=="undefined"&&COLLECTIONS.find(c=>c.id===id))||null}
+function carta(c,grande){
+  const col=colecao(c.colecao_id),bg=col?col.bg:["#334","#112"],m=c.meme_id&&typeof MEMES!=="undefined"&&MEMES.find(x=>x.id===c.meme_id);
+  const img=m&&m.yt?`<img src="https://i.ytimg.com/vi/${esc(m.yt)}/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:"";
+  return `<div class="pf-carta ${grande?"grande ":""}${esc(c.raridade)}" style="--rc:var(--${esc(c.raridade)})" role="img" aria-label="Carta ${esc(c.nome)}, ${esc(c.raridade)}">
+   <div class="tp"><span>${String(c.numero).padStart(3,"0")}</span><em>${esc(c.raridade)}</em></div>
+   <div class="art" style="background:linear-gradient(150deg,${esc(bg[0])},${esc(bg[1])})">${img}<span${img?" hidden":""}>${esc(c.emoji||"⭐")}</span></div>
+   <div class="nm">${esc(c.nome)}</div><div class="ft">${esc(col?col.n:c.colecao_id)}</div></div>`;
+}
+function favHTML(){
+  const eu=P.perfil.eh_meu;
+  if(!P.carta_favorita)return eu?`<button type="button" class="pf-semfav" data-ed="fav">${icon("edit")}<span>Escolher a minha carta favorita</span></button>`:`<div class="pf-semfav">Ainda sem carta favorita.</div>`;
+  return eu?`<div class="pf-edw pf-edw-fav">${carta(P.carta_favorita,true)}${lapis("fav","Trocar a carta favorita")}</div>`:carta(P.carta_favorita,true)}
+// lápis de edição (só para o dono do perfil)
+const lapis=(k,t)=>`<button type="button" class="pf-lapis" data-ed="${k}" title="${esc(t)}" aria-label="${esc(t)}">${icon("edit")}</button>`;
+// foto do perfil (gatinho) com o lápis no cantinho para o dono
+function fotoPerfil(p){const g=gato(p.avatar_gato,p.apelido);return p.eh_meu?`<span class="pf-edw pf-edw-av">${g}${lapis("gato","Editar gatinho e apelido")}</span>`:g}
+function patHTML(){
+  const p=P.patente,cor=p&&/^#[0-9a-f]{3,8}$/i.test(p.cor||"")?p.cor:"#0a6a9a",prox=P.proxima_patente;
+  const pct=prox?Math.max(4,Math.min(100,Math.round(P.xp/(P.xp+prox.faltam)*100))):100;
+  return `<div style="--pc:${cor}">${p?`<span class="pf-pat">⬢ ${esc(p.nome)}</span>`:""}<div class="pf-xp" role="progressbar" aria-label="Nível" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div>
+   <div class="pf-cap">${fmt(P.xp)} XP${prox?` · faltam ${fmt(prox.faltam)} para ${esc(prox.nome)}`:" · patente máxima"}</div></div>`;
+}
+function colsHTML(){return `<div class="pf-cols">${P.album.colecoes.map(k=>{const c=colecao(k.id),pct=k.total?Math.round(k.tenho/k.total*100):0;
+  return `<div class="pf-col" style="--cc:${esc(c?c.c:"#0a6a9a")}"><span class="ic" aria-hidden="true">${esc(c?c.ic:"📒")}</span><span><b>${esc(k.nome)}${k.completa?" ✔":""}</b><span class="br"><i style="width:${pct}%"></i></span></span><small>${k.tenho}/${k.total}</small></div>`}).join("")}</div>`}
+function figsHTML(max){
+  const l=P.album.cartas.slice().sort((a,b)=>RORD.indexOf(a.raridade)-RORD.indexOf(b.raridade)||String(a.id).localeCompare(String(b.id)));
+  if(!l.length)return `<p class="pf-vazio">${P.perfil.eh_meu?"Você ainda não tem figurinhas. Abra um pacote no álbum!":"Ainda sem figurinhas."}</p>`;
+  const n=MOSTRAR_TODAS?l.length:Math.min(max,l.length);
+  return `<div class="pf-figs">${l.slice(0,n).map(c=>carta(c)).join("")}</div>${l.length>n?`<button type="button" class="pf-bt pf-mais" data-todas>Ver todas as ${l.length} figurinhas</button>`:""}`;
+}
+function recadosHTML(L){
+  const ap=P.perfil.apelido,eu=P.perfil.eh_meu,tw=P.perfil.layout==="twitter";
+  const form=eu?"":`<form class="pf-form" id="rcF" novalidate>${tw?`<label class="q" for="rcT">O que você quer dizer para @${esc(ap)}?</label>`:`<label class="sr-only" for="rcT">${esc(L.ph(ap))}</label>`}
+    <textarea id="rcT" maxlength="${MAX}" placeholder="${esc(L.ph(ap))}" required></textarea>
+    <div class="ln"><small id="rcN" aria-live="polite">${MAX} caracteres restantes</small><button type="submit" id="rcB">${esc(L.acao)}</button></div></form>`;
+  const lista=REC.length?`<ul class="pf-rcs">${REC.map(r=>`<li class="pf-rc">${gato(r.autor.avatar_gato,r.autor.apelido,"pf-mini")}<div>
+     <div class="qm"><a href="${linkPerfil(r.autor.apelido)}">${esc(r.autor.apelido)}</a><time datetime="${esc(r.em)}">${esc(quando(r.em))}</time>${r.pode_apagar?`<button type="button" class="ap" data-apagar="${esc(r.id)}" aria-label="Apagar recado de ${esc(r.autor.apelido)}">apagar</button>`:""}</div>
+     <p>${tw||P.perfil.layout==="bluesky"?`<span class="ar">@${esc(ap)}</span> `:""}${esc(r.texto)}</p>${rodRec(r)}</div></li>`).join("")}</ul>`:`<p class="pf-vazio">${esc(eu?"Quando alguém deixar um recado, ele aparece aqui.":L.vazio)}</p>`;
+  return form+lista;
+}
+
+// rodapé de cada recado, no jeito da rede
+function rodRec(r){const l=P.perfil.layout,q=esc(quando(r.em));
+  return {facebook:`<div class="rod">Curtir · Comentar · ${q}</div>`,whatsapp:`<div class="rod">${esc(new Date(r.em).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}))} ✔✔</div>`,
+   instagram:`<div class="rod">Curtir · Responder</div>`,tiktok:`<div class="rod">Responder · ♡</div>`,kwai:`<div class="rod">Responder · ♡</div>`,bluesky:`<div class="rod">💬 · 🔁 · ♡</div>`,vine:`<div class="rod">🔁 revine</div>`,
+   ask:`<div class="rod">👍 Curtir</div>`,icq:`<div class="rod">uh-oh!</div>`}[l]||""}
+// um detalhe típico de cada rede moderna (sem logos, sem som, humor do site); a animação é só CSS e some com prefers-reduced-motion
+function detalheHTML(p,a,nRec){
+  const ap=esc(p.apelido),L=p.layout,autor=REC.length?esc(REC[0].autor.apelido):"alguém";
+  const dias=Math.max(1,Math.floor((Date.now()-new Date(p.membro_desde))/864e5)+1||1);
+  const f={
+    vine:()=>`<span class="loop" aria-hidden="true"><i></i></span><span>↻ 6 segundos em loop. Pode repetir à vontade.</span>`,
+    snapchat:()=>`<span class="chama" aria-hidden="true">🔥</span><span>${dias} dia${dias===1?"":"s"} de sequência. Não deixe a chama apagar!</span>`,
+    instagram:()=>`<span class="cora" aria-hidden="true">♥</span><span>Curtido por <b>${autor}</b> e outras <b>${a.tenho*3+nRec}</b> pessoas que só olharam</span>`,
+    tiktok:()=>`<span class="som"><span class="trilho"><span>♫ som original · ${ap} · com chiado de conexão discada</span><span aria-hidden="true">♫ som original · ${ap} · com chiado de conexão discada</span></span></span>`,
+    kwai:()=>`<span class="moeda" aria-hidden="true">🪙</span><span>Assista e ganhe moedas! Aqui o prêmio é a nostalgia.</span>`,
+    bluesky:()=>`<span>@${ap.toLowerCase()}.nostalgia.social</span> <span class="ok" aria-hidden="true">✔</span> <span>domínio verificado, é gato mesmo</span>`
+  }[L];
+  return f?`<div class="det det-${L}">${f()}</div>`:"";
+}
+// coleções como "destaques" redondos (Instagram, TikTok etc.)
+function destaquesHTML(){return `<div class="pf-dest">${P.album.colecoes.map(k=>{const c=colecao(k.id);return `<span class="d"><i style="--cc:${esc(c?c.c:"#888")}">${esc(c?c.ic:"📒")}</i><b title="${esc(k.nome)}">${esc(k.nome)}</b><small>${k.tenho}/${k.total}</small></span>`}).join("")}</div>`}
+// ---- cada rede monta o perfil do seu jeito ----
+function montar(){
+  const p=P.perfil,L=LAYOUTS[p.layout]||LAYOUTS.orkut,ap=esc(p.apelido),desde=dataBR(p.membro_desde),nRec=REC.length;
+  const a=P.album,figs=figsHTML(12),cols=colsHTML(),rec=recadosHTML(L),pat=patHTML(),fav=favHTML();
+  let T={
+    orkut:()=>`<div class="pf-top"><b>orkut</b><nav aria-hidden="true"><span>Início</span><span>Perfil</span><span>Scraps</span><span>Comunidades</span></nav></div>
+     <div class="pf-g"><div class="pf-c"><div class="pf-card">${fotoPerfil(p)}<div class="pf-nome">${ap}</div><div class="pf-cap">Brasil · no Não Salvo desde ${esc(desde)}</div>
+       <div class="lk" aria-hidden="true"><span>scraps (${nRec})</span><span>figurinhas (${a.tenho})</span><span>comunidades (${a.colecoes.length})</span></div></div></div>
+      <div class="pf-c"><div class="pf-card pf-box"><h1 class="ola">${ap}</h1><div class="sorte"><b>Sorte do dia:</b> ${esc(sorte(p.apelido))}</div>
+        <table><tr><td>patente:</td><td>${pat}</td></tr><tr><td>figurinhas:</td><td>${a.tenho} de ${a.total}</td></tr><tr><td>coleções completas:</td><td>${a.colecoes_completas}</td></tr><tr><td>no Não Salvo desde:</td><td>${esc(desde)}</td></tr></table></div>
+       <div class="pf-card pf-box"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div>
+       <div class="pf-card"><h2 class="pf-h">Figurinhas (${a.tenho})</h2>${figs}</div></div>
+      <div class="pf-c"><div class="pf-card pf-box"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="pf-card"><h2 class="pf-h">Comunidades (coleções)</h2>${cols}</div></div></div>`,
+    fotolog:()=>`<div class="pf-top"><b>${ap}</b><span>flog · no Não Salvo desde ${esc(desde)}</span></div>
+     <div class="pf-g"><div class="pf-c"><div class="post">${fav}<h1 class="pf-h" style="border:0;text-transform:none;font-size:16px;color:#222;margin-top:14px">${P.carta_favorita?esc(P.carta_favorita.nome):"minha figurinha favorita"}</h1><p>postada por ${ap} · ${a.tenho} figurinhas no álbum</p>
+       <div class="livro"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div></div></div>
+      <div class="pf-c"><div class="side pf-box">${fotoPerfil(p)}${pat}</div><div class="side pf-box"><h2 class="pf-h">flogs favoritos (figurinhas)</h2>${figs}</div><div class="side"><h2 class="pf-h">coleções</h2>${cols}</div></div></div>`,
+    msn:()=>`<div class="win"><div class="tit"><span>Não Salvo Messenger · ${ap}</span><i aria-hidden="true"><span></span><span></span><span></span></i></div>
+      <div class="eu">${fotoPerfil(p)}<div><h1 class="pf-nome" style="margin:0">~*~ ${ap} ~*~</h1><div class="pm">${P.carta_favorita?`♫ ouvindo: ${esc(P.carta_favorita.nome)}`:"(sem mensagem pessoal)"}</div><span class="st">Online</span></div></div>
+      <div class="pf-g"><div class="pf-c"><div class="conversa"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div></div>
+       <div class="pf-c"><div class="lado pf-box"><h2 class="pf-h">Nível</h2>${pat}</div><div class="lado pf-box"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="lado pf-box"><h2 class="pf-h">Contatos (coleções)</h2>${cols}</div><div class="lado"><h2 class="pf-h">Figurinhas (${a.tenho})</h2>${figs}</div></div></div></div>`,
+    twitter:()=>`<div class="pf-g"><div class="pf-c main"><div class="cab">${fotoPerfil(p)}<div><h1 class="pf-nome" style="margin:0">${ap}</h1><div class="arroba">@${ap}</div><div class="bio">Colecionando figurinhas da internet brasileira desde ${esc(desde)}.</div></div></div>
+       <h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div>
+      <div class="pf-c lado"><div class="nums"><span><b>${a.tenho}</b><span>figurinhas</span></span><span><b>${a.colecoes_completas}</b><span>coleções</span></span><span><b>${fmt(P.xp)}</b><span>XP</span></span></div>
+       <div class="pf-box">${pat}</div><div class="pf-box"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="pf-box"><h2 class="pf-h">Coleções</h2>${cols}</div><h2 class="pf-h">Figurinhas</h2>${figs}</div></div>`,
+    facebook:()=>`<div class="pf-top"><b>facebook</b></div>
+     <div class="pf-g"><div class="pf-c">${fotoPerfil(p)}<div class="info" id="fb-info"><span><b>Patente:</b> ${P.patente?esc(P.patente.nome):"-"}</span><span><b>Membro desde:</b> ${esc(desde)}</span><span><b>Figurinhas:</b> ${a.tenho} de ${a.total}</span></div></div>
+      <div class="pf-c"><h1 class="pf-nome">${ap}</h1><nav class="abas" aria-label="Seções do perfil"><a href="#fb-mural" aria-current="location" data-ir="fb-mural">Mural</a><a href="#fb-info" data-ir="fb-info">Informações</a><a href="#fb-fotos" data-ir="fb-fotos">Fotos</a></nav>
+       <div class="caixa" id="fb-mural"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div><div class="caixa" id="fb-fotos"><h2 class="pf-h">Fotos (figurinhas)</h2>${figs}</div></div>
+      <div class="pf-c"><div class="caixa"><h2 class="pf-h">Nível</h2>${pat}</div><div class="caixa"><h2 class="pf-h">Curtiu (carta favorita)</h2>${fav}</div><div class="caixa"><h2 class="pf-h">Grupos (coleções)</h2>${cols}</div></div></div>`
+  };
+  // redes novas (vídeo curto, fotos, stories): mesmo esqueleto, cada uma com seu visual no CSS
+  const mod=()=>{const st=L.st||["figurinhas","coleções","XP"];
+    return `<div class="banner" aria-hidden="true"></div><div class="cab">${fotoPerfil(p)}<div class="tx"><h1 class="pf-nome">${ap}</h1><div class="arroba">@${ap.toLowerCase()}</div>
+      <div class="nums"><span><b>${a.tenho}</b>${esc(st[0])}</span><span><b>${a.colecoes_completas}/${a.colecoes.length}</b>${esc(st[1])}</span><span><b>${esc(short(P.xp))}</b>${esc(st[2])}</span></div>
+      <div class="bio">Colecionando a internet brasileira desde ${esc(desde)}.</div>${detalheHTML(p,a,nRec)}${pat}</div></div>
+     ${destaquesHTML()}
+     <div class="pf-g"><div class="pf-c"><h2 class="pf-h">${p.layout==="instagram"?"Publicações":"Figurinhas"}</h2>${figs}</div>
+      <div class="pf-c"><div class="pf-box fav"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="pf-box rcx"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div></div></div>`};
+  Object.assign(T,{
+    homepage:()=>`<div class="win"><div class="tit">Minha Home Page - Netscape Navigator</div><div class="pg">
+      <h1 class="pf-nome"><span>✨ Bem-vindo à home page de ${ap}!!! ✨</span></h1><p class="cont">Você é o visitante nº <b>${String(7000+a.tenho*13+nRec).padStart(9,"0")}</b> · 🚧 Página em construção 🚧</p>
+      <div class="pf-g"><div class="pf-c"><div class="moldura">${fotoPerfil(p)}</div><p class="eu">Este sou eu!!! :)</p>${pat}<p class="eu">No Não Salvo desde ${esc(desde)}</p></div>
+       <div class="pf-c"><h2 class="pf-h">📖 ${esc(L.recados)} (${nRec})</h2>${rec}<hr><h2 class="pf-h">🖼️ Minhas figurinhas</h2>${figs}</div>
+       <div class="pf-c"><h2 class="pf-h">⭐ Minha carta favorita</h2>${fav}<h2 class="pf-h">🔗 Meus links (coleções)</h2>${cols}<p class="melhor">Melhor visualizado em 800x600</p></div></div></div></div>`,
+    icq:()=>`<div class="win"><div class="tit"><span>ICQ · Informações de ${ap}</span><i aria-hidden="true">_ □ ✕</i></div>
+      <div class="pf-g"><div class="pf-c lado"><div class="pf-box">${fotoPerfil(p)}</div><h1 class="pf-nome">${ap}</h1><div class="uin">UIN: ${esc(String(10000000+a.tenho*991+nRec*7))}</div><span class="on">🌼 Disponível</span></div>
+       <div class="pf-c"><div class="caixa"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div><div class="caixa"><h2 class="pf-h">Arquivos recebidos (figurinhas)</h2>${figs}</div></div>
+       <div class="pf-c"><div class="caixa"><h2 class="pf-h">Nível</h2>${pat}</div><div class="caixa"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="caixa"><h2 class="pf-h">Grupos (coleções)</h2>${cols}</div></div></div></div>`,
+    ask:()=>`<div class="pf-top"><b>ask.fm</b></div><div class="pf-g"><div class="pf-c"><div class="caixa">${fotoPerfil(p)}<h1 class="pf-nome">${ap}</h1><div class="pf-cap">@${ap.toLowerCase()} · desde ${esc(desde)}</div><div class="nums"><span><b>${nRec}</b>respostas</span><span><b>${a.tenho}</b>figurinhas</span></div>${pat}</div></div>
+       <div class="pf-c"><div class="caixa"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div><div class="caixa"><h2 class="pf-h">Figurinhas</h2>${figs}</div></div>
+       <div class="pf-c"><div class="caixa"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="caixa"><h2 class="pf-h">Coleções</h2>${cols}</div></div></div>`,
+    whatsapp:()=>`<div class="pf-g"><div class="pf-c chat${REC.length?"":" vazio"}"><div class="topo">${gato(p.avatar_gato,p.apelido,"pf-mini")}<div><h1 class="pf-nome">${ap}</h1><small>online</small></div></div>
+       <div class="msgs">${rec}</div></div>
+      <div class="pf-c info"><div class="caixa cen">${fotoPerfil(p)}<h2 class="pf-nome">${ap}</h2><div class="pf-cap">Recado: “${P.patente?esc(P.patente.nome):"Disponível"}” 🙂</div>${pat}</div>
+       <div class="caixa"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="caixa"><h2 class="pf-h">Mídia (figurinhas)</h2>${figsHTML(4)}</div><div class="caixa"><h2 class="pf-h">Grupos em comum (coleções)</h2>${cols}</div></div></div>`,
+    vine:mod,snapchat:mod,instagram:mod,tiktok:mod,kwai:mod,bluesky:mod
+  });
+  const el=$("pf");el.className="pf pf-"+(LAYOUTS[p.layout]?p.layout:"orkut");el.innerHTML=(T[p.layout]||T.orkut)();
+  ligar(L);
+}
+// "sorte do dia" do Orkut: muda por dia e por pessoa, sem servidor
+const SORTES=["Hoje é um bom dia para abrir um pacote.","Uma figurinha rara está mais perto do que parece.","Alguém vai deixar um scrap pra você.","Evite discutir com quem diz que o vestido é branco e dourado.","Hoje vale a pena visitar a linha do tempo.","Sua próxima carta pode ser Mítica. Ou não."];
+function sorte(ap){let h=new Date().toDateString().length;for(const c of String(ap))h=(h*31+c.charCodeAt(0))>>>0;return SORTES[h%SORTES.length]}
+
+function ligar(L){
+  const el=$("pf");
+  el.querySelectorAll(".abas a").forEach(t=>t.onclick=ev=>{ev.preventDefault();el.querySelectorAll(".abas a").forEach(o=>o.removeAttribute("aria-current"));t.setAttribute("aria-current","location");const x=$(t.dataset.ir);if(x)x.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"})});
+  const b=el.querySelector("[data-todas]");if(b)b.onclick=()=>{MOSTRAR_TODAS=true;montar();avisar("Mostrando todas as figurinhas")};
+  el.querySelectorAll("[data-apagar]").forEach(x=>x.onclick=()=>apagar(x.dataset.apagar));
+  const f=$("rcF");if(!f)return;
+  const t=$("rcT"),n=$("rcN");
+  t.oninput=()=>{const r=MAX-[...t.value].length;n.textContent=`${r} caracteres restantes`};
+  f.onsubmit=async ev=>{ev.preventDefault();const texto=t.value.trim();if(!texto){t.focus();toast("Escreva alguma coisa.");return}
+    const bt=$("rcB");bt.disabled=true;
+    try{const r=await Api.recadar(P.perfil.apelido,texto);REC.unshift(r);P.recados++;toast(L.ok);montar();avisar(L.ok);const nt=$("rcT");nt&&nt.focus()}
+    catch(e){bt.disabled=false;if(e&&e.status&&e.status!==429)toast(e.erro||"Não consegui enviar agora.")}};
+}
+async function apagar(id){
+  if(!confirmar())return;
+  try{await Api.apagarRecado(id);REC=REC.filter(r=>String(r.id)!==String(id));montar();toast("Recado apagado.");avisar("Recado apagado")}
+  catch(e){toast((e&&e.erro)||"Não consegui apagar agora.")}
+}
+// confirmação sem diálogo do navegador (que trava a página): 2 cliques em 4 s
+let confirmT=0;function confirmar(){const a=Date.now();if(a-confirmT<4000){confirmT=0;return true}confirmT=a;toast("Clique de novo em “apagar” para confirmar.",3500);return false}
+
+// ---- botões em cima do perfil: copiar link (todos) e trocar visual (dono), no estilo da rede escolhida ----
+function barra(){
+  const b=$("barra");if(!P){b.innerHTML="";return}
+  const eu=P.perfil.eh_meu,lay=LAYOUTS[P.perfil.layout]?P.perfil.layout:"orkut";
+  b.innerHTML=`<div class="pf-tools t-${lay}"><button type="button" class="pf-tb" id="btCopiar" aria-live="polite">${icon("link")}<span>Copiar link</span></button>${eu?`<button type="button" class="pf-tb" data-ed="visual" title="Trocar o visual do perfil">${icon("edit")}<span>Trocar visual</span></button>`:""}</div>`;
+  $("btCopiar").onclick=copiarLink;
+}
+// endereço completo do perfil (funciona em qualquer pasta do site)
+const urlPerfil=ap=>new URL(linkPerfil(ap),location.href).href;
+async function copiarLink(){
+  const u=urlPerfil(P.perfil.apelido),bt=$("btCopiar");
+  let ok=false;
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(u);ok=true}}catch(e){}
+  if(!ok){ // reserva: copia por um campo escondido (navegadores sem a API de área de transferência)
+    const t=document.createElement("textarea");t.value=u;t.setAttribute("readonly","");t.style.cssText="position:fixed;left:-9999px;top:0;opacity:0";
+    document.body.appendChild(t);t.select();t.setSelectionRange(0,u.length);try{ok=document.execCommand("copy")}catch(e){}t.remove()}
+  if(ok){toast("Link do perfil copiado!");avisar("Link do perfil copiado");if(bt){bt.classList.add("ok");bt.innerHTML=`${icon("check")}<span>Link copiado!</span>`;clearTimeout(bt._t);bt._t=setTimeout(()=>{bt.classList.remove("ok");bt.innerHTML=`${icon("link")}<span>Copiar link</span>`},2200)}}
+  else{toast("Não deu para copiar sozinho. Copie o link: "+u,8000);avisar("Não deu para copiar. O link está na tela.")}
+}
+// lápis e botões de edição (delegação: o perfil é redesenhado a cada mudança)
+document.addEventListener("click",ev=>{const b=ev.target.closest("[data-ed]");if(!b||!P||!P.perfil.eh_meu)return;
+  const k=b.dataset.ed;if(k==="gato"){if(typeof openSignup==="function")openSignup()}else abrirEdicao(k==="fav"?"fav":"")});
+// depois de salvar o gatinho/apelido no criador, o perfil é recarregado (o apelido pode ter mudado)
+function onAccountChange(){if(!P||!P.perfil.eh_meu||!SESSAO||!SESSAO.usuario)return;const ap=SESSAO.usuario.apelido;history.replaceState(null,"","perfil.html?u="+encodeURIComponent(ap));carregar(ap).then(()=>{ // o perfil é redesenhado: devolve o foco ao lápis do gatinho (ou ao título), não ao body
+    const l=document.querySelector(".pf-lapis[data-ed=gato]")||document.querySelector("#pf h1");if(l){if(!l.matches("button"))l.tabIndex=-1;l.focus()}})}
+function abrirEdicao(foco){
+  const p=P.perfil;
+  // cada opção: miniatura do perfil naquela rede (com o seu gatinho) e o nome na letra típica da época (sem logo)
+  const av=gatoValido(p.avatar_gato)?catSVG(p.avatar_gato):"";
+  $("lays").innerHTML=Object.entries(LAYOUTS).map(([k,v])=>`<label class="pf-lay l-${k}"><input type="radio" name="lay" value="${k}" ${k===p.layout?"checked":""}><span class="mini mini-${k}" aria-hidden="true"><b class="t"></b><span class="av">${av}</span><b class="x1"></b><b class="x2"></b><b class="x3"></b></span><span class="nm">${esc(v.nome)}</span><small>${esc(v.dica)}</small></label>`).join("");
+  const l=P.album.cartas.slice().sort((a,b)=>RORD.indexOf(a.raridade)-RORD.indexOf(b.raridade)||a.nome.localeCompare(b.nome));
+  // carta favorita: fileira de mini-cartas (radiogroup); "Nenhuma" primeiro
+  const fid=P.carta_favorita?P.carta_favorita.id:"";
+  $("fav").innerHTML=l.length?`<label class="pf-fav nenhuma"><input type="radio" name="fav" value="" ${fid?"":"checked"}><span class="pf-fv-n"><b>Nenhuma</b></span></label>`+l.map(c=>`<label class="pf-fav"><input type="radio" name="fav" value="${esc(c.id)}" ${fid===c.id?"checked":""}>${carta(c)}</label>`).join(""):`<p class="pf-vazio">Você ainda não tem figurinhas. Abra um pacote no álbum!</p>`;
+  $("dlgErro").textContent="";$("dlg").showModal();
+  const sel=$(foco==="fav"?"fav":"lays").querySelector("input:checked")||$("lays").querySelector("input:checked");sel&&sel.focus({preventScroll:foco!=="fav"}); // foco na rede atual (ou na favorita, pelo lápis da carta)
+  $("favN").textContent=l.length?`${l.length} carta${l.length===1?"":"s"}`:"";contarVisual();
+  rolarAtivo($("fav"));if(foco!=="fav")rolarVisual();
+}
+// contador "Visual N de 15" na legenda do grupo (acompanha a escolha)
+function contarVisual(){const i=[...$("lays").querySelectorAll("input")].findIndex(x=>x.checked);$("laysN").textContent=i<0?"":`Visual ${i+1} de ${$("lays").querySelectorAll("input").length}`}
+// rola o corpo do diálogo (vertical) até o visual marcado ficar à vista
+function rolarVisual(){const b=$("dlgCorpo"),a=$("lays").querySelector("input:checked"),l=a&&a.closest("label");if(!l)return;const br=b.getBoundingClientRect(),lr=l.getBoundingClientRect();if(lr.top<br.top+40||lr.bottom>br.bottom)b.scrollTop+=(lr.top-br.top)-(b.clientHeight-lr.height)/2}
+// rola a fileira horizontal até a opção marcada (só no eixo X: não mexe no scroll do diálogo)
+function rolarAtivo(c){const a=c.querySelector("input:checked"),l=a&&a.closest("label");if(l&&c.scrollWidth>c.clientWidth)c.scrollLeft=Math.max(0,l.offsetLeft-(c.clientWidth-l.offsetWidth)/2)}
+// ao navegar com as setas, a opção marcada entra na vista (sem mexer na rolagem vertical do diálogo)
+$("lays").addEventListener("change",()=>{contarVisual();rolarVisual()});
+$("fav").addEventListener("change",ev=>{const c=$("fav"),l=ev.target.closest("label");if(l&&(l.offsetLeft<c.scrollLeft||l.offsetLeft+l.offsetWidth>c.scrollLeft+c.clientWidth))rolarAtivo(c)});
+$("btCancelar").onclick=()=>$("dlg").close();
+$("btGato").onclick=()=>{$("dlg").close();if(typeof openSignup==="function")openSignup()};
+$("dlgF").onsubmit=async ev=>{ev.preventDefault();
+  const lay=($("dlgF").querySelector("input[name=lay]:checked")||{}).value||P.perfil.layout,fav=(($("dlgF").querySelector("input[name=fav]:checked")||{}).value)||null;
+  const corpo={perfil_layout:lay,carta_favorita:fav},bt=$("btSalvar");bt.disabled=true;$("dlgErro").textContent="";
+  try{await Api.perfil(corpo);$("dlg").close();toast("Perfil salvo!");await carregar(P.perfil.apelido);avisar("Perfil salvo")}
+  catch(e){$("dlgErro").textContent=(e&&e.erro)||"Não consegui salvar agora. Tente de novo."}
+  finally{bt.disabled=false}};
+
+// ---- carregar ----
+function estado(titulo,texto,botao){$("pf").className="";$("pf").innerHTML=`<div class="pf-st"><b>${esc(titulo)}</b>${esc(texto)}${botao||""}</div>`}
+async function carregar(ap){
+  try{
+    const [p,r]=await Promise.all([Api.perfilDe(ap,{silencioso:true}),Api.recados(ap,{silencioso:true})]);
+    P=p;REC=(r&&r.itens)||[];
+    document.title=`${P.perfil.apelido} · Perfil · NÃO SALVO`;
+    barra();montar();
+  }catch(e){
+    if(e&&e.status===404)return estado("Perfil não encontrado","Confira o nome de quem você quer visitar.",`<br><a class="pf-bt" href="index.html">Voltar ao início</a>`);
+    if(e&&e.status===401)return estado("Entre para ver os perfis","Os perfis são só para quem entrou com o Discord.",`<br><a class="pf-bt pri" href="/entrar.html?voltar=${encodeURIComponent(location.pathname+location.search)}">Entrar com Discord</a>`);
+    estado("Não consegui carregar o perfil","Pode ser a conexão. Tente de novo em instantes.",`<br><button type="button" class="pf-bt" id="tentar">Tentar de novo</button>`);
+    const t=$("tentar");if(t)t.onclick=()=>carregar(ap);
+  }
+}
+(async()=>{
+  if(pedido){if(!/^[A-Za-z0-9_.\-]{3,20}$/.test(pedido))return estado("Perfil não encontrado","Esse nome não existe por aqui.","");return carregar(pedido)}
+  // sem ?u= : o próprio perfil
+  try{const eu=await Api.eu({silencioso:true});if(eu&&eu.usuario){history.replaceState(null,"","perfil.html?u="+encodeURIComponent(eu.usuario.apelido)+location.hash);await carregar(eu.usuario.apelido);if(location.hash==="#editar"&&P&&P.perfil.eh_meu)abrirEdicao()}}
+  catch(e){estado("Entre para ver o seu perfil","Os perfis são só para quem entrou com o Discord.",`<br><a class="pf-bt pri" href="/entrar.html?voltar=%2Fperfil.html">Entrar com Discord</a>`)}
+})();
+</script>
+</body>
+</html>

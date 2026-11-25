@@ -32,3 +32,8 @@ Thumbs.db
 # Backend, segredos e config de deploy
 api
 .secrets
+
+# Ferramentas internas: nao precisam ir para a web root publica
+scripts
+tests
+CONTRIBUTING.md

@@ -2,14 +2,18 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
+<link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
+<script src="gate.js?v=20261120c"></script>
+<script src="cliente-economia.js?v=20261125c"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NÃO SALVO — Museu da Internet Brasileira</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://i.ytimg.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261119k">
-<link rel="stylesheet" href="viewer.css?v=20261119k">
+<link rel="stylesheet" href="theme.css?v=20261125b">
+<link rel="stylesheet" href="viewer.css?v=20261125b">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 <style>
 main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
@@ -23,17 +27,17 @@ main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
 .hero .sun img{display:block;width:100%;height:auto;filter:drop-shadow(0 12px 26px #00000055)}
 @keyframes bob{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-10px,0)}}
 .hero h1{font-size:clamp(28px,3.4vw,40px);line-height:1;font-weight:700;letter-spacing:1px;margin-top:4px}
-.hero h1 em{font-style:normal;color:var(--brand)}
+.hero h1 em{font-style:normal;color:var(--brand-display)}
 .hero p{color:var(--mut);margin:10px auto 18px;font-size:14px;max-width:380px;line-height:1.5}
 .hero .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.sec-title{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:1.5px;color:var(--mut);font-weight:700;margin-bottom:10px;text-transform:uppercase;gap:10px}
-.sec-title a{color:var(--brand);cursor:pointer;white-space:nowrap}
+.sec-title{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.2px;color:var(--mut);font-weight:700;margin-bottom:10px;text-transform:none;gap:10px}
+.sec-title a{color:var(--brand-text);cursor:pointer;white-space:nowrap}
 .rail{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .card{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);cursor:pointer;transition:.2s;text-align:left;box-shadow:0 2px 10px #0000000f}
 .card:hover{transform:translateY(-3px);border-color:var(--brand);box-shadow:0 8px 26px var(--glow)}
 .thumb{aspect-ratio:4/3;display:grid;place-items:center;font-size:54px;position:relative}
 .thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,#000a)}
-.thumb i{position:absolute;left:10px;top:10px;z-index:2;font-style:normal;font-size:11px;background:#000a;color:#fff;padding:3px 7px;border-radius:6px;font-family:Rajdhani;letter-spacing:1px}
+.thumb i{position:absolute;left:10px;top:10px;z-index:2;font-style:normal;font-size:12px;background:#000a;color:#fff;padding:3px 7px;border-radius:6px;font-family:Rajdhani;letter-spacing:1px}
 .thumb .ph{position:relative;z-index:1;color:#ffffffd9;filter:drop-shadow(0 4px 12px #0008)}
 .ico.art{width:46px;height:46px;stroke-width:1.5}.mini .ico.art{width:30px;height:30px}.today .ico.art{width:42px;height:42px}
 .thumb .th,.row .em .th{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -50,8 +54,8 @@ main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
 .meta{padding:10px 12px 12px}
 .meta h3{font-size:16px;font-weight:600;line-height:1.1}
 .meta small{color:var(--mut);font-size:12px}
-.tag{display:inline-block;font-size:9px;letter-spacing:1px;font-weight:800;padding:2px 6px;border-radius:4px;margin-top:6px;text-transform:uppercase;background:#a35cff22;color:#8a4dff;font-family:Inter}
-.tag.Lendário{background:#f2b22a26;color:#c88a00}.tag.Mítico{background:#ff4a8a22;color:#e0306f}.tag.Clássico{background:var(--brand-soft);color:var(--brand)}
+.tag{display:inline-block;font-size:12px;letter-spacing:1px;font-weight:800;padding:2px 6px;border-radius:4px;margin-top:6px;text-transform:uppercase;background:#a35cff22;color:#8a4dff;font-family:Inter}
+.tag.Lendário{background:#f2b22a26;color:#8a5a00}.tag.Mítico{background:#ff4a8a22;color:#c2255c}.tag.Clássico{background:var(--brand-soft);color:var(--brand-text)}
 :root[data-theme="dark"] .tag{color:#b89bff}:root[data-theme="dark"] .tag.Lendário{color:#ffc84d}:root[data-theme="dark"] .tag.Mítico{color:#ff6bb3}:root[data-theme="dark"] .tag.Clássico{color:var(--brand2)}
 .timeline{border:1px solid var(--line2);border-radius:20px;padding:18px 22px 24px;background:linear-gradient(180deg,var(--panel2),var(--panel));box-shadow:0 0 40px var(--glow);margin-bottom:24px;scroll-margin-top:calc(var(--hdh,64px) + 12px)}
 .years{display:flex;align-items:flex-end;justify-content:space-between;position:relative;padding:18px 0 8px;overflow-x:auto;gap:4px;scrollbar-width:thin}
@@ -63,19 +67,15 @@ main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
 .y:hover{color:var(--txt)}
 .stage{display:grid;grid-template-columns:90px 1fr 90px;gap:16px;align-items:center;margin-top:12px}
 .side{color:var(--faint);text-align:center;cursor:pointer}
-.side:hover{color:var(--brand)}
+.side:hover{color:var(--brand-text)}
 .side b{display:block;font-family:Rajdhani;font-size:36px}
-.side small{font-size:11px}
+.side small{font-size:12px}
 .cur{display:grid;grid-template-columns:240px 1fr;gap:24px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--sunk)}
 .cur h2{font-size:56px;line-height:1;font-weight:700;color:var(--brand-ink)}
 .cur p{color:var(--mut);font-size:13px;margin:8px 0 14px;line-height:1.45}
 .mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .mini .card .thumb{aspect-ratio:16/10;font-size:32px}
 .mini .meta{padding:6px 8px}.mini .meta h3{font-size:13px}
-.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:8px}
-.fact{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--panel)}
-.fact b{display:block;color:var(--brand);font-family:Rajdhani;letter-spacing:1px;text-transform:uppercase;font-size:13px;margin-bottom:4px}
-.fact span{font-size:12px;color:var(--mut)}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .chip{border:1px solid var(--line);padding:7px 13px;border-radius:99px;font-size:12px;color:var(--mut);background:var(--panel)}
 .chip.on,.chip:hover{border-color:var(--brand);color:var(--brand-ink);background:var(--brand-soft)}
@@ -89,14 +89,13 @@ main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
 .box h2{font-size:30px}
 .box p{color:var(--mut);font-size:14px;line-height:1.6;margin:10px 0 16px}
 .box .vp{border-radius:0}
-.note{font-size:11px;color:var(--faint);text-align:center;margin-top:30px}
 .fade{animation:f .35s ease}
 @keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .pulse{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:16px;margin-bottom:24px}
 .panel{border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--panel)}
 .today{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:center}
 .today .ago{font-family:Rajdhani;font-size:44px;font-weight:700;line-height:.9;color:var(--brand-ink)}
-.today .ago small{display:block;font-size:13px;color:var(--brand);letter-spacing:1px;margin-top:6px;text-transform:uppercase}
+.today .ago small{display:block;font-size:13px;color:var(--brand-text);letter-spacing:1px;margin-top:6px;text-transform:uppercase}
 .today p{color:var(--mut);font-size:12.5px;line-height:1.45;margin:6px 0 10px}
 .today .card .thumb{aspect-ratio:1/1;font-size:46px}
 .row{display:grid;grid-template-columns:22px 40px 1fr auto;gap:10px;align-items:center;padding:7px 4px;border-bottom:1px solid var(--line);cursor:pointer;width:100%;text-align:left;border-radius:8px}
@@ -104,13 +103,13 @@ main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
 .row:hover{background:var(--brand-soft)}
 .row b{font-family:Rajdhani;color:var(--mut);font-size:15px;text-align:center}
 .row .em{width:40px;height:30px;border-radius:7px;display:grid;place-items:center;font-size:18px}
-.row span{font-size:13px;line-height:1.15}.row span small{display:block;color:var(--mut);font-size:11px}
-.row em{font-style:normal;font-size:11px;color:#e07a10;white-space:nowrap;font-weight:600}
+.row span{font-size:13px;line-height:1.15}.row span small{display:block;color:var(--mut);font-size:12px}
+.row em{font-style:normal;font-size:12px;color:#e07a10;white-space:nowrap;font-weight:600}
 .row em.nw{color:var(--ok)}
 .card.add .thumb{background:repeating-linear-gradient(45deg,var(--brand-soft) 0 8px,var(--sunk) 8px 16px)!important;color:var(--brand);font-size:30px}
 .card.add .thumb::after{display:none}
-.card.add .meta h3{color:var(--brand)}
-.f label{display:block;font-size:10.5px;letter-spacing:1px;color:var(--mut);margin:12px 0 5px;font-weight:700;text-transform:uppercase}
+.card.add .meta h3{color:var(--brand-text)}
+.f label{display:block;font-size:12px;letter-spacing:1px;color:var(--mut);margin:12px 0 5px;font-weight:700;text-transform:uppercase}
 .f input,.f select,.f textarea{width:100%;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:11px 12px;color:var(--txt);font:inherit;font-size:13px;outline:none}
 .f input:focus,.f select:focus,.f textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--glow)}
 .f .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -119,7 +118,7 @@ main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
 .chk.warn{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 10%,transparent);color:var(--warn)}
 .chk.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent);color:var(--bad)}
 .chk b{color:var(--txt)}
-.chk button{color:var(--brand);text-decoration:underline;font-size:12.5px}
+.chk button{color:var(--brand-text);text-decoration:underline;font-size:12.5px}
 .chk label{display:flex;gap:8px;align-items:center;margin-top:6px;color:var(--warn);font-size:12px;text-transform:none;letter-spacing:0;font-weight:500}
 .chk label input{width:auto}
 .lock{text-align:center;padding:10px 4px}
@@ -131,24 +130,24 @@ main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
 .linkbox .in{display:flex;gap:8px;margin-top:8px}.linkbox input{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 10px;color:var(--txt);font:inherit;font-size:12.5px;outline:none}
 .linkbox .btn{padding:9px 14px}
 .linkok{display:inline-block;color:var(--ok);font-size:12.5px;margin-bottom:12px}
-.linkok a{color:var(--brand)}
+.linkok a{color:var(--brand-text)}
 .rk{display:grid;grid-template-columns:26px 36px 1fr auto auto;gap:12px;align-items:center;padding:9px 6px;border-bottom:1px solid var(--line);font-size:13px}
 .rk.me{background:var(--brand-soft);border-radius:10px}
 .rk b{color:var(--mut);text-align:center;font-family:Rajdhani;font-size:16px}
 .rk .av{width:34px;height:34px;border-radius:50%;overflow:hidden}.rk .av svg{width:100%;height:100%;display:block}
-.rk .pt{font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:2px 7px;border-radius:5px;margin-left:6px}
-.rk em{font-style:normal;color:var(--brand);font-weight:700;font-family:Rajdhani;font-size:16px;text-align:right}
-.rk small{color:var(--mut);font-size:11px;text-align:right}
+.rk .pt{font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:2px 7px;border-radius:5px;margin-left:6px}
+.rk em{font-style:normal;color:var(--brand-text);font-weight:700;font-family:Rajdhani;font-size:16px;text-align:right}
+.rk small{color:var(--mut);font-size:12px;text-align:right}
 .q{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:var(--sunk)}
 .q h4{font-family:Rajdhani;font-size:19px}
-.q .by{font-size:11.5px;color:var(--mut);margin:2px 0 6px}
+.q .by{font-size:12px;color:var(--mut);margin:2px 0 6px}
 .q p{margin:0 0 8px;font-size:12.5px}
 .q .act{display:flex;gap:8px;flex-wrap:wrap}.q .act .btn{padding:8px 14px;font-size:12px}
-.q .flag{font-size:11.5px;color:var(--warn);margin-bottom:8px}
+.q .flag{font-size:12px;color:var(--warn);margin-bottom:8px}
 .q.done{opacity:.55}
 .mine{font-size:12px;color:var(--mut);padding:6px 2px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
 .st-pending{color:var(--warn)}.st-approved{color:var(--ok)}
-.h4{font-size:11px;letter-spacing:1.3px;color:var(--mut);margin:8px 0}
+.h4{font-size:12px;letter-spacing:1.3px;color:var(--mut);margin:8px 0}
 @media(max-width:1000px){.pulse{grid-template-columns:1fr}}
 @media(max-width:860px){
 main{display:flex;flex-direction:column}
@@ -156,10 +155,10 @@ main{display:flex;flex-direction:column}
 .top>.hero{order:1;margin-bottom:18px}.timeline{order:2}.top>div:not(.hero){order:3;margin-bottom:24px}.pulse{order:4}#browse{order:5}.facts{order:6}.note{order:7}
 .hero .sun{max-width:250px}.hero h1{font-size:26px}.hero p{margin:6px auto 12px}
 .timeline{padding:14px 12px 16px}.cur{padding:12px;gap:12px}.cur h2{font-size:40px}
-.top,.cur{grid-template-columns:1fr}.stage{grid-template-columns:1fr}.side{display:none}.facts{grid-template-columns:1fr 1fr}.rail{grid-template-columns:1fr 1fr}.rail .card:nth-child(3){display:none}main{padding:16px 14px 40px}}
+.top,.cur{grid-template-columns:1fr}.stage{grid-template-columns:1fr}.side{display:none}.rail{grid-template-columns:1fr 1fr}.rail .card:nth-child(3){display:none}main{padding:16px 16px 40px}}
 @media(max-width:600px){.f .two{grid-template-columns:1fr}.today{grid-template-columns:110px 1fr}.box .body{padding:16px}}
 </style>
-<link rel="stylesheet" href="home.css?v=20261119k">
+<link rel="stylesheet" href="home.css?v=20261125a">
 </head>
 <body class="home">
 <div class="rays-wrap" aria-hidden="true"><div class="rays" id="rays"></div></div>
@@ -168,10 +167,10 @@ main{display:flex;flex-direction:column}
 <main>
   <section class="top">
     <div class="hero">
-      <div class="sun"><picture><source srcset="logo-hero.webp" type="image/webp"><img src="logo-hero.png" alt="Não Salvo" width="640" height="528" fetchpriority="high"></picture></div>
+      <div class="sun"><picture><source srcset="logo-hero.webp?v=4" type="image/webp"><img src="logo-hero.png?v=4" alt="Não Salvo" width="640" height="528" fetchpriority="high"></picture></div>
       <h1>E no fim, o plano do <em>Não Salvo</em> era salvar.</h1>
       <p>Um museu colaborativo de vídeos virais, memes e momentos inesquecíveis da nossa internet.</p>
-      <div class="btns"><button class="btn" onclick="go(2012,true)"><i data-ic="timeline"></i>Explorar por ano</button><button class="btn ghost" onclick="openSubmit()"><i data-ic="send"></i>Enviar meme</button></div>
+      <div class="btns"><a class="btn" href="linha-do-tempo.html"><i data-ic="timeline"></i>Explorar por ano</a><button class="btn ghost" data-gate="logado" onclick="openSubmit()"><i data-ic="send"></i>Enviar meme</button></div>
     </div>
     <div>
       <div class="sec-title"><span><i data-ic="star"></i>Clássicos da internet brasileira</span><a onclick="setView('todos')">Ver todos →</a></div>
@@ -182,11 +181,11 @@ main{display:flex;flex-direction:column}
   <section class="pulse">
     <div class="panel"><div class="sec-title"><span><i data-ic="clock"></i>Hoje na história da web</span><a onclick="randomPick()"><i data-ic="random"></i>Aleatório</a></div><div id="today"></div></div>
     <div class="panel sdp"><div id="hot"></div></div>
-    <div class="panel"><div class="sec-title"><span><i data-ic="new"></i>Últimos adicionados</span><a onclick="openMod()">Fila →</a></div><div id="latest"></div></div>
+    <div class="panel"><div class="sec-title"><span><i data-ic="new"></i>Últimos adicionados</span><a data-gate="moderador" onclick="openMod()">Fila →</a></div><div id="latest"></div></div>
   </section>
 
   <section class="timeline" id="tl">
-    <div class="sec-title"><span><i data-ic="clock"></i>Linha do tempo da internet brasileira</span><a onclick="setView('todos')">Ver todos os anos →</a></div>
+    <div class="sec-title"><span><i data-ic="clock"></i>Linha do tempo da internet brasileira</span><a href="linha-do-tempo.html">Ver todos os anos →</a></div>
     <div class="years" id="years"></div>
     <div class="stage">
       <div class="side" id="prev"></div>
@@ -196,16 +195,16 @@ main{display:flex;flex-direction:column}
   </section>
 
   <section id="browse">
-    <div class="sec-title"><span id="browseTitle">Todos os registros</span><a onclick="openSubmit()"><i data-ic="send"></i>Enviar meme</a></div>
+    <div class="sec-title"><span id="browseTitle">Todos os registros</span><a data-gate="logado" onclick="openSubmit()"><i data-ic="send"></i>Enviar meme</a></div>
     <div class="chips" id="chips"></div>
     <div class="grid" id="grid"></div>
   </section>
 
   <section class="facts">
-    <div class="fact"><i data-ic="moderation"></i><b>Colaborativo</b><span>A comunidade envia, a moderação aprova, e ninguém sobe o mesmo vídeo duas vezes.</span></div>
-    <div class="fact"><i data-ic="categories"></i><b>Organizado</b><span>Separado por ano, categoria e contexto.</span></div>
-    <div class="fact"><i data-ic="cloud"></i><b>Eternizado</b><span>Se caiu na internet, aqui fica pra sempre.</span></div>
-    <div class="fact"><i data-ic="clock"></i><b>Você está aqui há</b><span id="timer">0m</span></div>
+    <div class="fact"><i data-ic="moderation"></i><b>Colaborativo</b><span>A comunidade envia, a moderação aprova. Zero vídeo repetido.</span></div>
+    <div class="fact"><i data-ic="categories"></i><b>Organizado</b><span>Por ano, categoria e contexto. Cada meme no seu quadrado.</span></div>
+    <div class="fact"><i data-ic="cloud"></i><b>Eternizado</b><span>Caiu na internet? Fica aqui pra sempre.</span></div>
+    <div class="fact fact-tempo"><i data-ic="clock"></i><b id="timerB">Você chegou agora</b><span id="timer">Bem-vindo ao museu.</span></div>
   </section>
   <p class="note">Protótipo · os registros são exemplos para testar a navegação e precisam ser revisados antes de virar acervo de verdade. Moedas, cartas e envios ficam só neste navegador.</p>
 </main>
@@ -213,19 +212,20 @@ main{display:flex;flex-direction:column}
 <div class="modal" id="modal" onclick="if(event.target===this)closeM()"><div class="box" id="box"></div></div>
 
 <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="tipo"><textarea name="msg"></textarea><input name="contato"><input name="pagina"><input name="bot-field"></form>
-<script src="common.js?v=20261119m"></script>
-<script src="data.js?v=20261119k"></script>
-<script src="player.js?v=20261119l"></script>
-<script src="viewer.js?v=20261119k"></script>
-<script src="alertas.js?v=20261119k"></script>
+<script src="common.js?v=20261125d"></script>
+<script src="data.js?v=20261125b"></script>
+<script src="player.js?v=20261125b"></script>
+<script src="viewer.js?v=20261125b"></script>
+<script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("inicio",{search:true,sub:[]});
 document.querySelectorAll("[data-ic]").forEach(e=>e.outerHTML=icon(e.dataset.ic));
 // ===================== ACERVO =====================
 const CAT_IC={"Vídeos":"video","TV":"tv","Música":"music","Cultura":"culture","Zoeira":"zoeira","Fotos":"photo","Esportes":"sports"};
 const CAT_EMO={"Vídeos":"🎞️","TV":"📺","Música":"🎵","Cultura":"🌐","Zoeira":"🤡","Fotos":"📸","Esportes":"⚽"};
-const yKey=y=>(parseInt(y)>=2020?"2020+":String(y));
-const KEYS=Object.keys(YEAR_INFO);
+const yKey=y=>{y=parseInt(y)||2020;return y<2000?"1995–1999":y<=2003?"2000–2003":y>=2026?"2026":String(y)};
+const yLab=k=>(YEAR_INFO[k]&&YEAR_INFO[k].rot)||k;
+const KEYS=Object.keys(YEAR_INFO).sort((a,b)=>parseInt(a)-parseInt(b)); // "2004" vem antes de "1995–1999" no Object.keys
 const GRAD=["#1d3a8a,#0b0f2a","#5b1d8a,#14061f","#8a3a1d,#2a0f06","#1d8a6e,#06241d","#8a1d4a,#240614","#1d6e8a,#06202a","#7a8a1d,#1f2406"];
 const grad=s=>"linear-gradient(135deg,"+GRAD[[...s].reduce((a,c)=>a+c.charCodeAt(0),0)%GRAD.length]+")";
 
@@ -237,12 +237,8 @@ const SEED_QUEUE=[
  {id:"q4",t:"Carreta Furacão",y:2014,c:"Música",by:"zap_da_tia",rank:0,url:"https://www.youtube.com/watch?v=exemploCarreta",d:"Os personagens dançando em cima do trenzinho da alegria."},
  {id:"q5",t:"Nana Gouvêa posando no furacão",y:2012,c:"Fotos",by:"fotologueira",rank:1,url:"https://www.instagram.com/p/exemploNana/",d:"Ensaio de fotos em Nova York no meio da passagem de um furacão."}
 ];
-const RANK_USERS=[["Cid Cidoso",15420,247,104,2],
- ["SePPZAO",9640,231,101,4,0,"Moderador"],["Riba",9310,214,99,11],["Subversivo",8870,198,97,14],["yorkshiremaconhado",8640,192,96,22],["ad_moura",8420,187,95,16],["Dev_Gon",8050,176,94,15],["Gasanzin",7610,163,92,13],
- ["AteuDeGoianinha",7180,151,90,12],["Rulsso",6720,139,87,17],["cigarra_eletronica",6290,127,85,18],["maffeimafia",5830,114,82,19],["genery3",5360,102,80,20],["Velma",4980,93,78,21],
- ["ipsilva",4860,88,76,0],["bruninhotv",4720,84,74,1],["viralizador",4580,79,71,3],["faqo",4390,72,69,5],["lendariin",4180,66,64,6],["gatoNostalgico",2950,41,52,7],["fotologueira",420,6,23,8],["novato_2012",60,0,9,9]];
 
-const art=a=>((a.img||a.yt)?`<img class="th" src="${a.img||"https://i.ytimg.com/vi/"+a.yt+"/mqdefault.jpg"}" alt="" loading="lazy" decoding="async" width="320" height="180" onerror="this.remove()">`:"")+`<span class="ph">${a.art||icon(CAT_IC[a.c]||"video","art")}</span>`;
+const art=a=>(a.cuidado?`<span class="cdo-t" title="Selo de cuidado: contém conteúdo preconceituoso">${icon("care","in")}<b>Selo de cuidado</b><small>clique para saber mais</small></span>`:"")+((a.img||a.yt)?`<img class="th${a.cuidado?" cdo-blur":""}" src="${a.img||"https://i.ytimg.com/vi/"+a.yt+"/mqdefault.jpg"}" alt="" loading="lazy" decoding="async" width="320" height="180" onerror="this.remove()">`:"")+`<span class="ph">${a.art||icon(CAT_IC[a.c]||"video","art")}</span>`;
 let ALL=[];
 function buildAll(){
   ALL=MEMES.map(m=>{const l=NS.links[m.id],k=l?normUrl(l):"";return{...m,yt:m.yt||(k.startsWith("yt:")?k.slice(3):undefined),url:l||(m.yt?"https://www.youtube.com/watch?v="+m.yt:null)}});
@@ -253,18 +249,23 @@ function buildAll(){
 buildAll();
 const byId=id=>ALL.find(a=>a.id===id);
 
-let cur="2012",cat="Todas",query="",view="ano";
+// ano da linha do tempo da home: sorteado entre os anos que a pessoa ainda não explorou (guardado em ns_anos_vistos)
+function anosVistos(){try{const v=JSON.parse(localStorage.getItem("ns_anos_vistos")||"[]");return Array.isArray(v)?v.filter(x=>typeof x==="string"):[]}catch(e){return[]}}
+function marcarAnoVisto(k){try{const v=anosVistos();if(!v.includes(k)){v.push(k);localStorage.setItem("ns_anos_vistos",JSON.stringify(v.slice(-60)))}}catch(e){}}
+function anoInicial(){const ks=Object.keys(YEAR_INFO),vis=anosVistos(),novos=ks.filter(k=>!vis.includes(k));const L=novos.length?novos:ks;return L[Math.floor(Math.random()*L.length)]||"2012"}
+let cur=anoInicial(),cat="Todas",query="",view="ano";
 const $=id=>document.getElementById(id);
 const card=(a,big)=>`<button class="card" onclick="openM('${a.id}')">
   <div class="thumb" style="background:${grad(a.t)}"><i>${a.y}</i>${art(a)}${PLAY}</div>
   <div class="meta"><h3>${escapeHtml(a.t)}</h3>${big?`<small>${a.c}${a.mine?" · enviado por você":""}</small><br>`:""}<span class="tag ${a.r}">${a.r}</span></div></button>`;
-const addCard=y=>`<button class="card add" onclick="openSubmit('${y}')"><div class="thumb"><span>＋</span></div><div class="meta"><h3>Salvar um viral de ${y}</h3><small>+${REWARD.approved} moedas se aprovado</small></div></button>`;
+const addCard=y=>`<button class="card add" data-gate="logado" onclick="openSubmit('${y}')"><div class="thumb"><span>＋</span></div><div class="meta"><h3>Salvar um viral de ${y}</h3><small>enviar para a moderação</small></div></button>`;
 
 const SUB_ITEMS=[
-  {k:"tl",ic:"timeline",label:"Linha do tempo",fn:()=>{$("tl").scrollIntoView({behavior:"smooth"})}},
+  {k:"tl",ic:"timeline",label:"Linha do tempo",href:"linha-do-tempo.html"},
   {k:"cat",ic:"categories",label:"Categorias",dd:1,fn:(e,b)=>openPop(b,[{ic:"all",label:"Todas",fn:()=>pickCat("Todas")},...[...new Set(ALL.map(a=>a.c))].map(c=>({ic:CAT_IC[c]||"video",label:c,note:ALL.filter(a=>a.c===c).length+"",fn:()=>pickCat(c)}))])},
   {k:"rand",ic:"random",label:"Aleatório",fn:()=>randomPick()},
   {k:"rank",ic:"ranking",label:"Ranking",fn:()=>openRank()},
+  {k:"wiki",ic:"book",label:"Memepédia",href:"memepedia.html"},
   {k:"album",ic:"album",label:"Álbum de figurinhas",href:"album.html"},
   {k:"mod",ic:"moderation",label:"Moderação",fn:()=>openMod()},
   {sp:1},
@@ -287,38 +288,79 @@ function renderPulse(){
   const dd=new Date(a.date+"T12:00:00"),mon=dd.toLocaleDateString("pt-BR",{month:"short"}).replace(".","");
   $("today").innerHTML=`<div class="today2"><button class="tthumb" onclick="openM('${a.id}')" style="background:${grad(a.t)}">${art(a)}<span class="ago-b">Há ${ago} anos</span>${PLAY}</button>
     <div class="tinfo"><div class="cal"><small>${mon}</small><b>${dd.getDate()}</b><em>${dd.getFullYear()}</em></div><div><h3>${escapeHtml(a.t)}</h3><p>${escapeHtml(a.d).slice(0,110)}…</p><button class="lnk" onclick="openM('${a.id}')">Relembrar →</button></div></div></div>`;
-  // sobe.desce: views com um "sorteio do dia" (num site real: acessos das últimas 24h)
-  const seed=+t.replace(/-/g,"");const sc=ALL.map(x=>{const h=[...x.id].reduce((s,c)=>s*31+c.charCodeAt(0),seed)%1000/1000;return{x,h}});
-  const up=[...sc].sort((p,q)=>q.h-p.h).slice(0,5),dn=[...sc].sort((p,q)=>p.h-q.h).slice(0,5);
-  const li=(h,u)=>`<button class="sd-i ${u?"up":"dn"}" onclick="openM('${h.x.id}')">${icon(u?"arrowUp":"arrowDown")}<span><u>${escapeHtml(h.x.t)}</u><small>${u?"+"+Math.round(40+h.h*240):"−"+Math.round(10+(1-h.h)*60)}%</small></span></button>`;
-  $("hot").innerHTML=`<div class="sd-h"><span class="sd-logo"><span class="su">sobe</span><i>.</i><span class="de">desc<span class="ee">e${HORNS}</span></span></span><span class="sd-clip">${icon("clipboard")}</span></div>
-    <div class="sd"><div><h6 class="up">${icon("arrowUp")}sobe</h6>${up.map(h=>li(h,1)).join("")}</div><div><h6 class="dn">${icon("arrowDown")}desce</h6>${dn.map(h=>li(h,0)).join("")}</div></div>`;
+  renderSobeDesce();
   const lat=[...ALL].sort((p,q)=>(q.added||"").localeCompare(p.added||"")).slice(0,5);
   $("latest").innerHTML=lat.map(x=>{const days=Math.max(0,Math.round((new Date(t)-new Date(x.added))/864e5));return`<button class="row lt" onclick="openM('${x.id}')"><span class="em" style="background:${grad(x.t)}">${art(x)}</span><span>${escapeHtml(x.t)}<small>${x.y} · ${x.mine?"enviado por você":x.by?"por "+x.by:"acervo"}</small></span><em class="nw">${days===0?"hoje":days===1?"ontem":"há "+days+"d"}</em></button>`}).join("");
 }
 
+// ---- Sobe.Desce: ranking real de visitados (abriu) e clicados (deu play), hoje ou de todos os tempos ----
+const SD={tipo:"visitados",periodo:"hoje",cache:{}};
+try{const x=JSON.parse(localStorage.getItem("ns_sd")||"{}");if(x.tipo)SD.tipo=x.tipo;if(x.periodo)SD.periodo=x.periodo}catch(e){}
+function sdLocal(){
+  const k=SD.tipo==="visitados"?"v":"c",hoje=nsToday(),ontem=new Date(new Date(hoje+"T12:00:00")-864e5).toISOString().slice(0,10);
+  const L=ALL.filter(a=>!a.mine).map(a=>{const e=(NS.ev||{})[a.id]||{},d=e[k]||{};return{id:a.id,hoje:d[hoje]||0,ontem:d[ontem]||0,total:e[k+"t"]||0}});
+  if(SD.periodo==="hoje")return{sobe:L.filter(x=>x.hoje).sort((a,b)=>b.hoje-a.hoje).slice(0,5),desce:L.filter(x=>x.ontem>x.hoje).sort((a,b)=>(b.ontem-b.hoje)-(a.ontem-a.hoje)).slice(0,5),local:1};
+  return{sobe:L.filter(x=>x.total).sort((a,b)=>b.total-a.total).slice(0,5),desce:[...L].sort((a,b)=>a.total-b.total||a.id.localeCompare(b.id)).slice(0,5),local:1};
+}
+async function sdDados(){
+  const key=SD.tipo+"|"+SD.periodo;if(SD.cache[key]&&Date.now()-SD.cache[key].t<60000)return SD.cache[key].d;
+  let d=null;try{const r=await fetch(`/api/sobedesce?tipo=${SD.tipo}&periodo=${SD.periodo}`,{headers:{accept:"application/json"}});if(r.ok&&(r.headers.get("content-type")||"").includes("json"))d=await r.json()}catch(e){}
+  if(!d||!Array.isArray(d.sobe))d=sdLocal();SD.cache[key]={t:Date.now(),d};return d;
+}
+function sdSet(k,v){SD[k]=v;try{localStorage.setItem("ns_sd",JSON.stringify({tipo:SD.tipo,periodo:SD.periodo}))}catch(e){}renderSobeDesce()}
+async function renderSobeDesce(){
+  const el=$("hot");if(!el)return;
+  const per=SD.periodo==="hoje"?"Hoje":"Todos os tempos";
+  const head=`<div class="sd-h"><span class="sd-logo"><span class="su">sobe</span><i>.</i><span class="de">desc<span class="ee">e${HORNS}</span></span></span>
+    <div class="sd-seg" role="group" aria-label="Período do ranking">${[["hoje","clock","Hoje"],["sempre","ranking","Todos os tempos"]].map(([k,ic,t])=>`<button type="button" aria-controls="sd-painel" aria-pressed="${SD.periodo===k}" class="${SD.periodo===k?"on":""}" onclick="sdSet('periodo','${k}')"><span class="pl">${icon(ic,"in")}${t}</span></button>`).join("")}</div></div>
+    <div class="sd-tabs" role="tablist"><button role="tab" id="sd-tab-visitados" aria-controls="sd-painel" aria-selected="${SD.tipo==="visitados"}" class="${SD.tipo==="visitados"?"on":""}" onclick="sdSet('tipo','visitados')">${icon("eye","in")}Mais visitados</button><button role="tab" id="sd-tab-clicados" aria-controls="sd-painel" aria-selected="${SD.tipo==="clicados"}" class="${SD.tipo==="clicados"?"on":""}" onclick="sdSet('tipo','clicados')">${icon("cursor","in")}Mais clicados</button></div>`;
+  const keep=el.querySelector(".sd");el.innerHTML=head+(keep?keep.outerHTML:`<div class="sd" id="sd-painel" role="tabpanel"><div class="sd-load">carregando…</div></div>`);
+  { const p=el.querySelector(".sd"); if(p){p.id="sd-painel";p.setAttribute("role","tabpanel");p.setAttribute("aria-labelledby","sd-tab-"+SD.tipo)} }
+  const d=await sdDados();
+  const nome=SD.tipo==="visitados"?["visita","visitas"]:["clique","cliques"];
+  const n=v=>`${fmt(v)} ${v===1?nome[0]:nome[1]}`;
+  const varia=x=>SD.periodo==="hoje"?(x.ontem?`${x.hoje>=x.ontem?"+":"−"}${Math.abs(Math.round((x.hoje-x.ontem)/x.ontem*100))}%`:"novo hoje"):"";
+  const li=(x,u)=>{const a=byId(x.id);if(!a)return"";const v=SD.periodo==="hoje"?(u?x.hoje:x.ontem-x.hoje):x.total;
+    const sub=SD.periodo==="hoje"?(u?`${n(x.hoje)} · ${varia(x)}`:`−${fmt(x.ontem-x.hoje)} desde ontem`):(u?n(x.total):(x.total?n(x.total):"ninguém viu ainda"));
+    return`<button class="sd-i ${u?"up":"dn"}" onclick="openM('${a.id}')">${icon(u?"arrowUp":"arrowDown")}<span><u>${escapeHtml(a.t)}</u><small>${sub}</small></span></button>`};
+  const vazio=u=>`<p class="sd-vz">${u?(SD.periodo==="hoje"?`Ninguém ${SD.tipo==="visitados"?"abriu":"deu play em"} um meme hoje. Seja o primeiro!`:"Ainda sem dados."):(SD.periodo==="hoje"?"Nada caiu desde ontem.":"Ainda sem dados.")}</p>`;
+  const ups=d.sobe.map(x=>li(x,1)).join(""),dns=d.desce.map(x=>li(x,0)).join("");
+  el.querySelectorAll(".sd-nota").forEach(x=>x.remove());el.querySelector(".sd").outerHTML=`<div class="sd" id="sd-painel" role="tabpanel" aria-labelledby="sd-tab-${SD.tipo}"><div><h6 class="up">${icon("arrowUp")}sobe</h6>${ups||vazio(1)}</div><div><h6 class="dn">${icon("arrowDown")}desce</h6>${dns||vazio(0)}</div></div>${d.local?`<p class="sd-nota">Contando só os acessos deste navegador até o site entrar no ar.</p>`:""}`;
+}
+
 // ---- Linha do tempo (layout original) ----
 function renderYears(){
-  $("years").innerHTML=KEYS.map(y=>`<button class="y ${y===cur?'on':''}" onclick="go('${y}')">${y}</button>`).join("");
+  $("years").innerHTML=KEYS.map(y=>`<button class="y ${y===cur?'on':''}" onclick="go('${y}')">${yLab(y)}</button>`).join("");
   const ys=$("years"),el=ys.querySelector(".on");if(el)ys.scrollTo({left:el.offsetLeft-ys.clientWidth/2+el.clientWidth/2,behavior:"smooth"});
+}
+// prévia da linha do tempo: 3 memes sorteados a cada visita (e a cada volta ao ano), misturando vídeo e foto quando houver
+let PREV_SEED=Math.random();const PREV_SEED2=()=>{PREV_SEED=Math.random()};const PREV_CACHE={};
+function prevDoAno(k){
+  if(PREV_CACHE[k])return PREV_CACHE[k].map(id=>ALL.find(a=>a.id===id)).filter(Boolean);
+  const L=ALL.filter(a=>yKey(a.y)===k&&!a.mine);
+  const h=a=>{let x=PREV_SEED*1e6;for(const c of a.id)x=(x*31+c.charCodeAt(0))%1e9;return x/1e9};
+  const fotos=L.filter(a=>a.tipo==="foto").sort((a,b)=>h(a)-h(b)),vids=L.filter(a=>a.tipo!=="foto").sort((a,b)=>h(a)-h(b));
+  const out=[];if(fotos.length&&vids.length){out.push(vids.shift(),fotos.shift())}
+  const resto=[...vids,...fotos].sort((a,b)=>h(a)-h(b));while(out.length<3&&resto.length)out.push(resto.shift());
+  out.sort((a,b)=>h(a)-h(b));PREV_CACHE[k]=out.map(a=>a.id);return out;
 }
 function renderCur(){
   const i=KEYS.indexOf(cur),d=YEAR_INFO[cur],p=KEYS[i-1],n=KEYS[i+1];
-  $("prev").innerHTML=p?`<span class="arw">‹</span><b>${p}</b>`:"";
-  $("next").innerHTML=n?`<span class="arw">›</span><b>${n}</b>`:"";
+  $("prev").innerHTML=p?`<span class="arw">‹</span><b>${yLab(p)}</b>`:"";
+  $("next").innerHTML=n?`<span class="arw">›</span><b>${yLab(n)}</b>`:"";
   $("prev").onclick=()=>p&&go(p);$("next").onclick=()=>n&&go(n);
   const el=$("cur");el.classList.remove("fade");void el.offsetWidth;el.classList.add("fade");
-  const items=ALL.filter(a=>yKey(a.y)===cur).sort((a,b)=>b.views-a.views).slice(0,3);
-  const fill=items.map(a=>card(a));while(fill.length<3)fill.push(addCard(cur==="2020+"?2020:cur));
-  const exp=`setView('ano');$('browse').scrollIntoView({behavior:'smooth'})`;
-  el.innerHTML=`<div class="cur-t"><div class="cur-h"><button class="mnav" ${p?`onclick="go('${p}')"`:"disabled"} aria-label="Ano anterior">‹</button><div><h2 class="disp">${cur}</h2><div class="lema">${d.lema}</div></div><button class="mnav" ${n?`onclick="go('${n}')"`:"disabled"} aria-label="Próximo ano">›</button></div>
-    <p>${d.txt}</p><button class="btn dexp" onclick="${exp}">Explorar ${cur} →</button></div>
+  const items=prevDoAno(cur);
+  const fill=items.map(a=>card(a));while(fill.length<3)fill.push(addCard(parseInt(cur)));
+  const exp=`location.href='linha-do-tempo.html#'+encodeURIComponent('${cur}')`;
+  el.innerHTML=`<div class="cur-t"><div class="cur-h"><button class="mnav" ${p?`onclick="go('${p}')"`:"disabled"} aria-label="Ano anterior">‹</button><div><h2 class="disp">${yLab(cur)}</h2><div class="lema">${d.lema}</div></div><button class="mnav" ${n?`onclick="go('${n}')"`:"disabled"} aria-label="Próximo ano">›</button></div>
+    <p>${d.txt}</p><button class="btn dexp" onclick="${exp}">Explorar ${yLab(cur)} →</button></div>
     <div class="mini">${fill.join("")}</div>
-    <div class="mfoot"><span class="mdots">${KEYS.map(k=>`<i class="${k===cur?"on":""}"></i>`).join("")}</span><button class="btn mexp" onclick="${exp}">Ver tudo de ${cur} →</button></div>`;
+    <div class="mfoot"><span class="mdots">${KEYS.map(k=>`<i class="${k===cur?"on":""}"></i>`).join("")}</span><button class="btn mexp" onclick="${exp}">Ver tudo de ${yLab(cur)} →</button></div>`;
 }
 function renderGrid(){
   let list=ALL,title="Todos os registros";
-  if(view==="ano"&&!query){list=ALL.filter(a=>yKey(a.y)===cur);title="Registros de "+cur}
+  if(view==="ano"&&!query){list=ALL.filter(a=>yKey(a.y)===cur);title="Registros de "+yLab(cur)}
   if(query){const fold=x=>String(x).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();const q=fold(query);list=ALL.filter(a=>fold(a.t+" "+a.d+" "+a.c+" "+a.y).includes(q));title=`Busca: “${query}”`}
   if(cat!=="Todas")list=list.filter(a=>a.c===cat);
   list=[...list].sort((a,b)=>a.y-b.y||b.views-a.views);
@@ -330,7 +372,13 @@ function renderGrid(){
 (function swipe(){let x0=null,y0=0;const c=()=>document.getElementById("cur");
   document.addEventListener("touchstart",e=>{if(innerWidth>860||!c()||!c().contains(e.target)||e.target.closest(".mini"))return;x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
   document.addEventListener("touchend",e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)<50||Math.abs(dy)>Math.abs(dx))return;const i=KEYS.indexOf(cur),k=KEYS[i+(dx<0?1:-1)];if(k)go(k)},{passive:true});})();
-function go(y,scroll){cur=String(y);view="ano";query="";$("q").value="";cat="Todas";renderNav();renderYears();renderCur();renderGrid();if(scroll)$("tl").scrollIntoView({behavior:"smooth"})}
+// a cada 9 s troca a prévia do ano (se o ano tiver mais de 3 memes); pausa com o mouse em cima ou fora da tela
+setInterval(()=>{const el=document.querySelector("#cur .mini");if(!el||el.matches(":hover")||document.hidden)return;
+  const r=$("tl").getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;
+  if(ALL.filter(a=>yKey(a.y)===cur&&!a.mine).length<=3)return;
+  const old=PREV_CACHE[cur]||[];let tries=0;do{delete PREV_CACHE[cur];PREV_SEED2();}while(tries++<4&&prevDoAno(cur).map(a=>a.id).join()===old.join());
+  el.classList.add("swap");setTimeout(()=>{el.innerHTML=prevDoAno(cur).map(a=>card(a)).join("");el.classList.remove("swap")},260)},9000);
+function go(y,scroll){cur=String(y);marcarAnoVisto(cur);view="ano";query="";$("q").value="";cat="Todas";renderNav();renderYears();renderCur();renderGrid();if(scroll)$("tl").scrollIntoView({behavior:"smooth"})}
 
 // ---- Modal do meme com o player da época ----
 let player=null;
@@ -338,8 +386,8 @@ function openM(id){
   const a=byId(id);if(!a)return;
   const rel=ALL.filter(x=>x.id!==a.id).sort((p,q)=>Math.abs(p.y-a.y)-Math.abs(q.y-a.y)||q.views-p.views);
   openViewer({...a,e:a.art},{related:rel.map(r=>({...r,e:r.art})),onPick:openM,
-    onYear:y=>{go(yKey(y));$("tl").scrollIntoView({behavior:"smooth"})},
-    onSaveLink:u=>saveOldLink(a.id,u)});
+    onYear:y=>{location.href="linha-do-tempo.html#"+encodeURIComponent(yKey(y))},
+    onSaveLink:u=>saveOldLink(a.id,u),onClose:()=>{SD.cache={};renderSobeDesce()}});
 }
 function closeM(){player&&player.stop();$("modal").classList.remove("open")}
 new MutationObserver(()=>{const b=$("box");if(b&&!b.querySelector(".xclose")){const x=document.createElement("button");x.className="xclose";x.textContent="✕";x.setAttribute("aria-label","Fechar");x.onclick=closeM;b.prepend(x)}}).observe(document.getElementById("box"),{childList:true});
@@ -378,17 +426,19 @@ function dupCheck(url,name){
 
 // ---- Enviar meme ----
 function openSubmit(y){
-  if(needAccount())return;
+  if(barrarSemPapel("enviar um meme"))return;
+  if(needAccount("enviar um meme"))return;
+  if(!economiaPronta("enviar um meme"))return;
   $("box").className="box form";
-  if(rankIdx(NS.xp)<1){
+  if(nivelPatente()<1){
     $("box").innerHTML=`<div class="body lock"><div class="big">${icon("lock","big")}</div><h3>Enviar meme é a partir de <span style="color:${RANKS[1].color}">Banda larga</span></h3>
-    <p>Pra não virar bagunça, quem acabou de chegar ainda não envia virais. Você precisa de <b>${fmt(RANKS[1].xp)} XP</b> (tem ${fmt(NS.xp)}).<br>Ganhe XP visitando todo dia (+${XP_GAIN.visit}), abrindo pacotes (+${XP_GAIN.pack}) e completando o álbum. Quem é do Xet da live do Cid já entra como Banda larga.</p>
-    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn" href="album.html" style="text-decoration:none">${icon("pack")}ABRIR PACOTE</a><button class="btn ghost" onclick="openSignup()">Sou do Xet</button><button class="btn ghost" onclick="closeM()">Fechar</button></div></div>`;
+    <p>Pra não virar bagunça, quem acabou de chegar ainda não envia virais. Você precisa de <b>${fmt(RANKS[1].xp)} XP</b> (tem ${fmt(ECO.xp)}).<br>Ganhe XP visitando todo dia, abrindo pacotes e completando o álbum.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a class="btn" href="album.html" style="text-decoration:none">${icon("pack")}ABRIR PACOTE</a><button class="btn ghost" onclick="closeM()">Fechar</button></div></div>`;
     $("modal").classList.add("open");return;
   }
   const yrs=[];for(let i=2026;i>=1998;i--)yrs.push(i);
   $("box").innerHTML=`<div class="body f"><h2 class="disp">${icon("cloud","h")}Salvar viral no acervo</h2>
-   <p style="margin:4px 0 0">Se o link ou o nome já existir, não abre ticket novo. Aprovado pela moderação = <b>+${REWARD.approved} moedas</b> e +${XP_GAIN.approved} XP.</p>
+   <p style="margin:4px 0 0">Se o link ou o nome já existir, não abre ticket novo.</p>
    <label>Link original (YouTube, TikTok, X, Instagram…)</label><input id="sU" placeholder="https://www.youtube.com/watch?v=…" oninput="liveCheck()">
    <label>Nome do meme / viral</label><input id="sN" placeholder="ex: Luiza que está no Canadá" oninput="liveCheck()">
    <div class="two"><div><label>Ano que viralizou</label><select id="sY">${yrs.map(v=>`<option ${String(v)===String(y||"")?"selected":""}>${v}</option>`).join("")}</select></div>
@@ -408,33 +458,48 @@ function liveCheck(){
   if(r.lvl==="bad")el.innerHTML=`<div class="chk bad">${icon("xmark","in")}<b>${escapeHtml(h.t)}</b> ${where} (mesmo ${r.why}${r.s?`, ${Math.round(r.s*100)}% parecido`:""}). Não vamos abrir ticket repetido. ${h.where==="acervo"?`<button onclick="openM('${h.id}')">Ver no acervo</button>`:""}</div>`;
   else el.innerHTML=`<div class="chk warn">${icon("alert","in")}Parece com <b>${escapeHtml(h.t)}</b> (${Math.round(r.s*100)}% parecido), que ${where}. É outro meme?<label><input type="checkbox" id="sOk"> Não é o mesmo, enviar assim mesmo</label></div>`;
 }
-function sendSub(){
+// envio de verdade: POST /api/envios (patente Banda larga+); o servidor confere duplicado, campos e limite de abertos
+async function sendSub(){
   const url=$("sU").value.trim(),t=$("sN").value.trim(),y=+$("sY").value,c=$("sC").value,d=$("sD").value.trim();
   liveCheck();
   if(!url||!t){$("dup").innerHTML=`<div class="chk bad">Preencha pelo menos o link e o nome.</div>`;return}
   if(lastDup.lvl==="bad")return;
   if(lastDup.lvl==="warn"&&!($("sOk")&&$("sOk").checked))return toast("Confirme que não é o mesmo vídeo");
-  const ticket="#"+(400+NS.subs.length);
-  NS.subs.push({id:"s"+Date.now(),t,url,key:normUrl(url),y,c,d:d||"Enviado pela comunidade.",e:CAT_EMO[c],status:"pending",ts:Date.now(),ticket});nsSave();
-  closeM();toast(`Envio recebido! Ticket ${ticket} na fila da moderação ⏳`,3000);scheduleApprovals();
+  const go=$("sGo");go.disabled=true;
+  try{
+    await Api.enviar({url,titulo:t,ano:y,categoria:c,descricao:d||undefined},{silencioso:true});
+    closeM();toast("Envio recebido! Ele entra na fila da moderação ⏳",3600);
+  }catch(e){
+    go.disabled=false;
+    const campo=e&&e.campos?Object.entries(e.campos)[0]:null;
+    const msg=!e||e.status===0?"Sem conexão: o envio NÃO foi feito. Tente de novo.":e.status===429?(e.erro||"Muitos envios seguidos. Tente de novo daqui a pouco."):e.status===403?"Para enviar você precisa da patente Banda larga ou maior.":campo?`Confira o campo "${campo[0]}": ${campo[1]}.`:(e.erro||"Não consegui enviar. Tente de novo.");
+    $("dup").innerHTML=`<div class="chk bad">${escapeHtml(msg)}</div>`;
+  }
 }
-function approveMine(s){s.status="approved";s.approvedAt=nsToday();s.by=null;NS.approvedCount++;NS.coins+=REWARD.approved;nsSave();addXP(XP_GAIN.approved);
-  buildAll();renderAll();toast(`“${s.t}” foi aprovado pela moderação: +${REWARD.approved} moedas e +${XP_GAIN.approved} XP`,3800)}
+function approveMine(s){s.status="approved";s.approvedAt=nsToday();s.by=null;NS.approvedCount++;nsSave();
+  buildAll();renderAll();toast(`“${s.t}” foi aprovado pela moderação`,3800)}
 function scheduleApprovals(){NS.subs.filter(s=>s.status==="pending").forEach(s=>{const wait=Math.max(1500,8000-(Date.now()-s.ts));clearTimeout(s._t);setTimeout(()=>{const x=NS.subs.find(z=>z.id===s.id);if(x&&x.status==="pending")approveMine(x)},wait)})}
 
 // ---- Salvar link de viral antigo (+5) ----
 function saveOldLink(id,u){
-  if(rankIdx(NS.xp)<2)return`<div class="chk bad">Salvar link é a partir da patente Colaborador (${fmt(RANKS[2].xp)} XP). Você tem ${fmt(NS.xp)} XP.</div>`;
+  if(needAccount("salvar o link"))return`<div class="chk bad">Entre na sua conta para salvar o link.</div>`;
+  if(!ECO.pronto)return`<div class="chk warn">Carregando a sua patente… tente de novo em instantes.</div>`;
+  if(nivelPatente()<2)return`<div class="chk bad">Salvar link é a partir da patente Colaborador (${fmt(RANKS[2].xp)} XP). Você tem ${fmt(ECO.xp)} XP.</div>`;
   const key=normUrl(u);
   if(!key||!/^https?:\/\//i.test(u)&&!u.includes("."))return`<div class="chk bad">Cole um link válido.</div>`;
   const hit=pool().find(x=>x.key&&x.key===key);
   if(hit)return`<div class="chk bad">Esse link já está salvo em <b>${escapeHtml(hit.t)}</b>.</div>`;
-  NS.links[id]=u;NS.coins+=REWARD.oldLink;nsSave();addXP(XP_GAIN.oldLink);buildAll();renderAll();openM(id);toast(`Link salvo! +${REWARD.oldLink} moedas`);return"";
+  NS.links[id]=u;nsSave();buildAll();renderAll();openM(id);toast("Link salvo!");return"";
 }
 
 // ---- Moderação: patente maior modera patente menor ----
 function openMod(){
-  const r=rankIdx(NS.xp),canMod=r>=3;
+  if(barrarSemPapel("moderar",true))return;
+  if(!economiaPronta("moderar"))return;
+  location.href="/seppzone/#moderacao"; // a fila real (envios, votos, remoções) fica na área adm
+  return;
+  /* protótipo antigo abaixo (fila de exemplo no navegador), sem uso: sai na limpeza */
+  const r=nivelPatente(),canMod=r>=3;
   const mine=NS.subs.slice().reverse();
   const qs=SEED_QUEUE.map(q=>{const st=NS.modDone[q.id];const best=ALL.filter(a=>!a.by||a.id!==q.id).map(a=>({a,s:sim(q.t,a.t)})).sort((x,y)=>y.s-x.s)[0];
     const flag=best&&best.s>=.55?`<div class="flag">${icon("alert","in")}Possível duplicata de “${escapeHtml(best.a.t)}” (${Math.round(best.s*100)}% parecido)</div>`:"";
@@ -443,9 +508,10 @@ function openMod(){
      <div class="by">Ticket #${300+parseInt(q.id.slice(1))} · por <b>${q.by}</b> <span style="color:${RANKS[q.rank].color}">(${RANKS[q.rank].name})</span> · ${escapeHtml(normUrl(q.url))}</div><p>${escapeHtml(q.d)}</p>${flag}
      <div class="act">${st?`<span class="${st==='ok'?'st-approved':'st-pending'}">${st==='ok'?'Aprovado por você':'Recusado por você'}</span>`:canMod&&lower?`<button class="btn" onclick="moderate('${q.id}','ok')">${icon("check")}Aprovar</button><button class="btn ghost" onclick="moderate('${q.id}','no')">${icon("xmark")}Recusar${best&&best.s>=.55?" (duplicata)":""}</button>`:`<span style="font-size:12px;color:var(--mut)">${icon("lock","in")}${canMod?"Só quem tem patente maior que a do autor pode moderar.":`Moderação é a partir de <b style="color:${RANKS[3].color}">Moderador</b> (${fmt(RANKS[3].xp)} XP).`}</span>`}</div></div>`}).join("");
   $("box").className="box";
-  $("box").innerHTML=`<div class="body"><h2 class="disp">${icon("moderation","h")}Fila de moderação</h2><p>Quem tem patente mais alta modera quem tem patente mais baixa. Cada moderação vale +15 XP.</p>
-  ${mine.length?`<h4 class="h4">SEUS ENVIOS</h4>${mine.map(s=>`<div class="mine"><span>${icon(CAT_IC[s.c]||"video","in")}${escapeHtml(s.t)} <small>(${s.ticket})</small></span><span class="st-${s.status}">${s.status==="approved"?"aprovado · +"+REWARD.approved+" moedas":"aguardando moderação"}</span></div>`).join("")}<div style="height:14px"></div>`:""}
+  $("box").innerHTML=`<div class="body"><h2 class="disp">${icon("moderation","h")}Fila de moderação</h2><p>Quem tem patente mais alta modera quem tem patente mais baixa.</p>
+  ${mine.length?`<h4 class="h4">SEUS ENVIOS</h4>${mine.map(s=>`<div class="mine"><span>${icon(CAT_IC[s.c]||"video","in")}${escapeHtml(s.t)} <small>(${s.ticket})</small></span><span class="st-${s.status}">${s.status==="approved"?"aprovado":"aguardando moderação"}</span></div>`).join("")}<div style="height:14px"></div>`:""}
   ${linksQ(canMod)}
+  ${wikiQ(canMod)}
   <h4 class="h4">ENVIOS DA COMUNIDADE</h4>${qs}
   <button class="btn ghost" onclick="closeM()" style="margin-top:6px">Fechar</button></div>`;
   $("modal").classList.add("open");
@@ -457,22 +523,29 @@ function linksQ(canMod){
     <div class="by">por <b>${escapeHtml(x.by)}</b> · <a href="https://www.youtube.com/watch?v=${x.yt}" target="_blank" rel="noopener">youtu.be/${x.yt}</a></div>
     <div class="act">${x.status==="ok"?'<span class="st-approved">Aprovado: o vídeo já aparece no acervo</span>':x.status==="no"?'<span class="st-pending">Recusado</span>':canMod?`<button class="btn" onclick="moderarLink('${x.id}','ok')">${icon("check")}Aprovar</button><button class="btn ghost" onclick="moderarLink('${x.id}','no')">${icon("xmark")}Recusar</button>`:`<span style="font-size:12px;color:var(--mut)">${icon("clock","in")}Aguardando um moderador</span>`}</div></div>`).join("")}`;
 }
+// textos da Memepédia enviados pela comunidade (no site real, o moderador aprova em /dashboard/)
+const WIKI_CAMPO={origem:"De onde surgiu",porque:"Por que viralizou",usos:"Como é usado",rede:"Onde ficou famoso",hoje:"Onde está hoje",curiosidades:"Curiosidades"};
+function wikiQ(canMod){
+  const L=(NS.wikiSugs||[]).slice().reverse();if(!L.length)return"";
+  return `<h4 class="h4">MEMEPÉDIA: TEXTOS ENVIADOS</h4>${L.map(x=>`<div class="q ${x.status!=="pending"?"done":""}"><h4>${icon("book","in")}${escapeHtml(x.t)} <small style="color:var(--mut);font-family:Inter;font-size:12px">· ${WIKI_CAMPO[x.campo]||x.campo}</small></h4>
+    <div class="by">por <b>${escapeHtml(x.by)}</b>${x.fonte?` · <a href="${escapeHtml(x.fonte)}" target="_blank" rel="noopener nofollow">fonte</a>`:""}</div><p>${escapeHtml(x.texto)}</p>
+    <div class="act">${x.status==="ok"?'<span class="st-approved">Aprovado: já aparece na Memepédia</span>':x.status==="no"?'<span class="st-pending">Recusado</span>':canMod?`<button class="btn" onclick="moderarWiki('${x.id}','ok')">${icon("check")}Aprovar</button><button class="btn ghost" onclick="moderarWiki('${x.id}','no')">${icon("xmark")}Recusar</button>`:`<span style="font-size:12px;color:var(--mut)">${icon("clock","in")}Aguardando um moderador</span>`}</div></div>`).join("")}`;
+}
+function moderarWiki(id,v){const x=(NS.wikiSugs||[]).find(z=>z.id===id);if(!x)return;x.status=v;
+  if(v==="ok"){NS.wiki=NS.wiki||{};(NS.wiki[x.meme]=NS.wiki[x.meme]||{})[x.campo]={texto:x.texto,autor:x.by,fonte:x.fonte}}
+  nsSave();openMod()}
 function moderarLink(id,v){const x=(NS.linkSugs||[]).find(z=>z.id===id);if(!x)return;x.status=v;
-  if(v==="ok"){NS.links[x.meme]="https://youtu.be/"+x.yt;if(NS.acct&&x.by===NS.acct.user){NS.coins+=REWARD.oldLink;addXP(XP_GAIN.oldLink)}}
-  nsSave();addXP(15);buildAll();renderAll();openMod();toast(v==="ok"?"Link aprovado: o vídeo entrou no acervo.":"Link recusado.")}
-function moderate(id,v){NS.modDone[id]=v;NS.modDoneAt=NS.modDoneAt||{};NS.modDoneAt[id]=nsToday();nsSave();addXP(15);buildAll();renderAll();openMod();toast(v==="ok"?"Aprovado e adicionado ao acervo":"Recusado")}
+  if(v==="ok"){NS.links[x.meme]="https://youtu.be/"+x.yt;}
+  nsSave();buildAll();renderAll();openMod();toast(v==="ok"?"Link aprovado: o vídeo entrou no acervo.":"Link recusado.")}
+function moderate(id,v){NS.modDone[id]=v;NS.modDoneAt=NS.modDoneAt||{};NS.modDoneAt[id]=nsToday();nsSave();buildAll();renderAll();openMod();toast(v==="ok"?"Aprovado e adicionado ao acervo":"Recusado")}
 
 // ---- Ranking da galera ----
 function openRank(){
-  const me=NS.acct?[[NS.acct.user,NS.xp,NS.approvedCount,Object.keys(NS.owned).length,-1,true]]:[];
-  const list=[...RANK_USERS,...me].sort((a,b)=>b[1]-a[1]);
+  if(barrarSemPapel("ver o ranking"))return;
   $("box").className="box";
-  $("box").innerHTML=`<div class="body"><h2 class="disp">${icon("ranking","h")}Ranking da galera</h2><p>Quem mais salvou a internet brasileira. Envio aprovado, moderação, link salvo e carta nova contam XP.</p>
-  ${list.map((u,i)=>{const r=rankOf(u[1]);const av=u[5]?NS.acct.av:{fur:(u[4]*3)%10,pat:u[4]%5,eye:u[4]%5,acc:(u[4]*2)%9,clo:u[4]%7,bg:u[4]%8};
-   return`<div class="rk ${u[5]?'me':''}"><b>${i+1}</b><span class="av">${catSVG(av)}</span><span>${escapeHtml(u[0])}${u[5]?" (você)":""}<span class="pt" style="color:${r.color};background:${r.color}22">${r.name}</span>${u[6]?`<span class="pt" style="color:${RANKS[3].color};background:${RANKS[3].color}22">${u[6]}</span>`:""}</span><small>${u[2]} envios<br>${u[3]} cartas</small><em>${fmt(u[1])} XP</em></div>`}).join("")}
-  ${NS.acct?"":`<p style="margin-top:12px">Crie sua conta pra aparecer no ranking. <button class="btn" onclick="closeM();openSignup()">${icon("cat")}Criar conta</button></p>`}
+  $("box").innerHTML=`<div class="body"><h2 class="disp">${icon("ranking","h")}Ranking da galera</h2><p>Quem mais salvou a internet brasileira. Pacote aberto, carta nova e coleção completa contam.</p><div id="rkBox"></div>
   <button class="btn ghost" onclick="closeM()" style="margin-top:12px">Fechar</button></div>`;
-  $("modal").classList.add("open");
+  $("modal").classList.add("open");carregarRanking($("rkBox"),"xp");
 }
 
 function renderAll(){SUB=SUB_ITEMS;renderNav();renderPulse();renderYears();renderCur();renderGrid();renderRail()}
@@ -490,9 +563,15 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowRight"&&KEYS[i+1])go(KEYS[i+1]);
   if(e.key==="ArrowLeft"&&KEYS[i-1])go(KEYS[i-1]);
 });
-const t0=Date.now();setInterval(()=>{const m=Math.floor((Date.now()-t0)/60000);$("timer").textContent=m+"m explorando a história da internet"},15000);
-$("timer").textContent="0m explorando a história da internet";
-const h=location.hash.slice(1).replace("mais","+");if(YEAR_INFO[h])cur=h;
+// o tempo na página só aparece depois de 1 minuto; antes, "Você chegou agora"
+const t0=Date.now();
+const timerTick=setInterval(()=>{
+  const b=$("timerB"),el=$("timer");
+  if(!b||!el){clearInterval(timerTick);return} // faixa removida/redesenhada: não lança TypeError a cada 15 s
+  const m=Math.floor((Date.now()-t0)/60000);
+  b.textContent=m<1?"Você chegou agora":"Você está aqui há";el.textContent=m<1?"Bem-vindo ao museu.":m+" min passeando pelo museu.";
+},15000);
+const h=decodeURIComponent(location.hash.slice(1)).replace("mais","+");if(Object.hasOwn(YEAR_INFO,h))cur=h;else if(/^\d{4}$/.test(h))cur=yKey(h);
 renderWallet();renderAll();scheduleApprovals();
 if(["rank","mod","send","rand","tl","todos"].includes(h))setTimeout(()=>{ftGo(h);history.replaceState(null,"",location.pathname)},300);
 // centraliza os raios do fundo no logo

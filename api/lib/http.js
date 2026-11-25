@@ -1,5 +1,6 @@
 // Utilidades HTTP compartilhadas pelas rotas: resposta JSON, corpo, limpeza de texto, rate limit.
 import { timingSafeEqual } from 'node:crypto';
+import { saltosDeProxy } from './config.js';
 
 export const send = (res, code, body, headers = {}) => {
   const isStr = typeof body === 'string';
@@ -36,7 +37,28 @@ export const limited = (chave, max = 8) => {
 };
 setInterval(() => { const now = Date.now(); for (const [k, v] of hits) if (!v.some((t) => now - t < 600_000)) hits.delete(k); }, 600_000).unref();
 
-export const ipDe = (req) => (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+const PARECE_IP = /^[0-9a-fA-F:.]{2,45}$/;
+const limpaIp = (v) => String(v || '').trim().replace(/^::ffff:/i, '');
+
+/**
+ * IP do cliente. O X-Forwarded-For é uma lista que CADA proxy acrescenta à direita; o que está à esquerda
+ * pode ser forjado pelo cliente. Na cadeia cliente -> Cloudflare -> Traefik -> API, o Cloudflare acrescenta o IP real
+ * do cliente e o Traefik acrescenta o IP da borda do Cloudflare, então o IP do cliente é o item na posição `saltos`
+ * contando a partir da DIREITA (saltos = 2 => penúltimo). Itens à esquerda são ignorados.
+ * Cadeia com menos itens que o esperado: usa o último (o mais próximo de nós). Sem cabeçalho, item inválido
+ * ou saltos = 0: IP do socket.
+ */
+export function extrairIp(req, saltos = 2) {
+  const socket = limpaIp(req.socket?.remoteAddress);
+  if (!(saltos >= 1)) return socket;
+  const itens = String(req.headers['x-forwarded-for'] || '').split(',').map(limpaIp).filter(Boolean);
+  if (!itens.length) return socket;
+  const escolhido = itens.length >= saltos ? itens[itens.length - saltos] : itens[itens.length - 1];
+  return PARECE_IP.test(escolhido) ? escolhido : socket;
+}
+
+const SALTOS = saltosDeProxy(); // lido uma vez, na subida
+export const ipDe = (req) => extrairIp(req, SALTOS);
 
 export function ehAdmin(req, adminToken) {
   const h = req.headers.authorization || '';

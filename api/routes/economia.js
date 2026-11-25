@@ -2,7 +2,7 @@
 // Rotas com { autenticada: true } exigem usuário: hoje vem do auth-stub (X-Test-User, só com AUTH_STUB=1);
 // o login Discord vai fornecer o mesmo `ctx.usuario` e estas rotas não mudam.
 import { send, lerJson, limited } from '../lib/http.js';
-import { ErroNegocio, carteira, album, visita, comprarPacote, abrirPacote, reciclar, ranking } from '../economia/servico.js';
+import { ErroNegocio, carteira, album, visita, comprarPacote, abrirPacote, reciclar, ranking, tiposDePacote } from '../economia/servico.js';
 
 const A = { autenticada: true };
 const LIMITE_ESCRITAS = 60; // por usuário, janela de 10 min (além do limite da transação, que já é serial por usuário)
@@ -17,6 +17,7 @@ const ouErro = async (res, fn) => {
 
 export default function registrar(r) {
   r.get('/api/carteira', ({ res, pool, usuario }) => ouErro(res, async () => send(res, 200, await carteira(pool, usuario))), A);
+  r.get('/api/pacotes/tipos', ({ res, pool }) => ouErro(res, async () => send(res, 200, { itens: await tiposDePacote(pool) })), A);
   r.get('/api/album', ({ res, pool, usuario }) => ouErro(res, async () => send(res, 200, await album(pool, usuario))), A);
 
   r.post('/api/visita', ({ res, pool, usuario }) => ouErro(res, async () => {

@@ -1,0 +1,632 @@
+/* ===== Perfil público (perfil.html): estrutura comum + 5 visuais (Orkut, Fotolog, MSN, Twitter antigo, Facebook antigo) ===== */
+/* Visual inspirado em cada rede, sem logos oficiais. Cada layout tem cores fixas (como a linha do tempo), em claro e escuro. */
+:root{--Comum:#8e939c;--Relevante:#2fbf5b;--Raro:#2f86ff;--Relíquia:#a35cff;--Lendário:#e8a317;--Mítico:#ff4a4a}
+.pf-wrap{max-width:1120px;margin:0 auto;padding:18px 18px 40px}
+.pf-bt{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--line2);background:var(--panel2);color:var(--txt);font:700 13px Inter,sans-serif;cursor:pointer;text-decoration:none}
+.pf-bt .ico{width:16px;height:16px}
+.pf-bt.pri{background:#0a6a9a;border-color:#0a6a9a;color:#fff}
+.pf-bt:focus-visible,.pf button:focus-visible,.pf a:focus-visible,.pf textarea:focus-visible,.pf input:focus-visible,.pf-dlg :focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
+.pf-st{padding:40px 20px;text-align:center;color:var(--mut);font:500 15px Inter,sans-serif}
+.pf-st b{display:block;color:var(--txt);font-size:20px;margin-bottom:6px}
+.pf-st .pf-bt{margin-top:14px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+/* peças comuns */
+.pf{border-radius:18px;overflow:hidden}
+.pf *{box-sizing:border-box}
+.pf-gato{display:block;width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:#0002}
+.pf-gato svg{display:block;width:100%;height:100%}
+.pf-gato.ini{display:grid;place-items:center;font:800 48px Inter,sans-serif;color:#fff;background:#5b6b7d}
+.pf-mini{display:inline-block;width:36px;height:36px;flex:none;border-radius:8px;overflow:hidden;vertical-align:middle}
+.pf-mini svg{display:block;width:100%;height:100%}
+.pf-mini.ini{display:inline-grid;place-items:center;background:#5b6b7d;color:#fff;font:800 15px Inter,sans-serif}
+.pf-nome{font-weight:800;word-break:break-word}
+.pf-pat{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font:700 12px Inter,sans-serif;background:color-mix(in srgb,var(--pc) 16%,#fff);color:color-mix(in srgb,var(--pc) 60%,#000);border:1px solid color-mix(in srgb,var(--pc) 45%,#fff)}
+.pf-xp{height:8px;border-radius:5px;background:#0000001a;overflow:hidden;margin:6px 0 2px}
+.pf-xp i{display:block;height:100%;border-radius:5px;background:var(--pc,#0a6a9a)}
+.pf-cap{font-size:12px;opacity:.85}
+.pf-h{margin:0 0 10px;font:800 14px Inter,sans-serif}
+.pf-box{margin-bottom:14px}
+
+/* carta (mesmo desenho do álbum, menor) */
+.pf-carta{position:relative;display:flex;flex-direction:column;aspect-ratio:3/4.1;border-radius:12px;padding:5px;border:2px solid var(--rc);background:linear-gradient(160deg,#1a1f2c,#0b0e16);color:#ececf6;box-shadow:0 0 14px color-mix(in srgb,var(--rc) 45%,transparent);text-align:left;font-family:Inter,sans-serif}
+.pf-carta .tp{display:flex;justify-content:space-between;font:800 12px Rajdhani,Inter,sans-serif;letter-spacing:.5px;padding:1px 4px 3px}
+.pf-carta .tp em{font-style:normal;color:var(--rc);text-transform:uppercase}
+.pf-carta .art{flex:1;border-radius:7px;display:grid;place-items:center;position:relative;overflow:hidden;font-size:40px}
+.pf-carta .art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.pf-carta .art span{position:relative}
+.pf-carta .nm{margin-top:5px;border:1px solid color-mix(in srgb,var(--rc) 70%,#000);border-radius:5px;background:#06070b;text-align:center;font:700 11.5px/1.2 Rajdhani,Inter,sans-serif;text-transform:uppercase;padding:4px 3px;color:#fff;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pf-carta .ft{text-align:center;font-size:12px;color:#b5b5c8;padding:4px 0 1px;letter-spacing:.4px;text-transform:uppercase}
+.pf-carta.grande{max-width:230px;margin:0 auto}
+.pf-carta.grande .art{font-size:72px}
+.pf-carta.grande .nm{font-size:14px}
+.pf-carta.Mítico,.pf-carta.Lendário{box-shadow:0 0 22px color-mix(in srgb,var(--rc) 65%,transparent)}
+.pf-semfav{display:grid;place-items:center;aspect-ratio:3/4.1;max-width:230px;margin:0 auto;border-radius:12px;border:2px dashed currentColor;opacity:.75;text-align:center;padding:14px;font-size:13px}
+.pf-figs{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.pf-figs .pf-carta .art{font-size:30px}
+.pf-figs .pf-carta .nm{font-size:12px}
+.pf-mais{margin-top:10px}
+
+/* coleções (barrinhas) */
+.pf-cols{display:grid;gap:8px}
+.pf-col{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:12.5px}
+.pf-col .ic{font-size:20px;text-align:center}
+.pf-col b{display:block;font-weight:700}
+.pf-col .br{height:6px;border-radius:4px;background:#0000001a;overflow:hidden;margin-top:3px}
+.pf-col .br i{display:block;height:100%;background:var(--cc)}
+.pf-col small{font-weight:700;white-space:nowrap}
+
+/* recados */
+.pf-form{display:grid;gap:8px;margin-bottom:12px}
+.pf-form textarea{width:100%;min-height:72px;resize:vertical;padding:10px 12px;border-radius:8px;border:1px solid #0003;font:14px/1.4 inherit;font-family:inherit;background:#fff;color:#1d2129}
+.pf-form .ln{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pf-form .ln small{font-size:12px;opacity:.85}
+.pf-form button{min-height:44px;padding:0 18px;border-radius:8px;border:0;font:700 13px Inter,sans-serif;cursor:pointer}
+.pf-form button[disabled]{opacity:.6;cursor:default}
+.pf-rcs{display:grid;gap:10px;list-style:none;margin:0;padding:0}
+.pf-rc{display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:start;padding:10px;border-radius:8px}
+.pf-rc .pf-mini{width:44px;height:44px}
+.pf-rc .qm{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;font-size:12.5px}
+.pf-rc .qm a{font-weight:800;text-decoration:none;color:inherit}
+.pf-rc .qm a:hover{text-decoration:underline}
+.pf-rc .qm time{opacity:.8;font-size:12px}
+.pf-rc p{margin:4px 0 0;font-size:14px;line-height:1.45;word-break:break-word;white-space:pre-wrap}
+.pf-rc .ap{margin-left:auto;min-height:44px;min-width:56px;padding:0 10px;border-radius:6px;border:1px solid currentColor;background:none;color:inherit;font:600 12px Inter,sans-serif;cursor:pointer;opacity:.85}
+.pf-vazio{padding:12px;text-align:center;font-size:13px;opacity:.85}
+
+/* layout base em 3 colunas (cada visual reorganiza) */
+.pf-g{display:grid;grid-template-columns:230px minmax(0,1fr) 250px;gap:16px;padding:16px}
+.pf-c{min-width:0}
+
+/* ---------- ORKUT ---------- */
+.pf-orkut{background:#d4dded;color:#28334a;font-family:Verdana,Tahoma,sans-serif}
+.pf-orkut .pf-top{display:flex;align-items:center;gap:14px;padding:10px 16px;background:linear-gradient(#bfd0ea,#e8eefa);border-bottom:3px solid #c4006a}
+.pf-orkut .pf-top b{font:bold 26px Verdana,sans-serif;color:#c4006a;letter-spacing:-2px}
+.pf-orkut .pf-top nav{display:flex;flex-wrap:wrap;gap:12px;font-size:12px}
+.pf-orkut .pf-top nav span{color:#2f4f8f;text-decoration:underline}
+.pf-orkut .pf-card{background:#fff;border:1px solid #b9c9e6;border-radius:6px;padding:12px}
+.pf-orkut .pf-h{font:bold 13px Verdana,sans-serif;color:#2f4f8f;border-bottom:1px solid #d9e3f3;padding-bottom:6px}
+.pf-orkut .pf-nome{font-size:16px;color:#2f4f8f;margin:10px 0 2px}
+.pf-orkut .lk{display:grid;gap:4px;margin-top:10px;font-size:12px}
+.pf-orkut .lk span{color:#2f4f8f;text-decoration:underline}
+.pf-orkut .ola{font:bold 18px Verdana,sans-serif;color:#2f4f8f;margin:0 0 8px}
+.pf-orkut table{width:100%;border-collapse:collapse;font-size:12.5px}
+.pf-orkut td{padding:6px 8px;border-bottom:1px solid #e3eaf6;vertical-align:top}
+.pf-orkut td:first-child{width:38%;color:#556;text-align:right}
+.pf-orkut .sorte{background:#fff8d6;border:1px solid #ecd982;padding:8px 10px;border-radius:4px;font-size:12.5px;margin-bottom:12px}
+.pf-orkut .pf-rc{background:#eef3fb;border:1px solid #d9e3f3}
+.pf-orkut .pf-rc .qm a{color:#2f4f8f}
+.pf-orkut .pf-form button{background:#2f4f8f;color:#fff}
+.pf-orkut .pf-rc .ap{color:#9b0050}
+
+/* ---------- FOTOLOG ---------- */
+.pf-fotolog{background:#e6e6e6;color:#222;font-family:Verdana,Tahoma,sans-serif}
+.pf-fotolog .pf-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 18px;background:#262626;color:#fff;border-bottom:4px solid #8cc63f}
+.pf-fotolog .pf-top b{font:400 28px Georgia,serif;letter-spacing:-1px;text-transform:lowercase}
+.pf-fotolog .pf-top span{font-size:12px;color:#cfe9a8}
+.pf-fotolog .pf-g{grid-template-columns:minmax(0,1fr) 260px;max-width:980px;margin:0 auto}
+.pf-fotolog .post{background:#fff;border:1px solid #ccc;padding:16px;text-align:center}
+.pf-fotolog .post .pf-carta.grande,.pf-fotolog .post .pf-semfav{max-width:300px}
+.pf-fotolog .post h2{font:bold 16px Verdana,sans-serif;margin:14px 0 4px}
+.pf-fotolog .post p{font-size:12.5px;margin:0 0 6px;color:#444}
+.pf-fotolog .side{background:#fff;border:1px solid #ccc;padding:12px}
+.pf-fotolog .side .pf-gato{max-width:160px;margin:0 auto 8px;border-radius:0;border:5px solid #fff;outline:1px solid #bbb}
+.pf-fotolog .pf-h{font:bold 12px Verdana,sans-serif;color:#3e6610;border-bottom:1px dotted #aaa;padding-bottom:4px;text-transform:lowercase}
+.pf-fotolog .livro{margin-top:16px;text-align:left}
+.pf-fotolog .pf-rc{background:#f6f6f6;border-left:3px solid #8cc63f;border-radius:0}
+.pf-fotolog .pf-rc .qm a{color:#3e6610}
+.pf-fotolog .pf-form button{background:#262626;color:#fff;border-radius:0}
+.pf-fotolog .pf-form textarea{border-radius:0}
+.pf-fotolog .pf-carta{border-radius:4px}
+
+/* ---------- MSN ---------- */
+.pf-msn{background:radial-gradient(ellipse at 20% 0%,#7fd3ff 0%,#1a6fc2 45%,#0b2a5a 100%);color:#10233f;font-family:"Segoe UI",Tahoma,sans-serif;padding:16px}
+.pf-msn .win{background:#eef6fd;border:1px solid #7fb4e3;border-radius:10px;box-shadow:0 12px 30px #0006;overflow:hidden}
+.pf-msn .tit{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:linear-gradient(#e8f4ff,#bcd9f5);border-bottom:1px solid #8cb7e0;font-size:12.5px;color:#1b3a63}
+.pf-msn .tit i{font-style:normal;display:flex;gap:4px}
+.pf-msn .tit i span{width:22px;height:16px;border-radius:3px;background:#d7e8fa;border:1px solid #8cb7e0}
+.pf-msn .tit i span:last-child{background:#d9534f;border-color:#a33}
+.pf-msn .eu{display:flex;gap:14px;align-items:center;padding:14px 16px;background:linear-gradient(#fff,#e5f1fc);border-bottom:1px solid #c8def3}
+.pf-msn .eu .pf-gato{width:96px;flex:none;border-radius:10px;border:4px solid #4caf2a;box-shadow:0 0 0 1px #2c7d17,0 2px 8px #0003}
+.pf-msn .pf-nome{font-size:19px;color:#10233f}
+.pf-msn .pm{font-style:italic;color:#2f5a8a;font-size:13px;margin-top:3px}
+.pf-msn .st{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#2c6b17;margin-top:6px}
+.pf-msn .st:before{content:"";width:10px;height:10px;border-radius:50%;background:#4caf2a;box-shadow:0 0 0 2px #fff}
+.pf-msn .pf-g{grid-template-columns:minmax(0,1fr) 250px;padding:14px}
+.pf-msn .conversa{background:#fff;border:1px solid #c8def3;border-radius:6px;padding:12px}
+.pf-msn .pf-h{color:#1b3a63}
+.pf-msn .pf-rc{grid-template-columns:36px minmax(0,1fr);padding:6px 4px;border-bottom:1px dashed #d4e4f4;border-radius:0}
+.pf-msn .pf-rc .pf-mini{width:36px;height:36px}
+.pf-msn .pf-rc .qm a{color:#1b5e9e}
+.pf-msn .pf-rc .qm a:after{content:" diz:";font-weight:400;color:#556}
+.pf-msn .pf-form{grid-template-columns:minmax(0,1fr);border-top:1px solid #c8def3;padding-top:10px;margin:10px 0 0}
+.pf-msn .pf-form button{background:linear-gradient(#fdfdfd,#d9e8f6);border:1px solid #8cb7e0;color:#10233f}
+.pf-msn .lado{background:#fff;border:1px solid #c8def3;border-radius:6px;padding:12px}
+
+/* ---------- TWITTER (do passarinho) ---------- */
+.pf-twitter{background:#c0deed radial-gradient(ellipse 140px 44px at 12% 10%,#fff 60%,transparent 62%),radial-gradient(ellipse 170px 52px at 82% 6%,#fff 60%,transparent 62%) #c0deed;color:#333;font-family:"Lucida Grande",Arial,sans-serif;padding:18px}
+.pf-twitter .pf-g{grid-template-columns:minmax(0,1fr) 250px;padding:0;gap:0;background:#fff;border-radius:10px;overflow:hidden;max-width:960px;margin:0 auto}
+.pf-twitter .main{padding:18px 20px}
+.pf-twitter .cab{display:flex;gap:14px;align-items:center;border-bottom:1px solid #eee;padding-bottom:14px;margin-bottom:12px}
+.pf-twitter .cab .pf-gato{width:80px;flex:none;border-radius:6px}
+.pf-twitter .pf-nome{font-size:24px;color:#333}
+.pf-twitter .arroba{color:#4d4d4d;font-size:13px;opacity:1}
+.pf-twitter .bio{font-size:13px;margin-top:4px}
+.pf-twitter .lado{background:#ddeef6;border-left:1px solid #c0deed;padding:16px}
+.pf-twitter .nums{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0 14px;text-align:left}
+.pf-twitter .nums b{display:block;font-size:17px;color:#0a6e9c}
+.pf-twitter .nums span{font-size:12px;color:#555}
+.pf-twitter .pf-h{font:bold 13px "Lucida Grande",Arial,sans-serif;color:#333}
+.pf-twitter .pf-form{background:#f4f9fc;border:1px solid #d6e9f3;border-radius:6px;padding:10px}
+.pf-twitter .pf-form .q{font-size:15px;color:#555}
+.pf-twitter .pf-form button{background:#0a6e9c;color:#fff;border-radius:5px}
+.pf-twitter .pf-rc{border-bottom:1px solid #eee;border-radius:0;padding:10px 2px}
+.pf-twitter .pf-rc .qm a{color:#0a6e9c}
+.pf-twitter .pf-rc .ar{color:#0a6e9c}
+
+/* ---------- FACEBOOK (antigo) ---------- */
+.pf-facebook{background:#e9ebee;color:#1d2129;font-family:"Lucida Grande",Tahoma,Verdana,sans-serif}
+.pf-facebook .pf-top{display:flex;align-items:center;gap:12px;padding:8px 18px;background:#3b5998;border-bottom:1px solid #29487d;color:#fff}
+.pf-facebook .pf-top b{font:bold 22px "Helvetica Neue",Arial,sans-serif;letter-spacing:-1px}
+.pf-facebook .pf-g{grid-template-columns:200px minmax(0,1fr) 240px}
+.pf-facebook .pf-gato{border-radius:0;border:1px solid #ccc;background:#fff;padding:3px}
+.pf-facebook .info{font-size:12px;margin-top:10px;display:grid;gap:4px}
+.pf-facebook .info b{color:#3b5998}
+.pf-facebook .pf-nome{font-size:20px;color:#3b5998;margin:0 0 4px}
+.pf-facebook .abas{display:flex;gap:2px;border-bottom:1px solid #ccc;margin:8px 0 12px;font-size:12px}
+.pf-facebook .caixa{background:#fff;border:1px solid #dddfe2;border-radius:3px;padding:12px;margin-bottom:12px}
+.pf-facebook .pf-h{font:bold 12px "Lucida Grande",Tahoma,sans-serif;color:#4b4f56;background:#f6f7f9;margin:-12px -12px 10px;padding:7px 12px;border-bottom:1px solid #e5e5e5}
+.pf-facebook .pf-form button{background:#4267b2;color:#fff;border-radius:2px}
+.pf-facebook .pf-rc{border-bottom:1px solid #e9ebee;border-radius:0;padding:10px 0}
+.pf-facebook .pf-rc .qm a{color:#365899}
+.pf-facebook .pf-rc .rod{font-size:12px;color:#4b67a1;margin-top:4px}
+
+
+/* ---------- HOME PAGE ANOS 90 ---------- */
+.pf-homepage{background:#008080;color:#000;font-family:"Times New Roman",Times,serif;padding:14px}
+.pf-homepage .win{background:#c0c0c0;border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:inset -1px -1px #808080}
+.pf-homepage .tit{background:linear-gradient(90deg,#000080,#1084d0);color:#fff;font:bold 12px Tahoma,"MS Sans Serif",sans-serif;padding:4px 8px}
+.pf-homepage .pg{background:#ffffe0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ctext x='4' y='26' font-size='18' opacity='.18'%3E%E2%AD%90%3C/text%3E%3C/svg%3E");margin:4px;border:2px inset #808080;padding:14px}
+.pf-homepage h1.pf-nome{text-align:center;font:bold clamp(20px,3.4vw,32px) "Comic Sans MS","Comic Sans",cursive;color:#ff00ff;text-shadow:2px 2px 0 #ffff00;margin:0 0 6px}
+.pf-homepage .cont{text-align:center;font:13px "Courier New",monospace;margin:0 0 10px}
+.pf-homepage .cont b{background:#000;color:#0f0;padding:1px 5px}
+.pf-homepage .pf-g{padding:0}
+.pf-homepage .moldura{border:6px ridge #c0c0c0;background:#fff}
+.pf-homepage .pf-gato{border-radius:0}
+.pf-homepage .eu{text-align:center;font:bold 14px "Comic Sans MS",cursive;color:#000080;margin:6px 0}
+.pf-homepage .pf-h{font:bold 17px "Comic Sans MS",cursive;color:#800080;margin:14px 0 8px}
+.pf-homepage hr{border:0;height:6px;background:repeating-linear-gradient(90deg,#ff0 0 12px,#000 12px 24px);margin:16px 0}
+.pf-homepage .pf-rc{background:#fff;border:2px solid;border-color:#fff #808080 #808080 #fff;border-radius:0}
+.pf-homepage .pf-rc .qm a{color:#0000ee;text-decoration:underline}
+.pf-homepage .pf-form textarea{border-radius:0;border:2px inset #808080}
+.pf-homepage .pf-form button{background:#c0c0c0;color:#000;border:2px solid;border-color:#fff #404040 #404040 #fff;border-radius:0;font-family:Tahoma,sans-serif}
+.pf-homepage .melhor{font:12px "Courier New",monospace;text-align:center;margin-top:12px}
+.pf-homepage .pf-carta{border-radius:0}
+
+/* ---------- ICQ ---------- */
+.pf-icq{background:linear-gradient(180deg,#3a8ee6 0%,#7ec0f5 45%,#5fae3e 46%,#3f8f2a 100%);color:#1a1a1a;font-family:Tahoma,Verdana,sans-serif;padding:16px}
+.pf-icq .win{background:#ece9d8;border:3px solid #0a54d6;border-radius:8px 8px 0 0;box-shadow:0 10px 30px #0005}
+.pf-icq .tit{display:flex;justify-content:space-between;background:linear-gradient(#0a54d6,#2a7af0);color:#fff;font:bold 13px Tahoma,sans-serif;padding:6px 10px}
+.pf-icq .tit i{font-style:normal;letter-spacing:6px}
+.pf-icq .lado{text-align:center}
+.pf-icq .pf-gato{border:2px solid #7f9db9;border-radius:4px}
+.pf-icq .pf-nome{font-size:18px;margin:8px 0 2px}
+.pf-icq .uin{font:12px "Courier New",monospace;color:#333}
+.pf-icq .on{display:inline-block;margin-top:6px;font-size:12px;color:#1f6b16;font-weight:bold}
+.pf-icq .caixa{background:#fff;border:1px solid #7f9db9;padding:10px;margin-bottom:12px}
+.pf-icq .pf-h{font:bold 12px Tahoma,sans-serif;color:#0a246a;background:linear-gradient(#fff,#d6dff7);margin:-10px -10px 10px;padding:6px 10px;border-bottom:1px solid #7f9db9}
+.pf-icq .pf-rc{background:#f6faf3;border:1px solid #cfe3c4;border-radius:2px}
+.pf-icq .pf-rc .qm a{color:#1f6b16}
+.pf-icq .pf-rc .rod{font-size:12px;color:#1f6b16;font-weight:bold;margin-top:2px}
+.pf-icq .pf-form button{background:linear-gradient(#fff,#ece9d8);border:1px solid #003c74;color:#000;border-radius:3px}
+
+/* ---------- ASK.FM ---------- */
+.pf-ask{background:#e9f1f5;color:#222;font-family:"Helvetica Neue",Arial,sans-serif}
+.pf-ask .pf-top{padding:12px 18px;background:linear-gradient(#1679a0,#10607f);color:#fff}
+.pf-ask .pf-top b{font:800 24px "Helvetica Neue",Arial,sans-serif;letter-spacing:-1px}
+.pf-ask .caixa{background:#fff;border:1px solid #d5e3ea;border-radius:4px;padding:12px;margin-bottom:12px}
+.pf-ask .pf-gato{border-radius:50%;max-width:150px;margin:0 auto 8px}
+.pf-ask .pf-nome{font-size:19px;margin:0;text-align:center}
+.pf-ask .pf-cap{text-align:center}
+.pf-ask .nums{display:flex;justify-content:center;gap:18px;margin:10px 0;text-align:center;font-size:12px;color:#5f6b72}
+.pf-ask .nums b{display:block;font-size:18px;color:#c22a33}
+.pf-ask .pf-h{color:#1673a0}
+.pf-ask .pf-rc{display:block;background:#fff;border:1px solid #e3ecf0;padding:0;overflow:hidden}
+.pf-ask .pf-rc>.pf-mini{display:none}
+.pf-ask .pf-rc .qm{background:#f1f4f6;padding:8px 10px;color:#5f6b72}
+.pf-ask .pf-rc .qm:before{content:"Pergunta de";font-size:12px}
+.pf-ask .pf-rc p{padding:8px 10px 0;font-weight:600}
+.pf-ask .pf-rc .rod{padding:4px 10px 8px;font-size:12px;color:#c22a33;font-weight:700}
+.pf-ask .pf-form button{background:#d0353e;color:#fff;border-radius:4px}
+
+/* ---------- WHATSAPP ---------- */
+.pf-whatsapp{background:#d9d0c6;color:#111b21;font-family:"Segoe UI",Roboto,Helvetica,sans-serif}
+.pf-whatsapp .pf-g{grid-template-columns:minmax(0,1fr) 300px;gap:0;padding:0}
+.pf-whatsapp .chat{display:flex;flex-direction:column;min-height:420px;background:#efeae2 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='%23d9d1c7' stroke-width='1.2'%3E%3Ccircle cx='15' cy='15' r='6'/%3E%3Cpath d='M50 10l8 8-8 8-8-8z'/%3E%3Cpath d='M10 55q10-10 20 0'/%3E%3C/g%3E%3C/svg%3E")}
+.pf-whatsapp .topo{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#075e54;color:#fff}
+.pf-whatsapp .topo .pf-nome{font-size:16px;margin:0}
+.pf-whatsapp .topo small{font-size:12px;color:#d6f5e9}
+.pf-whatsapp .msgs{flex:1;display:flex;flex-direction:column;padding:12px 14px}
+.pf-whatsapp .msgs .pf-form{order:2;margin:auto 0 0;background:#f0f2f5;padding:8px;border-radius:12px;grid-template-columns:minmax(0,1fr)}
+.pf-whatsapp .msgs .pf-form textarea{border-radius:20px;min-height:48px;border:0}
+.pf-whatsapp .msgs .pf-form button{background:#008069;color:#fff;border-radius:22px}
+.pf-whatsapp .pf-rcs{display:flex;flex-direction:column-reverse;gap:8px;margin-bottom:12px}
+.pf-whatsapp .pf-rc{grid-template-columns:30px minmax(0,1fr);max-width:85%;background:#fff;border-radius:0 10px 10px 10px;box-shadow:0 1px 1px #0002;padding:6px 10px}
+.pf-whatsapp .pf-rc .pf-mini{width:30px;height:30px;border-radius:50%}
+.pf-whatsapp .pf-rc .qm a{color:#1f7a5a}
+.pf-whatsapp .pf-rc .rod{text-align:right;font-size:12px;color:#3d6a7d}
+.pf-whatsapp .pf-vazio{order:1;background:#fff8c4;border-radius:8px;align-self:center;font-size:12.5px}
+.pf-whatsapp .info{background:#f0f2f5;padding:12px;border-left:1px solid #d1d7db}
+.pf-whatsapp .caixa{background:#fff;border-radius:8px;padding:12px;margin-bottom:10px}
+.pf-whatsapp .cen{text-align:center}
+.pf-whatsapp .cen .pf-gato{border-radius:50%;max-width:150px;margin:0 auto 8px}
+.pf-whatsapp .cen .pf-nome{font-size:18px;margin:0}
+.pf-whatsapp .pf-h{color:#1f7a5a;font-size:13px}
+
+/* ---------- redes de vídeo curto, fotos e stories (Vine, Snapchat, Instagram, TikTok, Kwai, Bluesky) ---------- */
+.pf-vine,.pf-snapchat,.pf-instagram,.pf-tiktok,.pf-kwai,.pf-bluesky{font-family:-apple-system,"Segoe UI",Roboto,Inter,sans-serif}
+.pf .banner{height:110px}
+.pf .cab{display:flex;gap:18px;align-items:center;padding:0 20px;margin-top:-48px}
+.pf .cab .pf-gato{width:130px;flex:none;border-radius:50%;border:5px solid var(--fundo,#fff)}
+.pf .cab .tx{min-width:0;flex:1;padding-top:50px}
+.pf .cab .pf-nome{font-size:22px;margin:0}
+.pf .cab .arroba{font-size:13px;opacity:.8}
+.pf .cab .nums{display:flex;flex-wrap:wrap;gap:16px;margin:8px 0;font-size:13px}
+.pf .cab .nums b{margin-right:4px;font-size:16px}
+.pf .cab .bio{font-size:13px;margin-bottom:6px}
+.pf-dest{display:flex;gap:14px;overflow-x:auto;padding:14px 20px 4px;scrollbar-width:thin}
+.pf-dest .d{flex:none;width:76px;text-align:center;font-size:12px}
+.pf-dest .d i{display:grid;place-items:center;width:62px;height:62px;margin:0 auto 4px;border-radius:50%;font-style:normal;font-size:26px;background:var(--fundo2,#f2f2f2);box-shadow:0 0 0 2px var(--fundo,#fff),0 0 0 4px var(--cc)}
+.pf-dest .d b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pf-dest .d small{opacity:.85;font-size:12px}
+.pf-vine .pf-g,.pf-snapchat .pf-g,.pf-instagram .pf-g,.pf-tiktok .pf-g,.pf-kwai .pf-g,.pf-bluesky .pf-g{grid-template-columns:minmax(0,1fr) 300px}
+.pf .rcx .pf-rc{padding:8px 0;border-radius:0}
+
+.pf-instagram{--fundo:#fff;--fundo2:#fafafa;background:#fff;color:#262626}
+.pf-instagram .banner{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+.pf-instagram .cab .pf-gato{box-shadow:0 0 0 3px #dc2743}
+.pf-instagram .pf-figs{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.pf-instagram .pf-figs .pf-carta{border-radius:2px}
+.pf-instagram .pf-h{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#737373;border-top:1px solid #dbdbdb;padding-top:10px}
+.pf-instagram .pf-rc .qm a{color:#262626}
+.pf-instagram .pf-rc .rod,.pf-tiktok .pf-rc .rod,.pf-kwai .pf-rc .rod,.pf-bluesky .pf-rc .rod,.pf-vine .pf-rc .rod{font-size:12px;opacity:.8;margin-top:3px;font-weight:600}
+.pf-instagram .pf-form button{background:#0064d1;color:#fff}
+
+.pf-tiktok{--fundo:#121212;--fundo2:#1f1f1f;background:#121212;color:#fff}
+.pf-tiktok .banner{background:radial-gradient(ellipse at 30% 120%,#fe2c5555,transparent 60%),radial-gradient(ellipse at 70% -20%,#25f4ee55,transparent 60%),#000}
+.pf-tiktok .cab .pf-nome{text-shadow:-2px -1px 0 #25f4ee,2px 1px 0 #fe2c55}
+.pf-tiktok .pf-figs{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:3px}
+.pf-tiktok .pf-h{color:#fff}
+.pf-tiktok .pf-rc .qm a{color:#9ae8e6}
+.pf-tiktok .pf-form textarea{background:#2a2a2a;color:#fff;border-color:#444}
+.pf-tiktok .pf-form button{background:#e3204a;color:#fff}
+.pf-tiktok .pf-semfav{color:#ddd}
+
+.pf-kwai{--fundo:#fff4ea;--fundo2:#fff;background:#fff4ea;color:#2a1a0e}
+.pf-kwai .banner{background:linear-gradient(135deg,#c45200,#a33a00)}
+.pf-kwai .pf-h{color:#a33a00}
+.pf-kwai .pf-rc .qm a{color:#a33a00}
+.pf-kwai .pf-form button{background:#b34700;color:#fff;border-radius:999px}
+
+.pf-vine{--fundo:#f2faf7;--fundo2:#fff;background:#f2faf7;color:#1e2a26}
+.pf-vine .banner{background:#00805d}
+.pf-vine .cab .pf-gato{border-radius:14px}
+.pf-vine .cab .pf-nome{font-family:"Brush Script MT","Segoe Script",cursive;font-size:30px;color:#00704f}
+.pf-vine .pf-h{color:#00704f}
+.pf-vine .pf-rc .qm a{color:#00704f}
+.pf-vine .pf-form button{background:#00805d;color:#fff;border-radius:999px}
+
+.pf-snapchat{--fundo:#fffc00;--fundo2:#fff;background:#fffc00;color:#111}
+.pf-snapchat .banner{background:#fffc00;border-bottom:2px dashed #111}
+.pf-snapchat .cab .pf-gato{border:6px dotted #111;background:#fff}
+.pf-snapchat .pf-figs .pf-carta{border-radius:20px}
+.pf-snapchat .pf-c{background:#fff;border-radius:20px;padding:14px;box-shadow:0 4px 0 #111}
+.pf-snapchat .pf-rc .qm a{color:#6a2f91}
+.pf-snapchat .pf-form button{background:#111;color:#fffc00;border-radius:999px}
+
+.pf-bluesky{--fundo:#fff;--fundo2:#eef3f8;background:#fff;color:#0b0f14}
+.pf-bluesky .banner{background:linear-gradient(180deg,#0a5cc2,#5aa9ff)}
+.pf-bluesky .pf-h{color:#0a5cc2}
+.pf-bluesky .pf-rc{border-bottom:1px solid #e3e9f0}
+.pf-bluesky .pf-rc .qm a{color:#0b0f14}
+.pf-bluesky .pf-rc .ar{color:#0a5cc2}
+.pf-bluesky .pf-form button{background:#0a5cc2;color:#fff;border-radius:999px}
+/* diálogo de edição */
+.pf-dlg{margin:auto;max-height:calc(100vh - 24px);max-width:620px;width:calc(100% - 24px);border:0;border-radius:18px;padding:0;background:var(--panel);color:var(--txt);box-shadow:0 30px 80px #000a}
+.pf-dlg::backdrop{background:#0009}
+.pf-dlg form{padding:20px}
+.pf-dlg h2{margin:0 0 4px;font:800 22px "Baloo 2",Inter,sans-serif}
+.pf-dlg p{margin:0 0 14px;color:var(--mut);font-size:13.5px}
+.pf-dlg fieldset{border:0;padding:0;margin:0 0 16px}
+.pf-dlg legend{font:800 12px Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+.pf-lays{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.pf-lay{position:relative;display:flex;flex-direction:column;gap:6px;padding:10px;min-height:44px;border-radius:12px;border:2px solid var(--line2);cursor:pointer;font:700 13px Inter,sans-serif}
+.pf-lay input{position:absolute;opacity:0;pointer-events:none}
+.pf-lay small{font-weight:500;color:var(--mut);font-size:12px}
+.pf-lay:has(input:checked){border-color:#0a6a9a;box-shadow:0 0 0 3px color-mix(in srgb,#0a6a9a 30%,transparent)}
+.pf-lay:has(input:focus-visible){outline:3px solid #ffbf00;outline-offset:2px}
+
+/* ---- opções do diálogo: miniatura do perfil + nome na letra da época (sem logos) ---- */
+.pf-lay .nm{font-size:15px;line-height:1.15;color:var(--txt)}
+.mini{position:relative;display:block;height:78px;border-radius:8px;overflow:hidden;background:#ddd;box-shadow:inset 0 0 0 1px #0002}
+.mini b{position:absolute;display:block}
+.mini .av{position:absolute;width:30px;height:30px;overflow:hidden;border-radius:5px;left:10px;top:24px;z-index:2;background:#ccc}
+.mini .av svg{display:block;width:100%;height:100%}
+/* fundo padrão das "caixas" */
+.mini .x1,.mini .x2,.mini .x3{background:#fff;border-radius:3px}
+.mini .x1{left:48px;top:24px;right:10px;height:12px}
+.mini .x2{left:48px;top:42px;right:30px;height:8px}
+.mini .x3{left:10px;top:60px;right:10px;height:10px}
+.mini .t{left:0;right:0;top:0;height:16px}
+/* home page anos 90 */
+.mini-homepage{background:#008080}
+.mini-homepage .t{background:linear-gradient(90deg,#000080,#1084d0)}
+.mini-homepage .x1{background:#ffffe0;height:14px;box-shadow:inset 0 -3px #ff00ff}
+.mini-homepage .x2{background:#c0c0c0;border:1px solid #fff}
+.mini-homepage .x3{background:repeating-linear-gradient(90deg,#ff0 0 8px,#000 8px 16px);height:5px;top:64px}
+.mini-homepage .av{border-radius:0;border:2px ridge #c0c0c0}
+/* ICQ */
+.mini-icq{background:linear-gradient(180deg,#3a8ee6 0 55%,#5fae3e 55%)}
+.mini-icq .t{background:linear-gradient(#0a54d6,#2a7af0);height:12px;left:6px;right:6px;top:6px;border-radius:4px 4px 0 0}
+.mini-icq .x1,.mini-icq .x2,.mini-icq .x3{background:#ece9d8}
+.mini-icq .x1{box-shadow:inset 3px 0 #7ec850}
+/* Orkut */
+.mini-orkut{background:#d4dded}
+.mini-orkut .t{background:linear-gradient(#bfd0ea,#e8eefa);box-shadow:0 2px #c4006a}
+.mini-orkut .x1{background:#fff;box-shadow:inset 0 -2px #c4006a33}
+.mini-orkut .x2{background:#fff8d6}
+/* Fotolog */
+.mini-fotolog{background:#e6e6e6}
+.mini-fotolog .t{background:#262626;box-shadow:0 3px #8cc63f}
+.mini-fotolog .av{left:50%;margin-left:-15px;border-radius:0;border:3px solid #fff;outline:1px solid #bbb}
+.mini-fotolog .x1,.mini-fotolog .x2{display:none}
+.mini-fotolog .x3{left:30px;right:30px;height:6px;top:64px;background:#8cc63f}
+/* MSN */
+.mini-msn{background:radial-gradient(ellipse at 20% 0%,#7fd3ff,#1a6fc2 55%,#0b2a5a)}
+.mini-msn .t{background:linear-gradient(#e8f4ff,#bcd9f5);left:6px;right:6px;top:6px;height:12px;border-radius:5px 5px 0 0}
+.mini-msn .av{border:2px solid #4caf2a;border-radius:6px}
+.mini-msn .x1,.mini-msn .x2,.mini-msn .x3{background:#ffffffd9}
+/* Twitter antigo */
+.mini-twitter{background:#c0deed radial-gradient(ellipse 30px 9px at 20% 12%,#fff 60%,transparent 62%),radial-gradient(ellipse 34px 10px at 80% 10%,#fff 60%,transparent 62%) #c0deed}
+.mini-twitter .t{display:none}
+.mini-twitter .x1{background:#fff;left:8px;right:8px;top:18px;height:54px;border-radius:5px;z-index:1}
+.mini-twitter .x2{z-index:2;background:#0a6e9c;height:5px;top:30px}
+.mini-twitter .x3{z-index:2;background:#e5eef3;left:48px;top:44px;height:5px}
+/* Facebook antigo */
+.mini-facebook{background:#e9ebee}
+.mini-facebook .t{background:#3b5998;height:14px}
+.mini-facebook .av{border-radius:0;border:2px solid #fff}
+.mini-facebook .x1{box-shadow:inset 0 0 0 1px #dddfe2}
+.mini-facebook .x2{background:#4267b2;right:60px}
+/* Ask.fm */
+.mini-ask{background:#e9f1f5}
+.mini-ask .t{background:linear-gradient(#1679a0,#10607f)}
+.mini-ask .av{border-radius:50%}
+.mini-ask .x1{background:#f1f4f6;box-shadow:inset 0 0 0 1px #d5e3ea}
+.mini-ask .x2{background:#d0353e;right:70px}
+/* WhatsApp */
+.mini-whatsapp{background:#efeae2}
+.mini-whatsapp .t{background:#075e54;height:18px}
+.mini-whatsapp .av{width:14px;height:14px;top:2px;left:6px;border-radius:50%}
+.mini-whatsapp .x1{left:10px;right:50px;top:26px;height:12px;border-radius:0 6px 6px 6px}
+.mini-whatsapp .x2{left:56px;right:10px;top:44px;height:12px;background:#dcf8c6;border-radius:6px 0 6px 6px}
+.mini-whatsapp .x3{top:62px;height:10px;border-radius:8px;background:#fff;box-shadow:inset -14px 0 #00a884}
+/* Vine */
+.mini-vine{background:#f2faf7}
+.mini-vine .t{background:#00805d;height:24px}
+.mini-vine .av{border-radius:6px;top:12px;border:2px solid #f2faf7}
+.mini-vine .x1{left:48px;top:30px;right:auto;width:16px;height:16px;background:#1e2a26}
+.mini-vine .x2{left:68px;top:30px;right:auto;width:16px;height:16px;background:#00805d}
+.mini-vine .x3{left:88px;top:30px;right:auto;width:16px;height:16px;background:#1e2a26}
+/* Snapchat */
+.mini-snapchat{background:#fffc00}
+.mini-snapchat .t{display:none}
+.mini-snapchat .av{left:50%;margin-left:-17px;top:8px;width:34px;height:34px;border-radius:50%;outline:3px dotted #111;outline-offset:2px}
+.mini-snapchat .x1,.mini-snapchat .x2{display:none}
+.mini-snapchat .x3{top:56px;left:20px;right:20px;height:12px;border-radius:10px;box-shadow:0 2px #111}
+/* Instagram */
+.mini-instagram{background:#fff}
+.mini-instagram .t{height:18px;background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)}
+.mini-instagram .av{border-radius:50%;top:10px;box-shadow:0 0 0 2px #fff,0 0 0 4px #dc2743}
+.mini-instagram .x1,.mini-instagram .x2{background:#efefef}
+.mini-instagram .x1{top:24px}
+.mini-instagram .x3{background:linear-gradient(90deg,#c9c9c9 0 31%,transparent 31% 34.5%,#c9c9c9 34.5% 65.5%,transparent 65.5% 69%,#c9c9c9 69%);height:14px;top:56px;border-radius:0}
+/* TikTok */
+.mini-tiktok{background:#121212}
+.mini-tiktok .t{height:18px;background:radial-gradient(ellipse at 30% 140%,#fe2c5577,transparent 60%),radial-gradient(ellipse at 70% -40%,#25f4ee77,transparent 60%),#000}
+.mini-tiktok .av{border-radius:50%;top:10px;box-shadow:-2px -1px 0 #25f4ee,2px 1px 0 #fe2c55}
+.mini-tiktok .x1,.mini-tiktok .x2{background:#2a2a2a}
+.mini-tiktok .x1{top:24px}
+.mini-tiktok .x3{background:linear-gradient(90deg,#333 0 31%,transparent 31% 34.5%,#333 34.5% 65.5%,transparent 65.5% 69%,#fe2c55 69%);height:14px;top:56px;border-radius:0}
+/* Kwai */
+.mini-kwai{background:#fff4ea}
+.mini-kwai .t{height:18px;background:linear-gradient(135deg,#c45200,#a33a00)}
+.mini-kwai .av{border-radius:50%;top:10px;border:2px solid #fff4ea}
+.mini-kwai .x1{top:24px;background:#ffe0c2}
+.mini-kwai .x2{background:#b34700;right:70px}
+/* Bluesky */
+.mini-bluesky{background:#fff}
+.mini-bluesky .t{height:18px;background:linear-gradient(180deg,#0a5cc2,#5aa9ff)}
+.mini-bluesky .av{border-radius:50%;top:10px;border:2px solid #fff}
+.mini-bluesky .x1,.mini-bluesky .x3{background:#eef3f8}
+.mini-bluesky .x1{top:24px}
+.mini-bluesky .x2{background:#0a5cc2;right:70px}
+/* nome na letra típica de cada época (não é logo: só a fonte do período) */
+.l-homepage .nm{font-family:"Comic Sans MS","Comic Sans",cursive;color:#800080}
+.l-icq .nm{font-family:Tahoma,Verdana,sans-serif}
+.l-orkut .nm,.l-fotolog .nm{font-family:Verdana,Tahoma,sans-serif;font-size:14px}
+.l-msn .nm{font-family:"Segoe UI",Tahoma,sans-serif;font-weight:600}
+.l-twitter .nm,.l-facebook .nm{font-family:"Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif;font-size:14px}
+.l-ask .nm,.l-whatsapp .nm{font-family:"Helvetica Neue",Arial,sans-serif}
+.l-vine .nm{font-family:Georgia,"Times New Roman",serif;font-style:italic}
+.l-snapchat .nm{font-family:"Avenir Next","Trebuchet MS",sans-serif;font-weight:800}
+.l-instagram .nm,.l-tiktok .nm,.l-kwai .nm,.l-bluesky .nm{font-family:-apple-system,"Segoe UI",Roboto,Inter,sans-serif;font-weight:800;letter-spacing:-.2px}
+:root[data-theme="dark"] .l-homepage .nm{color:#ff9cff}
+.pf-dlg select{width:100%;min-height:44px;padding:0 10px;border-radius:10px;border:1px solid var(--line2);background:var(--panel2);color:var(--txt);font:600 14px Inter,sans-serif}
+.pf-dlg .rod{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-top:6px}
+.pf-dlg .erro{color:#c22a33;font-weight:700;font-size:13px;min-height:1em;margin:0 0 8px}
+:root[data-theme="dark"] .pf-dlg .erro{color:#ff8a8a}
+
+@media(max-width:900px){
+  .pf-g,.pf-facebook .pf-g{grid-template-columns:200px minmax(0,1fr)}
+  .pf-whatsapp .pf-g,.pf-vine .pf-g,.pf-snapchat .pf-g,.pf-instagram .pf-g,.pf-tiktok .pf-g,.pf-kwai .pf-g,.pf-bluesky .pf-g{grid-template-columns:minmax(0,1fr)}
+  .pf-homepage .pf-g,.pf-icq .pf-g,.pf-ask .pf-g{grid-template-columns:200px minmax(0,1fr)}
+  .pf-g>.pf-c:last-child{grid-column:1/-1}
+  .pf-fotolog .pf-g,.pf-msn .pf-g,.pf-twitter .pf-g{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:640px){
+  .pf-wrap{padding:12px 10px 30px}
+  .pf-g,.pf-facebook .pf-g,.pf-homepage .pf-g,.pf-icq .pf-g,.pf-ask .pf-g{grid-template-columns:minmax(0,1fr);padding:10px;gap:12px}
+  .pf .cab{flex-direction:column;text-align:center;margin-top:-56px;padding:0 12px}.pf .cab .tx{padding-top:0}.pf .cab .nums{justify-content:center}.pf .cab .pf-gato{width:110px}
+  .pf-dest{padding:12px}.pf-homepage,.pf-icq{padding:6px}
+  .pf-icq .lado .pf-gato,.pf-ask .pf-gato,.pf-homepage .moldura{max-width:180px;margin-left:auto;margin-right:auto}
+  .pf-orkut .pf-g>.pf-c:first-child .pf-gato,.pf-facebook .pf-g>.pf-c:first-child .pf-gato{max-width:180px;margin:0 auto}
+  .pf-msn{padding:8px}.pf-twitter{padding:8px}
+  .pf-msn .eu .pf-gato{width:76px}
+  .pf-twitter .main{padding:14px}
+  .pf-figs{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
+  .pf-orkut td:first-child{width:44%}
+}
+@media(prefers-reduced-motion:reduce){.pf *{transition:none!important;animation:none!important}}
+/* dentro do perfil o botão segue o visual da rede (fundo claro), mesmo com o site no modo escuro */
+.pf .pf-bt{background:#fff;color:#1d2129;border-color:#0003}
+.pf-instagram .pf-figs .pf-carta .art{font-size:clamp(30px,5vw,56px)}
+@media(max-width:520px){.pf-lays{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.pf-lay{padding:8px}.pf-lay .nm{font-size:13px}.pf-lay small{font-size:11px}}
+
+/* ---- editar perfil: corpo rola, rodapé (Cancelar/Salvar) fica sempre visível ---- */
+.pf-dlg{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow:hidden;padding:12px}
+.pf-dlg[open]{display:flex;flex-direction:column}
+.pf-dlg form{display:flex;flex-direction:column;min-height:0;flex:1;padding:0}
+.pf-dlg h2{margin:0;padding:8px 8px 4px}
+.pf-dlg .dlg-corpo{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 8px 8px;position:relative}
+.pf-dlg .rod{flex:none;position:sticky;bottom:0;margin:0;padding:12px 8px calc(4px + env(safe-area-inset-bottom,0px));background:var(--panel);border-top:1px solid var(--line2);box-shadow:0 -8px 14px -10px #0006}
+.pf-dlg .rod-bt{display:flex;gap:8px}
+.pf-dlg .rod .pf-bt{min-height:44px}
+.pf-lays,.pf-favs{position:relative}
+/* carta favorita: fileira horizontal de mini-cartas (radiogroup) */
+.pf-favs{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:6px 4px 10px;scrollbar-width:thin}
+.pf-fav{position:relative;flex:0 0 108px;display:block;cursor:pointer;scroll-snap-align:center;border:3px solid transparent;border-radius:15px;padding:2px}
+.pf-fav input{position:absolute;opacity:0;pointer-events:none}
+.pf-fav .pf-carta{width:100%;pointer-events:none}
+.pf-fav .pf-carta .art{font-size:32px}
+.pf-fav:has(input:checked){border-color:#0a6a9a;box-shadow:0 0 0 3px color-mix(in srgb,#0a6a9a 30%,transparent)}
+.pf-fav:has(input:checked)::after{content:"✓";position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#0a6a9a;color:#fff;font:800 14px Inter,sans-serif;z-index:2}
+.pf-fav:has(input:focus-visible){outline:3px solid #ffbf00;outline-offset:2px}
+.pf-fv-n{display:grid;place-items:center;aspect-ratio:3/4.1;border-radius:12px;border:2px dashed var(--line2);color:var(--txt);font:700 13px Inter,sans-serif;text-align:center;padding:6px}
+/* perfil: leitura mínima nas cartas e rótulos de coleções */
+.pf-dest{scrollbar-width:none}.pf-dest::-webkit-scrollbar{display:none}
+.pf-dest .d{width:84px;font-size:12px}
+.pf-dest .d b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:100%;line-height:1.2;min-height:2.4em}
+.pf-whatsapp .chat.vazio{min-height:0}
+@media(max-width:900px){
+  .pf-whatsapp .pf-g>.info{order:-1}
+  .pf-whatsapp .chat{min-height:320px}.pf-whatsapp .chat.vazio{min-height:0}
+  }
+@media(max-width:520px){
+  .pf-dlg{width:calc(100% - 16px);max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px);border-radius:16px;padding:10px}
+  .pf-dlg h2{padding:6px 6px 4px;font-size:20px}
+  .pf-dlg .dlg-corpo{padding:0 6px 6px}
+  .pf-dlg .rod{padding:10px 6px calc(2px + env(safe-area-inset-bottom,0px));gap:8px}
+  .pf-dlg .rod #btGato{flex:1 1 100%}
+  .pf-dlg .rod-bt{flex:1;gap:8px}.pf-dlg .rod-bt .pf-bt{flex:1}
+  /* os 15 visuais em grade de 2 colunas; o corpo do diálogo rola na vertical */
+  .pf-lays{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  /* legendas com altura uniforme (1, 2 ou 3 linhas não desalinham os cartões) */
+  .pf-lay .nm{min-height:2.3em}
+  .pf-lay small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.5em;line-height:1.25}
+}
+.pf-dlg fieldset{min-width:0}
+.pf-dlg legend .dica{text-transform:none;letter-spacing:0;font-weight:600;margin-left:6px}
+.pf-facebook .abas a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:6px 14px;background:#f2f2f2;border:1px solid #ccc;border-bottom:0;color:#3b5998;font-size:13px;text-decoration:none}
+.pf-facebook .abas a[aria-current="location"]{background:#fff;color:#333;font-weight:bold;margin-bottom:-1px}
+.pf-facebook .abas a:hover{text-decoration:underline}
+.pf-col small{font-size:12px}
+.pf-ask .pf-rc .qm time{opacity:1}
+/* WhatsApp no desktop: coluna lateral em 2 colunas, para o perfil não ficar 2x mais alto que os outros */
+@media(min-width:901px){
+  .pf-whatsapp .pf-g{grid-template-columns:minmax(0,1fr) 520px}
+  .pf-whatsapp .info{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-content:start}
+  .pf-whatsapp .info .caixa{margin:0}
+  .pf-whatsapp .info .cen,.pf-whatsapp .info .caixa:nth-child(3){grid-column:1/-1}
+  .pf-whatsapp .info .pf-figs{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .pf-whatsapp .info .pf-semfav{aspect-ratio:auto;min-height:96px;max-width:none}
+  .pf-whatsapp .info .pf-carta.grande{max-width:170px}
+  .pf-whatsapp .chat{min-height:0}
+}
+.pf-dlg fieldset:first-of-type>legend{position:sticky;top:0;z-index:3;width:100%;background:var(--panel);padding:6px 0;margin:0}
+
+/* ---- redes modernas: barra de XP na cor da patente (--pc) e um detalhe típico de cada rede ---- */
+.pf-vine .pf-xp,.pf-snapchat .pf-xp,.pf-instagram .pf-xp,.pf-tiktok .pf-xp,.pf-kwai .pf-xp,.pf-bluesky .pf-xp{--xp-tinta:#1d1d1d;height:14px;border:2px solid var(--xp-tinta);border-radius:999px;background:color-mix(in srgb,var(--pc,#0a6a9a) 10%,transparent);box-shadow:none}
+.pf-vine .pf-xp i,.pf-snapchat .pf-xp i,.pf-instagram .pf-xp i,.pf-tiktok .pf-xp i,.pf-kwai .pf-xp i,.pf-bluesky .pf-xp i{background:color-mix(in srgb,var(--pc,#0a6a9a) 50%,#000);border-radius:999px;box-shadow:none}
+.pf-tiktok .pf-xp{--xp-tinta:#fff;background:color-mix(in srgb,var(--pc,#0a6a9a) 8%,transparent)}
+.pf-tiktok .pf-xp i{background:var(--pc,#0a6a9a)}
+.pf .det{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:13px;font-weight:600;line-height:1.35}
+.pf .cab .det{justify-content:flex-start}
+.det-vine{color:#00704f}
+.det-vine .loop{display:inline-block;flex:none;width:72px;height:6px;border-radius:3px;background:#00805d33;overflow:hidden}
+.det-vine .loop i{display:block;height:100%;width:100%;background:#00805d;border-radius:3px;transform-origin:left center}
+.det-snapchat{display:inline-flex!important;padding:6px 14px;border-radius:999px;background:#111;color:#fffc00}
+.det-snapchat .chama{display:inline-block}
+.det-instagram{color:#262626}
+.det-instagram .cora{color:#c4123f;font-size:16px}
+.det-tiktok{display:block!important;overflow:hidden;width:0;min-width:100%}
+.det-tiktok .som{display:block;overflow:hidden;white-space:nowrap;border-radius:999px;background:#2a2a2a;color:#fff;padding:6px 0;max-width:100%}
+.det-tiktok .trilho{display:inline-flex;padding-left:12px}
+.det-tiktok .trilho span{padding-right:48px}
+.det-kwai{display:inline-flex!important;padding:6px 14px;border-radius:999px;background:#ffe3c2;color:#6b2d00}
+.det-kwai .moeda{display:inline-block}
+.det-bluesky{color:#0a5cc2}
+.det-bluesky .ok{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#0a5cc2;color:#fff;font-size:12px}
+@media(prefers-reduced-motion:no-preference){
+  .det-vine .loop i{transform:scaleX(0);animation:pf-loop 6s linear infinite;will-change:transform}
+  .det-snapchat .chama{animation:pf-chama 1.4s ease-in-out infinite}
+  .det-tiktok .trilho{animation:pf-som 14s linear infinite}
+  .det-kwai .moeda{animation:pf-moeda 3s linear infinite}
+}
+@keyframes pf-loop{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes pf-chama{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.18) rotate(3deg)}}
+@keyframes pf-som{to{transform:translateX(-50%)}}
+@keyframes pf-moeda{to{transform:rotateY(360deg)}}
+@media(max-width:640px){.pf .cab .det{justify-content:center;text-align:center}}
+
+/* ===== botões do perfil (sem tarja): copiar link para todos, trocar visual e lápis de edição para o dono ===== */
+.pf-carta .art span[hidden]{display:none}
+.pf-tools{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.pf-tb{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;cursor:pointer;font:700 13px/1 var(--tf,Inter),sans-serif;
+  background:var(--tbg,#fff);color:var(--tfg,#1d2129);border:var(--tbd,1px solid #0002);border-radius:var(--trad,12px);box-shadow:var(--tsh,0 2px 6px #0001);transition:transform .12s,filter .12s}
+.pf-tb:hover{transform:translateY(-1px);filter:brightness(1.04)}
+.pf-tb:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
+.pf-tb .ico{width:17px;height:17px}
+.pf-tb.ok{background:#17703d;color:#fff;border-color:#17703d}
+/* cada rede com o seu botão */
+.t-homepage{--tf:"Comic Sans MS","Comic Sans",cursive;--tbg:#c0c0c0;--tfg:#000;--tbd:2px outset #fff;--trad:0;--tsh:none}
+.t-icq{--tf:Tahoma;--tbg:linear-gradient(#fff,#ece9d8);--tfg:#0a246a;--tbd:1px solid #003c74;--trad:3px}
+.t-orkut{--tf:Verdana;--tbg:#fff;--tfg:#2f4f8f;--tbd:1px solid #b9c9e6;--trad:6px}
+.t-fotolog{--tf:Verdana;--tbg:#262626;--tfg:#cfe9a8;--tbd:0;--trad:0;--tsh:inset 0 -3px #8cc63f}
+.t-msn{--tf:"Segoe UI",Tahoma;--tbg:linear-gradient(#fdfdfd,#d9e8f6);--tfg:#10233f;--tbd:1px solid #8cb7e0;--trad:6px}
+.t-twitter{--tf:"Lucida Grande",Arial;--tbg:#fff;--tfg:#0a6e9c;--tbd:1px solid #c0deed;--trad:5px}
+.t-facebook{--tf:"Lucida Grande",Tahoma;--tbg:#f6f7f9;--tfg:#4b4f56;--tbd:1px solid #ced0d4;--trad:2px}
+.t-ask{--tf:"Helvetica Neue",Arial;--tbg:#fff;--tfg:#1673a0;--tbd:1px solid #c6dce6;--trad:4px}
+.t-whatsapp{--tf:"Segoe UI",Roboto;--tbg:#008069;--tfg:#fff;--tbd:0;--trad:22px}
+.t-vine{--tf:"Helvetica Neue",Arial;--tbg:#00805d;--tfg:#fff;--tbd:0;--trad:999px}
+.t-snapchat{--tf:"Avenir Next","Trebuchet MS";--tbg:#fffc00;--tfg:#111;--tbd:2px solid #111;--trad:999px;--tsh:0 3px 0 #111}
+.t-instagram{--tf:-apple-system,"Segoe UI";--tbg:#fff;--tfg:#262626;--tbd:1px solid #dbdbdb;--trad:8px}
+.t-tiktok{--tf:-apple-system,"Segoe UI";--tbg:#121212;--tfg:#fff;--tbd:1px solid #333;--trad:8px;--tsh:-2px -1px 0 #25f4ee,2px 1px 0 #fe2c55}
+.t-kwai{--tf:-apple-system,"Segoe UI";--tbg:#fff;--tfg:#a33a00;--tbd:1px solid #ffd2a8;--trad:999px}
+.t-bluesky{--tf:Inter,-apple-system;--tbg:#fff;--tfg:#0a5cc2;--tbd:1px solid #d4dde8;--trad:999px}
+/* lápis no cantinho (foto, carta favorita) */
+.pf-edw{position:relative;display:block}
+.pf-edw-av{flex:none}
+.pf-lapis{position:absolute;right:-8px;bottom:-8px;z-index:4;width:44px;height:44px;display:grid;place-items:center;padding:0;border-radius:50%;border:2px solid #fff;background:#0a6a9a;color:#fff;cursor:pointer;box-shadow:0 3px 10px #0005;transition:transform .12s}
+.pf-lapis:hover{transform:scale(1.08)}
+.pf-lapis:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
+.pf-lapis .ico{width:19px;height:19px}
+.pf-edw-fav{max-width:230px;margin:0 auto}
+.pf-fotolog .post .pf-edw-fav{max-width:300px}
+.pf-edw-fav .pf-lapis{top:42%;right:-12px;bottom:auto}
+/* sem carta favorita: o próprio quadro vira botão */
+button.pf-semfav{display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;width:100%;background:none;color:inherit;font:600 13px Inter,sans-serif;cursor:pointer}
+button.pf-semfav .ico{width:26px;height:26px}
+button.pf-semfav:hover{opacity:1;background:#0000000d}
+button.pf-semfav:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
+@media(max-width:640px){.pf-tools{justify-content:stretch}.pf-tb{flex:1;justify-content:center}}

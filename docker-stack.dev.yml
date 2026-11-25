@@ -25,9 +25,16 @@ services:
       DB_USER: naosalvo_dev
       DB_PASSWORD_FILE: /run/secrets/naosalvo_dev_db_password
       ADMIN_TOKEN_FILE: /run/secrets/naosalvo_dev_admin_token
+      DISCORD_CLIENT_ID_FILE: /run/secrets/naosalvo_dev_discord_client_id
+      DISCORD_CLIENT_SECRET_FILE: /run/secrets/naosalvo_dev_discord_client_secret
+      DISCORD_GUILD_ID_FILE: /run/secrets/naosalvo_discord_guild_id
+      DISCORD_REDIRECT_URI: https://naosalvo-dev.fishlab.com.br/api/auth/discord/callback
     secrets:
       - naosalvo_dev_db_password
       - naosalvo_dev_admin_token
+      - naosalvo_dev_discord_client_id
+      - naosalvo_dev_discord_client_secret
+      - naosalvo_discord_guild_id
     deploy:
       replicas: 1
       labels:
@@ -45,6 +52,12 @@ secrets:
   naosalvo_dev_db_password:
     external: true
   naosalvo_dev_admin_token:
+    external: true
+  naosalvo_dev_discord_client_id:
+    external: true
+  naosalvo_dev_discord_client_secret:
+    external: true
+  naosalvo_discord_guild_id:
     external: true
 
 networks:

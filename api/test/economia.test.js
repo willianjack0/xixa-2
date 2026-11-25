@@ -10,6 +10,9 @@ import { visita } from '../economia/servico.js';
 const skip = semBanco();
 let db, s;
 const como = (apelido) => ({ headers: { 'X-Test-User': apelido } });
+const GATO_OK = { fur: 1, pat: 0, eye: 2, acc: 3, clo: 0, bg: 4 };
+/** fim do cadastro: salvar o gato pela 1ª vez entrega o pacote de boas-vindas (a visita não dá mais) */
+const cadastrar = (u) => s.patch('/api/eu', { avatar_gato: GATO_OK }, como(u));
 const GET = (c, u) => s.get(c, como(u));
 const POST = (c, corpo, u) => s.post(c, corpo, como(u));
 
@@ -49,16 +52,16 @@ test('sem login: 401; header inválido: 401; ranking é público', { skip }, asy
   assert.equal((await s.get('/api/ranking')).status, 200);
 });
 
-test('visita: XP, pacote diário e boas-vindas; idempotente no mesmo dia', { skip }, async () => {
+test('visita: XP e pacote diário (sem boas-vindas); idempotente no mesmo dia', { skip }, async () => {
   const v1 = await POST('/api/visita', {}, 'visitante');
   assert.equal(v1.status, 200);
   assert.equal(v1.json.primeira_visita_do_dia, true); assert.equal(v1.json.xp_ganho, 10);
-  assert.deepEqual(v1.json.pacotes_ganhos.sort(), ['boas', 'diario']);
+  assert.deepEqual(v1.json.pacotes_ganhos, ['diario']);
   const v2 = await POST('/api/visita', {}, 'visitante');
   assert.equal(v2.json.primeira_visita_do_dia, false); assert.equal(v2.json.xp_ganho, 0); assert.deepEqual(v2.json.pacotes_ganhos, []);
   const c = (await GET('/api/carteira', 'visitante')).json;
   assert.equal(c.xp, 10); assert.equal(c.moedas, 0); assert.equal(c.patente.id, 'discado');
-  assert.deepEqual(c.pacotes.map((p) => [p.tipo, p.quantidade]).sort(), [['boas', 1], ['diario', 1]]);
+  assert.deepEqual(c.pacotes.map((p) => [p.tipo, p.quantidade]), [['diario', 1]]);
   await conferirRazao('visitante');
 });
 
@@ -95,7 +98,7 @@ test('comprar: valida, cobra pelo razão e guarda no estoque', { skip }, async (
 
 test('abrir: sorteio gravado e reproduzível, cartas + XP no razão, repetidas contadas', { skip }, async () => {
   const u = 'abridor';
-  await POST('/api/visita', {}, u);
+  await POST('/api/visita', {}, u); await cadastrar(u);
   const r = await POST('/api/pacotes/abrir', { tipo: 'boas' }, u);
   assert.equal(r.status, 200);
   assert.equal(r.json.cartas.length, 5);
@@ -147,7 +150,7 @@ test('concorrência: 6 compras com saldo para 1 = exatamente 1 sucesso, saldo nu
 
 test('concorrência: o mesmo pacote aberto 5 vezes ao mesmo tempo abre uma só', { skip }, async () => {
   const u = 'corrida';
-  await POST('/api/visita', {}, u);
+  await POST('/api/visita', {}, u); await cadastrar(u);
   const [e] = await q("SELECT id FROM pacotes_estoque WHERE usuario_id = $1 AND tipo = 'boas'", [await uid(u)]);
   const rs = await Promise.all(Array.from({ length: 5 }, () => POST('/api/pacotes/abrir', { estoque_id: Number(e.id) }, u)));
   assert.deepEqual(rs.map((r) => r.status).sort(), [200, 404, 404, 404, 404]);
@@ -160,7 +163,7 @@ test('concorrência: o mesmo pacote aberto 5 vezes ao mesmo tempo abre uma só',
 
 test('atomicidade: falha no meio da abertura desfaz TUDO (estoque, sorteio, cartas, razão, cache)', { skip }, async () => {
   const u = 'atomico';
-  await POST('/api/visita', {}, u);
+  await POST('/api/visita', {}, u); await cadastrar(u);
   const id = await uid(u);
   const antes = await conferirRazao(u);
   // sabotagem: o XP de carta nova explode, depois do pacote e das cartas já terem sido gravados na transação
@@ -234,7 +237,7 @@ test('reciclar: repetidas viram moeda pelo valor da tabela de regras; fica 1 de 
 
 test('GET /api/album e /api/carteira: formato', { skip }, async () => {
   const u = 'albumista';
-  await POST('/api/visita', {}, u);
+  await POST('/api/visita', {}, u); await cadastrar(u);
   await POST('/api/pacotes/abrir', { tipo: 'boas' }, u);
   const a = (await GET('/api/album', u)).json;
   assert.ok(a.colecoes.length >= 8);

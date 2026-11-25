@@ -1,4 +1,4 @@
-// Aviso (não falha) quando css/js muda sem trocar o ?v= em index.html, album.html e admin/index.html.
+// Aviso (não falha) quando css/js muda sem trocar o ?v= em index.html, album.html e seppzone/index.html.
 // Uso: node scripts/ci/check-asset-versions.mjs [baseRef] [--strict]
 // baseRef padrão: origin/$GITHUB_BASE_REF no CI, senão origin/dev. --strict transforma aviso em erro.
 import { execFileSync } from 'node:child_process';
@@ -11,7 +11,7 @@ const strict = process.argv.includes('--strict');
 const base = process.argv.slice(2).find(a => !a.startsWith('--'))
   || (process.env.GITHUB_BASE_REF ? `origin/${process.env.GITHUB_BASE_REF}` : 'origin/dev');
 const git = (...a) => execFileSync('git', a, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
-const PAGES = ['index.html', 'album.html', 'admin/index.html'];
+const PAGES = ['index.html', 'album.html', 'seppzone/index.html'];
 
 let changed;
 try { changed = git('diff', '--name-only', `${base}...HEAD`).split('\n').filter(Boolean); }

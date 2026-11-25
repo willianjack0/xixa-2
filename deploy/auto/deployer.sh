@@ -20,6 +20,9 @@ deploy_env() {
   head=$(git -C "$dir" rev-parse HEAD)
   short=$(echo "$head" | cut -c1-7)
   log "[$branch] publicando $short em $stack"
+  # número do PR: vem do título do commit de merge ("Merge pull request #60 from ..."); vazio se não for merge de PR
+  pr=$(git -C "$dir" log -1 --format=%s | sed -n 's/^Merge pull request #\([0-9][0-9]*\).*/\1/p')
+  built_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
   # guarda a versão atual para poder voltar
   docker tag "naosalvo-api:$tag" "naosalvo-api:$tag-prev" 2>/dev/null
@@ -27,7 +30,7 @@ deploy_env() {
 
   # o build da API falha se o server.js tiver erro de sintaxe (node --check no Dockerfile)
   docker build -q -t "naosalvo-api:$tag" "$dir/api" > /dev/null || { log "[$branch] build da API falhou, nada foi publicado"; return 1; }
-  docker build -q -t "naosalvo-frontend:$tag" "$dir" > /dev/null || { log "[$branch] build do site falhou, nada foi publicado"; return 1; }
+  docker build -q --build-arg "BUILD_BRANCH=$branch" --build-arg "BUILD_SHA=$short" --build-arg "BUILD_PR=$pr" --build-arg "BUILD_AT=$built_at" -t "naosalvo-frontend:$tag" "$dir" > /dev/null || { log "[$branch] build do site falhou, nada foi publicado"; return 1; }
 
   docker stack deploy --resolve-image never --detach=true -c "/config/stack.$branch.yml" "$stack" > /dev/null 2>&1 || { log "[$branch] stack deploy falhou"; return 1; }
   for svc in web api; do

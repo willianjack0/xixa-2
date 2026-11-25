@@ -8,7 +8,8 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 import pg from 'pg';
-import { tamanhoDoPool } from './lib/config.js';
+import { tamanhoDoPool, segredo } from './lib/config.js';
+export { segredo };
 
 const PASTA = join(dirname(fileURLToPath(import.meta.url)), 'migrations');
 const TRAVA = 7_435_001; // chave arbitrária do pg_advisory_lock
@@ -18,10 +19,6 @@ const STATEMENT_TIMEOUT = process.env.MIGRATE_STATEMENT_TIMEOUT || '120s'; // du
 const ESPERA_TRAVA = process.env.MIGRATE_ADVISORY_TIMEOUT || '30s';       // espera pela trava entre réplicas
 const NOME = /^(\d{3,})_([a-z0-9_]+)\.sql$/;
 
-export const segredo = (nome) => {
-  const arq = process.env[nome + '_FILE'];
-  return arq ? readFileSync(arq, 'utf8').trim() : (process.env[nome] || '');
-};
 
 export const criarPoolDoAmbiente = (extra = {}) => new pg.Pool({
   host: process.env.DB_HOST || 'postgres',

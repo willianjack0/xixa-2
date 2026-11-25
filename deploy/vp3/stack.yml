@@ -1,0 +1,95 @@
+# Não Salvo em produção no vp3 (Swarm de um nó, Traefik + Postgres compartilhados). Dá para colar no Portainer
+# (Stacks > Add stack > Web editor) ou subir pela linha de comando:
+#   NAOSALVO_TAG=<sha7> docker stack deploy --with-registry-auth -c deploy/vp3/stack.yml naosalvo
+# Variável de ambiente (no Portainer: "Environment variables"): NAOSALVO_TAG = tag das imagens (padrão: latest).
+# Pré-requisitos (roteiro completo em docs/migracao-vp3.md):
+#   - imagens willianjack0/naosalvo-api e willianjack0/naosalvo-web publicadas (deploy/vp3/build-push.sh);
+#   - banco e usuário "naosalvo" criados no postgres_postgres e dump restaurado;
+#   - secrets externos criados à mão (valores nunca ficam no repositório):
+#       naosalvo_db_password  naosalvo_admin_token  naosalvo_discord_client_id
+#       naosalvo_discord_client_secret  naosalvo_discord_guild_id
+#   - DNS naosalvo.fishlab.com.br apontando para este servidor (certificado sai pelo Traefik, desafio HTTP).
+version: '3.8'
+
+services:
+  web:
+    image: willianjack0/naosalvo-web:${NAOSALVO_TAG:-latest}
+    networks:
+      - jknet
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+      update_config:
+        order: start-first
+        failure_action: rollback
+        monitor: 20s
+      rollback_config:
+        order: start-first
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=jknet"
+        - "traefik.http.routers.naosalvo.rule=Host(`naosalvo.fishlab.com.br`)"
+        - "traefik.http.routers.naosalvo.entrypoints=websecure"
+        - "traefik.http.routers.naosalvo.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.naosalvo.loadbalancer.server.port=80"
+
+  api:
+    image: willianjack0/naosalvo-api:${NAOSALVO_TAG:-latest}
+    networks:
+      - jknet
+    environment:
+      DB_HOST: postgres_postgres          # serviço do Postgres compartilhado, na rede jknet
+      DB_NAME: naosalvo
+      DB_USER: naosalvo
+      DB_PASSWORD_FILE: /run/secrets/naosalvo_db_password
+      ADMIN_TOKEN_FILE: /run/secrets/naosalvo_admin_token          # chave de emergência do /api/admin
+      DISCORD_CLIENT_ID_FILE: /run/secrets/naosalvo_discord_client_id
+      DISCORD_CLIENT_SECRET_FILE: /run/secrets/naosalvo_discord_client_secret
+      DISCORD_GUILD_ID_FILE: /run/secrets/naosalvo_discord_guild_id
+      DISCORD_REDIRECT_URI: https://naosalvo.fishlab.com.br/api/auth/discord/callback
+      DISCORD_EXIGIR_MEMBRO: "1"          # produção: só entra quem é membro do servidor do Discord da comunidade
+      SITE_ORIGIN: https://naosalvo.fishlab.com.br
+      # Saltos de proxy confiáveis entre o cliente e a API: 2 = Cloudflare + Traefik (registro com nuvem laranja).
+      # Se o DNS ficar SÓ DNS (nuvem cinza), troque para 1, senão o IP do cliente pode ser forjado.
+      TRUSTED_PROXY_HOPS: "2"
+    secrets:
+      - naosalvo_db_password
+      - naosalvo_admin_token
+      - naosalvo_discord_client_id
+      - naosalvo_discord_client_secret
+      - naosalvo_discord_guild_id
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+      # NÃO use start-first na API: a migração nova roda na subida e a versão antiga ainda atenderia com o esquema velho
+      # (ver docs/runbook-banco.md). Troca com stop-first: poucos segundos de indisponibilidade da API no deploy.
+      update_config:
+        order: stop-first
+        failure_action: rollback
+        monitor: 20s
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=jknet"
+        - "traefik.http.routers.naosalvo-api.rule=Host(`naosalvo.fishlab.com.br`) && PathPrefix(`/api`)"
+        - "traefik.http.routers.naosalvo-api.priority=100"
+        - "traefik.http.routers.naosalvo-api.entrypoints=websecure"
+        - "traefik.http.routers.naosalvo-api.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.naosalvo-api.loadbalancer.server.port=3000"
+
+secrets:
+  naosalvo_db_password:
+    external: true
+  naosalvo_admin_token:
+    external: true
+  naosalvo_discord_client_id:
+    external: true
+  naosalvo_discord_client_secret:
+    external: true
+  naosalvo_discord_guild_id:
+    external: true
+
+networks:
+  jknet:
+    external: true

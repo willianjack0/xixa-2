@@ -1,5 +1,5 @@
 // Links do YouTube sugeridos pela comunidade para vídeos sem original (moderador aprova no admin).
-import { createHmac } from 'node:crypto';
+import { hashIp } from '../lib/ip.js';
 import { send, lerJson, clean, limited } from '../lib/http.js';
 import { VOTE_ID } from './votos.js';
 
@@ -7,7 +7,6 @@ export const LINKS_PENDENTES_POR_IP = 3;    // sugestões pendentes por meme e I
 export const LINKS_PENDENTES_POR_MEME = 20; // teto de pendentes por meme
 
 // IP nunca vai puro para o banco: HMAC com o segredo do admin (sem segredo, cai num sal fixo)
-const hashIp = (adminToken, ip) => createHmac('sha256', adminToken || 'naosalvo').update(String(ip)).digest('hex').slice(0, 32);
 
 export default function registrar(r) {
   r.get('/api/links/aprovados', async ({ res, pool }) => {

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# node --check em todos os JS do site (raiz, admin/, contribuir/, dashboard/) e da api/.
+# node --check em todos os JS do site (raiz, seppzone/, contribuir/, dashboard/) e da api/.
 set -u
 cd "$(dirname "$0")/../.."
 fail=0; n=0

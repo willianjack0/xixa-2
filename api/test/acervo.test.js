@@ -47,12 +47,13 @@ test('GET /api/memes/:id: 200, 404 e 400; oculto/removido não aparece', { skip 
   await db.pool.query("UPDATE memes SET status = 'publicado' WHERE id = 'havaianas-de-pau'");
 });
 
-test('GET /api/eras: todas as eras em ordem, 2020+ aberta', { skip }, async () => {
+test('GET /api/eras: todas as eras em ordem, faixa dos anos 90 fechada e a última aberta', { skip }, async () => {
   const r = await s.get('/api/eras');
   assert.equal(r.json.itens.length, N.eras);
-  assert.equal(r.json.itens[0].rotulo, '2004');
+  const primeira = r.json.itens[0];
+  assert.equal(primeira.rotulo, 'Anos 90'); assert.equal(primeira.ano, 1995); assert.equal(primeira.ano_fim, 1999);
   const ultima = r.json.itens.at(-1);
-  assert.equal(ultima.rotulo, '2020+'); assert.equal(ultima.ano, 2020); assert.equal(ultima.ano_fim, null);
+  assert.equal(ultima.rotulo, '2026'); assert.equal(ultima.ano, 2026); assert.equal(ultima.ano_fim, null);
 });
 
 test('GET /api/categorias: 7 categorias, total soma todos os memes', { skip }, async () => {
@@ -63,9 +64,9 @@ test('GET /api/categorias: 7 categorias, total soma todos os memes', { skip }, a
 });
 
 test('rotas legadas seguem iguais: voto agregado e comentário', { skip }, async () => {
-  const v = await s.post('/api/votos', { id: 'havaianas-de-pau', from: 0, to: 1 });
-  assert.equal(v.status, 200); assert.equal(v.json.up, 1);
-  assert.deepEqual((await s.get('/api/votos?ids=havaianas-de-pau')).json['havaianas-de-pau'], { up: 1, down: 0, sum: 0, n: 0 });
+  // votar exige login (voto por usuário: migração 016); os totais são públicos
+  assert.equal((await s.post('/api/votos', { id: 'havaianas-de-pau', v: 1 })).status, 401);
+  assert.deepEqual((await s.get('/api/votos?ids=havaianas-de-pau')).json['havaianas-de-pau'], { up: 0, down: 0, sum: 0, n: 0 });
   const c = await s.post('/api/comentarios', { id: 'havaianas-de-pau', autor: 'zeca', texto: 'kkk' });
   assert.equal(c.status, 201);
   assert.equal((await s.post('/api/comentarios', { id: 'meme-fantasma', autor: 'zeca', texto: 'oi' })).status, 404);

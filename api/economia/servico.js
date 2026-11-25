@@ -19,7 +19,7 @@ function indisponivel(detalhe) {
   return new ErroNegocio(503, MSG_INDISPONIVEL);
 }
 
-async function transacao(pool, fn) {
+export async function transacao(pool, fn) {
   const cli = await pool.connect();
   try {
     await cli.query('BEGIN');
@@ -154,8 +154,21 @@ export async function album(pool, usuario) {
   };
 }
 
+// ---- catálogo de pacotes (loja) ----
+/** Tipos ativos de pacote, na ordem da loja. gratis = preco 0 (vem do estoque); comprar = à venda (preco > 0). */
+export async function tiposDePacote(pool) {
+  const { rows } = await pool.query(
+    'SELECT id, nome, descricao, preco, cartas, chances, garantia, escopo, icone, gradiente FROM pacotes_tipo WHERE ativo ORDER BY ordem, id');
+  if (!rows.length) throw indisponivel('pacotes_tipo vazio (rode node api/seed/acervo.js)');
+  return rows.map((t) => ({
+    id: t.id, nome: t.nome, descricao: t.descricao, preco: t.preco, cartas: t.cartas,
+    chances: Object.fromEntries(RARIDADES.map((r) => [r, Number(t.chances?.[r]) || 0])),
+    garantia: t.garantia, escopo: t.escopo, gratis: t.preco === 0, comprar: t.preco > 0, icone: t.icone, gradiente: t.gradiente
+  }));
+}
+
 // ---- escrita ----
-/** Visita do dia: XP, pacote diário (acumula até o limite) e, na primeira vez, o pacote de boas-vindas. Idempotente por dia. */
+/** Visita do dia: XP e pacote diário (acumula até o limite). Idempotente por dia. O pacote de boas-vindas NÃO vem daqui: vem ao salvar o gato pela primeira vez (api/auth/perfil.js). */
 export async function visita(pool, usuario, { agora = new Date() } = {}) {
   return transacao(pool, async (cli) => {
     await travarUsuario(cli, usuario.id);
@@ -172,16 +185,6 @@ export async function visita(pool, usuario, { agora = new Date() } = {}) {
       if (q.n < regras.limites.pacote_diario_max) {
         await cli.query("INSERT INTO pacotes_estoque (usuario_id, tipo, origem) VALUES ($1,'diario','diario')", [usuario.id]);
         ganhos.push('diario');
-      }
-    }
-    // boas-vindas: uma vez na vida da conta (limite_por_usuario do tipo)
-    const { rows: [b] } = await cli.query("SELECT limite_por_usuario AS lim FROM pacotes_tipo WHERE id = 'boas' AND ativo");
-    if (b) {
-      const { rows: [ja] } = await cli.query(
-        `SELECT (SELECT count(*) FROM pacotes_estoque WHERE usuario_id = $1 AND tipo = 'boas')::int AS n`, [usuario.id]);
-      if (ja.n < (b.lim || 1)) {
-        await cli.query("INSERT INTO pacotes_estoque (usuario_id, tipo, origem) VALUES ($1,'boas','boas')", [usuario.id]);
-        ganhos.push('boas');
       }
     }
     const saldo = await razao.aplicar();
@@ -309,22 +312,24 @@ export async function reciclar(pool, usuario, { carta_id = null, todas = false }
 }
 
 // ---- ranking (público) ----
+// A foto do Discord só aparece quando a pessoa escolheu usá-la (usar_foto); senão null e o front mostra o gato.
+const FOTO_DO_RANKING = `CASE WHEN u.usar_foto THEN (SELECT c.avatar_url FROM contas_oauth c WHERE c.usuario_id = u.id AND c.provedor = 'discord' LIMIT 1) END AS avatar_url`;
 export async function ranking(pool, { metrica = 'xp', limite = 50 } = {}) {
   const lim = Math.max(1, Math.min(100, limite));
   const pats = await patentes(pool);
   if (metrica === 'cartas') {
     const { rows } = await pool.query(
-      `SELECT u.id, u.apelido, u.avatar_gato, count(*)::int AS valor, u.xp
+      `SELECT u.id, u.apelido, u.avatar_gato, count(*)::int AS valor, u.xp, u.papel, ${FOTO_DO_RANKING}
          FROM inventario_cartas i JOIN usuarios u ON u.id = i.usuario_id
         WHERE i.quantidade > 0 AND NOT u.banido GROUP BY u.id ORDER BY valor DESC, u.xp DESC, u.id LIMIT $1`, [lim]);
-    return rows.map((r, i) => ({ posicao: i + 1, apelido: r.apelido, avatar_gato: r.avatar_gato, valor: r.valor, patente: patenteDe(pats, Number(r.xp)).nome }));
+    return rows.map((r, i) => ({ posicao: i + 1, apelido: r.apelido, avatar_gato: r.avatar_gato, avatar_url: r.avatar_url, valor: r.valor, patente: patenteDe(pats, Number(r.xp)).nome, moderador: r.papel === 'moderador' }));
   }
   // xp: soma do razão (eventos reais), não o cache
   const { rows } = await pool.query(
-    `SELECT u.id, u.apelido, u.avatar_gato, sum(e.valor)::bigint AS valor
+    `SELECT u.id, u.apelido, u.avatar_gato, sum(e.valor)::bigint AS valor, u.papel, ${FOTO_DO_RANKING}
        FROM eventos_xp e JOIN usuarios u ON u.id = e.usuario_id
       WHERE NOT u.banido GROUP BY u.id HAVING sum(e.valor) > 0 ORDER BY valor DESC, u.id LIMIT $1`, [lim]);
-  return rows.map((r, i) => ({ posicao: i + 1, apelido: r.apelido, avatar_gato: r.avatar_gato, valor: Number(r.valor), patente: patenteDe(pats, Number(r.valor)).nome }));
+  return rows.map((r, i) => ({ posicao: i + 1, apelido: r.apelido, avatar_gato: r.avatar_gato, avatar_url: r.avatar_url, valor: Number(r.valor), patente: patenteDe(pats, Number(r.valor)).nome, moderador: r.papel === 'moderador' }));
 }
 
-export { RARIDADES };
+export { RARIDADES, indisponivel, criarRazao, carregarRegras, travarUsuario };

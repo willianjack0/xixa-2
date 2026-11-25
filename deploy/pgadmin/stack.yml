@@ -1,0 +1,44 @@
+# pgAdmin da infra para revisar o banco do Não Salvo (somente leitura, só o naosalvo_dev nesta etapa).
+# Acesso: rede interna, http://192.168.0.9:5050 (sem subdomínio, sem Cloudflare). Detalhes em docs/infra-pgadmin.md.
+#   docker --context servidor2 stack deploy --resolve-image never -c deploy/pgadmin/stack.yml naosalvo-pgadmin
+# Segredo (criado à mão, fora do repositório):  docker secret create naosalvo_pgadmin_admin_password -
+version: '3.8'
+services:
+  pgadmin:
+    image: dpage/pgadmin4@sha256:3591b3d02910dcd817dec6fcaa681c278ba6966945283dd0ea0042731c330c83   # pgAdmin 9.19
+    environment:
+      PGADMIN_DEFAULT_EMAIL: infra@fishlab.com.br
+      PGADMIN_DEFAULT_PASSWORD_FILE: /run/secrets/naosalvo_pgadmin_admin_password
+      PGADMIN_CONFIG_SERVER_MODE: "True"
+      PGADMIN_SERVER_JSON_FILE: /pgadmin4/servers.json
+      PGADMIN_DISABLE_POSTFIX: "true"
+      PGADMIN_CONFIG_CONSOLE_LOG_LEVEL: "30"
+    secrets:
+      - naosalvo_pgadmin_admin_password
+    configs:
+      - source: naosalvo_pgadmin_servers
+        target: /pgadmin4/servers.json
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - v0net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 512M
+secrets:
+  naosalvo_pgadmin_admin_password:
+    external: true
+configs:
+  naosalvo_pgadmin_servers:
+    file: ./servers.json
+volumes:
+  pgadmin_data:
+networks:
+  v0net:
+    external: true

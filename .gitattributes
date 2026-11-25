@@ -1,0 +1,6 @@
+# Arquivos que rodam em Linux (container) precisam de fim de linha LF, mesmo em checkout no Windows:
+# com CRLF o shebang quebra ("exec ... not found").
+*.sh text eol=lf
+Dockerfile text eol=lf
+**/Dockerfile text eol=lf
+deploy/nginx.conf text eol=lf

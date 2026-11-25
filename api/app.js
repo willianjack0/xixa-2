@@ -11,10 +11,19 @@ import comentarios from './routes/comentarios.js';
 import links from './routes/links.js';
 import yt from './routes/yt.js';
 import admin from './routes/admin.js';
+import adminUsuarios from './routes/admin-usuarios.js';
+import adminAcervo from './routes/admin-acervo.js';
+import envios from './routes/envios.js';
 import economia from './routes/economia.js';
+import authRotas from './routes/auth.js';
+import sobedesce from './routes/sobedesce.js';
+import memepedia from './routes/memepedia.js';
+import perfis from './routes/perfis.js';
 
-export function criarApp({ pool, adminToken = '', ytKey = '', autenticar = null } = {}) {
-  const router = criarRouter({ pool, adminToken, autenticar, extras: { ytKey } });
-  for (const modulo of [saude, acervo, contribuidores, votos, feedback, comentarios, links, yt, economia, admin]) modulo(router);
+// auth = { discord: config | null, fetch, cookieSecure, origemSite }  (ver routes/auth.js e auth/discord.js)
+export function criarApp({ pool, adminToken = '', ytKey = '', autenticar = null, auth = {} } = {}) {
+  const cfgAuth = { discord: null, fetch: globalThis.fetch, cookieSecure: true, origemSite: '', ...auth };
+  const router = criarRouter({ pool, adminToken, autenticar, extras: { ytKey, auth: cfgAuth } });
+  for (const modulo of [saude, acervo, contribuidores, votos, feedback, comentarios, links, yt, authRotas, economia, sobedesce, memepedia, perfis, admin, adminUsuarios, adminAcervo, envios]) modulo(router);
   return { router, server: http.createServer((req, res) => router.tratar(req, res)) };
 }

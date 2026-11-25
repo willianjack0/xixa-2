@@ -21,23 +21,26 @@ export const temBanco = () => !!process.env.TEST_DB_NAME;
 export const semBanco = () => (temBanco() ? false : 'defina TEST_DB_NAME (Postgres descartável) para rodar');
 
 export async function servidor(pool, opcoes = {}) {
-  const { server } = criarApp({ pool, ...opcoes });
+  const { server, router } = criarApp({ pool, ...opcoes });
   await new Promise((ok) => server.listen(0, '127.0.0.1', ok));
   const base = `http://127.0.0.1:${server.address().port}`;
   const chamar = async (metodo, caminho, { corpo, headers = {} } = {}) => {
     const r = await fetch(base + caminho, {
+      redirect: 'manual', // a API só redireciona no login; os testes inspecionam o 302
       method: metodo,
       headers: { ...(corpo !== undefined ? { 'Content-Type': 'application/json' } : {}), ...headers },
       body: corpo !== undefined ? JSON.stringify(corpo) : undefined
     });
     const texto = await r.text();
     let json; try { json = JSON.parse(texto); } catch { json = texto; }
-    return { status: r.status, json, headers: r.headers };
+    return { status: r.status, json, headers: r.headers, cookies: r.headers.getSetCookie() };
   };
   return {
-    base,
+    base, router,
     get: (c, o) => chamar('GET', c, o),
     post: (c, corpo, o = {}) => chamar('POST', c, { ...o, corpo }),
+    patch: (c, corpo, o = {}) => chamar('PATCH', c, { ...o, corpo }),
+    del: (c, o) => chamar('DELETE', c, o),
     fechar: () => new Promise((ok) => server.close(ok))
   };
 }
@@ -46,6 +49,9 @@ export async function servidor(pool, opcoes = {}) {
 export async function bancoDeTeste({ seed = false } = {}) {
   const nome = process.env.TEST_DB_NAME;
   if (!/test|descart/i.test(nome)) throw new Error(`TEST_DB_NAME="${nome}" não parece banco de teste (precisa conter "test" ou "descart")`);
+  // arquivos de teste rodam em paralelo e migram um de cada vez (trava advisory): em disco lento a espera passa dos 30 s padrão
+  process.env.MIGRATE_ADVISORY_TIMEOUT ||= '300s';
+  process.env.MIGRATE_LOCK_TIMEOUT ||= '60s';
   const { default: pg } = await import('pg');
   const { migrar } = await import('../migrate.js');
   const schema = 't_' + Math.random().toString(36).slice(2, 10);

@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "naosalvo_dev (somente leitura)",
+      "Group": "Não Salvo",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "naosalvo_dev",
+      "Username": "infra_ro",
+      "SSLMode": "prefer",
+      "Comment": "Papel infra_ro: SELECT no esquema public, sem sessões nem dados pessoais. A senha é pedida no primeiro acesso."
+    }
+  }
+}

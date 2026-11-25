@@ -2,49 +2,53 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
+<link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
+<script src="gate.js?v=20261120c"></script>
+<script src="cliente-economia.js?v=20261125c"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NÃO SALVO — Álbum de Figurinhas da Internet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261119k">
-<link rel="stylesheet" href="viewer.css?v=20261119k">
+<link rel="stylesheet" href="theme.css?v=20261125b">
+<link rel="stylesheet" href="viewer.css?v=20261125b">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 <style>
 :root{--Comum:#8e939c;--Relevante:#2fbf5b;--Raro:#2f86ff;--Relíquia:#a35cff;--Lendário:#e8a317;--Mítico:#ff4a4a}
 .layout{display:grid;grid-template-columns:250px minmax(0,1fr) 290px;gap:18px;padding:18px 22px 40px;max-width:1500px;margin:0 auto}
-.side h6{font-size:10.5px;letter-spacing:1.4px;color:var(--mut);font-weight:700;margin:6px 0 10px;text-transform:uppercase}
+.side h6{font-size:12px;letter-spacing:1.4px;color:var(--mut);font-weight:700;margin:6px 0 10px;text-transform:uppercase}
 .side{scroll-margin-top:calc(var(--hdh,64px) + 12px)}
 .col{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;width:100%;text-align:left;padding:10px;border-radius:12px;border:1px solid transparent;margin-bottom:4px}
 .col:hover{background:var(--panel2)}
 .col.on{border-color:var(--line2);background:var(--brand-soft);box-shadow:0 0 18px var(--glow)}
 .col .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:24px}
 .col b{display:block;font-size:12px;letter-spacing:.3px;text-transform:uppercase;font-weight:800}
-.col small{font-size:10.5px;color:var(--mut)}
+.col small{font-size:12px;color:var(--mut)}
 .bar{height:5px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:5px;flex:1}
 .bar i{display:block;height:100%;border-radius:3px}
-.prow{display:flex;align-items:center;gap:8px}.prow span{font-size:10.5px;color:var(--mut)}
+.prow{display:flex;align-items:center;gap:8px}.prow span{font-size:12px;color:var(--mut)}
 .tot{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
-.tot .n{font-family:Rajdhani;font-size:40px;font-weight:700;color:var(--brand);line-height:1}.tot .n small{font-size:20px;color:var(--mut);font-weight:500}
-.rar{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;color:var(--mut);margin-top:6px}
+.tot .n{font-family:Rajdhani;font-size:40px;font-weight:700;color:var(--brand-display);line-height:1}.tot .n small{font-size:20px;color:var(--mut);font-weight:500}
+.rar{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-top:6px}
 .rar span{display:flex;align-items:center;gap:5px}.rar i{width:11px;height:11px;border-radius:3px}
-.packbtn{width:100%;margin-top:16px;padding:13px;border-radius:12px;background:linear-gradient(180deg,var(--brand2),var(--brand-strong));color:#fff;font-weight:800;letter-spacing:.5px;font-size:12.5px;box-shadow:0 6px 22px var(--glow)}
+.packbtn{width:100%;margin-top:16px;padding:13px;border-radius:12px;background:linear-gradient(180deg,var(--btn-a),var(--btn-b));color:var(--on-brand);font-weight:800;letter-spacing:.5px;font-size:12.5px;box-shadow:0 6px 22px var(--glow)}
 .packbtn,.ib{display:flex!important;align-items:center;justify-content:center;gap:8px}.packbtn .ico,.ib .ico{width:17px;height:17px}
 .wallet .c{display:flex;align-items:center;gap:6px}#coinIc .ico{width:26px;height:26px}
 .packbtn:disabled{opacity:.45;box-shadow:none;cursor:default}
-.ghost{display:block;width:100%;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:11.5px;color:var(--mut);background:var(--panel);font-weight:600;text-align:center;text-decoration:none}
+.ghost{display:block;width:100%;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:12px;color:var(--mut);background:var(--panel);font-weight:600;text-align:center;text-decoration:none}
 .ghost:hover{border-color:var(--brand);color:var(--brand-ink)}
 .wallet{margin-top:16px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
 .wallet .c{font-family:Rajdhani;font-size:30px;font-weight:700;color:var(--gold);line-height:1}
 .wallet .c small{font-size:13px;color:var(--mut);font-weight:500;margin-left:4px}
-.ghost.go{border-color:color-mix(in srgb,var(--gold) 50%,transparent);color:var(--gold)}
+.ghost.go{border-color:color-mix(in srgb,var(--gold) 50%,transparent);color:var(--gold-text)}
 /* álbum */
 .album{position:relative;background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:22px;padding:22px 26px 18px 54px;box-shadow:var(--shadow);min-width:0}
 .rings{position:absolute;left:-10px;top:26px;bottom:26px;width:36px;background:radial-gradient(circle at 50% 50%,var(--bg) 0 6px,#d8d8e2 6.5px 8px,#777 8.5px 10px,transparent 10.5px) 0 0/36px 34px repeat-y}
 .ahead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .ahead h1{font-size:36px;letter-spacing:1px;line-height:1;font-weight:700;text-transform:uppercase}
 .ahead .pr{display:flex;align-items:center;gap:12px;margin-top:6px;font-size:13px;color:var(--mut)}.ahead .pr .bar{width:170px;margin:0;height:7px}
-.about{border:1px solid var(--line2);border-radius:10px;padding:9px 14px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;background:var(--panel)}
+.about{border:1px solid var(--line2);border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;background:var(--panel)}
 .about:hover{border-color:var(--brand);color:var(--brand-ink)}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .card{position:relative;aspect-ratio:3/4.1;border-radius:14px;padding:6px;text-align:left;border:2px solid var(--rc);background:linear-gradient(160deg,#1a1f2c,#0b0e16);color:#ececf6;box-shadow:0 0 16px color-mix(in srgb,var(--rc) 40%,transparent);transition:.2s;overflow:hidden;display:flex;flex-direction:column}
@@ -71,13 +75,13 @@
 @keyframes pulseM{50%{box-shadow:0 0 34px color-mix(in srgb,var(--rc) 85%,transparent)}}
 .pager{display:flex;justify-content:center;gap:8px;margin-top:16px}
 .pager button{width:36px;height:34px;border:1px solid var(--line2);border-radius:10px;font-weight:700;font-size:13px;background:var(--panel)}
-.pager button.on{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 0 14px var(--glow)}
+.pager button.on{background:var(--brand-fill);color:var(--on-brand);border-color:var(--brand-fill);box-shadow:0 0 14px var(--glow)}
 .pager button:disabled{opacity:.3}
 /* detalhe */
 .det{border-left:1px solid var(--line);padding-left:18px;position:sticky;top:calc(var(--hdh,64px) + 12px);align-self:start}
 .det .h{display:flex;justify-content:space-between;align-items:center}
 .det .h b{font-family:Rajdhani;font-size:26px}
-.chipR{border:1px solid var(--rc);color:var(--rc);padding:5px 11px;border-radius:6px;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;background:color-mix(in srgb,var(--rc) 14%,transparent)}
+.chipR{border:1px solid var(--rc);color:var(--rc);padding:5px 11px;border-radius:6px;font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;background:color-mix(in srgb,var(--rc) 14%,transparent)}
 .det .card{margin:12px 0 14px;width:100%;pointer-events:none;aspect-ratio:3/3.9}
 .det h2{font-size:26px;line-height:1.05}
 .det p{font-size:12.5px;color:var(--mut);line-height:1.55;margin:8px 0 14px}
@@ -88,8 +92,8 @@
 .det .play{width:100%;margin-top:8px;padding:11px;border-radius:10px;background:#e62117;color:#fff;font-size:12px;font-weight:800;letter-spacing:.5px}
 .det .play:hover{filter:brightness(1.1)}
 .sm{width:100%;padding:11px;font-size:12px;font-weight:600;color:var(--mut);margin-top:4px}
-.sm:hover{color:var(--brand)}
-.copies{text-align:center;font-size:11px;color:var(--mut);margin-top:10px}
+.sm:hover{color:var(--brand-text)}
+.copies{text-align:center;font-size:12px;color:var(--mut);margin-top:10px}
 /* modais */
 .modal{position:fixed;inset:0;background:var(--overlay);display:none;place-items:center;z-index:65;padding:20px;overflow:auto}
 .modal.open{display:grid}
@@ -105,11 +109,12 @@
 .flip .back.glow{border-color:var(--rc);box-shadow:0 0 26px var(--rc),inset 0 0 22px color-mix(in srgb,var(--rc) 40%,transparent)}
 .flip .front{transform:rotateY(180deg)}
 .flip .front .card{width:100%;height:100%;pointer-events:none}
-.new{position:absolute;top:-8px;right:-6px;background:#ff3b6b;color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:99px;z-index:5;letter-spacing:.5px}
-.mclose{margin:18px auto 0;display:block;padding:12px 28px;border-radius:12px;background:linear-gradient(180deg,var(--brand2),var(--brand-strong));color:#fff;font-weight:800;letter-spacing:.6px;box-shadow:0 6px 20px var(--glow)}
+.new{position:absolute;top:-8px;right:-6px;background:#ff3b6b;color:#fff;font-size:12px;font-weight:800;padding:3px 8px;border-radius:99px;z-index:5;letter-spacing:.5px}
+.mclose{margin:18px auto 0;display:block;padding:12px 28px;border-radius:12px;background:linear-gradient(180deg,var(--btn-a),var(--btn-b));color:var(--on-brand);font-weight:800;letter-spacing:.6px;box-shadow:0 6px 20px var(--glow)}
 .rk{display:flex;align-items:center;gap:12px;padding:9px 6px;border-bottom:1px solid var(--line);font-size:13px}
-.rk b{width:22px;text-align:center;color:var(--mut)}.rk .av{width:30px;height:30px;border-radius:50%;overflow:hidden}.rk .av svg{width:100%;height:100%;display:block}.rk span{flex:1}.rk em{font-style:normal;color:var(--brand);font-weight:700}
-.note{grid-column:1/-1;text-align:center;font-size:11px;color:var(--faint);margin-top:6px}
+.rk.cid{background:linear-gradient(90deg,#ffd23f22,transparent);border-radius:8px}.rk.cid b{font-size:16px}.rk small{display:block;font-size:12px;color:var(--mut)}
+.rk b{width:22px;text-align:center;color:var(--mut)}.rk .av{width:30px;height:30px;border-radius:50%;overflow:hidden}.rk .av svg{width:100%;height:100%;display:block}.rk span{flex:1}.rk em{font-style:normal;color:var(--brand-text);font-weight:700}
+.note{grid-column:1/-1;text-align:center;font-size:12px;color:var(--faint);margin-top:6px}
 .pk-wrap{display:grid;place-items:center;padding:10px 0 4px;perspective:900px}
 .pk{position:relative;width:220px;height:310px;cursor:pointer;animation:float 2.6s ease-in-out infinite}
 .pk:hover{animation:shake .35s linear infinite}
@@ -135,21 +140,21 @@
 .sp{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--sunk);display:flex;flex-direction:column;gap:6px}
 .sp .ph{height:86px;border-radius:10px;background:var(--pg);display:grid;place-items:center;font-size:38px;border:1px solid #ffffff33}
 .sp h4{font-family:Rajdhani;font-size:19px;line-height:1}
-.sp p{font-size:11.5px;color:var(--mut);line-height:1.4;margin:0;text-align:left}
+.sp p{font-size:12px;color:var(--mut);line-height:1.4;margin:0;text-align:left}
 .sp .odds{display:flex;height:7px;border-radius:4px;overflow:hidden;gap:1px;margin:4px 0}
 .sp .odds i{display:block;height:100%}
-.sp .ol{font-size:10px;color:var(--mut);display:flex;flex-wrap:wrap;gap:2px 8px}
-.sp button{margin-top:auto;padding:10px;border-radius:10px;background:linear-gradient(180deg,var(--brand2),var(--brand-strong));color:#fff;font-weight:800;font-size:12px;letter-spacing:.5px}
+.sp .ol{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:2px 8px}
+.sp button{margin-top:auto;padding:10px;border-radius:10px;background:linear-gradient(180deg,var(--btn-a),var(--btn-b));color:var(--on-brand);font-weight:800;font-size:12px;letter-spacing:.5px}
 .sp button:disabled{opacity:.4;cursor:default}
 .sp select{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px;font:inherit;font-size:12px}
 .tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}
-.tbl td,.tbl th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}.tbl th{color:var(--mut);font-size:10.5px;letter-spacing:1px;text-transform:uppercase}
+.tbl td,.tbl th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}.tbl th{color:var(--mut);font-size:12px;letter-spacing:1px;text-transform:uppercase}
 .vpbox{max-width:760px;padding:0;overflow:hidden}
 .vpbox .mclose{margin:14px auto 16px}
 @media(max-width:1100px){.layout{grid-template-columns:210px minmax(0,1fr)}.det{grid-column:1/-1;border:0;padding:0;position:static;max-width:380px;margin:0 auto}}
 @media(max-width:720px){.layout{grid-template-columns:1fr;padding:12px}.cards{grid-template-columns:repeat(2,1fr)}.album{padding-left:34px}.pack{grid-template-columns:repeat(3,1fr);gap:8px}}
 </style>
-<link rel="stylesheet" href="album.css?v=20261119m">
+<link rel="stylesheet" href="album.css?v=20261122e">
 </head>
 <body>
 
@@ -192,30 +197,29 @@
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="mbox" id="mbox"></div></div>
 
 <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="tipo"><textarea name="msg"></textarea><input name="contato"><input name="pagina"><input name="bot-field"></form>
-<script src="common.js?v=20261119m"></script>
-<script src="data.js?v=20261119k"></script>
-<script src="player.js?v=20261119l"></script>
-<script src="viewer.js?v=20261119k"></script>
-<script src="alertas.js?v=20261119k"></script>
+<script src="common.js?v=20261125d"></script>
+<script src="data.js?v=20261125b"></script>
+<script src="player.js?v=20261125b"></script>
+<script src="viewer.js?v=20261125b"></script>
+<script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("album",{sub:[
   {k:"cols",ic:"collections",label:"Coleções",fn:()=>{setSubOn("cols");document.querySelector(".side").scrollIntoView({behavior:"smooth"})}},
   {k:"shop",ic:"shop",label:"Loja",fn:()=>openShop()},
   {k:"conv",ic:"convert",label:"Converter repetidas",fn:()=>convertAll()},
-  {k:"rank",ic:"ranking",label:"Ranking",fn:()=>openRank()}
+  {k:"rank",ic:"ranking",label:"Ranking",fn:()=>openRank()},
+  {k:"tl",ic:"timeline",label:"Linha do tempo",href:"linha-do-tempo.html"},
+  {k:"wiki",ic:"book",label:"Memepédia",href:"memepedia.html"}
 ]});
 setSubOn("cols");
 document.querySelectorAll("[data-ic]").forEach(e=>e.outerHTML=icon(e.dataset.ic));document.getElementById("coinIc").innerHTML=icon("coin");
-const GOLD_ODDS={Comum:0,Relevante:30,Raro:38,"Relíquia":19,"Lendário":10,"Mítico":3};
 const FOIL=new Set(["Relíquia","Lendário","Mítico"]);
-const PACKS=[
- {id:"diario",name:"Pacote Diário",ic:"pack",price:0,odds:ODDS,scope:"all",guar:null,pg:"linear-gradient(160deg,#25aae3,#0b4f6e)",desc:"1 grátis por dia em que você entra no site (acumula até 7)."},
- {id:"boas",name:"Boas-vindas",ic:"cat",price:0,odds:ODDS,scope:"all",guar:"Raro",pg:"linear-gradient(160deg,#2a6bff,#0a1a50)",desc:"Só uma vez. Garante 1 carta Rara ou melhor."},
- {id:"classico",name:"Pacote Clássico",ic:"star",price:150,odds:ODDS,scope:"all",guar:null,pg:"linear-gradient(160deg,#8a1d5a,#2a0618)",desc:"5 cartas de todas as coleções, com as chances padrão."},
- {id:"colecao",name:"Pacote da Coleção",ic:"collections",price:200,odds:ODDS,scope:"col",guar:null,pg:"linear-gradient(160deg,#1d6e5a,#06241d)",desc:"5 cartas só da coleção que você escolher. Bom pra fechar uma página."},
- {id:"ouro",name:"Pacote Ouro",ic:"ranking",price:450,odds:GOLD_ODDS,scope:"all",guar:"Relíquia",pg:"linear-gradient(160deg,#c98a00,#3a2600)",desc:"Sem Comuns. Garante 1 Relíquia ou melhor."}
-];
-const PK=Object.fromEntries(PACKS.map(p=>[p.id,p]));
+// tipos de pacote (preço, chances, arte) vêm de GET /api/pacotes/tipos
+let TIPOS=[];
+const TIPO=id=>TIPOS.find(t=>t.id===id);
+const GRAD_PADRAO="linear-gradient(160deg,#25aae3,#0b4f6e)";
+const artDe=(tipo,nome)=>{const t=TIPO(tipo)||{};return{name:t.nome||nome||"Pacote",ic:t.icone||"pack",pg:t.gradiente||GRAD_PADRAO,guar:t.garantia||null,cartas:t.cartas||5,colecao:t.escopo==="colecao"}};
+async function carregarTipos(){try{const r=await Api.tipos({silencioso:true});TIPOS=Array.isArray(r)?r:(r&&r.itens)||[]}catch(e){}}
 
 // cartas
 const CARDS=[];
@@ -226,29 +230,31 @@ const cardYt=c=>{const m=c.meme&&MEMES.find(x=>x.id===c.meme);return m&&m.yt};
 const $=id=>document.getElementById(id);
 const PER=6;
 let ci=0,page=0,sel=CARDS[0].id,packOpen=false;
-const owned=c=>NS.owned[c.id]||0;
-const dupsTotal=()=>CARDS.reduce((s,c)=>s+Math.max(0,owned(c)-1)*DUP_VALUE[c.r],0);
-const dailyFree=()=>!(NS.daily.d===nsToday()&&NS.daily.used);
+// quantidade por carta e coleções completas: vêm de GET /api/album (nada é guardado no navegador)
+let QTD={},COLOK={};
+const owned=c=>QTD[c.id]||0;
+const dupsTotal=()=>ECO.valor_das_repetidas||0;
+async function carregarAlbum(){const a=await Api.album();QTD={};COLOK={};(a.colecoes||[]).forEach(k=>{COLOK[k.id]=!!k.completa;(k.cartas||[]).forEach(c=>{QTD[c.id]=c.quantidade})})}
 
 function cardHTML(c,opt={}){
   const has=owned(c)>0||opt.force,col=COLLECTIONS[c.ci],rc=`var(--${c.r})`;
   if(!has)return `<button class="card lock ${opt.sel?'sel':''}" onclick="pick('${c.id}')"><div class="top"><span>${c.num}</span><em style="color:var(--faint)">${c.r}</em></div><div class="art"><b>${+c.num}</b></div><div class="nm">???</div><div class="ft">${col.n.toUpperCase()}</div></button>`;
   return `<button class="card ${FOIL.has(c.r)?'foil':''} ${c.r} ${opt.sel?'sel':''}" style="--rc:${rc}" onclick="pick('${c.id}')">
    <div class="top"><span>${c.num}</span><em>${c.r}</em></div>
-   ${NS.fav===c.id?'<span class="star">⭐</span>':''}${owned(c)>1&&!opt.force?`<span class="cp">x${owned(c)}</span>`:''}${c.y?`<span class="yr">${c.y}</span>`:""}
-   <div class="art" style="background:linear-gradient(150deg,${col.bg[0]},${col.bg[1]})">${cardYt(c)?`<img src="https://i.ytimg.com/vi/${cardYt(c)}/mqdefault.jpg" alt="" loading="lazy" onerror="this.remove()">`:""}<span class="emo">${c.e}</span></div>
+   ${favId()===c.id?'<span class="star">⭐</span>':''}${owned(c)>1&&!opt.force?`<span class="cp">x${owned(c)}</span>`:''}${c.y?`<span class="yr">${c.y}</span>`:""}
+   <div class="art" style="background:linear-gradient(150deg,${col.bg[0]},${col.bg[1]})">${cardYt(c)?`<img src="https://i.ytimg.com/vi/${cardYt(c)}/mqdefault.jpg" alt="" loading="lazy" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:""}<span class="emo"${cardYt(c)?" hidden":""}>${c.e}</span></div>
    <div class="nm">${escapeHtml(c.name)}</div><div class="ft">${col.n.toUpperCase()}</div></button>`;
 }
 function renderCols(){
   $("cols").innerHTML=COLLECTIONS.map((c,k)=>{
     const tot=c.cards.length,n=CARDS.filter(x=>x.ci===k&&owned(x)>0).length,p=Math.round(n/tot*100);
     return `<button class="col ${k===ci?'on':''}" onclick="setCol(${k})"><div class="ic" style="--cc:${c.c}">${icon(COL_IC[c.id]||"album")}</div>
-    <div><b>${c.n}${NS.completed[c.id]?" "+icon("check","in"):""}</b><small>${n} / ${tot} cartas</small><div class="prow"><div class="bar"><i style="width:${p}%;background:${c.c}"></i></div><span>${p}%</span></div></div></button>`}).join("");
+    <div><b>${c.n}${COLOK[c.id]?" "+icon("check","in"):""}</b><small>${n} / ${tot} cartas</small><div class="prow"><div class="bar"><i style="width:${p}%;background:${c.c}"></i></div><span>${p}%</span></div></div></button>`}).join("");
   const tot=CARDS.filter(c=>owned(c)>0);
   $("tn").textContent=tot.length;$("tt").textContent=CARDS.length;
   $("rar").innerHTML=RARITIES.map(r=>`<span title="${r}"><i style="background:var(--${r})"></i>${tot.filter(c=>c.r===r).length}/${CARDS.filter(c=>c.r===r).length}</span>`).join("");
   renderFab();
-  $("coins").textContent=fmt(NS.coins);const d=dupsTotal();
+  $("coins").textContent=fmt(ECO.moedas);const d=dupsTotal();
   $("dupInfo").textContent=d?`+${fmt(d)} em repetidas`:"";$("convBtn").disabled=!d;$("convBtn").style.opacity=d?1:.45;
 }
 function renderAlbum(){
@@ -259,18 +265,17 @@ function renderAlbum(){
 }
 function renderDet(){
   const c=byId[sel],has=owned(c)>0,col=COLLECTIONS[c.ci];
-  const chance=(ODDS[c.r]/CARDS.filter(x=>x.r===c.r).length);
-  const odds=`<div class="kv"><span>Chance por carta</span><b>${chance<.1?chance.toFixed(3):chance.toFixed(2)}%</b></div>`;
+  const tc=TIPO("classico"),chance=tc&&tc.chances&&tc.chances[c.r]?tc.chances[c.r]/CARDS.filter(x=>x.r===c.r).length:null;
+  const odds=chance==null?"":`<div class="kv"><span>Chance por carta</span><b>${chance<.1?chance.toFixed(3):chance.toFixed(2)}%</b></div>`;
   if(!has){$("det").innerHTML=`<div class="h"><b>${c.num}</b><span class="chipR" style="--rc:var(--${c.r})">⬢ ${c.r}</span></div>${cardHTML(c,{})}<h2>???</h2><p>Você ainda não tem esta carta. Abra pacotes para descobrir quem é.</p><div class="kv"><span>Coleção</span><b>${col.n}</b></div><div class="kv"><span>Raridade</span><b style="color:var(--${c.r})">${c.r}</b></div>${odds}`;return}
   const n=owned(c);
   $("det").innerHTML=`<div class="h"><b>${c.num}</b><span class="chipR" style="--rc:var(--${c.r})">⬢ ${c.r}</span></div>${cardHTML(c,{})}
   <h2>${escapeHtml(c.name)}</h2><p>${escapeHtml(c.desc||"")}</p>
   <div class="kv"><span>Coleção</span><b>${col.n}</b></div>
   <div class="kv"><span>Raridade</span><b style="color:var(--${c.r})">⬢ ${c.r}</b></div>${odds}
-  <div class="worth"><span>Repetida vale</span><b>🪙 ${DUP_VALUE[c.r]}</b></div>
-  ${c.meme?`<button class="play" onclick="watch('${c.meme}')">▶ ASSISTIR NO PLAYER DE ${c.y}</button>`:""}
-  <button class="bigbtn" onclick="setFav()">${NS.fav===c.id?'★ É A SUA FAVORITA':'☆ DEFINIR COMO FAVORITA'}</button>
-  ${n>1?`<button class="sm" style="color:var(--gold)" onclick="convertOne('${c.id}')">♻ CONVERTER 1 REPETIDA (+${DUP_VALUE[c.r]} 🪙)</button>`:""}
+  ${c.meme?`<button class="play" onclick="watch('${c.meme}')"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="vertical-align:-2px"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg> ASSISTIR NO PLAYER DE ${c.y}</button>`:""}
+  <button class="bigbtn" onclick="setFav()">${favId()===c.id?'★ É A SUA FAVORITA':'☆ DEFINIR COMO FAVORITA'}</button>
+  ${n>1?`<button class="sm" style="color:var(--gold)" onclick="convertOne('${c.id}')">♻ CONVERTER AS REPETIDAS DESTA CARTA</button>`:""}
   <button class="sm" onclick="share()">⤴ COMPARTILHAR</button>
   <div class="copies">Você possui ${n} cópia${n>1?'s':''} desta carta</div>`;
 }
@@ -278,113 +283,162 @@ const renderAll=()=>{renderCols();renderAlbum();renderDet()};
 function pick(id){sel=id;renderAlbum();renderDet()}
 function setCol(k){ci=k;page=0;sel=CARDS.find(c=>c.ci===k).id;renderAll()}
 function pg(p){const pages=Math.ceil(CARDS.filter(x=>x.ci===ci).length/PER);if(p<0||p>=pages)return;page=p;renderAlbum()}
-function setFav(){NS.fav=sel;nsSave();renderAll();toast("Carta favorita definida ⭐")}
+// favorita oficial = a do servidor (perfil); NS.fav só como reserva enquanto a sessão carrega
+function favId(){return (typeof SESSAO!=="undefined"&&SESSAO&&SESSAO.usuario&&"carta_favorita" in SESSAO.usuario)?SESSAO.usuario.carta_favorita:NS.fav}
+// carta favorita: vai para o perfil público (servidor). Só dá para escolher uma carta que você tem.
+async function setFav(){
+  if(owned(byId[sel])<1){toast("Você ainda não tem essa carta.");return}
+  try{const r=await Api.perfil({carta_favorita:sel},{silencioso:true});if(SESSAO&&SESSAO.usuario&&r&&r.usuario)SESSAO.usuario.carta_favorita=r.usuario.carta_favorita;NS.fav=sel;nsSave();renderAll();toast("Carta favorita definida ⭐ Ela aparece no seu perfil.")}
+  catch(e){toast((e&&e.erro)||"Não consegui salvar a favorita agora.")}
+}
 function share(){const c=byId[sel],t=`Consegui a carta ${c.num} "${c.name}" (${c.r}) no álbum do Não Salvo!`;try{navigator.clipboard.writeText(t).then(()=>toast("Texto copiado!"),()=>toast(t))}catch(e){toast(t)}}
-function about(){const c=COLLECTIONS[ci];openModal(`<h3>${c.n}</h3><p>${c.about}</p><table class="tbl"><tr><th>Raridade</th><th>Cartas</th><th>Você tem</th></tr>${RARITIES.map(r=>{const l=CARDS.filter(x=>x.ci===ci&&x.r===r);return l.length?`<tr><td style="color:var(--${r})">⬢ ${r}</td><td>${l.length}</td><td>${l.filter(x=>owned(x)).length}</td></tr>`:""}).join("")}</table><p style="margin-top:12px">Completar a coleção vale <b style="color:var(--gold)">+${REWARD.collection} 🪙</b>.</p><button class="mclose" onclick="closeModal()">FECHAR</button>`)}
+function about(){const c=COLLECTIONS[ci];openModal(`<h3>${c.n}</h3><p>${c.about}</p><table class="tbl"><tr><th>Raridade</th><th>Cartas</th><th>Você tem</th></tr>${RARITIES.map(r=>{const l=CARDS.filter(x=>x.ci===ci&&x.r===r);return l.length?`<tr><td style="color:var(--${r})">⬢ ${r}</td><td>${l.length}</td><td>${l.filter(x=>owned(x)).length}</td></tr>`:""}).join("")}</table><p style="margin-top:12px">Completar a coleção rende um bônus de <b style="color:var(--gold)">moedas</b> e XP.</p><button class="mclose" onclick="closeModal()">FECHAR</button>`)}
 function openModal(h,cls){$("mbox").className="mbox "+(cls||"");$("mbox").innerHTML=`<button class="xclose" onclick="closeModal()" aria-label="Fechar" title="Fechar (Esc)">${icon("xmark")}</button>`+h;$("modal").classList.add("open")}
 let vpl=null;
 // fim da revelação (todas viradas ou pacote fechado): só agora carteira, XP, patente e o álbum atrás aparecem
-function settlePack(){if(!packOpen)return;packOpen=false;holdWallet(false);renderAll()}
+// devolve uma promessa que resolve quando carteira e álbum (do servidor) já foram desenhados
+function settlePack(){
+  if(!packOpen)return;packOpen=false;
+  return Promise.all([holdWallet(false),carregarAlbum().catch(()=>{})]).then(()=>renderAll());
+}
 function closeModal(){vpl&&vpl.stop();$("modal").classList.remove("open");settlePack()}
-function watch(id){const m=MEMES.find(x=>x.id===id);if(!m)return;closeModal();const rel=MEMES.filter(x=>x.id!==m.id).sort((p,q)=>Math.abs(p.y-m.y)-Math.abs(q.y-m.y));openViewer(m,{related:rel,onPick:watch,onYear:y=>{location.href="index.html#"+(y>=2020?"2020mais":y)}})}
+function watch(id){const m=MEMES.find(x=>x.id===id);if(!m)return;closeModal();const rel=MEMES.filter(x=>x.id!==m.id).sort((p,q)=>Math.abs(p.y-m.y)-Math.abs(q.y-m.y));openViewer(m,{related:rel,onPick:watch,onYear:y=>{location.href="linha-do-tempo.html#"+y}})}
 
-// ---- moedas: repetida vira moeda ----
-function convertOne(id){const c=byId[id];if(owned(c)<2)return;NS.owned[id]--;addCoins(DUP_VALUE[c.r],`(${c.name} repetida)`);renderAll()}
-function convertAll(){let s=0,n=0;CARDS.forEach(c=>{const x=owned(c)-1;if(x>0){s+=x*DUP_VALUE[c.r];n+=x;NS.owned[c.id]=1}});if(!s)return;addCoins(s,`(${n} repetidas convertidas)`);renderAll()}
+// ---- moedas: repetida vira moeda (o servidor converte e paga) ----
+async function reciclarRepetidas(corpo){
+  if(packOpen||abrindo)return;
+  if(ECO.convidado)return avisoLogin("converter repetidas");
+  try{
+    const r=await Api.reciclar(corpo);
+    toast(`+${fmt(r.moedas_ganhas)} 🪙 (${r.convertidas} repetida${r.convertidas>1?"s":""} convertida${r.convertidas>1?"s":""})`);
+  }catch(e){
+    if(e.status===409)toast(e.erro||"Você não tem repetidas para converter");
+    else if(e.status===0)toast("Sem conexão. Tente de novo.");
+    else if(e.status===400||e.status===404)toast(e.erro||"Não foi possível converter");
+  }
+  try{await Promise.all([atualizarCarteira(),carregarAlbum()])}catch(e){}
+  renderWallet();renderAll();
+}
+const convertOne=id=>reciclarRepetidas({carta_id:id});
+const convertAll=()=>reciclarRepetidas({todas:true});
 
-// ---- pacotes ----
-function drawCard(pack,colIdx){
-  const scope=pack.scope==="col"?CARDS.filter(c=>c.ci===colIdx):CARDS;
-  let tot=0;RARITIES.forEach(r=>tot+=pack.odds[r]);let x=Math.random()*tot,rar="Comum";
-  for(const r of RARITIES){if(x<pack.odds[r]){rar=r;break}x-=pack.odds[r]}
-  let pool=scope.filter(c=>c.r===rar);if(!pool.length)pool=scope;
-  return pool[Math.floor(Math.random()*pool.length)];
-}
-function rollPack(pack,colIdx){
-  const got=Array.from({length:PACK_SIZE},()=>drawCard(pack,colIdx));
-  if(pack.guar){const gi=RARITIES.indexOf(pack.guar);if(!got.some(c=>RARITIES.indexOf(c.r)>=gi)){
-    const scope=(pack.scope==="col"?CARDS.filter(c=>c.ci===colIdx):CARDS).filter(c=>RARITIES.indexOf(c.r)>=gi);
-    const w=scope.map(c=>pack.odds[c.r]/CARDS.filter(x=>x.r===c.r).length);let t=w.reduce((a,b)=>a+b,0)*Math.random();
-    got[PACK_SIZE-1]=scope.find((c,i)=>(t-=w[i])<0)||scope[0]}}
-  return got.sort((a,b)=>RARITIES.indexOf(a.r)-RARITIES.indexOf(b.r));
-}
-const invCount=()=>NS.inv.length;
+// ---- pacotes (estoque vem de /api/carteira; sorteio e resultado vêm do servidor) ----
+const invCount=()=>(ECO.pacotes||[]).reduce((n,p)=>n+p.quantidade,0);
 function renderFab(){
   const n=invCount(),f=$("pfab");if(!f)return;
+  if(ECO.convidado){f.classList.add("empty");f.innerHTML=`<span class="pf-pack"><span class="pf-crimp"></span>${icon("pack")}<span class="pf-crimp b"></span></span><span class="pf-t"><b>Entre para jogar</b><small>álbum, moedas e pacotes precisam de conta</small></span>`;return}
   f.classList.toggle("empty",!n);
   f.innerHTML=`<span class="pf-pack"><span class="pf-crimp"></span>${icon("pack")}<span class="pf-crimp b"></span></span>
    <span class="pf-t"><b>${n?"Abrir pacote":"Sem pacotes"}</b><small>${n?`${n} ${n>1?"pacotes esperando":"pacote esperando"}`:"Próximo grátis amanhã · ver loja"}</small></span>${n?`<span class="pf-n">${n}</span>`:""}`;
 }
 function bumpFab(){const f=$("pfab");f.classList.remove("bump");void f.offsetWidth;f.classList.add("bump")}
 function packFab(){
+  if(abrindo||packOpen)return;
+  if(ECO.convidado)return avisoLogin("abrir pacotes");
+  if(!economiaPronta()){if(ECO.indisponivel)iniciarEconomia();return}
   if(!invCount())return openShop();
-  if(invCount()===1)return openFromInv(0);
+  if(invCount()===1)return abrirTipo(ECO.pacotes[0].tipo,ECO.pacotes[0].colecao_id);
   openInv();
 }
 function openInv(){
-  const g={};NS.inv.forEach((p,i)=>{const k=p.id+(p.col!=null?":"+p.col:"");(g[k]=g[k]||{p,idx:[]}).idx.push(i)});
+  const arg=p=>escapeHtml(JSON.stringify(p.tipo))+","+escapeHtml(JSON.stringify(p.colecao_id||null));
   openModal(`<div class="inv-h"><h3>Seus pacotes</h3><p>${invCount()} pacote${invCount()>1?"s":""} fechado${invCount()>1?"s":""}. Escolha qual rasgar.</p></div>
-  <div class="inv">${Object.values(g).map(({p,idx})=>{const pk=PK[p.id];return`<button class="inv-i" onclick="openFromInv(${idx[0]})">${packArt(pk,p.col,true)}<b>${pk.name}</b><small>${p.col!=null?COLLECTIONS[p.col].n:pk.guar?"Garante "+pk.guar+" ou melhor":"Todas as coleções"}</small>${idx.length>1?`<span class="inv-n">x${idx.length}</span>`:""}</button>`}).join("")}</div>
-  ${invCount()>1?`<button class="mclose ghost2" onclick="openFromInv(0)">Abrir o primeiro</button>`:""}`,"invbox");
+  <div class="inv">${ECO.pacotes.map(p=>{const a=artDe(p.tipo,p.nome),col=p.colecao_id&&COLLECTIONS.find(c=>c.id===p.colecao_id);return`<button class="inv-i" onclick="abrirTipo(${arg(p)})">${packArt(a,p.colecao_id,true)}<b>${escapeHtml(a.name)}</b><small>${col?escapeHtml(col.n):a.guar?"Garante "+escapeHtml(a.guar)+" ou melhor":"Todas as coleções"}</small>${p.quantidade>1?`<span class="inv-n">x${p.quantidade}</span>`:""}</button>`}).join("")}</div>
+  ${ECO.pacotes.length>1||ECO.pacotes[0].quantidade>1?`<button class="mclose ghost2" onclick="abrirTipo(${arg(ECO.pacotes[0])})">Abrir o primeiro</button>`:""}`,"invbox");
 }
-function openFromInv(i){const p=NS.inv.splice(i,1)[0];if(!p)return;nsSave();openPack(PK[p.id],p.col)}
 function freePack(){packFab()}
-function buyPack(id){
-  const p=PK[id];if(NS.coins<p.price)return toast("Moedas insuficientes");
-  const colIdx=id==="colecao"?+$("shopCol").value:null;
-  NS.coins-=p.price;NS.inv.push(colIdx!=null?{id,col:colIdx}:{id});nsSave();renderWallet();closeModal();renderAll();bumpFab();
-  toast(`${p.name} guardado! Abra pelo botão de pacotes.`,3000);
+async function buyPack(id){
+  const p=TIPO(id);if(!p)return;
+  const colId=p.escopo==="colecao"?$("shopCol").value:null;
+  try{await Api.comprar({tipo:id,colecao_id:colId})}
+  catch(e){
+    if(e.status===0)toast("Sem conexão. Tente de novo.");
+    else if(![401,402,429,503].includes(e.status))toast(e.erro||"Não foi possível comprar");
+    return;
+  }
+  try{await atualizarCarteira()}catch(e){}
+  closeModal();renderWallet();renderAll();bumpFab();
+  toast(`${p.nome} guardado! Abra pelo botão de pacotes.`,3000);
 }
-function packArt(pack,colIdx,mini){
-  const colName=pack.scope==="col"&&colIdx!=null?COLLECTIONS[colIdx].n:"Todas as coleções";
-  return `<div class="pk${mini?" mini":""}" style="--pg:${pack.pg}"><div class="lid"><span>rasgue aqui</span></div><div class="bod"><div class="pk-ray"></div><div class="ic">${icon(pack.ic)}</div><img class="wm" src="logo-word.png" alt="Não Salvo"><div class="t2">${pack.name}</div><div class="t3">${colName} · ${PACK_SIZE} cartas</div></div></div>`;
+function packArt(a,colecaoId,mini){
+  const col=colecaoId&&COLLECTIONS.find(c=>c.id===colecaoId),colName=col?col.n:"Todas as coleções";
+  return `<div class="pk${mini?" mini":""}" style="--pg:${escapeHtml(a.pg)}"><div class="lid"><span>rasgue aqui</span></div><div class="bod"><div class="pk-ray"></div><div class="ic">${icon(a.ic)}</div><img class="wm" src="logo-word.png" alt="Não Salvo" width="380" height="73"><div class="t2">${escapeHtml(a.name)}</div><div class="t3">${escapeHtml(colName)} · ${a.cartas} cartas</div></div></div>`;
 }
-function openPack(pack,colIdx){
-  const got=rollPack(pack,colIdx).map(c=>({c,isNew:owned(c)===0}));
-  let xp=XP_GAIN.pack;
-  got.forEach(g=>{if(!owned(g.c))xp+=XP_GAIN.newCard[g.c.r];NS.owned[g.c.id]=(NS.owned[g.c.id]||0)+1});
-  // coleções completas: +100
-  const done=[];COLLECTIONS.forEach(c=>{if(!NS.completed[c.id]&&c.cards.every((x,i)=>owned(byId[c.id+"-"+i])>0)){NS.completed[c.id]=true;NS.coins+=REWARD.collection;xp+=XP_GAIN.collection;done.push(c)}});
-  nsSave();packOpen=true;holdWallet(true);addXP(xp);
-  const best=got.reduce((b,g)=>RARITIES.indexOf(g.c.r)>RARITIES.indexOf(b)?g.c.r:b,"Comum");
-  const colName=pack.scope==="col"?COLLECTIONS[colIdx].n:"Todas as coleções";
-  const nNew=got.filter(g=>g.isNew).length,dupVal=got.filter(g=>!g.isNew).reduce((s,g)=>s+DUP_VALUE[g.c.r],0);
-  openModal(`<div class="stage-rays"></div><div class="pk-head"><h3>${pack.name}</h3><p id="pkP">Clique no pacote para rasgar</p></div>
-   <div class="pk-wrap" id="pkW" onclick="tear(this.firstElementChild)">${packArt(pack,colIdx)}</div>
+// abrir = o servidor sorteia, grava e credita tudo; aqui só se anima o resultado que ele devolveu.
+// ANTI-SPOILER: a carteira e o álbum só são buscados depois da última carta virada (ou do pacote fechado).
+let abrindo=false;
+async function abrirTipo(tipo,colecaoId){
+  if(abrindo||packOpen)return;
+  if(ECO.convidado)return avisoLogin("abrir pacotes");
+  abrindo=true;holdWallet(true);
+  let r;
+  try{r=await Api.abrir({tipo,colecao_id:colecaoId||null})}
+  catch(e){
+    abrindo=false;walletHold=false;
+    if(e.status===0)toast("Sem conexão. Tente de novo.");
+    else if(e.status===404||e.status===409){toast(e.erro||"Pacote não encontrado no seu estoque");try{await atualizarCarteira()}catch(_){}renderAll()}
+    else if(![401,402,429,503].includes(e.status))toast(e.erro||"Não foi possível abrir o pacote");
+    renderWallet();return;
+  }
+  abrindo=false;mostrarPacote(r,colecaoId||null);
+}
+function mostrarPacote(r,colecaoId){
+  const a=artDe(r.tipo,r.nome);
+  const got=(r.cartas||[]).map(x=>{const c=byId[x.id]||{id:x.id,name:x.nome,e:x.emoji,r:x.raridade,ci:Math.max(0,COLLECTIONS.findIndex(k=>k.id===x.colecao_id)),num:"???"};return{c,isNew:!!x.nova}});
+  const done=(r.colecoes_completas||[]).map(id=>COLLECTIONS.find(k=>k.id===id)).filter(Boolean);
+  const nNew=typeof r.novas==="number"?r.novas:got.filter(g=>g.isNew).length,dupVal=r.valor_das_repetidas||0;
+  packOpen=true;
+  openModal(`<div class="stage-rays"></div><div class="pk-head"><h3>${escapeHtml(a.name)}</h3><p id="pkP">Clique no pacote para rasgar</p></div>
+   <div class="pk-wrap" id="pkW" onclick="tear(this.firstElementChild)">${packArt(a,colecaoId)}</div>
    <div id="pkC" style="display:none"><div class="pack">${got.map((g,i)=>{const ri=RARITIES.indexOf(g.c.r);return`<div class="slot" style="--d:${i*110}ms;--rc:var(--${g.c.r})">${g.isNew?'<span class="new">NOVA!</span>':''}<div class="flip r${ri}" onclick="flipOne(this)"><div class="back ${ri>=3?'glow':''}"><img src="logo-word.png" alt=""><span>${icon("star")}</span></div><div class="front">${cardHTML(g.c,{force:true})}</div></div></div>`}).join("")}</div>
-   <div class="sum" id="pkS" style="visibility:hidden"><span class="nw">${icon("new")}${nNew} nova${nNew!==1?"s":""}</span><span class="cp">+${xp} XP</span>${dupVal?`<span class="gd">${icon("convert")}repetidas valem ${dupVal} moedas</span>`:""}${done.map(c=>`<span class="gd">${icon("ranking")}${c.n} completa! +${REWARD.collection} moedas</span>`).join("")}</div>
+   <div class="sum" id="pkS" style="visibility:hidden"><span class="nw">${icon("new")}${nNew} nova${nNew!==1?"s":""}</span><span class="cp">+${fmt(r.xp_ganho||0)} XP</span>${dupVal?`<span class="gd">${icon("convert")}repetidas valem ${fmt(dupVal)} moedas (converta no álbum)</span>`:""}${done.map(c=>`<span class="gd">${icon("ranking")}${escapeHtml(c.n)} completa!${done.length===1&&r.moedas_ganhas?` +${fmt(r.moedas_ganhas)} moedas`:""}</span>`).join("")}</div>
    <div class="pk-btns"><button class="mclose" id="pkB" onclick="revealAll(this)">Revelar tudo</button></div></div>`,"pkstage");
-  // o álbum atrás do modal só se atualiza depois da revelação (ou ao fechar), para não entregar o resultado
 }
 function tear(el){if(!el||!el.isConnected||el.classList.contains("torn"))return;el.classList.add("torn");burst($("pkW"),"#fff",26);$("pkP").textContent="Toque nas cartas para revelar. As que brilham são Relíquia ou melhor";setTimeout(()=>{const w=$("pkW"),c=$("pkC");if(w&&c){w.style.display="none";c.style.display="block"}},700)}
 function burst(host,color,n){if(!host||!host.isConnected)return;const r=host.getBoundingClientRect(),box=$("mbox").getBoundingClientRect();for(let i=0;i<n;i++){const s=document.createElement("i");s.className="spark";const a=Math.random()*Math.PI*2,d=80+Math.random()*160;s.style.cssText=`left:${r.left-box.left+r.width/2}px;top:${r.top-box.top+r.height/2}px;--x:${Math.cos(a)*d}px;--y:${Math.sin(a)*d}px;background:${color};animation-delay:${Math.random()*80}ms`;$("mbox").appendChild(s);setTimeout(()=>s.remove(),1000)}}
 function flipOne(el){if(!el||!el.isConnected||el.classList.contains("f"))return;el.classList.add("f");el.parentElement.classList.add("rev");const ri=+el.className.match(/r(\d)/)[1];if(ri>=3)burst(el,getComputedStyle(el.parentElement).getPropertyValue("--rc")||"#fff",ri*6);checkAll()}
-function checkAll(){const s=$("pkS"),b=$("pkB");if(!s||!b)return;const f=[...document.querySelectorAll(".flip")];if(f.every(x=>x.classList.contains("f"))){settlePack();s.style.visibility="visible";b.textContent="Guardar no álbum";if(invCount()&&!$("pkN")){b.insertAdjacentHTML("afterend",`<button class="mclose alt" id="pkN" onclick="closeModal();packFab()">Abrir o próximo (${invCount()})</button>`)}}}
+function checkAll(){const s=$("pkS"),b=$("pkB");if(!s||!b)return;const f=[...document.querySelectorAll(".flip")];if(f.every(x=>x.classList.contains("f"))){const p=settlePack();s.style.visibility="visible";b.textContent="Guardar no álbum";
+  Promise.resolve(p).then(()=>{const bb=$("pkB");if(bb&&invCount()&&!$("pkN"))bb.insertAdjacentHTML("afterend",`<button class="mclose alt" id="pkN" onclick="closeModal();packFab()">Abrir o próximo (${invCount()})</button>`)})}}
 function revealAll(b){const f=[...document.querySelectorAll(".flip")];if(f.every(x=>x.classList.contains("f"))){closeModal();return}f.forEach((x,i)=>setTimeout(()=>flipOne(x),i*260))}
 
-function openShop(){
-  const bar=o=>`<div class="odds">${RARITIES.map(r=>o[r]?`<i style="width:${o[r]}%;background:var(--${r})" title="${r} ${o[r]}%"></i>`:"").join("")}</div><div class="ol">${RARITIES.filter(r=>o[r]).map(r=>`<span style="color:var(--${r})">${r} ${o[r]}%</span>`).join("")}</div>`;
-  openModal(`<h3>Loja de pacotes</h3><p>Você tem <b style="color:var(--gold)">🪙 ${fmt(NS.coins)}</b>${dupsTotal()?` e mais <b style="color:var(--gold)">🪙 ${fmt(dupsTotal())}</b> em repetidas para converter`:""}. Cada pacote tem ${PACK_SIZE} cartas e vai pro seu estoque, para abrir quando quiser.</p>
-  <div class="shop">${PACKS.filter(p=>p.price).map(p=>`<div class="sp" style="--pg:${p.pg}"><div class="ph">${icon(p.ic)}</div><h4>${p.name}</h4><p>${p.desc}</p>
-   ${p.id==="colecao"?`<select id="shopCol">${COLLECTIONS.map((c,k)=>`<option value="${k}" ${k===ci?"selected":""}>${c.n}</option>`).join("")}</select>`:""}
-   ${bar(p.odds)}<button ${NS.coins<p.price?"disabled":""} onclick="buyPack('${p.id}')">${icon("coin")}Comprar · ${p.price}</button></div>`).join("")}</div>
-  <table class="tbl"><tr><th>Como ganhar moedas</th><th>🪙</th></tr>
-   ${RARITIES.map(r=>`<tr><td>Carta repetida <span style="color:var(--${r})">${r}</span></td><td>${DUP_VALUE[r]}</td></tr>`).join("")}
-   <tr><td>Envio aprovado no acervo</td><td>${REWARD.approved}</td></tr><tr><td>Salvar o link de um viral antigo</td><td>${REWARD.oldLink}</td></tr><tr><td>Completar uma coleção</td><td>${REWARD.collection}</td></tr></table>
-  <div style="display:flex;gap:10px;justify-content:center"><button class="mclose" style="margin:16px 0 0" onclick="closeModal()">FECHAR</button>${dupsTotal()?`<button class="mclose" style="margin:16px 0 0;background:var(--sunk);color:var(--gold);box-shadow:none;border:1px solid var(--gold)" onclick="convertAll();openShop()">♻ CONVERTER REPETIDAS</button>`:""}</div>`);
+async function openShop(){
+  if(ECO.convidado)return avisoLogin("comprar pacotes");
+  if(!economiaPronta()){if(ECO.indisponivel)iniciarEconomia();return}
+  if(!TIPOS.length)await carregarTipos();
+  const lojaTipos=TIPOS.filter(p=>p.comprar);
+  if(!lojaTipos.length){openModal(`<h3>Loja de pacotes</h3><p>A loja não está disponível agora. Tente de novo daqui a pouco.</p><button class="mclose" onclick="closeModal()">FECHAR</button>`);return}
+  const bar=o=>{o=o||{};return `<div class="odds">${RARITIES.map(r=>o[r]?`<i style="width:${o[r]}%;background:var(--${r})" title="${r} ${o[r]}%"></i>`:"").join("")}</div><div class="ol">${RARITIES.filter(r=>o[r]).map(r=>`<span style="color:var(--${r})">${r} ${o[r]}%</span>`).join("")}</div>`};
+  openModal(`<h3>Loja de pacotes</h3><p>Você tem <b style="color:var(--gold)">🪙 ${fmt(ECO.moedas)}</b>${dupsTotal()?` e mais <b style="color:var(--gold)">🪙 ${fmt(dupsTotal())}</b> em repetidas para converter`:""}. Cada pacote vai pro seu estoque, para abrir quando quiser.</p>
+  <div class="shop">${lojaTipos.map(p=>`<div class="sp" style="--pg:${escapeHtml(p.gradiente||GRAD_PADRAO)}"><div class="ph">${icon(p.icone||"pack")}</div><h4>${escapeHtml(p.nome)}</h4><p>${escapeHtml(p.descricao||"")}</p>
+   ${p.escopo==="colecao"?`<select id="shopCol">${COLLECTIONS.map((c,k)=>`<option value="${escapeHtml(c.id)}" ${k===ci?"selected":""}>${escapeHtml(c.n)}</option>`).join("")}</select>`:""}
+   ${bar(p.chances)}<button ${ECO.moedas<p.preco?"disabled":""} onclick="buyPack(${escapeHtml(JSON.stringify(p.id))})">${icon("coin")}Comprar · ${fmt(p.preco)}</button></div>`).join("")}</div>
+  <table class="tbl"><tr><th>Como ganhar moedas</th></tr>
+   <tr><td>Converter cartas repetidas (sempre fica 1 de cada)</td></tr><tr><td>Completar uma coleção</td></tr></table>
+  <div style="display:flex;gap:10px;justify-content:center"><button class="mclose" style="margin:16px 0 0" onclick="closeModal()">FECHAR</button>${dupsTotal()?`<button class="mclose" style="margin:16px 0 0;background:var(--sunk);color:var(--gold);box-shadow:none;border:1px solid var(--gold)" onclick="convertAll().then(openShop)">♻ CONVERTER REPETIDAS</button>`:""}</div>`);
 }
 function openRank(){
-  const me=CARDS.filter(c=>owned(c)>0).length,T=CARDS.length,name=NS.acct?NS.acct.user:"você";
-  const people=[["colecionador_pro",Math.round(T*.94)],["gatoNostalgico",Math.round(T*.81)],["Cid Cidoso",Math.round(T*.77)],["viralizador",Math.round(T*.6)],[name,me,1],["faqo",Math.round(T*.2)],["lendarium",Math.round(T*.12)]].sort((a,b)=>b[1]-a[1]);
-  openModal(`<h3>Ranking de colecionadores</h3><p>Usuários de exemplo. Quem completar o álbum primeiro ganha selo especial.</p>${people.map(([n,v,me2],i)=>`<div class="rk"><b>${i+1}</b><span class="av">${catSVG(me2&&NS.acct?NS.acct.av:{fur:(i*3)%10,pat:i%5,eye:i%5,acc:(i*2)%9,clo:i%7,bg:i%8})}</span><span>${escapeHtml(n)}${me2?" (você)":""}</span><em>${v} / ${T}</em></div>`).join("")}<button class="mclose" onclick="closeModal()">FECHAR</button>`);
+  if(barrarSemPapel("ver o ranking"))return;
+  openModal(`<h3>Ranking de colecionadores</h3><p>Quem completar o álbum primeiro ganha selo especial.</p><div id="rkBox"></div><button class="mclose" onclick="closeModal()">FECHAR</button>`);
+  carregarRanking($("rkBox"),"cartas");
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();if(document.querySelector(".modal.open"))return;if(e.key==="ArrowRight")pg(page+1);if(e.key==="ArrowLeft")pg(page-1)});
 function onAccountChange(){renderAll()}
 // chamado por renderWallet (common.js) a cada redesenho da carteira; durante a revelação renderWallet nem chega aqui
 function onWalletRendered(){renderCols()}
+// convidado: o álbum fica vazio e o aviso explica o porquê (sem redirecionar)
+// convidado não vê o álbum: volta para o início (o início não exige sessão, então não há laço de redirecionamento)
+function onConvidado(){location.replace("index.html")}
+// sessão, visita e carteira prontas (common.js): busca álbum e tipos e desenha
+async function onEconomiaPronta(){
+  let albumOk=true;
+  await Promise.all([carregarAlbum().catch(()=>{albumOk=false}),carregarTipos()]);
+  if(!albumOk){ECO.indisponivel=true;avisoEconomiaOff(true)}
+  const first=CARDS.find(c=>owned(c));if(first){ci=first.ci;sel=first.id}
+  renderAll();
+  if(invCount())setTimeout(()=>{bumpFab();const t=$("toast");if(!albumOk||(t&&t.style.display==="block"))return;toast(ECO.pacotes.some(p=>p.tipo==="boas")?"Seu pacote de boas-vindas está esperando!":`Você tem ${invCount()} pacote${invCount()>1?"s":""} para abrir`,3200)},600);
+}
 const first=CARDS.find(c=>owned(c));if(first){ci=first.ci;sel=first.id}
 renderWallet();renderAll();
-if(invCount())setTimeout(()=>{bumpFab();toast(NS.inv.some(p=>p.id==="boas")?"Seu pacote de boas-vindas está esperando!":`Você tem ${invCount()} pacote${invCount()>1?"s":""} para abrir`,3200)},600);
 </script>
 </body>
 </html>
