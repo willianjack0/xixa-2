@@ -94,6 +94,6 @@ Não apague os bancos `naosalvo` e `naosalvo_dev` do lab nem os secrets por pelo
 
 ## Depois da virada (pendências, em ordem)
 1. **Backup no vp3:** `pg_dump -Fc naosalvo` diário em `/root/backups` (o do lab, `docs/backup-e-restauracao.md`, não vai junto) e um teste de restauração.
-2. **Deploy contínuo:** hoje o deployer do lab publica a cada merge. No vp3, opção recomendada: GitHub Actions faz `build-push.sh` em merge na `main` e chama o webhook da stack no Portainer (atualiza `NAOSALVO_TAG`). Fica para uma PR própria, decidindo antes se o ambiente de dev continua no lab.
+2. **Deploy contínuo:** feito com GitHub Actions + Portainer em modo Git (consulta a cada 30 min). Passo a passo em `docs/deploy-vp3-portainer.md`.
 3. **Ambiente de dev:** com o `naosalvo-dev` virando redirecionamento, não sobra um dev com banco próprio. Se quiser manter um, a stack de dev sobe no lab em outro domínio (ex.: `naosalvo-teste.fishlab.com.br`) com um banco novo.
 4. **Segurança:** trocar a senha do Postgres compartilhado só se ela já tiver circulado; manter `ADMIN_TOKEN` fora de qualquer chat.
