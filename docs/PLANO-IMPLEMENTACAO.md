@@ -265,6 +265,8 @@ erDiagram
 - [ ] Revisão de texto: padronizar termos (patente, nível, moedas) e remover frases de protótipo ("Em construção", "só funciona no Netlify"). — **parcial**: saiu o aviso "Protótipo" do álbum e os formulários ocultos do Netlify (album e index). Falta padronizar patente/nível/moedas e limpar o código de protótipo sem uso em `index.html` (fila de moderação local `SEED_QUEUE`, wiki e links locais em `localStorage`).
 - [x] Trocar o aviso "dados de exemplo" em ranking e moderação por dados reais ou por estado vazio bem escrito. — **feito**: ranking e moderação usam dados reais (resta código de protótipo sem uso em `index.html`).
 
+- [x] **Envio de arte de carta (página temporária)** — **feito**: `enviar-arte.html` (guia de tamanhos e margens, exemplos aplicados no álbum, no perfil e na miniatura, busca de cartas sem imagem e formulário), botão "Enviar arte de carta" no rodapé, moderação em "Artes de cartas" no `/seppzone/` e API em `/api/arte/*` e `/api/mod/arte/*` (migração 030), com cancelamento do próprio envio, limpeza periódica de pendentes e guia de zona segura pela proporção real das cartas. Ver `docs/API.md`. **Pendente:** definir até quando a campanha dura (depois, tirar a página, o botão e as rotas); decidir se quem envia ganha XP ou moedas (hoje não ganha); aviso ao autor quando a arte é decidida (hoje ele vê em "Seus envios"); só a moderação vê o arquivo pendente, sem lista pública das artes concorrentes.
+
 **Pronto quando:** nenhum dado da tela vem de `data.js` nem de `localStorage` (exceto preferências como o tema), e as telas passam na checagem de celular, tablet e desktop.
 
 ---

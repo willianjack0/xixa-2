@@ -91,6 +91,15 @@ export function criarS3(cfg, { fetchImpl = fetch, agora = () => new Date() } = {
       const r = await chamar('PUT', chave, buf, tipo);
       if (!r.ok) throw new Error(`s3 put ${r.status}`);
     },
+    /** Baixa o objeto como Buffer (até max bytes). null se 404; lança para outros erros. */
+    async get(chave, { max = 10 * 1024 * 1024 } = {}) {
+      const r = await chamar('GET', chave);
+      if (r.status === 404) return null;
+      if (!r.ok) throw new Error(`s3 get ${r.status}`);
+      const buf = Buffer.from(await r.arrayBuffer());
+      if (buf.length > max) throw new Error('s3 get: objeto maior que o limite');
+      return buf;
+    },
     async remove(chave) {
       const r = await chamar('DELETE', chave);
       if (!r.ok && r.status !== 404) throw new Error(`s3 delete ${r.status}`);

@@ -151,3 +151,5 @@ dialog::backdrop{background:var(--overlay)}
 .tabela-rol{max-height:260px;overflow:auto;margin-top:8px}.tabela-rol table{width:100%;border-collapse:collapse;font-size:13px}
 .tabela-rol th,.tabela-rol td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 #p-visao>.sec{margin-top:30px}.sec .grid+.grid{margin-top:14px}.mem-blk{margin-top:30px}.mem-blk>h2{font-size:22px;margin-bottom:10px}
+/* prévia da arte de carta pendente (moderação) */
+.arte-previa{display:block;max-width:min(100%,240px);height:auto;aspect-ratio:3/4;object-fit:contain;margin:8px 0;border-radius:10px;background:var(--sunk);box-shadow:0 0 0 1px var(--line2)}

@@ -595,3 +595,9 @@ img.cdo-blur{filter:blur(16px) saturate(.6);transform:scale(1.15)}
 
 /* toque (inclui tablet/desktop touch, 761-1100px): botões do cartão com 44px e o texto de apoio com 13,5px */
 @media(pointer:coarse){.nsft2 .fq-in .fq-acts .fq-go{min-height:44px}.nsft2 .fq-in .fq-l2{font-size:13.5px}}
+
+/* ---------- botão "Enviar arte de carta" no rodapé (página temporária enviar-arte.html) ---------- */
+.ft-legal .ft-arte{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:0 0 0 4px;padding:10px 18px;border-radius:99px;background:#ffd23f;color:#2b2330;font:800 14px Inter,sans-serif;text-decoration:none}
+.ft-legal .ft-arte .ico{width:17px;height:17px}
+.ft-legal .ft-arte:hover{background:#fff}
+.ft-legal .ft-arte:focus-visible{outline:3px solid #fff;outline-offset:3px}

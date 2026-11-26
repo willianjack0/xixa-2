@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
+<script src="gate.js?v=20261120c"></script>
+<script src="cliente-economia.js?v=20261205a"></script>
+<title>Enviar arte de carta · NÃO SALVO</title>
+<meta name="description" content="Página temporária: ajude a completar o álbum enviando a arte das cartas que ainda não têm imagem.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css?v=20261205a">
+<link rel="stylesheet" href="enviar-arte.css?v=20261205a">
+<script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
+</head>
+<body>
+<main class="ea" id="ea">
+  <p class="ea-k">Página temporária</p>
+  <h1>Enviar arte de carta</h1>
+  <p class="ea-lead">Várias figurinhas do álbum ainda estão sem imagem. Escolha uma delas e mande a sua arte: quando a moderação aprovar, ela entra no álbum e no perfil de todo mundo.</p>
+
+  <!-- 1. guia -->
+  <section class="ea-sec" aria-labelledby="h-guia">
+    <h2 id="h-guia">1. Antes de desenhar: tamanhos e margens</h2>
+    <ul class="ea-regras">
+      <li><b>Tamanho ideal</b><span>600 × 800 px (retrato, proporção 3:4)</span></li>
+      <li><b>Mínimo</b><span>o menor lado com 400 px</span></li>
+      <li><b>Formato</b><span>PNG, JPEG ou WebP (imagem parada, sem GIF animado nem SVG)</span></li>
+      <li><b>Peso</b><span>até 5 MB. O site reduz para no máximo 800 px</span></li>
+      <li><b>Proporção</b><span>nada de tiras: a imagem não pode ser mais de 2 vezes mais larga que alta (nem o contrário)</span></li>
+    </ul>
+
+    <div class="ea-guia">
+      <figure class="ea-seg">
+        <div class="ea-seg-box" id="segBox" role="img" aria-label="Retângulo 3 por 4 com uma moldura tracejada: 8% de margem dos lados e 19% em cima e embaixo. Dentro dela fica a zona segura">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#arteModelo"/></svg>
+          <span class="ea-seg-z"><i>zona segura</i></span>
+        </div>
+        <figcaption><b>Zona segura.</b> A imagem <em>preenche</em> o quadro da carta e o que sobra é cortado. No álbum e no perfil o quadro da arte é quase quadrado (de cerca de 1,2 : 1 nas cartas pequenas a 0,9 : 1 nas grandes), então uma arte 3:4 perde até <b>19% em cima e 19% embaixo</b>; nas figurinhas coladas e nas miniaturas ela perde cerca de 8% dos lados e 12,5% em cima e embaixo. Deixe tudo o que importa (rosto, personagem, texto) dentro da moldura tracejada: <b>8% de margem dos lados e 19% em cima e embaixo</b>. Não escreva o nome da carta na imagem: ele já aparece numa faixa própria.</figcaption>
+      </figure>
+      <div class="ea-dicas">
+        <h3>O que a carta faz com a sua arte</h3>
+        <ul>
+          <li><b>Carta no álbum (lista):</b> o quadro da arte fica entre a faixa de cima (número e raridade) e a faixa do nome, quase quadrado. A imagem é centralizada e cortada.</li>
+          <li><b>Figurinha colada (página do álbum):</b> quadro retrato 3:4 com uma moldura amarela de 6%, levemente inclinada.</li>
+          <li><b>Carta no perfil e favorita:</b> mesmo desenho da carta do álbum, mas a imagem fica mais suave (55% de opacidade) sobre o fundo escuro. Prefira cores fortes e contraste.</li>
+          <li><b>Miniatura:</b> um quadrado 1:1 cortado do centro, usado nas grades do perfil.</li>
+          <li><b>Só arte original ou que você pode usar.</b> Nada de conteúdo ofensivo, de marca d'água de terceiros ou de pessoas reais sem contexto de meme.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="ea-h3">Como fica aplicada</h3>
+    <p class="ea-mut" id="exTxt">Exemplo com uma arte de modelo. Escolha o arquivo no passo 3 e estes quadros passam a mostrar a <b>sua</b> imagem.</p>
+    <div class="ea-ex" id="exemplos">
+      <figure class="ea-ex-i">
+        <div class="ea-card" aria-hidden="true">
+          <div class="top"><span>07</span><em>Raro</em></div>
+          <div class="art"><svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice"><use href="#arteModelo"></use></svg><img alt="" hidden data-arte-img></div>
+          <div class="nm">Nome da carta</div>
+          <div class="ft">Coleção</div>
+        </div>
+        <figcaption>Carta no álbum</figcaption>
+      </figure>
+      <figure class="ea-ex-i">
+        <div class="ea-vaga" aria-hidden="true">
+          <div class="f"><div class="art"><svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice"><use href="#arteModelo"></use></svg><img alt="" hidden data-arte-img></div></div>
+        </div>
+        <figcaption>Figurinha colada</figcaption>
+      </figure>
+      <figure class="ea-ex-i">
+        <div class="ea-card perfil" aria-hidden="true">
+          <div class="top"><span>07</span><em>Raro</em></div>
+          <div class="art"><svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice"><use href="#arteModelo"></use></svg><img alt="" hidden data-arte-img></div>
+          <div class="nm">Nome da carta</div>
+          <div class="ft">Coleção</div>
+        </div>
+        <figcaption>Carta no perfil (favorita)</figcaption>
+      </figure>
+      <figure class="ea-ex-i">
+        <div class="ea-mini" aria-hidden="true">
+          <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice"><use href="#arteModelo"></use></svg><img alt="" hidden data-arte-img>
+        </div>
+        <figcaption>Miniatura 1:1</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- estados de sessão -->
+  <section class="ea-sec" id="entrar" hidden aria-labelledby="h-entrar">
+    <h2 id="h-entrar">Entre para enviar</h2>
+    <p>O envio é feito com a sua conta do Discord, para a moderação saber de quem é cada arte.</p>
+    <button type="button" class="ea-btn" id="btEntrar">Entrar com Discord</button>
+  </section>
+
+  <div id="logado" hidden>
+    <!-- 2. escolher a carta -->
+    <section class="ea-sec" aria-labelledby="h-cartas">
+      <h2 id="h-cartas">2. Escolha uma carta sem arte</h2>
+      <p class="ea-mut">Só aparecem cartas que ainda não têm imagem aprovada. Se outras pessoas já mandaram arte para a mesma carta, ela continua na lista até a moderação aprovar uma.</p>
+      <form class="ea-busca" id="fBusca" role="search">
+        <div class="ea-campo"><label for="busca">Buscar pelo nome</label><input id="busca" type="search" maxlength="60" autocomplete="off" placeholder="ex.: Nazaré"></div>
+        <div class="ea-campo"><label for="colecao">Coleção</label><select id="colecao"><option value="">Todas</option></select></div>
+      </form>
+      <p class="ea-estado" id="cartasEstado" role="status" aria-live="polite"></p>
+      <ul class="ea-grade" id="cartas" role="list"></ul>
+      <div class="ea-mais"><button type="button" class="ea-btn ghost" id="btMais" hidden>Mostrar mais cartas</button></div>
+    </section>
+
+    <!-- 3. enviar -->
+    <section class="ea-sec" id="enviar" aria-labelledby="h-env">
+      <h2 id="h-env">3. Mande a sua arte</h2>
+      <p class="ea-sel" id="selecao" aria-live="polite">Nenhuma carta escolhida ainda. Escolha uma no passo 2.</p>
+      <form id="fEnvio" novalidate>
+        <div class="ea-campo">
+          <label for="arquivo">Arquivo da imagem</label>
+          <input id="arquivo" type="file" accept="image/png,image/jpeg,image/webp" aria-describedby="arqAjuda arqErro" disabled>
+          <small id="arqAjuda">PNG, JPEG ou WebP, até 5 MB, o menor lado com pelo menos 400 px.</small>
+          <p class="ea-erro" id="arqErro" role="alert"></p>
+        </div>
+        <button type="submit" class="ea-btn" id="btEnviar" disabled>Enviar para a moderação</button>
+        <p class="ea-estado" id="envioEstado" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- 4. meus envios -->
+    <section class="ea-sec" aria-labelledby="h-meus">
+      <h2 id="h-meus">Seus envios</h2>
+      <p class="ea-estado" id="meusEstado" role="status" aria-live="polite"></p>
+      <ul class="ea-meus" id="meus" role="list"></ul>
+    </section>
+  </div>
+
+  <nav class="ea-fim" aria-label="Outras páginas"><a href="album.html">Ver o álbum</a><a href="index.html">Voltar ao início</a></nav>
+</main>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="arteModelo" viewBox="0 0 300 400">
+      <defs><linearGradient id="amg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#25aae3"/><stop offset="1" stop-color="#7a4dff"/></linearGradient></defs>
+      <rect width="300" height="400" fill="url(#amg)"/>
+      <circle cx="150" cy="150" r="62" fill="#ffffffd9"/>
+      <path d="M60 400c0-80 40-130 90-130s90 50 90 130Z" fill="#ffffffd9"/>
+      <circle cx="128" cy="144" r="7" fill="#1b2a4a"/><circle cx="172" cy="144" r="7" fill="#1b2a4a"/>
+      <path d="M126 172q24 18 48 0" stroke="#1b2a4a" stroke-width="6" fill="none" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<script src="common.js?v=20261205a"></script>
+<script src="data.js?v=20261201a"></script>
+<script src="enviar-arte.js?v=20261205a"></script>
+<script>
+renderHeader("arte",{sub:[
+  {k:"inicio",ic:"home",label:"Início",href:"index.html"},
+  {k:"tl",ic:"timeline",label:"Linha do tempo",href:"linha-do-tempo.html"},
+  {k:"wiki",ic:"book",label:"Memepédia",href:"memepedia.html"},
+  {k:"album",ic:"album",label:"Álbum de figurinhas",href:"album.html"},
+  {sp:1},
+  {k:"send",ic:"send",label:"Enviar meme",cta:1,href:"index.html#send"}
+]});
+renderWallet();
+EnviarArte.iniciar();
+</script>
+<script src="/nav.js?v=20261129a"></script>
+</body>
+</html>

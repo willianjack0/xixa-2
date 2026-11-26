@@ -481,11 +481,55 @@ function pintaPrazo(c) { const r = textoPrazo(c.prazo); c.el.textContent = "Praz
 
 function abaMod(p) {
   contadores = [];
-  const fila = h("div"), meus = h("div"), rem = h("div");
+  const fila = h("div"), meus = h("div"), rem = h("div"), artes = h("div");
   trocar(p, h("div", { class: "sec" }, h("h2", null, "Fila de envios"), fila),
+    h("div", { class: "sec" }, h("h2", null, "Artes de cartas"), artes),
     h("div", { class: "sec" }, h("h2", null, "Seus envios"), meus),
     h("div", { class: "sec" }, h("h2", null, "Pedidos de remoção"), rem));
-  carregarFila(fila); carregarMeusEnvios(meus); carregarRemocoes(rem);
+  carregarFila(fila); carregarArtes(artes); carregarMeusEnvios(meus); carregarRemocoes(rem);
+}
+
+// ---------- artes de cartas enviadas pela página enviar-arte.html (temporária) ----------
+// Aprovar grava a imagem da carta (e rejeita as outras pendentes da mesma carta); rejeitar exige o motivo. A prévia sai de uma rota
+// que só moderador acessa (o arquivo pendente nunca é público). Quem enviou não decide a própria arte (só admin).
+async function carregarArtes(box) {
+  trocar(box, carregando("Carregando as artes…"));
+  const r = await api("GET", "/api/mod/arte/envios?status=pendente");
+  if (r.status === 404) return trocar(box, vazio("O envio de arte de carta ainda não está disponível neste servidor."));
+  if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarArtes(box)));
+  const itens = r.data.itens || [];
+  if (!itens.length) return trocar(box, vazio("Nenhuma arte esperando moderação."));
+  trocar(box, h("p", { class: "mini" }, (r.data.total || itens.length) + " arte(s) esperando. Aprovar põe a imagem na carta e rejeita as outras artes pendentes dela."),
+    h("ul", { class: "lista" }, itens.map((i) => cartaoArte(i, box))));
+}
+
+function cartaoArte(i, box) {
+  const botoes = [];
+  const travar = (v) => botoes.forEach((b) => (b.disabled = v));
+  async function aprovar() {
+    const c = await confirmar({ titulo: "Aprovar esta arte?", texto: "A imagem vira a arte oficial de “" + i.carta_nome + "”" + (i.outros_pendentes ? " e as outras " + i.outros_pendentes + " artes pendentes dela serão rejeitadas." : "."), ok: "Aprovar" });
+    if (!c) return;
+    travar(true);
+    const r = await api("POST", "/api/mod/arte/envios/" + encodeURIComponent(i.id) + "/aprovar", {});
+    if (!r.ok) { aviso(msgErro(r), "erro"); if (r.status === 409) carregarArtes(box); else travar(false); return; }
+    aviso("Arte aprovada: a carta já aparece com a nova imagem.", "ok"); carregarArtes(box);
+  }
+  async function rejeitar() {
+    const c = await confirmar({ titulo: "Rejeitar esta arte?", texto: "A pessoa vê o motivo em “Seus envios”. A carta continua aberta para outras artes.", ok: "Rejeitar", perigo: true, motivo: { rotulo: "Motivo (3 a 300 caracteres)", max: 300 } });
+    if (!c) return;
+    if (c.motivo.length < 3) { aviso("Diga o motivo da rejeição (pelo menos 3 caracteres).", "erro"); return; }
+    travar(true);
+    const r = await api("POST", "/api/mod/arte/envios/" + encodeURIComponent(i.id) + "/rejeitar", { motivo: c.motivo });
+    if (!r.ok) { aviso(msgErro(r), "erro"); if (r.status === 409) carregarArtes(box); else travar(false); return; }
+    aviso("Arte rejeitada.", "ok"); carregarArtes(box);
+  }
+  botoes.push(h("button", { class: "b ok", type: "button", on: { click: aprovar } }, "Aprovar"), h("button", { class: "b bad", type: "button", on: { click: rejeitar } }, "Rejeitar"));
+  return h("li", { class: "item" },
+    h("div", { class: "item-h" }, h("h3", null, i.carta_nome), chip(i.colecao_nome), chip(i.raridade),
+      i.outros_pendentes ? chip(i.outros_pendentes + " concorrente(s)", "info") : null, i.carta_ja_tem_arte ? chip("Carta já tem arte", "bad") : null),
+    h("div", { class: "meta" }, h("span", null, "Enviado por " + i.autor + " · " + quando(i.criado_em)), h("span", null, i.largura + " × " + i.altura + " px · " + Math.round((i.bytes || 0) / 1024) + " KB")),
+    h("img", { class: "arte-previa", src: "/api/mod/arte/envios/" + encodeURIComponent(i.id) + "/arquivo", alt: "Arte enviada para a carta " + i.carta_nome, loading: "lazy", width: 240, height: 320 }),
+    h("div", { class: "acts" }, botoes));
 }
 
 const SITUACAO_ENVIO = { aberto: "Aguardando moderação", aprovado: "Aprovado", rejeitado: "Rejeitado", ajuste: "Ajuste pedido", duplicado: "Duplicado" };

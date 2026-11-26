@@ -7,6 +7,8 @@ import { criarAutenticador } from './auth/autenticador.js';
 import { lerConfigDiscord } from './auth/discord.js';
 import { limparExpiradas } from './auth/sessao.js';
 import { agendarLimpezaEventosIp } from './lib/limpeza.js';
+import { agendarLimpezaArtes } from './lib/limpeza-arte.js';
+import { configDoAmbiente, criarS3 } from './mcp/s3.js';
 import { semearMemepedia } from './lib/memepedia-acervo.js';
 
 // falha ANTES de tocar no banco se o stub estiver ligado fora da allowlist (ver auth-stub.js)
@@ -38,4 +40,5 @@ const { server } = criarApp({
   auth: { discord, cookieSecure, origemSite }
 });
 agendarLimpezaEventosIp(pool); // apaga eventos_meme_ip antigos: já no boot e a cada 6h
+agendarLimpezaArtes(pool, () => { const cfg = configDoAmbiente(); return cfg ? criarS3(cfg) : null; }); // artes pendentes: expira em 30 dias e apaga órfãos de pendentes/
 server.listen(3000, () => console.log('naosalvo-api :3000'));
