@@ -5,7 +5,7 @@
 <link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
 <link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
 <script src="gate.js?v=20261120c"></script>
-<script src="cliente-economia.js?v=20261205a"></script>
+<script src="cliente-economia.js?v=20261207a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Perfil · NÃO SALVO</title>
 <meta name="description" content="Perfil de colecionador no Não Salvo: veja figurinhas, cartas favoritas e conquistas no museu da internet brasileira.">
@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261205a">
+<link rel="stylesheet" href="theme.css?v=20261207a">
 <link rel="stylesheet" href="viewer.css?v=20261206a">
 <link rel="stylesheet" href="perfil.css?v=20261128a">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
@@ -52,7 +52,7 @@
   </form>
 </dialog>
 
-<script src="common.js?v=20261205a"></script>
+<script src="common.js?v=20261207a"></script>
 <script src="data.js?v=20261204a"></script>
 <script src="player.js?v=20261130c"></script>
 <script src="viewer.js?v=20261206a"></script>
@@ -112,7 +112,7 @@ function urlArte(imagem,meme,yt){
 function colecao(id){return (typeof COLLECTIONS!=="undefined"&&COLLECTIONS.find(c=>c.id===id))||null}
 function carta(c,grande){
   const col=colecao(c.colecao_id),bg=col?col.bg:["#334","#112"],m=c.meme_id&&typeof MEMES!=="undefined"&&MEMES.find(x=>x.id===c.meme_id);
-  const ua=urlArte(c.imagem,m),img=ua?`<img src="${esc(ua)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:"";
+  const ua=urlArte(c.imagem,m),img=ua?`<img src="${esc(ua)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:"";
   return `<div class="pf-carta ${grande?"grande ":""}${esc(c.raridade)}" style="--rc:var(--${esc(c.raridade)})" role="img" aria-label="Carta ${esc(c.nome)}, ${esc(c.raridade)}">
    <div class="tp"><span>${String(c.numero).padStart(3,"0")}</span><em>${esc(c.raridade)}</em></div>
    <div class="art" style="background:linear-gradient(150deg,${esc(bg[0])},${esc(bg[1])})">${img}<span${img?" hidden":""}>${esc(c.emoji||"⭐")}</span></div>
@@ -170,12 +170,12 @@ function detalheHTML(p,a,nRec){
 }
 // ---- publicações: figurinhas compartilhadas do álbum e memes aprovados, no jeito de cada rede ----
 const PUBS=()=>(P&&Array.isArray(P.publicacoes)?P.publicacoes:[]);
-function midia(m){const g=m&&m.id&&typeof MEMES!=="undefined"?MEMES.find(z=>z.id===m.id):null,u=m?urlArte(m.imagem,g,m.youtube_id):"";return u?`<img src="${esc(u)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:""}
+function midia(m){const g=m&&m.id&&typeof MEMES!=="undefined"?MEMES.find(z=>z.id===m.id):null,u=m?urlArte(m.imagem,g,m.youtube_id):"";return u?`<img src="${esc(u)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:""}
 // quadradinho (grade do Instagram, story do Snapchat): figurinha ou meme como foto
 function quadro(x,cls){
   if(x.tipo==="meme"){const m=x.meme||{};return `<a class="${cls}" ${m.id?`href="memepedia.html#${encodeURIComponent(m.id)}"`:""} style="--qbg:linear-gradient(150deg,#3f729b,#1c3f5e)">${midia(m)}<span class="em" aria-hidden="true">${esc(m.emoji||"🎬")}</span><span class="lg"><b>${esc(m.titulo||"Meme")}</b>${m.ano?` · ${esc(m.ano)}`:""}</span></a>`}
   const c=x.carta||x,col=colecao(c.colecao_id),bg=col?col.bg:["#334","#112"],mm=c.meme_id&&typeof MEMES!=="undefined"&&MEMES.find(z=>z.id===c.meme_id);
-  return `<span class="${cls} r-${esc(c.raridade)}" style="--qbg:linear-gradient(150deg,${esc(bg[0])},${esc(bg[1])});--rc:var(--${esc(c.raridade)})" role="img" aria-label="Figurinha ${esc(c.nome)}, ${esc(c.raridade)}">${(ua=>ua?`<img src="${esc(ua)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:"")(urlArte(c.imagem,mm))}<span class="em" aria-hidden="true">${esc(c.emoji||"⭐")}</span><span class="lg"><b>${esc(c.nome)}</b></span></span>`
+  return `<span class="${cls} r-${esc(c.raridade)}" style="--qbg:linear-gradient(150deg,${esc(bg[0])},${esc(bg[1])});--rc:var(--${esc(c.raridade)})" role="img" aria-label="Figurinha ${esc(c.nome)}, ${esc(c.raridade)}">${(ua=>ua?`<img src="${esc(ua)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`:"")(urlArte(c.imagem,mm))}<span class="em" aria-hidden="true">${esc(c.emoji||"⭐")}</span><span class="lg"><b>${esc(c.nome)}</b></span></span>`
 }
 // rodapé de cada publicação, no jeito da rede (texto decorativo, sem botões falsos)
 const RODPUB={orkut:"comentários (0)",fotolog:"0 comentários · livro de visitas",twitter:"↩ Responder · ⟲ Retweetar · ★ Favoritar",facebook:"Curtir · Comentar · Compartilhar",instagram:"♥ curtir · 💬 comentar",whatsapp:"✔✔ visualizado",vine:"🔁 loops · revine",snapchat:"👀 vista",tiktok:"♡ · 💬 · ↗",msn:"(Y) curtiu",icq:"uh-oh! arquivo recebido",ask:"👍 Curtir",homepage:"✨ NOVO! ✨"};
