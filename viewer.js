@@ -408,7 +408,10 @@ function encaixarJanela(el){
   media.style.maxWidth="";media.style.maxHeight="";
   const pad=innerWidth<=700||innerHeight<800?16:48,room=innerHeight-pad,folga=innerWidth<=700?8:24;
   const minH=innerWidth<=700?180:Math.min(300,Math.round(innerHeight*.42));
-  const fim=()=>{const wr=w.getBoundingClientRect(),mr=media.getBoundingClientRect();return mr.bottom-wr.top+folga};
+  // vídeo 4:3 (2005) no PC: as informações ficam numa coluna ao lado do vídeo (viewer.css), então basta o vídeo caber;
+  // a janela inteira (com a folga de baixo para a plaquinha da lan house e os avisos da época) tem que caber na tela
+  const lado=media.closest(".vp-e1")&&matchMedia("(min-width: 901px)").matches;
+  const fim=()=>{const wr=w.getBoundingClientRect(),mr=media.getBoundingClientRect();return lado?wr.height+8:mr.bottom-wr.top+folga};
   for(let i=0;i<4;i++){
     const over=fim()-room;if(over<=1)return;
     if(media.classList.contains("pimg")){const h=media.getBoundingClientRect().height;if(h<=minH)return;media.style.maxHeight=Math.max(minH,h-over)+"px";continue}

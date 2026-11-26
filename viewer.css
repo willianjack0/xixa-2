@@ -645,3 +645,19 @@ body.vw-open{overflow:hidden}
 .vw-win .yc>main{margin:0;max-width:none;min-width:0;width:auto;justify-self:stretch;padding-left:0;padding-right:0;padding-top:0}
 /* player de 2005 (4:3): na janela ele ocupa a largura toda (o encaixe da janela reduz se não couber na altura) */
 .vw-win .vp-e1 .vp-screen{max-width:none}
+
+/* 2005 (4:3) no PC: vídeo grande à esquerda e as informações numa coluna à direita (como a página do YouTube de 2005),
+   para caber tudo na tela sem rolar: avaliação, abas, canal, descrição, botões e ainda sobrar lugar embaixo para a
+   plaquinha da lan house e para os avisos da época */
+@media(min-width:901px){
+  .vw-win.vw-e1{max-width:1020px}
+  .vw-win .e1 .yc>main{display:grid;grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:auto auto auto auto auto auto minmax(150px,1fr);column-gap:18px;align-items:start;padding-bottom:0}
+  .vw-win .e1 .yc>main>*{grid-column:2;min-width:0;margin-top:0}
+  .vw-win .e1 .yc>main>h1{grid-column:1/-1;grid-row:1}
+  .vw-win .e1 .yc>main>.vp{grid-column:1;grid-row:2/-1}
+  .vw-win .e1 .ub1{flex-wrap:wrap;gap:4px 10px}
+  .vw-win .e1 .tabs1{flex-wrap:wrap;margin-top:8px}
+  .vw-win .e1 .tabs1+*{margin-top:0}
+  .vw-win .e1 .vbs{flex-wrap:wrap;margin-top:10px}
+  .vw-win .e1 .yc{padding-bottom:64px}
+}
