@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
 <link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
-<script src="gate.js?v=20261120c"></script>
-<script src="cliente-economia.js?v=20261207a"></script>
+<script src="gate.js?v=20261207b"></script>
+<script src="cliente-economia.js?v=20261207b"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Perfil · NÃO SALVO</title>
 <meta name="description" content="Perfil de colecionador no Não Salvo: veja figurinhas, cartas favoritas e conquistas no museu da internet brasileira.">
@@ -24,9 +24,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261207a">
-<link rel="stylesheet" href="viewer.css?v=20261206a">
-<link rel="stylesheet" href="perfil.css?v=20261128a">
+<link rel="stylesheet" href="theme.css?v=20261207b">
+<link rel="stylesheet" href="viewer.css?v=20261207b">
+<link rel="stylesheet" href="perfil.css?v=20261207b">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 </head>
 <body>
@@ -52,11 +52,11 @@
   </form>
 </dialog>
 
-<script src="common.js?v=20261207a"></script>
-<script src="data.js?v=20261204a"></script>
-<script src="player.js?v=20261130c"></script>
-<script src="viewer.js?v=20261206a"></script>
-<script src="alertas.js?v=20261125b"></script>
+<script src="common.js?v=20261207b"></script>
+<script src="data.js?v=20261207b"></script>
+<script src="player.js?v=20261207b"></script>
+<script src="viewer.js?v=20261207b"></script>
+<script src="alertas.js?v=20261207b"></script>
 <script>
 renderHeader("perfil",{sub:[
   {k:"inicio",ic:"home",label:"Início",href:"index.html"},
@@ -129,7 +129,7 @@ function fotoPerfil(p){const g=gato(p.avatar_gato,p.apelido);return p.eh_meu?`<s
 function patHTML(){
   const p=P.patente,cor=p&&/^#[0-9a-f]{3,8}$/i.test(p.cor||"")?p.cor:"#0a6a9a",prox=P.proxima_patente;
   const pct=prox?Math.max(4,Math.min(100,Math.round(P.xp/(P.xp+prox.faltam)*100))):100;
-  return `<div style="--pc:${cor}">${p?`<span class="pf-pat">⬢ ${esc(p.nome)}</span>`:""}<div class="pf-xp" role="progressbar" aria-label="Nível" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div>
+  return `<div style="--pc:${cor}">${p?`<span class="pf-pat">⬢ ${esc(p.nome)}</span>`:""}<div class="pf-xp" role="progressbar" aria-label="Patente" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div>
    <div class="pf-cap">${fmt(P.xp)} XP${prox?` · faltam ${fmt(prox.faltam)} para ${esc(prox.nome)}`:" · patente máxima"}</div></div>`;
 }
 function colsHTML(){return `<div class="pf-cols">${P.album.colecoes.map(k=>{const c=colecao(k.id),pct=k.total?Math.round(k.tenho/k.total*100):0;
@@ -216,7 +216,7 @@ function montar(){
     msn:()=>`<div class="win"><div class="tit"><span>Não Salvo Messenger · ${ap}</span><i aria-hidden="true"><span></span><span></span><span></span></i></div>
       <div class="eu">${fotoPerfil(p)}<div><h1 class="pf-nome" style="margin:0">~*~ ${ap} ~*~</h1><div class="pm">${P.carta_favorita?`♫ ouvindo: ${esc(P.carta_favorita.nome)}`:"(sem mensagem pessoal)"}</div><span class="st">Online</span></div></div>
       <div class="pf-g"><div class="pf-c"><div class="conversa"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div>${caixa("conversa",posts)}</div>
-       <div class="pf-c"><div class="lado pf-box"><h2 class="pf-h">Nível</h2>${pat}</div><div class="lado pf-box"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="lado pf-box"><h2 class="pf-h">Contatos (coleções)</h2>${cols}</div><div class="lado"><h2 class="pf-h">Figurinhas (${a.tenho})</h2>${figs}</div></div></div></div>`,
+       <div class="pf-c"><div class="lado pf-box"><h2 class="pf-h">Patente</h2>${pat}</div><div class="lado pf-box"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="lado pf-box"><h2 class="pf-h">Contatos (coleções)</h2>${cols}</div><div class="lado"><h2 class="pf-h">Figurinhas (${a.tenho})</h2>${figs}</div></div></div></div>`,
     twitter:()=>`<div class="pf-g"><div class="pf-c main"><div class="tcab">${fotoPerfil(p)}<div class="tx"><h1 class="pf-nome">${ap}</h1><div class="arroba">@${ap}</div><div class="bio">Colecionando figurinhas da internet brasileira desde ${esc(desde)}.</div><div class="loc">Brasil · naosalvo</div></div></div>
        <div class="tw-abas" aria-hidden="true"><span class="on">Tweets</span><span>Menções</span><span>Favoritos</span></div>
        ${posts}<div class="pf-box tw-men"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div></div>
@@ -226,7 +226,7 @@ function montar(){
      <div class="pf-g"><div class="pf-c">${fotoPerfil(p)}<div class="info" id="fb-info"><span><b>Patente:</b> ${P.patente?esc(P.patente.nome):"-"}</span><span><b>Membro desde:</b> ${esc(desde)}</span><span><b>Figurinhas:</b> ${a.tenho} de ${a.total}</span></div></div>
       <div class="pf-c"><h1 class="pf-nome">${ap}</h1><nav class="abas" aria-label="Seções do perfil"><a href="#fb-mural" aria-current="location" data-ir="fb-mural">Mural</a><a href="#fb-info" data-ir="fb-info">Informações</a><a href="#fb-fotos" data-ir="fb-fotos">Fotos</a></nav>
        ${caixa("caixa",posts)}<div class="caixa" id="fb-mural"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div><div class="caixa" id="fb-fotos"><h2 class="pf-h">Fotos (figurinhas)</h2>${figs}</div></div>
-      <div class="pf-c"><div class="caixa"><h2 class="pf-h">Nível</h2>${pat}</div><div class="caixa"><h2 class="pf-h">Curtiu (carta favorita)</h2>${fav}</div><div class="caixa"><h2 class="pf-h">Grupos (coleções)</h2>${cols}</div></div></div>`
+      <div class="pf-c"><div class="caixa"><h2 class="pf-h">Patente</h2>${pat}</div><div class="caixa"><h2 class="pf-h">Curtiu (carta favorita)</h2>${fav}</div><div class="caixa"><h2 class="pf-h">Grupos (coleções)</h2>${cols}</div></div></div>`
   };
   // redes novas (vídeo curto, fotos, stories): mesmo esqueleto, cada uma com seu visual no CSS
   const mod=()=>{const st=L.st||["figurinhas","coleções","XP"];
@@ -245,7 +245,7 @@ function montar(){
     icq:()=>`<div class="win"><div class="tit"><span>ICQ · Informações de ${ap}</span><i aria-hidden="true">_ □ ✕</i></div>
       <div class="pf-g"><div class="pf-c lado"><div class="pf-box">${fotoPerfil(p)}</div><h1 class="pf-nome">${ap}</h1><div class="uin">UIN: ${esc(String(10000000+a.tenho*991+nRec*7))}</div><span class="on">🌼 Disponível</span></div>
        <div class="pf-c"><div class="caixa"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div>${caixa("caixa",posts)}<div class="caixa"><h2 class="pf-h">Arquivos recebidos (figurinhas)</h2>${figs}</div></div>
-       <div class="pf-c"><div class="caixa"><h2 class="pf-h">Nível</h2>${pat}</div><div class="caixa"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="caixa"><h2 class="pf-h">Grupos (coleções)</h2>${cols}</div></div></div></div>`,
+       <div class="pf-c"><div class="caixa"><h2 class="pf-h">Patente</h2>${pat}</div><div class="caixa"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="caixa"><h2 class="pf-h">Grupos (coleções)</h2>${cols}</div></div></div></div>`,
     ask:()=>`<div class="pf-top"><b>ask.fm</b></div><div class="pf-g"><div class="pf-c"><div class="caixa">${fotoPerfil(p)}<h1 class="pf-nome">${ap}</h1><div class="pf-cap">@${ap.toLowerCase()} · desde ${esc(desde)}</div><div class="nums"><span><b>${nRec}</b>respostas</span><span><b>${a.tenho}</b>figurinhas</span></div>${pat}</div></div>
        <div class="pf-c"><div class="caixa"><h2 class="pf-h">${esc(L.recados)} (${nRec})</h2>${rec}</div>${caixa("caixa",posts)}<div class="caixa"><h2 class="pf-h">Figurinhas</h2>${figs}</div></div>
        <div class="pf-c"><div class="caixa"><h2 class="pf-h">Carta favorita</h2>${fav}</div><div class="caixa"><h2 class="pf-h">Coleções</h2>${cols}</div></div></div>`,
@@ -381,6 +381,6 @@ async function carregar(ap){
   catch(e){estado("Entre para ver o seu perfil","Os perfis são só para quem entrou com o Discord.",`<br><a class="pf-bt pri" href="/entrar.html?voltar=%2Fperfil.html">Entrar com Discord</a>`)}
 })();
 </script>
-<script src="/nav.js?v=20261129a"></script>
+<script src="/nav.js?v=20261207b"></script>
 </body>
 </html>

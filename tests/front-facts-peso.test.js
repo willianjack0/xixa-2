@@ -1,5 +1,5 @@
 // Faixa facts da home: copy curta, título em Baloo 2 15px, texto 14px/1.45, células de altura igual no 2x2,
-// linha única no desktop, quebra de linha sem órfã, respiro da nota Protótipo, contraste e sem erro de console.
+// linha única no desktop, quebra de linha sem órfã, respiro da nota do rodapé da home, contraste e sem erro de console.
 // Roda com arquivo explícito: node --test tests/front-facts-peso.test.js
 // Precisa do Playwright (npm i playwright; npx playwright install chromium). Sem ele os testes são pulados.
 // Se estiver instalado fora do projeto: PLAYWRIGHT_MODULE=/caminho/node_modules/playwright
