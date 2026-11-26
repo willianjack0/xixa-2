@@ -13,11 +13,11 @@ const fotoDe = (u) => (u.usar_foto && u.avatar_url ? u.avatar_url : null);
 export async function acharPorApelido(db, apelido) {
   if (typeof apelido !== 'string' || !APELIDO_URL.test(apelido)) throw new ErroNegocio(404, 'perfil não encontrado');
   const { rows } = await db.query(
-    `SELECT u.id, u.apelido, u.avatar_gato, u.usar_foto, u.perfil_layout, u.carta_favorita, u.criado_em, u.banido, c.avatar_url
+    `SELECT u.id, u.apelido, u.avatar_gato, u.usar_foto, u.perfil_layout, u.carta_favorita, u.criado_em, u.banido, u.removida_em, c.avatar_url
        FROM usuarios u LEFT JOIN contas_oauth c ON c.usuario_id = u.id AND c.provedor = 'discord'
       WHERE lower(u.apelido) = lower($1) LIMIT 1`, [apelido]);
   const u = rows[0];
-  if (!u || u.banido) throw new ErroNegocio(404, 'perfil não encontrado');
+  if (!u || u.banido || u.removida_em) throw new ErroNegocio(404, 'perfil não encontrado');
   return u;
 }
 

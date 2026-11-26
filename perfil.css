@@ -733,3 +733,24 @@ button.pf-semfav:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
 /* carta bem pequena (ex.: WhatsApp no desktop, 4 por linha): a raridade sai do topo (a borda já tem a cor) e a coleção fica em 1 linha */
 @container (max-width:96px){.pf-carta .tp em{display:none}.pf-carta .art{font-size:22px}.pf-carta .nm{padding:3px 2px}}
 @container (max-width:74px){.pf-carta .ft{display:none}.pf-carta .art{min-height:24px}}
+
+/* ---- LGPD: excluir a própria conta (área discreta no fim do perfil) ---- */
+.pf-conta{max-width:760px;margin:16px auto 0;padding:6px 14px;border:1px dashed var(--line2);border-radius:14px;background:var(--panel);color:var(--txt);font:500 14px/1.4 Inter,sans-serif;display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px}
+.pf-conta[hidden]{display:none}
+.pf-conta-h{margin:0;font:800 14px Inter,sans-serif}
+.pf-conta-p{margin:0;flex:1 1 240px;font-size:13px;color:var(--mut-strong,var(--mut))}
+.pf-bt-del{border-color:var(--bad);color:var(--bad);background:transparent}
+.pf-bt-perigo{background:#b3243a;border-color:#b3243a;color:#fff}
+.pf-bt-perigo:disabled{opacity:.5;cursor:not-allowed}
+.pf-conta-painel{flex:1 1 100%;margin:6px 0 8px;padding-top:14px;border-top:1px solid var(--line)}
+.pf-conta-painel[hidden]{display:none}
+.pf-conta-painel h3{margin:0 0 10px;font:800 16px Inter,sans-serif}
+.pf-conta-painel h4{margin:0 0 6px;font:800 13px Inter,sans-serif}
+.pf-conta-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pf-conta-cols ul{margin:0;padding-left:18px;display:grid;gap:5px;font-size:13px}
+.pf-conta-lb{display:block;margin:16px 0 6px;font-weight:700}
+.pf-conta-in{width:100%;max-width:340px;min-height:44px;padding:0 12px;border-radius:10px;border:1.5px solid var(--line2);background:var(--sunk);color:var(--txt);font:600 16px Inter,sans-serif}
+.pf-conta-in:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
+.pf-conta-erro{min-height:20px;margin:6px 0 0;color:var(--bad);font-size:13px;font-weight:700}
+.pf-conta-acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+@media(max-width:640px){.pf-conta-cols{grid-template-columns:1fr}.pf-conta-acts .pf-bt{flex:1 1 100%}}

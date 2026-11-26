@@ -5,7 +5,7 @@
 <link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
 <link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
 <script src="gate.js?v=20261120c"></script>
-<script src="cliente-economia.js?v=20261207a"></script>
+<script src="cliente-economia.js?v=20261208a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Perfil · NÃO SALVO</title>
 <meta name="description" content="Perfil de colecionador no Não Salvo: veja figurinhas, cartas favoritas e conquistas no museu da internet brasileira.">
@@ -24,15 +24,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261207a">
+<link rel="stylesheet" href="theme.css?v=20261208a">
 <link rel="stylesheet" href="viewer.css?v=20261206a">
-<link rel="stylesheet" href="perfil.css?v=20261128a">
+<link rel="stylesheet" href="perfil.css?v=20261208a">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 </head>
 <body>
 <main class="pf-wrap">
   <div id="barra"></div>
   <section id="pf" aria-live="polite"><p class="pf-st" role="status">Carregando o perfil…</p></section>
+  <section id="conta" class="pf-conta" aria-labelledby="cT" hidden></section>
   <p id="aviso" class="sr-only" aria-live="polite"></p>
 </main>
 
@@ -52,7 +53,7 @@
   </form>
 </dialog>
 
-<script src="common.js?v=20261207a"></script>
+<script src="common.js?v=20261208a"></script>
 <script src="data.js?v=20261204a"></script>
 <script src="player.js?v=20261130c"></script>
 <script src="viewer.js?v=20261206a"></script>
@@ -308,7 +309,66 @@ function barra(){
   const eu=P.perfil.eh_meu,lay=LAYOUTS[P.perfil.layout]?P.perfil.layout:"orkut";
   b.innerHTML=`<div class="pf-tools t-${lay}"><button type="button" class="pf-tb" id="btCopiar" aria-live="polite">${icon("link")}<span>Copiar link</span></button>${eu?`<button type="button" class="pf-tb" data-ed="visual" title="Trocar o visual do perfil">${icon("edit")}<span>Trocar visual</span></button>`:""}</div>`;
   $("btCopiar").onclick=copiarLink;
+  contaLgpd();
 }
+// ---- LGPD: "Excluir minha conta" (só no perfil do próprio usuário). Duas etapas na própria página, sem confirm():
+//  1) o botão abre o painel que explica o que some e o que fica anonimizado; 2) digitar o apelido libera "Excluir para sempre".
+// O painel fica fora do #pf (que é redesenhado a cada mudança), então não perde o que a pessoa digitou. Só textContent com dados da API.
+function contaLgpd(){
+  const s=$("conta");if(!s)return;
+  if(!P||!P.perfil.eh_meu){s.hidden=true;s.textContent="";delete s.dataset.ap;return}
+  const ap=P.perfil.apelido;
+  if(!s.hidden&&s.dataset.ap===ap)return;
+  s.dataset.ap=ap;s.hidden=false;
+  s.innerHTML=`<h2 id="cT" class="pf-conta-h">Privacidade e conta</h2>
+   <p class="pf-conta-p">Você pode excluir a sua conta quando quiser. Isso não tem volta.</p>
+   <button type="button" class="pf-bt pf-bt-del" id="cAbrir" aria-expanded="false" aria-controls="cPainel">Excluir minha conta</button>
+   <div class="pf-conta-painel" id="cPainel" role="group" aria-labelledby="cP2" hidden>
+    <h3 id="cP2">Antes de excluir, confira</h3>
+    <div class="pf-conta-cols">
+     <div><h4>O que some</h4><ul>
+      <li>O vínculo com o seu Discord, o nome e a foto que vieram de lá</li>
+      <li>O seu gatinho, o visual do perfil e a carta favorita</li>
+      <li>As suas publicações no perfil e os recados que deixaram no seu perfil</li>
+      <li>As suas sessões e chaves de acesso: você sai em todos os aparelhos</li>
+      <li>Contato deixado em feedback e artes de carta que ainda não foram avaliadas</li>
+     </ul></div>
+     <div><h4>O que fica, sem o seu nome</h4><ul>
+      <li>Comentários, envios aprovados, votos e textos da Memepédia continuam, assinados como <b>removida-</b> e um número</li>
+      <li>O histórico de XP e moedas e o registro de auditoria da moderação, sem dado pessoal</li>
+      <li>Se a conta estava suspensa, a suspensão continua valendo</li>
+      <li>Se você entrar de novo com o mesmo Discord, o cadastro começa do zero: XP, moedas e cartas não voltam</li>
+     </ul></div>
+    </div>
+    <label class="pf-conta-lb" for="cApelido">Para confirmar, digite o seu apelido: <b id="cAp"></b></label>
+    <input class="pf-conta-in" id="cApelido" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40" aria-describedby="cErro">
+    <p class="pf-conta-erro" id="cErro" role="alert"></p>
+    <div class="pf-conta-acts"><button type="button" class="pf-bt pf-bt-perigo" id="cConfirmar" disabled>Excluir para sempre</button><button type="button" class="pf-bt" id="cCancelar">Cancelar</button></div>
+   </div>`;
+  $("cAp").textContent=ap;
+  const abrir=$("cAbrir"),painel=$("cPainel"),inp=$("cApelido"),ok=$("cConfirmar"),erro=$("cErro");
+  const bate=()=>inp.value.trim().toLowerCase()===ap.toLowerCase();
+  const fechar=()=>{painel.hidden=true;abrir.setAttribute("aria-expanded","false");inp.value="";erro.textContent="";ok.disabled=true;abrir.focus()};
+  abrir.onclick=()=>{painel.hidden=false;abrir.setAttribute("aria-expanded","true");inp.focus();painel.scrollIntoView({block:"nearest"})};
+  $("cCancelar").onclick=fechar;
+  painel.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();fechar()}});
+  inp.addEventListener("input",()=>{ok.disabled=!bate();erro.textContent=""});
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter"&&bate()){e.preventDefault();ok.click()}});
+  ok.onclick=async()=>{
+    if(!bate())return;
+    ok.disabled=true;inp.disabled=true;erro.textContent="";
+    try{
+      await Api.excluirConta(inp.value.trim(),{silencioso:true});
+      try{localStorage.removeItem("ns_convidado")}catch(e){}
+      location.replace("entrar.html?conta=excluida");
+    }catch(e){
+      inp.disabled=false;ok.disabled=!bate();
+      erro.textContent=e&&e.status===0?"Sem conexão. Nada foi excluído; tente de novo.":e&&e.status>=400&&e.status<500&&e.erro?e.erro:"Não consegui excluir agora. Nada foi alterado; tente de novo daqui a pouco.";
+      inp.focus();
+    }
+  };
+}
+
 // endereço completo do perfil (funciona em qualquer pasta do site)
 const urlPerfil=ap=>new URL(linkPerfil(ap),location.href).href;
 async function copiarLink(){

@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261207a">
+<link rel="stylesheet" href="theme.css?v=20261208a">
 <link rel="stylesheet" href="entrar.css?v=20261202a">
 <!-- esta tela não carrega o script da barreira de login (senão entra em laço de redirecionamento) -->
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
@@ -73,6 +73,7 @@
     negado:["leve","Login cancelado","Você fechou a janela do Discord antes de terminar. Sem problema: é só clicar no botão de novo."],
     erro:["serio","A conexão caiu","Não deu para falar com o Discord agora (parece internet discada). Espere um pouquinho e tente de novo."],
     banido:["serio","Conta bloqueada","Esta conta não pode entrar no Não Salvo. Se achar que é engano, fale com a moderação no Discord da comunidade."],
+    conta_excluida:["leve","Conta excluída","Pronto: a sua conta foi excluída e os seus dados pessoais foram removidos. Se um dia quiser voltar, é só entrar com o Discord: o cadastro começa do zero."],
     nao_membro:["leve","Falta entrar no servidor","Para visitar o museu, você precisa fazer parte do servidor do Discord da comunidade. Entre no servidor e tente de novo."]
   };
   var ICO={leve:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5h.01"/></svg>',
@@ -104,7 +105,8 @@
     av.querySelector("b").textContent=d[1];av.querySelector("b+span").textContent=d[2];
   }
   var m=q.get("login");
-  if(m)mostraAviso(Object.prototype.hasOwnProperty.call(MSG,m)?MSG[m]:MSG.erro);
+  if(q.get("conta")==="excluida")mostraAviso(MSG.conta_excluida);
+  else if(m)mostraAviso(Object.prototype.hasOwnProperty.call(MSG,m)?MSG[m]:MSG.erro);
   // tema claro/escuro (mesma chave do resto do site)
   var tb=document.getElementById("tema"),html=document.documentElement;
   var pinta=function(){var esc=html.dataset.theme==="dark";tb.setAttribute("aria-checked",String(esc));tb.title=esc?"Modo escuro ativo · clique para o modo claro":"Modo claro ativo · clique para o modo escuro"};
