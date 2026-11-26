@@ -265,6 +265,8 @@ erDiagram
 - [ ] Revisão de texto: padronizar termos (patente, nível, moedas) e remover frases de protótipo ("Em construção", "só funciona no Netlify"). — **parcial**: saiu o aviso "Protótipo" do álbum e os formulários ocultos do Netlify (album e index). Falta padronizar patente/nível/moedas e limpar o código de protótipo sem uso em `index.html` (fila de moderação local `SEED_QUEUE`, wiki e links locais em `localStorage`).
 - [x] Trocar o aviso "dados de exemplo" em ranking e moderação por dados reais ou por estado vazio bem escrito. — **feito**: ranking e moderação usam dados reais (resta código de protótipo sem uso em `index.html`).
 
+- [x] **Memepédia no admin** — **feito**: aba "Memepédia" no `/seppzone/` (moderador e admin) com busca, filtros (sem texto, incompleto, completos, com pendentes) e cobertura por campo; editor por meme com texto atual de cada um dos 6 campos, publicação direta com fonte opcional e contagem de caracteres, histórico de edições, restaurar versão e aprovar ou recusar pendentes com um clique. API em `/api/mod/memepedia/*`, com auditoria e sem migração. Ver `docs/API.md`. **Pendente:** apagar edição (não existe, por desenho), editar o texto de uma edição pendente, aviso ao autor quando a sugestão é decidida, e filtro por categoria ou ano na lista.
+
 **Pronto quando:** nenhum dado da tela vem de `data.js` nem de `localStorage` (exceto preferências como o tema), e as telas passam na checagem de celular, tablet e desktop.
 
 ---

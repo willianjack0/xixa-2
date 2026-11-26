@@ -314,6 +314,7 @@ function listaPaginada(box, { buscar, desenhar, vazio: txtVazio, resumo }) {
 const ABAS = [
   { id: "visao", nome: "Visão geral", papeis: ["admin"], montar: abaVisao, sempre: true },
   { id: "moderacao", nome: "Moderação", papeis: ["moderador", "admin"], montar: abaMod, sempre: true },
+  { id: "memepedia", nome: "Memepédia", papeis: ["moderador", "admin"], montar: abaMemepedia },
   { id: "usuarios", nome: "Usuários", papeis: ["admin"], montar: abaUsuarios },
   { id: "memes", nome: "Memes", papeis: ["admin"], montar: abaMemes },
   { id: "cartas", nome: "Cartas e coleções", papeis: ["admin"], montar: abaCartas },
@@ -1130,6 +1131,211 @@ const cfgMemepedia = () => ({
          h("button", { class: "b bad", type: "button", on: { click: () => c.decidir(i, "recusado") } }, "Recusar")]
       : [h("button", { class: "b", type: "button", on: { click: () => c.decidir(i, i.status === "aprovado" ? "recusado" : "aprovado") } }, i.status === "aprovado" ? "Recusar" : "Aprovar"),
          h("button", { class: "b", type: "button", on: { click: () => c.decidir(i, "pendente") } }, "Voltar à fila")])) });
+
+// ---------- Memepédia: cobertura, editor por campo, histórico, restaurar e pendentes (aba própria; moderador e admin) ----------
+// API em /api/mod/memepedia/*. Nenhum HTML é montado com dado da API: todo texto entra como nó de texto (h()).
+const MP_FILTROS = [["todos", "Todos"], ["sem", "Sem nenhum texto"], ["incompletos", "Texto incompleto"], ["completos", "Completos"], ["pendentes", "Com edições pendentes"]];
+const MP_CAMPOS = ["origem", "porque", "usos", "rede", "hoje", "curiosidades"];
+const MP_COR = { aprovado: "ok", recusado: "bad", pendente: "warn" };
+const MP_ST = { aprovado: "Aprovada", recusado: "Recusada", pendente: "Pendente" };
+
+function abaMemepedia(p) {
+  const raiz = h("div", { class: "mp" });
+  trocar(p, raiz);
+  listaMemepedia(raiz);
+}
+
+/** Barra de cobertura: x de y campos com texto aprovado. */
+function barraCobertura(feitos, total, rotulo) {
+  const pct = total ? Math.round((feitos / total) * 100) : 0;
+  const i = h("i"); i.style.width = pct + "%";
+  return h("div", { class: "mp-barra", role: "img", "aria-label": rotulo + ": " + feitos + " de " + total + " (" + pct + "%)" }, i);
+}
+
+/** Os 6 campos de um meme: ✓ com texto aprovado, ✕ sem texto (não depende só de cor). */
+function chipsCampos(tem) {
+  return h("ul", { class: "mp-campos", "aria-label": "Campos com texto aprovado" },
+    MP_CAMPOS.map((c) => h("li", { class: "chip" + (tem.includes(c) ? " ok" : "") }, (tem.includes(c) ? "✓ " : "✕ ") + CAMPOS_MP[c])));
+}
+
+function listaMemepedia(raiz) {
+  let busca = "", filtro = "todos", pagina = 1, token = 0, itens = [];
+  const idB = uid("mpb"), idF = uid("mpf");
+  const inBusca = h("input", { id: idB, type: "search", autocomplete: "off", maxLength: 60, placeholder: "título ou id do meme" });
+  const selF = h("select", { id: idF, value: "todos" }, MP_FILTROS.map(([v, r]) => h("option", { value: v }, r)));
+  const resumoEl = h("div", { class: "mp-resumo" }), info = h("p", { class: "mini", role: "status" }), ul = h("ul", { class: "lista" });
+  const mais = h("button", { class: "b", type: "button", hidden: true, on: { click: () => carregar(false) } }, "Mostrar mais memes");
+  trocar(raiz,
+    h("div", { class: "sec" }, h("h2", null, "Memepédia"), resumoEl),
+    h("div", { class: "filtros" }, h("div", { class: "campo larg" }, h("label", { for: idB }, "Buscar meme"), inBusca), h("div", { class: "campo" }, h("label", { for: idF }, "Mostrar"), selF)),
+    info, ul, h("div", { class: "pager" }, mais));
+
+  function desenharResumo(r) {
+    const total = r.resumo.campos_total;
+    trocar(resumoEl,
+      h("p", { class: "mp-cobertura" }, h("b", null, r.resumo.campos_preenchidos + " de " + total), " campos com texto aprovado (", total ? Math.round(r.resumo.campos_preenchidos / total * 100) : 0, "%) em ", r.resumo.memes, " memes"),
+      barraCobertura(r.resumo.campos_preenchidos, total, "Cobertura da Memepédia"),
+      h("ul", { class: "mp-numeros" },
+        h("li", null, h("b", null, r.resumo.sem_nenhum), " sem nenhum texto"),
+        h("li", null, h("b", null, r.resumo.incompletos), " com texto incompleto"),
+        h("li", null, h("b", null, r.resumo.completos), " completos"),
+        h("li", null, h("b", null, r.resumo.pendentes), " edições esperando moderação")));
+  }
+
+  function cartao(i) {
+    return h("li", { class: "item" },
+      h("div", { class: "item-h" }, h("h3", null, i.titulo),
+        i.status !== "publicado" ? chip(STATUS_MEME[i.status] || i.status, "warn") : null,
+        i.pendentes ? chip(i.pendentes + (i.pendentes === 1 ? " pendente" : " pendentes"), "warn") : null,
+        h("span", { class: "chip" + (i.preenchidos === 6 ? " ok" : "") }, i.preenchidos + "/6")),
+      h("div", { class: "meta" }, h("span", null, i.ano + " · " + i.categoria), h("span", { class: "mini" }, i.id)),
+      barraCobertura(i.preenchidos, 6, "Cobertura de " + i.titulo),
+      chipsCampos(i.campos),
+      h("div", { class: "acts" }, h("button", { class: "b pri", type: "button", on: { click: () => editorMemepedia(raiz, i.id, () => listaMemepedia(raiz)) } }, "Editar textos")));
+  }
+
+  async function carregar(zerar) {
+    if (zerar) { pagina = 1; itens = []; trocar(ul); } else pagina++;
+    const meu = ++token; mais.disabled = true;
+    if (zerar) trocar(info, carregando("Carregando os memes…"));
+    const qs = "filtro=" + encodeURIComponent(filtro) + "&pagina=" + pagina + "&limite=30" + (busca ? "&busca=" + encodeURIComponent(busca) : "");
+    const r = await api("GET", "/api/mod/memepedia/memes?" + qs);
+    if (meu !== token) return;
+    if (!r.ok) { mais.hidden = true; return trocar(info, erroEstado(msgErro(r), () => carregar(true))); }
+    desenharResumo(r.data);
+    r.data.itens.forEach((i) => ul.append(cartao(i)));
+    const mostrados = ul.children.length;
+    trocar(info, r.data.total ? mostrados + " de " + r.data.total + " memes" : vazio("Nenhum meme neste filtro."));
+    if (r.data.total) info.className = "mini"; mais.hidden = mostrados >= r.data.total; mais.disabled = false;
+  }
+  let t = null;
+  inBusca.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => { busca = inBusca.value.trim(); carregar(true); }, 300); });
+  selF.addEventListener("change", () => { filtro = selF.value; carregar(true); });
+  carregar(true);
+}
+
+/** Editor de um meme: um bloco por campo (pendentes, texto atual, histórico). voltar() devolve à lista. */
+function editorMemepedia(raiz, id, voltar) {
+  const rascunho = {};          // campo -> { texto, fonte } digitado e ainda não publicado
+  const abertos = new Set();    // históricos abertos
+  const corpo = h("div");
+  let dados = null;
+  const sujo = () => Object.keys(rascunho).length > 0;
+  async function sair() {
+    if (sujo()) { const c = await confirmar({ titulo: "Descartar o que você digitou?", texto: "Há texto digitado e não publicado.", ok: "Descartar", perigo: true }); if (!c) return; }
+    voltar();
+  }
+  trocar(raiz, h("div", { class: "sec" }, h("button", { class: "b", type: "button", on: { click: sair } }, "← Voltar à lista")), corpo);
+
+  async function carregar(manterRolagem) {
+    const y = window.scrollY;
+    if (!dados) trocar(corpo, carregando("Carregando o meme…"));
+    const r = await api("GET", "/api/mod/memepedia/memes/" + encodeURIComponent(id));
+    if (!r.ok) return trocar(corpo, erroEstado(msgErro(r), () => carregar(false)));
+    dados = r.data; desenhar();
+    if (manterRolagem) window.scrollTo(0, y);
+  }
+  async function acao(metodo, caminho, corpoReq, ok) {
+    const r = await api(metodo, caminho, corpoReq);
+    if (!r.ok) { aviso(msgErro(r), "erro"); if (r.status === 409 || r.status === 404) await carregar(true); return false; }
+    aviso(typeof ok === "function" ? ok(r.data) : ok, "ok"); await carregar(true); return true;
+  }
+
+  function blocoPendente(e, campo) {
+    const f = seguro(e.fonte);
+    return h("li", { class: "item mp-pend" },
+      h("div", { class: "item-h" }, chip("Pendente", "warn"), h("span", { class: "mini" }, "Enviado por " + (e.autor || "—") + " · " + quando(e.criado_em))),
+      h("p", { class: "txt" }, e.texto),
+      f ? h("p", { class: "mini" }, h("a", { href: f, target: "_blank", rel: "noopener noreferrer nofollow" }, "Fonte externa")) : null,
+      h("div", { class: "acts" },
+        h("button", { class: "b ok", type: "button", on: { click: () => acao("POST", "/api/mod/memepedia/edicoes/" + e.id + "/decidir", { status: "aprovado" }, "Texto aprovado e publicado.") } }, "Aprovar e publicar"),
+        h("button", { class: "b bad", type: "button", on: { click: () => acao("POST", "/api/mod/memepedia/edicoes/" + e.id + "/decidir", { status: "recusado" }, "Texto recusado.") } }, "Recusar"),
+        h("button", { class: "b", type: "button", on: { click: () => usarNoEditor(campo, e) } }, "Editar a partir deste")));
+  }
+
+  function usarNoEditor(campo, e) {
+    rascunho[campo] = { texto: e.texto, fonte: e.fonte || "" };
+    desenhar();
+    const ta = $("#mp-t-" + campo, corpo); if (ta) { ta.focus(); ta.scrollIntoView({ block: "center" }); }
+  }
+
+  function blocoCampo(c) {
+    const lim = dados.limites, rot = CAMPOS_MP[c.campo] || c.campo;
+    const base = { texto: c.atual ? c.atual.texto : "", fonte: c.atual && c.atual.fonte ? c.atual.fonte : "" };
+    const rasc = rascunho[c.campo] || base;
+    const idT = "mp-t-" + c.campo, idF = "mp-f-" + c.campo, idC = "mp-c-" + c.campo, idE = "mp-e-" + c.campo;
+    const ta = h("textarea", { id: idT, rows: 6, maxLength: lim.texto_max, value: rasc.texto, "aria-describedby": idC + " " + idE });
+    const fo = h("input", { id: idF, type: "url", maxLength: lim.fonte_max, value: rasc.fonte, placeholder: "https://… (opcional)" });
+    const cont = h("p", { class: "mini mp-cont", id: idC });
+    const erro = h("p", { class: "erro", id: idE, role: "alert" });
+    const bt = h("button", { class: "b pri", type: "button" }, "Publicar agora");
+    function atualizar() {
+      const tx = ta.value.trim(), n = [...ta.value.trim()].length, f = fo.value.trim();
+      const mudou = tx !== base.texto || f !== base.fonte;
+      if (mudou) rascunho[c.campo] = { texto: ta.value, fonte: fo.value }; else delete rascunho[c.campo];
+      cont.textContent = n + " / " + lim.texto_max + " caracteres · mínimo " + lim.texto_min;
+      const ruim = n < lim.texto_min || n > lim.texto_max;
+      const fonteRuim = f && (!/^https?:\/\/\S+$/i.test(f) || f.length > lim.fonte_max);
+      cont.classList.toggle("ruim", ruim && tx !== "");
+      ta.setAttribute("aria-invalid", ruim && tx !== "" ? "true" : "false"); fo.setAttribute("aria-invalid", fonteRuim ? "true" : "false");
+      erro.textContent = fonteRuim ? "A fonte precisa ser um link http ou https de até " + lim.fonte_max + " caracteres." : "";
+      bt.disabled = !mudou || ruim || !!fonteRuim;
+    }
+    ta.addEventListener("input", atualizar); fo.addEventListener("input", atualizar);
+    bt.addEventListener("click", async () => {
+      bt.disabled = true;
+      const corpoReq = { texto: ta.value }; if (fo.value.trim()) corpoReq.fonte = fo.value.trim();
+      const r = await api("POST", "/api/mod/memepedia/memes/" + encodeURIComponent(id) + "/campos/" + c.campo, corpoReq);
+      if (!r.ok) { erro.textContent = msgErro(r); aviso(msgErro(r), "erro"); bt.disabled = false; return; }
+      delete rascunho[c.campo];
+      aviso(r.data.sem_mudanca ? "Esse já é o texto publicado." : "Texto publicado.", "ok"); carregar(true);
+    });
+    atualizar();
+
+    const pend = c.historico.filter((e) => e.status === "pendente");
+    const hist = h("details", { class: "mp-hist" }, h("summary", null, "Histórico (" + c.historico.length + ")"),
+      c.historico.length ? h("ul", { class: "lista" }, c.historico.map((e) => linhaHistorico(c, e))) : h("p", { class: "mini" }, "Nenhuma edição ainda."));
+    if (abertos.has(c.campo)) hist.open = true;
+    hist.addEventListener("toggle", () => { if (hist.open) abertos.add(c.campo); else abertos.delete(c.campo); });
+
+    return h("section", { class: "mp-campo", "aria-labelledby": "mp-h-" + c.campo },
+      h("div", { class: "item-h" }, h("h3", { id: "mp-h-" + c.campo }, rot),
+        c.atual ? chip("Publicado", "ok") : chip("Sem texto", "bad"), pend.length ? chip(pend.length + (pend.length === 1 ? " pendente" : " pendentes"), "warn") : null),
+      c.atual ? h("p", { class: "mini" }, "Publicado por " + (c.atual.autor || "—") + " em " + quando(c.atual.revisado_em)) : null,
+      pend.length ? h("div", null, h("h4", null, "Esperando moderação"), h("ul", { class: "lista" }, pend.map((e) => blocoPendente(e, c.campo)))) : null,
+      h("div", { class: "campo" }, h("label", { for: idT }, "Texto publicado"), ta, cont),
+      h("div", { class: "campo" }, h("label", { for: idF }, "Fonte (link, opcional)"), fo, erro),
+      h("div", { class: "acts" }, bt, rascunho[c.campo] ? h("button", { class: "b", type: "button", on: { click: () => { delete rascunho[c.campo]; desenhar(); } } }, "Desfazer o que digitei") : null),
+      hist);
+  }
+
+  function linhaHistorico(c, e) {
+    const f = seguro(e.fonte), atual = e.id === c.atual_id;
+    const podeRestaurar = !atual && (e.status === "aprovado" || e.status === "recusado");
+    return h("li", { class: "item" + (atual ? " mp-atual" : "") },
+      h("div", { class: "item-h" }, chip(MP_ST[e.status] || e.status, MP_COR[e.status]), atual ? chip("Publicada agora", "info") : null,
+        h("span", { class: "mini" }, (e.autor || "—") + " · enviada " + quando(e.criado_em) + (e.revisado_em ? " · decidida " + quando(e.revisado_em) : ""))),
+      h("p", { class: "txt" }, e.texto),
+      f ? h("p", { class: "mini" }, h("a", { href: f, target: "_blank", rel: "noopener noreferrer nofollow" }, "Fonte externa")) : null,
+      h("div", { class: "acts" },
+        h("button", { class: "b", type: "button", on: { click: () => usarNoEditor(c.campo, e) } }, "Editar a partir desta"),
+        podeRestaurar ? h("button", { class: "b", type: "button", on: { click: async () => {
+          const ok = await confirmar({ titulo: "Restaurar esta versão?", texto: "O texto vira o publicado de “" + (CAMPOS_MP[c.campo] || c.campo) + "”. O histórico continua inteiro: é criada uma edição nova.", ok: "Restaurar" });
+          if (ok) acao("POST", "/api/mod/memepedia/edicoes/" + e.id + "/restaurar", {}, "Versão restaurada e publicada.");
+        } } }, "Restaurar esta versão") : null));
+  }
+
+  function desenhar() {
+    const m = dados.meme, feitos = dados.campos.filter((c) => c.atual).length;
+    trocar(corpo,
+      h("div", { class: "sec" },
+        h("h2", null, m.titulo, h("a", { class: "b peq", href: "/memepedia.html#" + encodeURIComponent(m.id), target: "_blank", rel: "noopener noreferrer" }, "Ver na Memepédia")),
+        h("div", { class: "meta" }, chip(m.ano + " · " + m.categoria), m.status !== "publicado" ? chip(STATUS_MEME[m.status] || m.status, "warn") : null, chip(feitos + "/6 campos com texto", feitos === 6 ? "ok" : ""), h("span", { class: "mini" }, m.id)),
+        barraCobertura(feitos, 6, "Cobertura deste meme")),
+      dados.campos.map(blocoCampo));
+  }
+  carregar(false);
+}
 
 // ---------- telas de acesso e inicialização ----------
 function sessaoExpirou() {

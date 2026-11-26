@@ -74,6 +74,7 @@ function criarApi(over = {}) {
       st.log.push({ m, p, csrf: req.headers()["x-csrf"], ct: req.headers()["content-type"], corpo });
       if (p === "/api/eu") return st.papel ? json(route, 200, { usuario: { id: 1, apelido: "Ana" }, papel: st.papel, csrf: "tok-csrf", moedas: 1, xp: 1 }) : json(route, 401, { erro: "não autenticado" });
       if (st.expirou && p !== "/api/eu") return json(route, 401, { erro: "sessão expirada" });
+      if (p === "/api/mod/memepedia/memes") return json(route, 200, { total: 0, pagina: 1, limite: 30, campos: [], resumo: { memes: 0, sem_nenhum: 0, incompletos: 0, completos: 0, campos_preenchidos: 0, campos_total: 0, pendentes: 0 }, itens: [] });
       if (p === "/api/categorias") return json(route, 200, { itens: [{ nome: "Memes" }, { nome: "Música" }] });
       if (p === "/api/eras") return json(route, 200, { itens: [{ ano: 2000, ano_fim: 2005, rotulo: "Discado", lema: "Lema", texto: "Texto da era" }] });
       if (p === "/api/envios/meus") return json(route, 200, { itens: st.meus || [] });
@@ -155,7 +156,7 @@ test("papel usuário: acesso negado e nenhuma chamada além de /api/eu", opts, a
 test("moderador: só a aba Moderação; fila ausente (404) vira aviso, sem quebrar e sem chamar /api/admin", opts, async () => {
   const { ctx, page, api, erros } = await abrir({ papel: "moderador", modAusente: true });
   await page.waitForSelector("text=ainda não está disponível");
-  assert.deepStrictEqual(await abas(page), ["Moderação"]);
+  assert.deepStrictEqual(await abas(page), ["Moderação", "Memepédia"]);
   assert.strictEqual(api.n(/\/api\/admin/), 0);
   assert.deepStrictEqual(erros, []);
   await ctx.close();
@@ -164,7 +165,7 @@ test("moderador: só a aba Moderação; fila ausente (404) vira aviso, sem quebr
 test("admin: todas as abas, visão geral só com números das rotas, sem Ver como/Reiniciar/banner", opts, async () => {
   const { ctx, page, erros } = await abrir();
   await page.waitForSelector("#p-visao .num");
-  assert.deepStrictEqual(await abas(page), ["Visão geral", "Moderação", "Usuários", "Memes", "Cartas e coleções", "Eras", "Comunidade", "Log", "MCP"]);
+  assert.deepStrictEqual(await abas(page), ["Visão geral", "Moderação", "Memepédia", "Usuários", "Memes", "Cartas e coleções", "Eras", "Comunidade", "Log", "MCP"]);
   await page.waitForFunction(() => [...document.querySelectorAll("#p-visao .num")].every((n) => n.textContent !== "…"));
   const nums = await page.$$eval("#p-visao .card:has(h2)", (c) => c.map((x) => x.querySelector("h2").textContent + "=" + x.querySelector(".num").textContent));
   assert.deepStrictEqual(nums, ["Memes=1", "Moderação=1", "Remoções=2", "Links sugeridos=1", "Feedback=1"]);
@@ -440,7 +441,7 @@ test("sessão que expira no meio (401) leva à tela de entrar", opts, async () =
 
 test("celular 390px: sem rolagem horizontal, fonte >= 12px e alvos >= 44px em todas as abas", opts, async () => {
   const { ctx, page, erros } = await abrir({}, { largura: 390 });
-  for (const nome of ["Visão geral", "Moderação", "Usuários", "Memes", "Cartas e coleções", "Eras", "Comunidade", "Log", "MCP"]) {
+  for (const nome of ["Visão geral", "Moderação", "Memepédia", "Usuários", "Memes", "Cartas e coleções", "Eras", "Comunidade", "Log", "MCP"]) {
     await irPara(page, nome);
     await page.waitForTimeout(300);
     await page.waitForFunction(() => !document.querySelector(".spin"));
