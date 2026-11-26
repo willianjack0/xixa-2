@@ -1,0 +1,43 @@
+/* Página temporária "Roteiro de teste". Mobile primeiro; usa os tokens do theme.css (claro e escuro).
+   Alvos de toque de 44 px, textos de pelo menos 12 px. Remover junto com roteiro-teste.html e roteiro-teste.js. */
+.rt-bar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.rt-bar-in{max-width:720px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;gap:12px}
+.rt-count{font:700 18px Rajdhani,Inter,sans-serif;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--txt)}
+.rt-track{flex:1;min-width:0;height:10px;border-radius:99px;background:var(--sunk);box-shadow:inset 0 0 0 1px var(--line);overflow:hidden}
+.rt-fill{height:100%;width:0;background:var(--brand-fill);border-radius:99px;transition:width .25s ease}
+@media (prefers-reduced-motion:reduce){.rt-fill{transition:none}}
+.rt-reset{font:600 13px Inter,sans-serif;color:var(--mut-strong);background:none;border:1px solid var(--line2);border-radius:8px;min-height:44px;padding:0 12px;cursor:pointer}
+.rt-reset:hover{color:var(--txt)}
+
+.rt{max-width:720px;margin:0 auto;padding:26px 16px 64px;color:var(--txt)}
+.rt-k{font:800 12px Inter,sans-serif;letter-spacing:2px;text-transform:uppercase;color:var(--brand-ink);margin:0}
+.rt h1{font:800 clamp(30px,7vw,46px)/1.05 "Baloo 2",Inter,sans-serif;margin:8px 0 8px;letter-spacing:-.5px;text-wrap:balance}
+.rt-lead{font-size:16px;line-height:1.6;max-width:62ch;margin:0 0 8px}
+.rt p,.rt li{font-size:15px;line-height:1.6}
+.rt a{color:var(--brand-ink);font-weight:600}
+.rt-sec{margin-top:24px;padding:16px;border:1px solid var(--line2);background:var(--panel);border-radius:16px}
+.rt h2{font:800 22px/1.2 "Baloo 2",Inter,sans-serif;margin:0 0 10px}
+.rt-lista{margin:0;padding-left:20px;display:grid;gap:6px}
+.rt-tpl{margin:10px 0;padding:12px 14px;border:1px dashed var(--line2);border-radius:10px;background:var(--sunk);font:15px/1.6 Inter,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere}
+.rt-btn{font:700 14px Inter,sans-serif;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--brand-ink);background:transparent;color:var(--brand-ink);cursor:pointer}
+.rt-btn:hover{background:var(--sunk)}
+
+.rt-bloco{margin-top:28px}
+.rt-bloco>h2{display:flex;gap:10px;align-items:baseline;margin-bottom:6px}
+.rt-n{color:var(--brand-ink);font-variant-numeric:tabular-nums}
+.rt-nota{margin:0 0 10px;color:var(--mut-strong)}
+.rt-aviso{margin:0 0 10px;padding:10px 12px;border-radius:10px;background:var(--sunk);box-shadow:inset 0 0 0 1px var(--line2)}
+.rt-passos{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rt-passo{display:flex;align-items:flex-start;gap:12px;background:var(--panel);border:1px solid var(--line2);border-radius:12px;padding:10px 14px;min-height:52px;cursor:pointer}
+.rt-passo:hover{border-color:var(--brand-ink)}
+.rt-passo input{appearance:none;-webkit-appearance:none;flex:none;width:26px;height:26px;margin:2px 0 0;border:2px solid var(--mut-strong);border-radius:7px;background:var(--sunk);cursor:pointer;display:grid;place-content:center}
+.rt-passo input:checked{background:var(--brand-fill);border-color:var(--brand-fill)}
+.rt-passo input:checked::after{content:"";width:12px;height:7px;border-left:3px solid var(--on-brand);border-bottom:3px solid var(--on-brand);transform:rotate(-45deg) translate(1px,-1px)}
+.rt-passo input:focus-visible,.rt-btn:focus-visible,.rt-reset:focus-visible,.rt-tpl:focus-visible{outline:3px solid #ffd84a;outline-offset:2px}
+.rt-txt{min-width:0}
+.rt-id{font:700 16px Rajdhani,Inter,sans-serif;color:var(--brand-ink);margin-right:6px;font-variant-numeric:tabular-nums}
+.rt-passo input:checked+.rt-txt{color:var(--mut-strong)}
+.rt-passo input:checked+.rt-txt .rt-id{color:var(--mut-strong)}
+.rt-fim{margin-top:24px;color:var(--mut-strong)}
+.rt-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--txt);color:var(--bg);padding:10px 16px;border-radius:10px;font:600 14px Inter,sans-serif;opacity:0;pointer-events:none;transition:opacity .2s;z-index:40;max-width:calc(100vw - 32px)}
+.rt-toast.on{opacity:1}
