@@ -360,6 +360,7 @@ export async function conferir_duplicado(pool, args = {}) {
 import { criar_meme, editar_meme, publicar_meme, ocultar_meme, criar_carta } from './escrita.js';
 import { anexar_midia, remover_midia } from './midias.js';
 import { buscar_cartas, editar_carta } from './cartas.js';
+import { obter_memepedia, escrever_memepedia, moderar_memepedia } from './memepedia.js';
 
 export const FERRAMENTAS_MAP = {
   listar_referencias,
@@ -374,5 +375,8 @@ export const FERRAMENTAS_MAP = {
   anexar_midia,
   remover_midia,
   buscar_cartas,
-  editar_carta
+  editar_carta,
+  obter_memepedia,
+  escrever_memepedia,
+  moderar_memepedia
 };

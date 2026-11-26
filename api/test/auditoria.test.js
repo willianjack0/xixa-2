@@ -6,17 +6,26 @@ import { servidor } from './helpers.js';
 // pool falso que registra as consultas; papel do usuário 7 = admin; rowCount configurável para os DELETE/UPDATE
 const pool = ({ afetadas = 1, falhaLog = false, linhasLog = [] } = {}) => {
   const chamadas = [];
-  return {
+  const p = {
     chamadas,
     query: async (sql, val) => {
       chamadas.push({ sql, val });
       if (/SELECT papel FROM usuarios/.test(sql)) return { rows: [{ papel: 'admin' }], rowCount: 1 };
       if (/INSERT INTO log_auditoria/.test(sql)) { if (falhaLog) throw new Error('banco fora'); return { rows: [], rowCount: 1 }; }
       if (/FROM log_auditoria/.test(sql)) return { rows: linhasLog, rowCount: linhasLog.length };
+      if (/FROM links_sugeridos WHERE id =/.test(sql)) {
+        if (!afetadas) return { rows: [], rowCount: 0 };
+        return { rows: [{ id: 5, status: 'pendente', autor: 'autor_qualquer', meme_id: 'm1' }], rowCount: 1 };
+      }
       if (/^(DELETE|UPDATE)/.test(sql)) return { rows: [], rowCount: afetadas };
       return { rows: [], rowCount: 0 };
-    }
+    },
+    connect: async () => ({
+      query: (sql, val) => p.query(sql, val),
+      release: () => {}
+    })
   };
+  return p;
 };
 const admin = async (req) => (req.headers['x-test-user'] ? { id: 7, apelido: 'adm', banido: false, via: 'stub' } : null);
 const H = { 'X-Test-User': 'adm' };

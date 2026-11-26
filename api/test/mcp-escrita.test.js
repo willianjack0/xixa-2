@@ -78,15 +78,15 @@ test('tools/list traz 13 ferramentas para chave com 3 escopos e 5 ferramentas pa
 
   const rLer = await s.post('/mcp', { jsonrpc: '2.0', id: 1, method: 'tools/list' }, { headers: authHeader(kLer) });
   assert.equal(rLer.status, 200);
-  assert.equal(rLer.json.result.tools.length, 5);
+  assert.equal(rLer.json.result.tools.length, 6);
 
   const rTudo = await s.post('/mcp', { jsonrpc: '2.0', id: 2, method: 'tools/list' }, { headers: authHeader(kTudo) });
   assert.equal(rTudo.status, 200);
-  assert.equal(rTudo.json.result.tools.length, 13);
+  assert.equal(rTudo.json.result.tools.length, 16);
   const nomesTudo = rTudo.json.result.tools.map((t) => t.name).sort();
   assert.deepEqual(nomesTudo, [
     'anexar_midia', 'buscar_cartas', 'buscar_memes', 'conferir_duplicado', 'criar_carta', 'criar_meme',
-    'editar_carta', 'editar_meme', 'listar_referencias', 'obter_meme', 'ocultar_meme', 'publicar_meme', 'remover_midia'
+    'editar_carta', 'editar_meme', 'escrever_memepedia', 'listar_referencias', 'moderar_memepedia', 'obter_meme', 'obter_memepedia', 'ocultar_meme', 'publicar_meme', 'remover_midia'
   ]);
 });
 

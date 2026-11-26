@@ -4,8 +4,8 @@ import { ESCOPOS, VALIDADES_DIAS, MAX_ATIVAS_POR_USUARIO } from './chaves.js';
 
 const ESCOPO_TXT = {
   ler: 'ler: buscar memes, conferir duplicados e listar valores válidos. Não altera nada.',
-  escrever: 'escrever: criar e editar memes (como rascunho oculto), anexar mídias e criar cartas.',
-  publicar: 'publicar: publicar direto (criar_meme com publicar=true e publicar_meme). Sem este escopo, quem publica é um admin pelo painel.'
+  escrever: 'escrever: criar e editar memes (como rascunho oculto), anexar mídias, criar cartas e enviar textos da Memepédia (para a moderação).',
+  publicar: 'publicar: publicar direto (criar_meme com publicar=true, publicar_meme, ocultar_meme, escrever_memepedia com publicar=true e moderar_memepedia). Sem este escopo, quem publica é um admin pelo painel.'
 };
 
 export function gerarLlmsTxt({ base = 'https://naosalvo.fishlab.com.br', ferramentas = ativas() } = {}) {
@@ -50,6 +50,7 @@ export function gerarLlmsTxt({ base = 'https://naosalvo.fishlab.com.br', ferrame
     tem('anexar_midia') && 'anexar_midia quando o meme não for só um vídeo do YouTube. Use obter_meme para conferir as mídias e remover_midia se precisar tirar.',
     tem('ocultar_meme') && 'Para tirar do ar: ocultar_meme muda o meme de publicado para oculto (só com o escopo publicar).',
     tem('editar_carta') && 'Para arte de carta: buscar_cartas (ache o id, ex.: plataformas-2) e editar_carta com imagem_url; a imagem é otimizada e aparece no álbum e no perfil.',
+    tem('obter_memepedia') && 'Para o verbete da Memepédia: obter_memepedia (veja o que já tem e o que falta), depois escrever_memepedia com a fonte. Sem publicar=true o texto vai para a moderação; moderar_memepedia (escopo publicar) aprova ou recusa.',
     'Avise o admin do que foi encontrado ou criado (ids dos memes) para revisar no painel.'
   ].filter(Boolean);
   passos.forEach((p, i) => L.push(`${i + 1}. ${p}`));

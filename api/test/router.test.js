@@ -48,12 +48,13 @@ test('admin sem ADMIN_TOKEN configurado nunca autoriza', async () => {
 });
 
 test('validação de entrada continua igual (sem tocar no banco)', async () => {
-  const pool = poolFalso(); const s = await servidor(pool);
+  const pool = poolFalso(); const s = await servidor(pool, { autenticar: async () => ({ id: 1, banido: false }) });
   assert.equal((await s.get('/api/comentarios?id=ID_INVALIDO')).status, 400);
   assert.equal((await s.get('/api/memes/ID_INVALIDO')).status, 400);
   assert.equal((await s.post('/api/feedback', { msg: 'oi' })).status, 422);
   assert.equal((await s.post('/api/feedback', { 'bot-field': 'x' })).status, 201); // honeypot finge sucesso
-  assert.equal((await s.post('/api/links', { id: 'abc', yt: 'curto', autor: 'zeca' })).status, 422);
+  assert.equal((await s.post('/api/links', { id: 'abc', yt: 'curto' })).status, 422);
+  assert.equal((await s.post('/api/links', { id: 'abc', yt: 'dQw4w9WgXcQ', autor: 'falsificado' })).status, 422);
   assert.equal((await s.post('/api/comentarios', { id: 'abc', autor: 'x', texto: 'oi' })).status, 422);
   assert.equal((await s.post('/api/contribuidores', { nome: 'a' })).status, 422);
   assert.equal(pool.chamadas.length, 0, 'nenhuma consulta para entrada inválida');

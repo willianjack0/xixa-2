@@ -85,6 +85,24 @@ export const FERRAMENTAS = [
       imagem_url: { tipo: 'texto', descricao: 'link público http/https da imagem (portas 80 e 443)' },
       imagem_base64: { tipo: 'texto', descricao: 'conteúdo da imagem em base64' },
       remover_imagem: { tipo: 'booleano', descricao: 'true: tira a imagem da carta' }
+    } },
+  { nome: 'obter_memepedia', escopo: 'ler', ativa: true,
+    resumo: 'Devolve o verbete da Memepédia de um meme: o texto publicado de cada campo (origem, porque, usos, rede, hoje, curiosidades), as edições pendentes na fila (com id) e os campos que ainda faltam.',
+    params: { id: { tipo: 'texto', obrigatorio: true, descricao: 'id do meme (slug a-z, 0-9 e hífen)' } } },
+  { nome: 'escrever_memepedia', escopo: 'escrever', ativa: true,
+    resumo: 'Escreve o texto de um campo do verbete de um meme. Por padrão entra na fila da moderação (pendente). Com o escopo publicar e publicar=true entra já publicado e substitui o texto atual do campo. Cite sempre a fonte (link).',
+    params: {
+      id: { tipo: 'texto', obrigatorio: true, descricao: 'id do meme' },
+      campo: { tipo: 'texto', obrigatorio: true, descricao: 'origem | porque | usos | rede | hoje | curiosidades' },
+      texto: { tipo: 'texto', obrigatorio: true, descricao: 'de 10 a 2000 caracteres' },
+      fonte: { tipo: 'texto', descricao: 'link http/https da fonte (até 300 caracteres)' },
+      publicar: { tipo: 'booleano', descricao: 'só com o escopo publicar' }
+    } },
+  { nome: 'moderar_memepedia', escopo: 'publicar', ativa: true,
+    resumo: 'Aprova, recusa ou devolve à fila uma edição da Memepédia. O id da edição vem de obter_memepedia (pendentes).',
+    params: {
+      edicao_id: { tipo: 'inteiro', obrigatorio: true, descricao: 'id da edição' },
+      status: { tipo: 'texto', obrigatorio: true, descricao: 'aprovado | recusado | pendente' }
     } }
 ];
 

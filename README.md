@@ -6,7 +6,9 @@ O **Não Salvo** é uma plataforma colaborativa dedicada a catalogar, preservar 
 
 Este projeto nasceu da união da comunidade (comunidade XET, Cid Cidoso, moderadores e voluntários) para criar uma experiência rica que mistura acervo histórico, linha do tempo interativa e gamificação através de um álbum de figurinhas digital.
 
-> **Estado atual:** o layout e as telas do protótipo de [@Subversivo011](https://github.com/Subversivo011) são a **raiz do site** (HTML/CSS/JS estático, sem build). Conta, moedas, cartas, XP e envios são **protótipo** (ficam só no `localStorage` do navegador). O que já tem backend real (Node + PostgreSQL) são o formulário de contribuidores, o dashboard, os votos, as visualizações do YouTube e o feedback (seção 7).
+> **Estado atual (25/11/2026):** o layout e as telas do protótipo de [@Subversivo011](https://github.com/Subversivo011) são a **raiz do site** (HTML/CSS/JS estático, sem build), ligado a uma **API real em Node + PostgreSQL** (`api/`, 26 migrações). O **servidor é a autoridade**: login com Discord (sessão em cookie e CSRF), moedas, XP, pacotes e cartas, votos por usuário, envios e moderação por consenso, ranking, Memepédia, perfil público, painel admin (`seppzone/`), analytics anônimo de navegação, imagens no S3 (otimizadas para WebP) e um **servidor MCP** (`/mcp`, 16 ferramentas) para cadastrar memes, cartas e verbetes da Memepédia por um assistente de IA. O acervo tem **283 memes** e **603 cartas em 11 coleções**. O estado do plano está em [`docs/PLANO-IMPLEMENTACAO.md`](docs/PLANO-IMPLEMENTACAO.md); as rotas, em [`docs/API.md`](docs/API.md).
+>
+> Algumas seções mais abaixo ainda descrevem o protótipo original (por exemplo, diagramas e a lista de arquivos). Onde houver divergência, vale este aviso e o plano de implementação.
 
 ---
 
@@ -30,13 +32,13 @@ Este projeto nasceu da união da comunidade (comunidade XET, Cid Cidoso, moderad
 ### 🗓️ 1. Hoje na História da Internet
 - O bloco **"Hoje na história da web"** (home) pega a data atual e mostra o registro do acervo cuja data (dia e mês) é a mais próxima de hoje, com "Há X anos" e o botão *Relembrar*.
 - Botão **Aleatório** abre um registro qualquer do acervo.
-- Ao lado ficam o bloco **sobe.desce** (5 em alta e 5 em queda; hoje é um "sorteio do dia" calculado no navegador, não acessos reais) e **Últimos adicionados** (os 5 mais recentes, com atalho para a fila de moderação).
+- Ao lado fica o bloco **sobe.desce** (ranking de memes mais abertos e mais tocados, hoje ou de todos os tempos, a partir de `/api/sobedesce`) e **Últimos adicionados** (os 5 mais recentes, com atalho para a fila de moderação).
 
 ### ⏱️ 2. Linha do Tempo Histórica (2004 - Presente)
 - Navegação ano a ano (2004 a 2019 e **2020+**) com lema e resumo cultural de cada época (`YEAR_INFO`). Setas `←`/`→` do teclado e botões laterais trocam de ano; os 3 registros mais vistos do ano aparecem como destaque e, se faltarem, entram cartões "Salvar um viral de AAAA".
 - Grade de registros com busca (ignora acentos) e filtros por categoria: Vídeos, TV, Música, Cultura, Zoeira, Fotos e Esportes (também pelo menu **Categorias**).
 - Classificação do acervo por raridade cultural: *Clássico*, *Relíquia*, *Lendário* e *Mítico*. A seção **Clássicos da internet brasileira** destaca os Míticos.
-- O acervo (`data.js`) tem **59 registros** (2004 a 2024): 57 com capa local em `memes/` e 43 com vídeo do YouTube. É a união da fonte do protótipo do @Subversivo011 com a nossa. Os dados são exemplos e precisam de revisão antes de virar acervo definitivo.
+- O acervo (`data.js`) tem **283 registros** (de 1989 a 2026): 257 com vídeo do YouTube, 75 com capa local em `memes/` e 1 com vídeo só no Facebook (campo `fb`). O Postgres também guarda o acervo (carregado por `api/seed/acervo.js` e pelas migrações), e novos memes entram pelo painel admin ou pelo MCP.
 
 ### 🎞️ 3. Tela de Vídeo e Foto no Visual de Cada Época
 Ao abrir um registro, o site mostra uma página no estilo da época do meme (`viewer.js` + `viewer.css`), com o player do YouTube (`player.js`), vídeos relacionados, link para "Ver o ano" e a opção de **salvar o link** de virais que ainda estão sem vídeo (+5 moedas, exige patente Colaborador).
@@ -51,38 +53,43 @@ Ao abrir um registro, o site mostra uma página no estilo da época do meme (`vi
 | Vídeo | 2017 em diante | YouTube atual |
 | Foto | até 2006 / 2007 a 2011 / 2012 a 2014 / 2015 / 2016 em diante | Fotolog / Orkut / Tumblr / Instagram de 2015 / Instagram atual |
 
-- **Nota do público:** estrelas (2004 a 2009) ou curtir/não curtir (2010 em diante). Os votos são enviados para `/api/votos`; sem a API, valem só no navegador. As visualizações reais vêm de `/api/yt-stats`.
+- **Nota do público:** estrelas (2004 a 2009) ou curtir/não curtir (2010 em diante). Votar exige login e vale um voto por pessoa (`/api/votos`, tabela `votos_usuario`); o `GET` com os totais é público. As visualizações reais vêm de `/api/yt-stats`.
 - **Sons da época** (modem discado, aviso do MSN, pop do scrap), gerados na hora pelo Web Audio, com botão para ligar e desligar.
 - Atalhos: `Esc` fecha o registro e a tela inicial aceita `←`/`→` para trocar de ano.
 
 ### 🃏 4. Álbum de Figurinhas da Internet (Gamificação)
-Página própria (`album.html`) com três colunas: **Minhas coleções** (barra lateral com progresso, total de cartas, raridades e carteira de moedas), **Fichário** (cartas da coleção, 6 por página, com paginação e `←`/`→`) e **Detalhe da carta**. O menu da página tem *Início, Coleções, Loja, Converter repetidas e Ranking*. *(Protótipo: o estoque, as cartas e as moedas ficam no `localStorage`.)*
+Página própria (`album.html`) com três colunas: **Minhas coleções** (barra lateral com progresso, total de cartas, raridades e carteira de moedas), **Fichário** (cartas da coleção, 6 por página, com paginação e `←`/`→`) e **Detalhe da carta**. O menu da página tem *Início, Coleções, Loja, Converter repetidas e Ranking*. O estoque, as cartas e as moedas ficam no servidor, ligados à conta (`/api/album`, `/api/pacotes/*`, `/api/carteira`).
 
-**8 coleções (109 cartas):**
+**11 coleções (603 cartas):**
 
-| Coleção | Cartas | Observação |
-|---|---|---|
-| Lendas do Orkut | 9 | Sem registro do acervo ligado |
-| Lendas da Web | 7 | Sem registro do acervo ligado |
-| Memes Icônicos | 20 | Todas ligadas a um registro do acervo (botão de assistir no player) |
-| Expansão Orkut | 12 | Sem registro do acervo ligado |
-| Comunidades Clássicas | 10 | Sem registro do acervo ligado |
-| Plataformas Raiz | 21 | Sem registro do acervo ligado |
-| Blogs & Épicos | 20 | Sem registro do acervo ligado |
-| Sites & Portais | 10 | Sem registro do acervo ligado |
+| Coleção | Cartas |
+|---|---|
+| Lendas do Orkut | 27 |
+| Lendas da Web | 7 |
+| Expansão Orkut | 34 |
+| Comunidades Clássicas | 76 |
+| Plataformas Raiz | 111 |
+| Blogs & Épicos | 84 |
+| Sites & Portais | 38 |
+| Lendas do Fotolog | 19 |
+| YouTube Raiz | 83 |
+| Redes & Trends | 96 |
+| Grupinhos e Criadores | 28 |
 
-Cada coleção tem texto "Sobre a coleção" e tabela de cartas por raridade. As cartas mostram a capa do YouTube quando há vídeo e, senão, o emoji. Cartas ainda não tiradas aparecem como silhueta com `???`. Completar uma coleção dá **+100 moedas** e **+100 XP**.
+A coleção "Memes Icônicos" saiu na migração 021: as cópias que cada pessoa tinha viraram moedas. Cada coleção tem texto "Sobre a coleção" e tabela de cartas por raridade. As cartas mostram a imagem enviada no painel (S3) quando existe, senão a capa do YouTube e, por fim, o emoji. Cartas ainda não tiradas aparecem como silhueta com `???`. Completar uma coleção dá **+100 moedas** e **+100 XP**.
 
 **6 raridades** (moedas e chances iguais aos do documento de economia):
 
 | Raridade | Cartas | Chance por carta no pacote | XP (carta nova) | Moedas (repetida) | Efeito visual |
 |---|---|---|---|---|---|
-| Comum | 28 | 44% | 2 | 5 | Moldura cinza |
-| Relevante | 26 | 26% | 4 | 10 | Moldura verde |
-| Raro | 21 | 15% | 8 | 20 | Moldura azul |
-| Relíquia | 15 | 9% | 15 | 40 | Moldura roxa + brilho holográfico |
-| Lendário | 11 | 5% | 30 | 80 | Moldura dourada + brilho holográfico |
-| Mítico | 8 | 1% | 60 | 150 | Moldura vermelha + brilho holográfico + pulso |
+| Comum | 116 | 44% | 2 | 5 | Moldura cinza |
+| Relevante | 31 | 26% | 4 | 10 | Moldura verde |
+| Raro | 174 | 15% | 8 | 20 | Moldura azul |
+| Relíquia | 162 | 9% | 15 | 40 | Moldura roxa + brilho holográfico |
+| Lendário | 86 | 5% | 30 | 80 | Moldura dourada + brilho holográfico |
+| Mítico | 34 | 1% | 60 | 150 | Moldura vermelha + brilho holográfico + pulso |
+
+*(A coluna "Cartas" é a contagem real de `data.js`; os valores de XP e moedas ficam na tabela `regras_economia` e as chances, em `pacotes_tipo`.)*
 
 Dentro da mesma raridade, todas as cartas têm a mesma chance. A chance de uma carta específica aparece no painel de detalhe.
 
@@ -100,30 +107,26 @@ Dentro da mesma raridade, todas as cartas têm a mesma chance. A chance de uma c
 - **Animação de abertura:** o pacote flutua, balança ao passar o mouse e é rasgado com um clique; as cartas aparecem viradas para baixo, são reveladas uma a uma (ou todas em *Revelar tudo*), com faíscas na cor da raridade para Relíquia ou melhor, selo **NOVA!** e resumo (novas, XP, valor das repetidas, coleções completas).
 - **Loja de pacotes:** cartões com as chances por raridade, saldo, tabela *Como ganhar moedas* e atalho para converter repetidas.
 - **Repetidas viram moeda:** botão *Converter repetidas* (todas) ou *Converter 1 repetida* no detalhe da carta. Fica sempre 1 cópia de cada.
-- **Carta favorita** (estrela), **compartilhar** (copia um texto) e **Ranking de colecionadores** (exemplos + você, por quantidade de cartas).
-- **Modo teste:** clicar na carteira do cabeçalho abre o perfil com *Avançar 1 dia*, *+500 XP*, *+300 moedas* e *Zerar tudo*.
+- **Carta favorita** (estrela), **compartilhar** (copia um texto) e **Ranking de colecionadores** (`/api/ranking?metrica=cartas`).
+- **Painel do perfil:** clicar na carteira do cabeçalho mostra moedas, XP, patente e envios aprovados, que vêm do servidor.
 - **Troca de cartas entre usuários:** ainda não existe (planejado para o backend, ver `docs/subversivo011/economia-e-escassez.md`).
 
-**Economia e escassez:** a análise da economia do álbum (chances, preço do pacote, simulação de quanto tempo cada perfil leva para completar, diagnóstico e recomendações de game design) está em [`docs/subversivo011/economia-e-escassez.md`](docs/subversivo011/economia-e-escassez.md), com o simulador em [`docs/subversivo011/simulacao.js`](docs/subversivo011/simulacao.js). Ela usa as mesmas 109 cartas, 8 coleções e chances por raridade do código, mas supõe um único pacote comprado a 150 moedas; a loja atual tem três preços (150, 200 e 450).
+**Economia e escassez:** a análise da economia do álbum (chances, preço do pacote, simulação de quanto tempo cada perfil leva para completar, diagnóstico e recomendações de game design) está em [`docs/subversivo011/economia-e-escassez.md`](docs/subversivo011/economia-e-escassez.md), com o simulador em [`docs/subversivo011/simulacao.js`](docs/subversivo011/simulacao.js). Ela foi feita com o catálogo antigo (109 cartas e 8 coleções, hoje são 603 cartas e 11 coleções) e supõe um único pacote comprado a 150 moedas; o Pacote Clássico custa 150 e o Ouro, 450. Os números do simulador precisam ser refeitos para o catálogo atual.
 
 ### 🐱 5. Criador de Gatinho (Avatar) e Conta
-O cadastro abre em um modal com duas partes: **Sua conta** e **Seu gatinho** (prévia grande, raça e botão *Embaralhar tudo*). O gato é um SVG gerado na hora e é o mesmo no cabeçalho, no ranking e no perfil. O cadastro tem 3 abas de entrada:
+A entrada é **só pelo Discord** (OAuth2, em `entrar.html`; não existe cadastro por e-mail e senha nem login com Google). A sessão fica num cookie `httpOnly`, com proteção CSRF. Na primeira vez a pessoa escolhe o apelido (3 a 20 caracteres: letras, números, `_`, `.`, `-`) e monta o **gatinho** (prévia grande, raça e botão *Embaralhar tudo*); salvar o gato pela primeira vez completa o cadastro e dá o pacote de boas-vindas. O gato é um SVG gerado na hora e é o mesmo no cabeçalho, no ranking e no perfil. Quem quiser pode mostrar a foto do Discord no lugar do gato.
 
-- **E-mail:** usuário (3 a 20 caracteres: letras, números, `_`, `.`, `-`), e-mail e senha de pelo menos 6 caracteres. *(Protótipo: nenhuma conta real é criada e a senha não é guardada.)*
-- **Google** e **Discord:** botões ainda sem login real ("entra quando o site for ao ar"); por enquanto só pedem o nome de usuário e o gatinho.
-- **"Sou do Xet da live do Cid":** quem marca já entra com a patente Banda larga (150 XP) e pode enviar vídeos.
-
-O criador tem 4 abas:
-1. **Pelo:** 10 cores de pelo (a **Rosa** vira um gato **Sphynx**, sem pelo, com orelhas grandes e rugas), 5 padrões (Liso, Tigrado, Pintado, Smoking, Máscara; desativados no Sphynx) e 5 cores de olhos.
-2. **Acessórios (opcional):** óculos redondo, óculos escuro, boné, gorro, fone, bandana, corrente e monóculo.
-3. **Roupa (opcional):** hoodie, camiseta, jaqueta jeans, moletom, jaqueta bomber, camisa xadrez, regata ou sem roupa.
+O criador tem 4 abas (os limites são `OPCOES_GATO` em `api/auth/perfil.js`; opções novas entram sempre no fim, porque o gato salvo guarda o índice):
+1. **Pelo:** 15 cores de pelo (a **Rosa** vira um gato **Sphynx**, sem pelo, com orelhas grandes e rugas), 9 padrões (Liso, Tigrado, Pintado, Smoking, Máscara, Tartaruga, Tricolor, Siamês e Peludo; os padrões ficam desativados no Sphynx) e 8 cores de olhos (inclui heterocromia).
+2. **Acessórios (opcional):** 18 opções, entre óculos, boné, gorro, fone, bandana, coroa, cartola, laço e outros, com ícones desenhados.
+3. **Roupa (opcional):** 14 opções, de hoodie e jaqueta a camisa canarinho, terno e suéter de tricô, ou sem roupa.
 4. **Fundo:** 8 fundos em degradê (Azul, Roxo, Rosa, Verde, Sol, Noite, Menta e Vermelho).
 
-O cabeçalho mostra o gato, o nome e *Gato nível N* (nível = posição da patente). A conta, o avatar, o XP e as moedas ficam em `localStorage` (`naosalvo2_state`).
+O cabeçalho mostra o gato, o nome e *Gato nível N* (nível = posição da patente). Conta, avatar, XP e moedas ficam no servidor.
 
 ### 🏆 5.1. Ranking & Patentes
-- **Ranking da galera** (home, menu *Ranking*): lista ordenada por XP com gato, nome, patente, envios e cartas. Os usuários são **dados de exemplo** (Cid Cidoso, SePPZAO, Riba, Subversivo etc.); a sua conta entra na lista com seus números reais do navegador. Não há pódio nem filtros.
-- **Ranking de colecionadores** (álbum): exemplos + você, por cartas coletadas.
+- **Ranking da galera** (home, menu *Ranking*): lista ordenada por XP, calculada pelo servidor a partir do razão de XP (`GET /api/ranking?metrica=xp`).
+- **Ranking de colecionadores** (álbum): por cartas coletadas (`metrica=cartas`).
 - **6 patentes por XP**, e quem tem patente maior modera quem tem menor:
 
 | Patente | XP | O que libera |
@@ -138,10 +141,10 @@ O cabeçalho mostra o gato, o nome e *Gato nível N* (nível = posição da pate
 - **Como ganhar XP:** visita diária +10, abrir pacote +5, carta nova (2 a 60 conforme a raridade), envio aprovado +50, link antigo salvo +10, coleção completa +100 e cada moderação +15.
 
 ### ☁️ 6. Envio de Vídeos, Anti-Duplicação e Moderação
-*(Protótipo: tudo roda no navegador; não há backend de envios ainda.)*
+Os envios e a fila têm backend real (`api/routes/envios.js`): `POST /api/envios`, `GET /api/envios/meus`, fila em `/api/mod/fila` e pedidos de remoção em `/api/remocoes`, com prazo de 72 h. **Dois votos iguais fecham o envio**; votos divididos esperam o desempate de um admin; as recompensas entram no razão de moedas e XP.
 - **Enviar vídeo** (exige conta e patente Banda larga): link original (YouTube, TikTok, X, Instagram), nome, ano, categoria e contexto ("Conta pra quem não viveu"). Quem ainda não tem a patente vê uma tela explicando como ganhar XP.
 - **Anti-duplicação em tempo real:** o link é normalizado (YouTube, TikTok, X e Instagram viram um id) e comparado com acervo e fila; o nome é comparado por similaridade. Igual ou muito parecido bloqueia o envio; parecido pede confirmação.
-- **Fila de moderação:** envios de exemplo de outros usuários, com aviso de possível duplicata, aprovar e recusar liberados só para quem tem patente maior que a do autor (a partir de Moderador). No protótipo, os seus envios são aprovados automaticamente depois de alguns segundos para demonstrar o fluxo.
+- **Fila de moderação:** envios reais de outros usuários, com aviso de possível duplicata; aprovar e recusar ficam liberados só para quem pode moderar.
 - **Recompensas:** envio aprovado = +25 moedas e +50 XP; link antigo salvo = +5 moedas e +10 XP.
 
 ### 💬 7. Rodapé, Feedback e Aviso Legal
@@ -442,9 +445,9 @@ erDiagram
 ### 🚀 Stack em uso hoje
 | Componente | Tecnologia | Papel Principal |
 | :--- | :--- | :--- |
-| **Front-end** | HTML, CSS e JavaScript puro (sem build, sem framework) | Páginas estáticas: `index.html`, `album.html`, `contribuir/`, `dashboard/`. Fontes Rajdhani, Inter e Baloo 2 (Google Fonts) |
-| **Dados do acervo e do álbum** | `data.js` (`MEMES`, `YEAR_INFO`, `COLLECTIONS`) | Conteúdo versionado no repositório; capas locais em `memes/` e vídeos do YouTube por id |
-| **Estado do usuário (protótipo)** | `localStorage` (`naosalvo2_state`, `ns_theme`, `ns_snd`, `ns_feedback`) | Conta, avatar, XP, moedas, cartas, estoque de pacotes, envios e votos locais |
+| **Front-end** | HTML, CSS e JavaScript puro (sem build, sem framework) | Páginas estáticas: `index.html`, `album.html`, `linha-do-tempo.html`, `memepedia.html`, `perfil.html`, `entrar.html`, `404.html`, `contribuir/`, `dashboard/` e o painel `seppzone/`. Fontes Rajdhani, Inter e Baloo 2 (Google Fonts) |
+| **Dados do acervo e do álbum** | Postgres (fonte) e `data.js` (`MEMES`, `YEAR_INFO`, `COLLECTIONS`) | O site lê do banco (`/api/memes`, `/api/cartas`) com o `data.js` como base e fallback; capas em `memes/` e imagens do painel no S3 (WebP) |
+| **Estado do usuário** | Servidor (Postgres) | Conta, avatar, XP, moedas, cartas, pacotes, envios e votos. O `localStorage` guarda só preferências (`ns_theme`, `ns_snd`) |
 | **Player** | YouTube iframe (`player.js`) e YouTube Data API v3 | Reprodução oficial e visualizações reais (via `/api/yt-stats`, chave `YT_API_KEY` opcional) |
 | **Servidor web** | nginx alpine (`Dockerfile`, `deploy/nginx.conf`) | Serve os arquivos estáticos, `noindex` em `/dashboard/` |
 | **Backend API** | Node 22 + `pg` (`api/server.js`, sem framework) | Contribuidores, admin, votos, yt-stats e feedback, com rate limit por IP |
@@ -491,9 +494,18 @@ O site é a **raiz do repositório** (o `Dockerfile` copia a raiz para o nginx, 
 naosalvo-2/
 ├── index.html              # Home: acervo, linha do tempo, categorias, busca, envio, moderação, ranking
 ├── album.html              # Álbum: coleções, fichário, pacotes, loja, repetidas, ranking de colecionadores
-├── common.js               # Conta (e-mail/Google/Discord), criador de gatinho, XP/patentes/moedas,
+├── linha-do-tempo.html     # Linha do tempo ano a ano
+├── memepedia.html          # Memepédia: verbetes dos memes (origem, por que viralizou, hoje, curiosidades)
+├── perfil.html / perfil.css   # Perfil público e privado, publicações e criador de gatinho
+├── entrar.html / entrar.css   # Entrada com Discord
+├── gate.js                 # Barreira de login do site
+├── cliente-economia.js     # Cliente da API de economia, álbum e ranking
+├── nav.js                  # Analytics de navegação anônimo
+├── common.js               # Sessão, criador de gatinho, XP/patentes/moedas,
 │                           #   ícones, tema, cabeçalho, rodapé e feedback
-├── data.js                 # MEMES (59), YEAR_INFO (2004 a 2020+) e COLLECTIONS (8 coleções, 109 cartas)
+├── data.js                 # MEMES (283), YEAR_INFO e COLLECTIONS (11 coleções, 603 cartas)
+├── seppzone/               # Painel admin (acervo, usuários, MCP, uploads, moderação)
+├── tests/                  # Testes de front (Playwright) e do player
 ├── player.js               # Player do YouTube
 ├── viewer.js / viewer.css  # Tela de vídeo e foto no visual de cada época, votos e sons
 ├── alertas.js              # Alertas de época sorteados no player (MSN, Orkut, WhatsApp, Pix…)
@@ -502,17 +514,24 @@ naosalvo-2/
 ├── home.css                # Estilos dos blocos da home
 ├── album.css               # Estilos do álbum e da abertura de pacotes
 ├── logo-hero.png / .webp, logo-word.png, avatar-ns.png, boneco.png   # Marca e imagens
-├── memes/                  # Capas locais dos registros (59 arquivos: jpg, jpeg, webp, mp4)
+├── memes/                  # Capas locais dos registros
 ├── memes_data.json         # Dados auxiliares do acervo (fora da imagem Docker)
 ├── contribuir/index.html   # Formulário de contribuidores
 ├── dashboard/index.html    # Dashboard de contribuidores (token de admin)
 ├── api/
-│   ├── server.js           # API Node + pg (contribuidores, admin, votos, yt-stats, feedback)
-│   ├── package.json
-│   ├── Dockerfile
-│   └── .dockerignore
+│   ├── server.js / app.js  # API Node + pg (sem framework), roteador em lib/router.js
+│   ├── routes/             # Rotas por assunto: auth, economia, envios, votos, memepedia, admin*, mcp, analytics...
+│   ├── auth/ economia/ perfil/   # Login Discord e sessão, regras e sorteio de pacotes, perfil público
+│   ├── mcp/                # Servidor MCP: registro, ferramentas, escrita, cartas, mídias, memepédia, S3
+│   ├── lib/                # Validação, auditoria, imagens, papéis, equipe e utilidades
+│   ├── migrations/         # 001 a 026 (SQL numerado, aplicado na subida)
+│   ├── seed/ scripts/      # Carga do acervo e scripts de operação (ex.: limpeza de órfãos do S3)
+│   ├── test/               # Testes da API (node:test; os com banco pedem TEST_DB_NAME)
+│   └── package.json, Dockerfile, .dockerignore
+├── scripts/                # ci/ (checagens), backup/ (banco e S3) e infra/
 ├── deploy/
-│   └── nginx.conf          # Config do nginx (copiada para a imagem do site)
+│   ├── nginx.conf          # Config do nginx (copiada para a imagem do site)
+│   └── vp3/, auto/, pgadmin/, lab-redirect/   # Stack de produção (vp3) e utilitários de deploy
 ├── Dockerfile              # Imagem do site (nginx alpine)
 ├── docker-stack.yml        # Stack Swarm: web + api, Traefik, secrets
 ├── .dockerignore / .gitignore
@@ -597,19 +616,19 @@ A paleta vem do logo (azul do céu e azul da marca) e o fundo tem raios de luz. 
 
 | Ambiente | Endereço | Branch | Stack | Banco |
 |---|---|---|---|---|
-| Local (produção do protótipo) | `naosalvo-local.fishlab.com.br` | `main` | `naosalvo` (`docker-stack.yml`) | `naosalvo` |
-| Desenvolvimento | `naosalvo-dev.fishlab.com.br` | `dev` | `naosalvo-dev` (`docker-stack.dev.yml`) | `naosalvo_dev` |
+| Produção | `naosalvo.fishlab.com.br` | `main` | `naosalvo` no vp3 (`deploy/vp3/stack.yml`, via Portainer) | `naosalvo` (no vp3) |
+| Antigos (`naosalvo-local` e `naosalvo-dev`) | `naosalvo-local.fishlab.com.br`, `naosalvo-dev.fishlab.com.br` | — | só redirecionam para a produção (`deploy/lab-redirect/`) | bancos `naosalvo` e `naosalvo_dev` do servidor 2 mantidos por segurança |
 
-- `main` guarda o protótipo visual (tag `v0.1-prototipo`). `dev` é onde o banco, o back e a estrutura nova são montados e testados antes de chegar ao `main`.
-- Cada ambiente tem segredos próprios (`naosalvo_*` e `naosalvo_dev_*`) e imagens separadas (`:latest` e `:dev`).
-- Deploy do dev: `docker build -t naosalvo-api:dev ./api && docker build -t naosalvo-frontend:dev . && docker stack deploy -c docker-stack.dev.yml naosalvo-dev` (contexto `servidor2`).
-- Deploy automático: o serviço `naosalvo-deployer` publica `main` e `dev` sozinho (`deploy/auto/`).
+- Fluxo: PR em `dev`, depois PR `dev` → `main`. O merge na `main` publica as imagens no Docker Hub (GitHub Actions) e o Portainer, em modo Git, puxa a nova versão a cada 30 minutos. Passo a passo e rollback em [`docs/deploy-vp3-portainer.md`](docs/deploy-vp3-portainer.md); a migração do servidor 2 para o vp3 está em [`docs/migracao-vp3.md`](docs/migracao-vp3.md).
+- Segredos ficam em Docker secrets, nunca no repositório. Backup do banco e do bucket: [`docs/backup-e-restauracao.md`](docs/backup-e-restauracao.md) e [`docs/s3-politica-bucket.md`](docs/s3-politica-bucket.md).
 - Próximos passos (banco, API, admin e front): [`docs/PLANO-IMPLEMENTACAO.md`](docs/PLANO-IMPLEMENTACAO.md).
 - DNS: o registro `naosalvo-dev` no Cloudflare deve apontar para o mesmo destino do `naosalvo-local` (com proxy).
 
 ## 7. Formulário de Contribuidores, Dashboard e API
 
-Cadastro de quem quer ajudar o projeto, mais as rotas de votos, visualizações e feedback do site. Os dados vão para um banco PostgreSQL próprio (`naosalvo`), no servidor 2.
+Cadastro de quem quer ajudar o projeto, mais as rotas de votos, visualizações e feedback do site. Os dados vão para o PostgreSQL de produção (`naosalvo`).
+
+> **A tabela de rotas abaixo é parcial** (as rotas originais do protótipo). A lista completa e atual (`/api/eu`, `/api/auth/*`, `/api/carteira`, `/api/album*`, `/api/pacotes/*`, `/api/ranking`, `/api/sobedesce`, `/api/memepedia*`, `/api/envios*`, `/api/mod/*`, `/api/admin/*`, `/mcp` e outras) está em [`docs/API.md`](docs/API.md) e em `api/routes/`. A rota `POST /api/memes/fora-do-ar` foi removida.
 
 | Peça | Onde | O que faz |
 |---|---|---|
@@ -643,7 +662,7 @@ Cadastro de quem quer ajudar o projeto, mais as rotas de votos, visualizações 
 
 **Segurança:** validação no servidor, Discord único, honeypot, rate limit por IP, CSV sem injeção de fórmula. Senha do banco, token admin e (opcionalmente) a chave do YouTube são lidos de arquivos de Docker secrets (`DB_PASSWORD_FILE`, `ADMIN_TOKEN_FILE`, `YT_API_KEY_FILE`), nunca do git. O dashboard tem `noindex`.
 
-**Deploy (servidor 2):** `docker build -t naosalvo-api:latest ./api && docker build -t naosalvo-frontend:latest . && docker stack deploy -c docker-stack.yml naosalvo`. As tabelas `contribuidores`, `votos`, `feedback`, `comentarios` e `links_sugeridos` são criadas pela API na primeira subida. O site fica em `naosalvo-local.fishlab.com.br`; o Traefik envia `/api` para a API (porta 3000) e o resto para o nginx.
+**Deploy:** ver a seção "Ambientes e branches" e [`docs/deploy-vp3-portainer.md`](docs/deploy-vp3-portainer.md). As tabelas são criadas e alteradas pelas migrações de `api/migrations/` (001 a 026), aplicadas pela API na subida; o Traefik envia `/api` para a API (porta 3000) e o resto para o nginx.
 
 ---
 
@@ -654,8 +673,10 @@ Cadastro de quem quer ajudar o projeto, mais as rotas de votos, visualizações 
 
 Consulte os responsáveis pelo repositório (`@SePPZAO`, `@cidcidoso`) para alinhamento nas issues e branches de desenvolvimento.
 
-### 7.1. Painel `/admin/` (exemplo)
-Tela de exemplo (dados fictícios, estado só na sessão do navegador, nada vai ao servidor) que mistura moderação ao estilo wiki com gamificação, usando as patentes do site:
+### 7.1. Painel admin (`/seppzone/`)
+O painel real (`seppzone/`) é ligado à API com permissão por papel e grava toda ação em `log_auditoria`: acervo (memes, mídias e cartas), usuários, chaves do MCP, uploads de imagem, moderação de envios e Memepédia. O plano e o estado das fatias estão em [`docs/PLANO-ADMIN.md`](docs/PLANO-ADMIN.md) e o do MCP em [`docs/PLANO-MCP.md`](docs/PLANO-MCP.md).
+
+A tabela a seguir descreve o desenho original de exemplo (dados fictícios), que serviu de referência para o painel:
 
 | Aba | O que mostra |
 |---|---|
@@ -667,4 +688,4 @@ Tela de exemplo (dados fictícios, estado só na sessão do navegador, nada vai 
 | Log | Registro de todas as ações |
 | Regras de XP | XP por ação e princípios do modelo |
 
-Para virar real falta: login/autorização, tabelas de fila/histórico/log no Postgres e rotas `/api/admin/*` correspondentes.
+Parte disso já existe (login, fila de envios, log e rotas `/api/admin/*`); o que falta está em `docs/PLANO-ADMIN.md`.

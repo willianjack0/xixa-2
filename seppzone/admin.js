@@ -481,9 +481,25 @@ function pintaPrazo(c) { const r = textoPrazo(c.prazo); c.el.textContent = "Praz
 
 function abaMod(p) {
   contadores = [];
-  const fila = h("div"), rem = h("div");
-  trocar(p, h("div", { class: "sec" }, h("h2", null, "Fila de envios"), fila), h("div", { class: "sec" }, h("h2", null, "Pedidos de remoção"), rem));
-  carregarFila(fila); carregarRemocoes(rem);
+  const fila = h("div"), meus = h("div"), rem = h("div");
+  trocar(p, h("div", { class: "sec" }, h("h2", null, "Fila de envios"), fila),
+    h("div", { class: "sec" }, h("h2", null, "Seus envios"), meus),
+    h("div", { class: "sec" }, h("h2", null, "Pedidos de remoção"), rem));
+  carregarFila(fila); carregarMeusEnvios(meus); carregarRemocoes(rem);
+}
+
+const SITUACAO_ENVIO = { aberto: "Aguardando moderação", aprovado: "Aprovado", rejeitado: "Rejeitado", ajuste: "Ajuste pedido", duplicado: "Duplicado" };
+// os envios de quem está logado: a fila acima nunca mostra os próprios (quem envia não vota no próprio envio)
+async function carregarMeusEnvios(box) {
+  trocar(box, carregando("Carregando seus envios…"));
+  const r = await api("GET", "/api/envios/meus");
+  if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarMeusEnvios(box)));
+  const itens = r.data.itens || [];
+  if (!itens.length) return trocar(box, vazio("Você ainda não enviou nada por esta conta."));
+  trocar(box, h("p", { class: "mini" }, "Quem envia não vota no próprio envio: outra pessoa com papel de moderador precisa votar. Por isso estes envios não aparecem na fila acima."),
+    h("ul", { class: "lista" }, itens.map((i) => h("li", { class: "item" },
+      h("b", null, i.titulo), " · ", i.ano, " · ", i.categoria, " · ", h("strong", null, SITUACAO_ENVIO[i.status] || i.status),
+      h("div", { class: "mini" }, "Enviado em ", quando(i.criado_em), i.decidido_em ? " · decidido em " + quando(i.decidido_em) : "", i.motivo ? " · " + i.motivo : "")))));
 }
 
 async function carregarFila(box) {
@@ -492,7 +508,7 @@ async function carregarFila(box) {
   if (r.status === 404) return trocar(box, vazio("A fila de envios ainda não está disponível neste servidor."));
   if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarFila(box)));
   const itens = r.data.itens || [];
-  if (!itens.length) return trocar(box, vazio("Nenhum envio esperando votos. Bom trabalho!"));
+  if (!itens.length) return trocar(box, vazio("Nenhum envio esperando o seu voto. Seus próprios envios não entram aqui (veja \"Seus envios\" abaixo)."));
   trocar(box, h("p", { class: "mini" }, "Voto cego: você vê só quantos votos o envio já tem, nunca os votos dos outros. Dois votos iguais fecham o envio; se dividir, um admin desempata."),
     h("ul", { class: "lista" }, itens.map((i) => cartaoEnvio(i, box))));
 }
@@ -995,13 +1011,16 @@ function abaEras(p) {
   trocar(p, box); carregar();
 }
 
-// ---------- Comunidade (contribuidores, feedback, comentários, links) ----------
+// ---------- Comunidade (contribuidores, feedback, comentários, links, memepédia) ----------
 const TIPOS_FB = { ideia: "Ideia", bug: "Bug", elogio: "Elogio", remocao: "Remoção" };
 const ST_LINK = { pendente: "Pendente", aprovado: "Aprovado", recusado: "Recusado" };
+const CAMPOS_MP = { origem: "De onde surgiu", porque: "Por que viralizou", usos: "Como é usado", rede: "Onde ficou famoso", hoje: "Onde está hoje", curiosidades: "Curiosidades" };
+const ST_MP = { pendente: "Pendente", aprovado: "Aprovado", recusado: "Recusado" };
 function abaComunidade(p) {
   const segs = [
     { id: "contribuidores", nome: "Contribuidores", cfg: cfgContribuidores }, { id: "feedback", nome: "Feedback", cfg: cfgFeedback },
-    { id: "comentarios", nome: "Comentários", cfg: cfgComentarios }, { id: "links", nome: "Links sugeridos", cfg: cfgLinks }
+    { id: "comentarios", nome: "Comentários", cfg: cfgComentarios }, { id: "links", nome: "Links sugeridos", cfg: cfgLinks },
+    { id: "memepedia", nome: "Memepédia", cfg: cfgMemepedia }
   ];
   const corpo = h("div"); const bar = h("div", { class: "sub", role: "group", "aria-label": "Tipo de item" });
   const botoes = segs.map((s) => h("button", { type: "button", "aria-pressed": "false", on: { click: () => ir(s) } }, s.nome));
@@ -1026,7 +1045,7 @@ function listaCliente(box, cfg) {
     async decidir(item, status) {
       const r = await api("POST", cfg.url + "/" + encodeURIComponent(item.id), { status });
       if (!r.ok) return aviso(msgErro(r), "erro");
-      item.status = status; aviso("Link " + status + ".", "ok"); desenhar();
+      item.status = status; aviso((cfg.rotuloAviso || "Item") + " " + status + ".", "ok"); desenhar();
     }
   };
   function desenhar() {
@@ -1082,7 +1101,7 @@ const cfgComentarios = () => ({
     h("div", { class: "item-h" }, h("h3", null, i.autor || "—"), h("span", { class: "chip cod" }, i.meme_id), h("span", { class: "mini" }, quando(i.criado_em))),
     h("p", { class: "txt" }, i.texto), h("div", { class: "acts" }, h("button", { class: "b bad", type: "button", on: { click: () => c.apagar(i, "Excluir este comentário?") } }, "Excluir"))) });
 const cfgLinks = () => ({
-  url: "/api/admin/links", rotulo: "links", vazio: "Nenhum link sugerido ainda.", texto: (i) => [i.meme_id, i.yt, i.autor].join(" "),
+  url: "/api/admin/links", rotulo: "links", rotuloAviso: "Link", vazio: "Nenhum link sugerido ainda.", texto: (i) => [i.meme_id, i.yt, i.autor].join(" "),
   filtro: { rotulo: "Situação", valor: (i) => i.status, nome: (v) => ST_LINK[v] || v, padrao: "pendente" },
   desenhar: (i, c) => { const yt = "https://www.youtube.com/watch?v=" + encodeURIComponent(i.yt); return h("li", { class: "item" },
     h("div", { class: "item-h" }, h("h3", null, i.meme_id), chip(ST_LINK[i.status] || i.status, i.status === "aprovado" ? "ok" : i.status === "recusado" ? "bad" : "warn"), h("span", { class: "mini" }, quando(i.criado_em))),
@@ -1090,6 +1109,27 @@ const cfgLinks = () => ({
     h("div", { class: "acts" }, i.status === "pendente"
       ? [h("button", { class: "b ok", type: "button", on: { click: () => c.decidir(i, "aprovado") } }, "Aprovar"), h("button", { class: "b bad", type: "button", on: { click: () => c.decidir(i, "recusado") } }, "Recusar")]
       : h("button", { class: "b", type: "button", on: { click: () => c.decidir(i, i.status === "aprovado" ? "recusado" : "aprovado") } }, i.status === "aprovado" ? "Mudar para recusado" : "Mudar para aprovado"))); } });
+
+const cfgMemepedia = () => ({
+  url: "/api/admin/memepedia", rotulo: "edições", rotuloAviso: "Texto da Memepédia", vazio: "Nenhum texto enviado ainda.",
+  texto: (i) => [i.meme_id, CAMPOS_MP[i.campo] || i.campo, i.texto, i.autor, i.fonte || ""].join(" "),
+  filtro: { rotulo: "Situação", valor: (i) => i.status, nome: (v) => ST_MP[v] || v, padrao: "pendente" },
+  desenhar: (i, c) => h("li", { class: "item" },
+    h("div", { class: "item-h" },
+      h("h3", null, h("a", { href: "/memepedia.html#" + encodeURIComponent(i.meme_id), target: "_blank", rel: "noopener noreferrer" }, i.meme_id)),
+      chip(CAMPOS_MP[i.campo] || i.campo, "info"),
+      chip(ST_MP[i.status] || i.status, i.status === "aprovado" ? "ok" : i.status === "recusado" ? "bad" : "warn"),
+      h("span", { class: "mini" }, quando(i.criado_em))),
+    h("p", { class: "txt" }, i.texto),
+    h("div", { class: "meta" },
+      h("span", null, "Enviado por " + (i.autor || "—")),
+      i.fonte ? h("a", { href: i.fonte, target: "_blank", rel: "noopener noreferrer nofollow" }, "Fonte externa") : null,
+      i.revisado_em ? h("span", { class: "mini" }, "Revisado em " + quando(i.revisado_em)) : null),
+    h("div", { class: "acts" }, i.status === "pendente"
+      ? [h("button", { class: "b ok", type: "button", on: { click: () => c.decidir(i, "aprovado") } }, "Aprovar"),
+         h("button", { class: "b bad", type: "button", on: { click: () => c.decidir(i, "recusado") } }, "Recusar")]
+      : [h("button", { class: "b", type: "button", on: { click: () => c.decidir(i, i.status === "aprovado" ? "recusado" : "aprovado") } }, i.status === "aprovado" ? "Recusar" : "Aprovar"),
+         h("button", { class: "b", type: "button", on: { click: () => c.decidir(i, "pendente") } }, "Voltar à fila")])) });
 
 // ---------- telas de acesso e inicialização ----------
 function sessaoExpirou() {

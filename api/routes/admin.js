@@ -2,6 +2,7 @@
 // (O token fixo é "chave de emergência" e sai quando o login por patente entrar.)
 import { send, lerJson } from '../lib/http.js';
 import { auditar } from '../lib/auditoria.js';
+import { transacao, carregarRegras, travarUsuario, criarRazao } from '../economia/servico.js';
 
 const csvCell = (v) => {
   let s = Array.isArray(v) ? v.join('; ') : v instanceof Date ? v.toISOString() : String(v ?? '');
@@ -59,9 +60,42 @@ export default function registrar(r) {
     if (b === undefined) return send(res, 400, { erro: 'json inválido' });
     const st = b.status === 'aprovado' ? 'aprovado' : b.status === 'recusado' ? 'recusado' : null;
     if (!st) return send(res, 400, { erro: 'status inválido' });
-    const d = await pool.query('UPDATE links_sugeridos SET status = $1, revisado_em = now() WHERE id = $2', [st, params[0]]);
-    if (d.rowCount) await auditar(ctx, 'link.' + (st === 'aprovado' ? 'aprovar' : 'recusar'), 'links_sugeridos:' + params[0]);
-    return send(res, d.rowCount ? 200 : 404, { ok: !!d.rowCount });
+
+    const linkId = params[0];
+    const { ok, statusAnterior, usuarioId } = await transacao(pool, async (cli) => {
+      const { rows: [link] } = await cli.query(
+        'SELECT id, status, autor, usuario_id, meme_id FROM links_sugeridos WHERE id = $1 FOR UPDATE',
+        [linkId]
+      );
+      if (!link) return { ok: false };
+
+      const statusAnt = link.status;
+      await cli.query('UPDATE links_sugeridos SET status = $1, revisado_em = now() WHERE id = $2', [st, linkId]);
+
+      const autorUsuarioId = link.usuario_id || null;
+      if (st === 'aprovado' && statusAnt !== 'aprovado' && autorUsuarioId) {
+        const regras = await carregarRegras(cli);
+        const xpGanho = regras.xp_ganho?.link_antigo || 0;
+        const moedasGanhas = regras.recompensa_moedas?.link_antigo || 0;
+
+        if (xpGanho > 0 || moedasGanhas > 0) {
+          await travarUsuario(cli, autorUsuarioId);
+          const razao = criarRazao(cli, autorUsuarioId);
+          if (xpGanho > 0) await razao.xp(xpGanho, 'link_antigo', 'link:' + linkId);
+          if (moedasGanhas > 0) await razao.moedas(moedasGanhas, 'link_antigo', 'link:' + linkId);
+          await razao.aplicar();
+        }
+      }
+
+      await auditar({ ...ctx, pool: cli }, 'link.' + (st === 'aprovado' ? 'aprovar' : 'recusar'), 'links_sugeridos:' + linkId, {
+        status_anterior: statusAnt,
+        ...(autorUsuarioId ? { autor_usuario_id: autorUsuarioId } : {})
+      });
+
+      return { ok: true, statusAnterior: statusAnt, usuarioId: autorUsuarioId };
+    });
+
+    return send(res, ok ? 200 : 404, { ok, status_anterior: statusAnterior });
   });
 
   r.get('/api/admin/feedback', async ({ res, pool }) => {

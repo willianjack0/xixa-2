@@ -9,8 +9,8 @@ export class ErroPerfil extends ErroNegocio {
 }
 
 // ---- lista fechada do gato: as opções do criador de gato (common.js: SG.fur/pat/eye/acc/clo/bg), tamanho de cada lista ----
-//  fur 10 (9 = Sphynx) · pat 5 · eye 5 · acc 9 · clo 8 · bg 8. Se o criador ganhar opções, atualize aqui (e os testes).
-export const OPCOES_GATO = Object.freeze({ fur: 10, pat: 5, eye: 5, acc: 9, clo: 8, bg: 8 });
+//  fur 15 (9 = Sphynx) · pat 9 · eye 8 · acc 18 · clo 14 · bg 8. Opções novas entram sempre no fim (o gato salvo guarda o índice). Se o criador ganhar opções, atualize aqui (e os testes).
+export const OPCOES_GATO = Object.freeze({ fur: 15, pat: 9, eye: 8, acc: 18, clo: 14, bg: 8 });
 const CHAVES_GATO = Object.keys(OPCOES_GATO);
 
 /** Devolve o gato normalizado ({fur,pat,eye,acc,clo,bg}) ou lança 422. Só aceita objeto simples, todas as 6 chaves, inteiros na faixa. */

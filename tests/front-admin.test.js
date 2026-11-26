@@ -76,6 +76,7 @@ function criarApi(over = {}) {
       if (st.expirou && p !== "/api/eu") return json(route, 401, { erro: "sessão expirada" });
       if (p === "/api/categorias") return json(route, 200, { itens: [{ nome: "Memes" }, { nome: "Música" }] });
       if (p === "/api/eras") return json(route, 200, { itens: [{ ano: 2000, ano_fim: 2005, rotulo: "Discado", lema: "Lema", texto: "Texto da era" }] });
+      if (p === "/api/envios/meus") return json(route, 200, { itens: st.meus || [] });
       if (p === "/api/mod/fila") return st.modAusente ? json(route, 404, { erro: "não existe" }) : json(route, 200, { itens: st.fila });
       if (p === "/api/mod/remocoes" && m === "GET") return st.modAusente ? json(route, 404, { erro: "não existe" }) : json(route, 200, { itens: st.remocoes });
       let x;
@@ -101,6 +102,8 @@ function criarApi(over = {}) {
       if (p === "/api/admin/colecoes" && m === "GET") return json(route, 200, { itens: [{ id: "c1", nome: "Clássicos", icone: "★", cor: "#25aae3", cores_fundo: ["#000"], sobre: "Sobre", ordem: 1, cartas: 1 }] });
       if (p === "/api/admin/cartas" && m === "GET") return json(route, 200, { itens: [{ id: "c1-01", colecao_id: "c1", numero: 1, nome: "Carta Um", emoji: "🐱", raridade: "Raro", meme_id: null }] });
       if (p === "/api/admin/links") return json(route, 200, { items: [{ id: 5, meme_id: "nyan-cat", yt: "QH2-TGUlwu4", autor: "Zé", status: "pendente", criado_em: "2026-11-20T10:00:00Z" }] });
+      if (p === "/api/admin/memepedia" && m === "GET") return json(route, 200, { items: st.memepedia || [{ id: 12, meme_id: "nyan-cat", campo: "origem", texto: XSS, fonte: "https://example.com", autor: "AutorX", status: "pendente", criado_em: "2026-11-20T10:00:00Z", revisado_em: null }] });
+      if ((x = p.match(/^\/api\/admin\/memepedia\/(\d+)$/)) && m === "POST") return json(route, 200, { ok: true });
       if (p === "/api/admin/feedback") return json(route, 200, { items: [{ id: 6, tipo: "bug", msg: XSS, contato: null, pagina: "/index.html", criado_em: "2026-11-20T10:00:00Z" }] });
       if (p === "/api/admin/comentarios") return json(route, 200, { items: [] });
       if (p === "/api/admin/contribuidores") return json(route, 200, { items: [{ id: 7, nome: "Dani", nick: "dani", discord: "dani#1", areas: ["Código"], area_outros: null, horas_semana: 4, experiencia: "pouca", ferramentas: "git", mensagem: null, criado_em: "2026-11-20T10:00:00Z" }] });
@@ -224,13 +227,30 @@ test("moderação: voto manda CSRF e mostra o resultado; remoção atrasada em d
   assert.match(await page.textContent("#av-ok"), /Decidido: aprovado.*Meme criado: meme-novo/);
   const v = api.st.log.find((l) => /voto$/.test(l.p));
   assert.strictEqual(v.csrf, "tok-csrf"); assert.deepStrictEqual(v.corpo, { voto: "aprovado", motivo: "ok" });
-  await page.waitForSelector("text=Nenhum envio esperando votos");
+  await page.waitForSelector("text=Nenhum envio esperando o seu voto");
   // atender remoção pede confirmação
   await page.click('#p-moderacao .item:has-text("Nyan Cat") button:has-text("Atender")');
   assert.match(await page.textContent("dialog"), /sai do site/);
   await page.click('dialog button:has-text("Atender e tirar")');
   await page.waitForFunction(() => !document.body.textContent.includes("É meu"));
   assert.deepStrictEqual(api.st.log.find((l) => /remocoes\/1$/.test(l.p) && l.m === "POST").corpo, { decisao: "atendida" });
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+test("moderação: 'Seus envios' mostra os envios da própria conta (a fila nunca mostra) e trata texto como texto", opts, async () => {
+  const meus = [
+    { id: 7, titulo: "Meu envio <img src=x onerror=window.__xss=1>", ano: 2012, categoria: "Vídeos", status: "aberto", motivo: null, criado_em: "2026-11-20T10:00:00Z", decidido_em: null },
+    { id: 6, titulo: "Outro", ano: 2010, categoria: "TV", status: "rejeitado", motivo: "já existe", criado_em: "2026-11-19T10:00:00Z", decidido_em: "2026-11-19T12:00:00Z" }
+  ];
+  const { ctx, page, erros } = await abrir({ meus, fila: [] }, { hash: "#moderacao" });
+  await page.waitForSelector("text=Seus envios");
+  await page.waitForSelector("text=Aguardando moderação");
+  const txt = await page.textContent("#p-moderacao");
+  assert.match(txt, /Meu envio <img src=x onerror=window.__xss=1>/, "o título aparece como texto");
+  assert.match(txt, /Rejeitado/); assert.match(txt, /já existe/);
+  assert.match(txt, /outra pessoa com papel de moderador precisa votar/);
+  assert.strictEqual(await page.evaluate(() => window.__xss), undefined);
   assert.deepStrictEqual(erros, []);
   await ctx.close();
 });
@@ -284,6 +304,19 @@ test("log mostra de/para legível; comunidade exclui feedback com confirmação 
   assert.strictEqual(api.st.log.find((l) => l.m === "DELETE").csrf, "tok-csrf");
   await page.click('#p-comunidade button:has-text("Comentários")');
   await page.waitForSelector("text=Nenhum comentário ainda");
+  // aba Memepédia (edições colaborativas da comunidade)
+  await page.click('#p-comunidade button:has-text("Memepédia")');
+  await page.waitForSelector("#p-comunidade .item");
+  assert.strictEqual(await page.evaluate(() => window.__xss), undefined, "XSS não executou");
+  assert.strictEqual(await page.$("#p-comunidade img"), null, "tag <img> não é inserida como elemento");
+  assert.match(await page.textContent("#p-comunidade .item h3"), /nyan-cat/);
+  assert.strictEqual(await page.getAttribute('#p-comunidade .item h3 a', 'href'), '/memepedia.html#nyan-cat');
+  await page.click('#p-comunidade button:has-text("Aprovar")');
+  await page.waitForSelector("#av-ok .aviso");
+  const postMp = api.st.log.find((l) => /memepedia\/12$/.test(l.p) && l.m === "POST");
+  assert.ok(postMp, "chamou POST /api/admin/memepedia/12");
+  assert.strictEqual(postMp.csrf, "tok-csrf");
+  assert.deepStrictEqual(postMp.corpo, { status: "aprovado" });
   assert.deepStrictEqual(erros, []);
   await ctx.close();
 });

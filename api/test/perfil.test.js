@@ -85,7 +85,7 @@ test('tudo ou nada: apelido válido + campo inválido na mesma chamada não grav
 test('avatar_gato inválido: 422 e nada muda (gato, cadastro e estoque)', { skip }, async () => {
   const { u, id } = await novoUsuario();
   const antes = (await GET('/api/eu', u)).json.usuario;
-  for (const ruim of [{ ...GATO, fur: 10 }, { ...GATO, bg: 'x' }, { fur: 1 }, { ...GATO, extra: 1 }, 'gato']) {
+  for (const ruim of [{ ...GATO, fur: 15 }, { ...GATO, bg: 'x' }, { fur: 1 }, { ...GATO, extra: 1 }, 'gato']) {
     const r = await PATCH('/api/eu', { avatar_gato: ruim }, u);
     assert.equal(r.status, 422, JSON.stringify(ruim)); assert.equal(r.json.campo, 'avatar_gato');
   }

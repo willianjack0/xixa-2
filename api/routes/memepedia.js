@@ -81,11 +81,17 @@ export default function registrar(r) {
         ORDER BY (status = 'pendente') DESC, criado_em DESC LIMIT 500`);
     return send(res, 200, { items: rows });
   });
-  r.post(/^\/api\/admin\/memepedia\/(\d+)$/, async ({ req, res, pool, params }) => {
+  r.post(/^\/api\/admin\/memepedia\/(\d+)$/, async (ctx) => {
+    const { req, res, pool, params } = ctx;
     const b = await lerJson(req);
     const st = b && ['aprovado', 'recusado', 'pendente'].includes(b.status) ? b.status : null;
     if (!st) return send(res, 400, { erro: 'status inválido' });
-    const d = await pool.query('UPDATE memepedia_edicoes SET status = $1, revisado_em = now() WHERE id = $2', [st, params[0]]);
-    return send(res, d.rowCount ? 200 : 404, d.rowCount ? { ok: true } : { erro: 'não encontrado' });
+    const { rows: [antes] } = await pool.query('SELECT id, meme_id, campo, status FROM memepedia_edicoes WHERE id = $1', [params[0]]);
+    if (!antes) return send(res, 404, { erro: 'não encontrado' });
+    if (antes.status !== st) {
+      await pool.query('UPDATE memepedia_edicoes SET status = $1, revisado_em = now() WHERE id = $2', [st, params[0]]);
+      await auditar(ctx, 'memepedia.moderar', 'memes:' + antes.meme_id, { edicao_id: antes.id, campo: antes.campo, de: antes.status, para: st });
+    }
+    return send(res, 200, { ok: true });
   });
 }

@@ -218,9 +218,9 @@ test('POST /mcp: tools/list lista apenas ferramentas ativas que a chave tem esco
   );
   assert.equal(r.status, 200);
   const tools = r.json.result.tools;
-  assert.equal(tools.length, 5);
+  assert.equal(tools.length, 6);
   const nomes = tools.map((t) => t.name).sort();
-  assert.deepEqual(nomes, ['buscar_cartas', 'buscar_memes', 'conferir_duplicado', 'listar_referencias', 'obter_meme']);
+  assert.deepEqual(nomes, ['buscar_cartas', 'buscar_memes', 'conferir_duplicado', 'listar_referencias', 'obter_meme', 'obter_memepedia']);
 
   for (const t of tools) {
     assert.ok(t.description);

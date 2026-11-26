@@ -206,6 +206,8 @@ a{color:inherit}
 .sg-o:disabled{opacity:.35;cursor:not-allowed;transform:none}
 .sg-o i{display:block;width:36px;height:36px;border-radius:50%;border:1px solid #0002;margin:0 auto}
 .sg-o span{font-size:20px;display:block}
+.sg-o .sg-ic{display:block;width:30px;height:30px;margin:0 auto 3px}
+[data-theme="dark"] .sg-o .sg-ic{filter:drop-shadow(0 0 .6px #ffffffb0) drop-shadow(0 0 .6px #ffffff80)}
 .sg-o.sq{border-radius:12px;padding:6px 10px}
 /* tablet e celular (<=980px): folha de tela cheia. Prévia compacta e sticky no topo (sempre visível ao rolar até as cores),
    Salvar numa barra sticky embaixo (fora do bloco do formulário, com safe-area). overflow:clip (e não hidden) para o sticky funcionar. */

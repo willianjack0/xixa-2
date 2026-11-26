@@ -11,15 +11,20 @@ export default function registrar(r) {
     return send(res, 200, { itens: rows.map((x) => ({ id: +x.id, autor: x.autor, texto: x.texto, em: x.criado_em })) });
   });
 
-  r.post('/api/comentarios', async ({ req, res, pool, ip }) => {
+  r.post('/api/comentarios', async ({ req, res, pool, ip, usuario }) => {
     if (limited('c:' + ip, 20)) return send(res, 429, { erro: 'Muitos comentários seguidos. Aguarde um pouco.' });
     const b = await lerJson(req);
-    if (b === undefined) return send(res, 400, { erro: 'json inválido' });
+    if (b === undefined || b === null || typeof b !== 'object' || Array.isArray(b)) return send(res, 400, { erro: 'json inválido' });
     if (b['bot-field']) return send(res, 201, { ok: true });
-    const id = String(b.id || ''), autor = clean(b.autor, 20), texto = clean(b.texto, 300);
+    if ('autor' in b && b.autor !== undefined) return send(res, 422, { erro: 'O autor é definido pela conta logada e não deve ser enviado.' });
+    const id = String(b.id || ''), texto = clean(b.texto, 300);
     if (!VOTE_ID.test(id)) return send(res, 400, { erro: 'id inválido' });
-    if (!/^[\w.\-]{3,20}$/.test(autor)) return send(res, 422, { erro: 'Nome de usuário inválido.' });
     if (texto.length < 1) return send(res, 422, { erro: 'Escreva alguma coisa.' });
+
+    const { rows: uRows } = await pool.query('SELECT apelido FROM usuarios WHERE id = $1', [usuario.id]);
+    if (!uRows.length || !uRows[0].apelido) return send(res, 401, { erro: 'usuário não encontrado' });
+    const autor = uRows[0].apelido;
+
     let rows;
     try {
       ({ rows } = await pool.query(
@@ -29,5 +34,5 @@ export default function registrar(r) {
       throw e;
     }
     return send(res, 201, { id: +rows[0].id, autor, texto, em: rows[0].criado_em });
-  });
+  }, { autenticada: true });
 }

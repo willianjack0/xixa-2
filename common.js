@@ -1,13 +1,35 @@
 // Avatar de gatinho (do protótipo original)
 
 const SG={
- fur:[["Cinza","#9b9ba1"],["Laranja","#e8932f"],["Preto","#24242a"],["Branco","#f2eee6"],["Marrom","#8a6a45"],["Grafite","#5b5c66"],["Creme","#e6c99a"],["Azulado","#7d8ca6"],["Chocolate","#4a3226"],["Rosa (Sphynx)","#efb6c4"]],
- pat:["Liso","Tigrado","Pintado","Smoking","Máscara"],
- eye:[["Âmbar","#e6a21a"],["Verde","#5bbf3a"],["Azul","#2f8cff"],["Esmeralda","#19c29a"],["Roxo","#9a5cff"]],
- acc:[["Nenhum","🚫"],["Óculos redondo","👓"],["Óculos escuro","🕶️"],["Boné","🧢"],["Gorro","🧶"],["Fone","🎧"],["Bandana","🧣"],["Corrente","⛓️"],["Monóculo","🧐"]],
- clo:[["Hoodie","#1c1c24"],["Camiseta","#ececec"],["Jaqueta jeans","#3d6aa8"],["Maletom","#cfc7b4"],["Jaqueta bomber","#4b5a3a"],["Camisa xadrez","#b3262d"],["Regata","#22222a"],["Pelado","#0000"]],
+ fur:[["Cinza","#9b9ba1"],["Laranja","#e8932f"],["Preto","#24242a"],["Branco","#f2eee6"],["Marrom","#8a6a45"],["Grafite","#5b5c66"],["Creme","#e6c99a"],["Azulado","#7d8ca6"],["Chocolate","#4a3226"],["Rosa (Sphynx)","#efb6c4"],["Prata","#c9ccd4"],["Caramelo","#c98a45"],["Canela","#a0623e"],["Lilás","#b9a7b8"],["Dourado","#dcae5a"]],
+ pat:["Liso","Tigrado","Pintado","Smoking","Máscara","Tartaruga","Tricolor","Siamês","Peludo"],
+ eye:[["Âmbar","#e6a21a"],["Verde","#5bbf3a"],["Azul","#2f8cff"],["Esmeralda","#19c29a"],["Roxo","#9a5cff"],["Mel","#c98a2a"],["Cinza","#9aa7b3"],["Heterocromia (azul e âmbar)","#2f8cff","#e6a21a"]],
+ acc:[["Nenhum"],["Óculos redondo"],["Óculos escuro"],["Boné"],["Gorro"],["Fone"],["Bandana"],["Corrente"],["Monóculo"],["Viseira"],["Piercing na sobrancelha"],["Laço"],["Coroa"],["Gravata-borboleta"],["Cartola"],["Brinco de argola"],["Óculos 3D"],["Coleira com sininho"]],
+ clo:[["Hoodie","#1c1c24"],["Camiseta","#ececec"],["Jaqueta jeans","#3d6aa8"],["Moletom","#cfc7b4"],["Jaqueta bomber","#4b5a3a"],["Camisa xadrez","#b3262d"],["Regata","#22222a"],["Pelado","#0000"],["Camisa canarinho","#f4d01e"],["Camisa florida","#1fa3a0"],["Terno","#2b2f3a"],["Listrada","#f4f4f4"],["Puffer","#e2542f"],["Suéter de tricô","#7a4ea8"]],
  bg:[["Azul",["#2a6bff","#0a2a8a"]],["Roxo",["#7a4dff","#2a1070"]],["Rosa",["#ff6bd0","#7a2aa8"]],["Verde",["#19c29a","#06503f"]],["Sol",["#ffb12a","#d9561a"]],["Noite",["#1a1f4a","#05060f"]],["Menta",["#7ef0c8","#1a8a7a"]],["Vermelho",["#ff5a6a","#7a1030"]]]
 };
+// ícones coloridos dos acessórios no editor (desenhos próprios, no lugar de emoji: mesma ordem de SG.acc)
+const SG_ACC_ICO=[
+ '<circle cx="16" cy="16" r="11" fill="none" stroke="#e5383b" stroke-width="3.4"/><path d="M8.5 23.5L23.5 8.5" stroke="#e5383b" stroke-width="3.4" stroke-linecap="round"/>',
+ '<circle cx="9.5" cy="17" r="6" fill="#bfe3ff" fill-opacity=".55" stroke="#2a2a30" stroke-width="2.4"/><circle cx="22.5" cy="17" r="6" fill="#bfe3ff" fill-opacity=".55" stroke="#2a2a30" stroke-width="2.4"/><path d="M15.5 16q.5-2 1 0M3.5 15L1.5 13M28.5 15l2-2" stroke="#2a2a30" stroke-width="2" fill="none" stroke-linecap="round"/>',
+ '<rect x="2.5" y="11" width="12" height="9" rx="3.5" fill="#15151b"/><rect x="17.5" y="11" width="12" height="9" rx="3.5" fill="#15151b"/><path d="M14.5 13.5h3" stroke="#15151b" stroke-width="2"/><path d="M5 13.5h4M20 13.5h4" stroke="#fff" stroke-opacity=".55" stroke-width="1.6" stroke-linecap="round"/>',
+ '<path d="M5 20Q5 7 16 7Q27 7 27 20Z" fill="#2d5bd1"/><path d="M4 20h18q8 0 9 4H4z" fill="#1c3f9c"/><circle cx="16" cy="7" r="1.8" fill="#1c3f9c"/><path d="M16 8v11" stroke="#4f7ae6" stroke-width="1.2"/>',
+ '<path d="M6 22Q6 8 16 8Q26 8 26 22Z" fill="#d6453a"/><rect x="4.5" y="19" width="23" height="6" rx="3" fill="#9e2e20"/><circle cx="16" cy="6.5" r="3.6" fill="#f2f2f2"/><path d="M11 11v8M16 10v9M21 11v8" stroke="#b8352b" stroke-width="1.2"/>',
+ '<path d="M6 19Q5 5 16 5Q27 5 26 19" stroke="#2a2a33" stroke-width="2.8" fill="none"/><rect x="3" y="16" width="7" height="11" rx="3.5" fill="#2a2a36"/><rect x="22" y="16" width="7" height="11" rx="3.5" fill="#2a2a36"/><rect x="4.8" y="18" width="3.4" height="7" rx="1.7" fill="#3d8bff"/><rect x="23.8" y="18" width="3.4" height="7" rx="1.7" fill="#3d8bff"/>',
+ '<path d="M3 8Q16 13 29 8L16 28Z" fill="#d6282f"/><circle cx="12" cy="13" r="1.4" fill="#fff"/><circle cx="20" cy="13" r="1.4" fill="#fff"/><circle cx="16" cy="19" r="1.4" fill="#fff"/><circle cx="16" cy="11" r="1.1" fill="#fff"/>',
+ '<g fill="none" stroke="#e8b923" stroke-width="2.4"><ellipse cx="7" cy="9" rx="4" ry="2.6" transform="rotate(35 7 9)"/><ellipse cx="12.5" cy="15" rx="4" ry="2.6" transform="rotate(55 12.5 15)"/><ellipse cx="19.5" cy="18.5" rx="4" ry="2.6" transform="rotate(10 19.5 18.5)"/><ellipse cx="25.5" cy="23.5" rx="4" ry="2.6" transform="rotate(50 25.5 23.5)"/></g><path d="M8 10l3 3M21 19l3 3" stroke="#a8800f" stroke-width="1"/>',
+ '<circle cx="13" cy="13" r="8.5" fill="#dff1ff" fill-opacity=".7" stroke="#d4a82a" stroke-width="2.6"/><path d="M10 9.5q2-2 5-1" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M20 19Q25 24 22 30" stroke="#d4a82a" stroke-width="1.6" fill="none" stroke-dasharray="2 1.6"/>',
+ '<path d="M3 14Q16 8 29 14" stroke="#eeeeee" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M3 14Q16 8 29 14" stroke="#b8bec6" stroke-width="1" fill="none"/><path d="M5 15.5Q16 10 27 15.5Q26 24 16 23Q6 24 5 15.5Z" fill="#19c29a"/><path d="M8 17Q16 13 24 17" stroke="#fff" stroke-opacity=".6" stroke-width="1.6" fill="none" stroke-linecap="round"/>',
+ '<path d="M3 16Q12 8 24 10" stroke="#6b4a2e" stroke-width="4.2" fill="none" stroke-linecap="round"/><path d="M20 7Q26 10 26 18" stroke="#aab2bd" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="20" cy="7" r="3.6" fill="#eef1f5" stroke="#6f7884" stroke-width="1.2"/><circle cx="26" cy="19" r="3.6" fill="#eef1f5" stroke="#6f7884" stroke-width="1.2"/><circle cx="19" cy="6" r="1.1" fill="#fff"/><circle cx="25" cy="18" r="1.1" fill="#fff"/>',
+ '<path d="M16 16L4 8Q1 16 4 24Z" fill="#ff4fa3"/><path d="M16 16L28 8Q31 16 28 24Z" fill="#ff4fa3"/><path d="M7 11l5 5M25 11l-5 5" stroke="#c22f7a" stroke-width="1.4"/><path d="M14 18l-4 9M18 18l4 9" stroke="#e0338c" stroke-width="2.6" stroke-linecap="round"/><circle cx="16" cy="16" r="3.6" fill="#e0338c"/>',
+ '<path d="M4 25L2.5 9L10 15L16 5L22 15L29.5 9L28 25Z" fill="#f4c430" stroke="#c9971a" stroke-width="1.4" stroke-linejoin="round"/><rect x="4" y="23" width="24" height="4" rx="1" fill="#e0ad1f"/><circle cx="16" cy="18" r="2.4" fill="#e0245e"/><circle cx="9.5" cy="20" r="1.8" fill="#2f8cff"/><circle cx="22.5" cy="20" r="1.8" fill="#19c29a"/>',
+ '<path d="M16 16L4 9Q2 16 4 23Z" fill="#c21f3a"/><path d="M16 16L28 9Q30 16 28 23Z" fill="#c21f3a"/><path d="M7 12l4 4-4 4M25 12l-4 4 4 4" stroke="#8f1429" stroke-width="1.2" fill="none"/><rect x="12.5" y="12.5" width="7" height="7" rx="2.4" fill="#8f1429"/>',
+ '<rect x="8" y="3" width="16" height="19" rx="2" fill="#17171d"/><rect x="8" y="17" width="16" height="4" fill="#c0303a"/><ellipse cx="16" cy="23.5" rx="14" ry="3.6" fill="#24242c"/><path d="M11 5v11" stroke="#ffffff30" stroke-width="2"/>',
+ '<path d="M16 3.5Q20 3.5 19.5 8" stroke="#c9971a" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="16" cy="18" r="9.5" fill="none" stroke="#f0c040" stroke-width="3.6"/><path d="M8.5 14q2.5-5 7-5.5" stroke="#fff6c8" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M22 25q-2 2-5 2.4" stroke="#b8901a" stroke-width="1.4" fill="none" stroke-linecap="round"/>',
+ '<rect x="2.5" y="10" width="12" height="11" rx="1.6" fill="#ff2d3d" fill-opacity=".8" stroke="#f6f6f6" stroke-width="2.2"/><rect x="17.5" y="10" width="12" height="11" rx="1.6" fill="#22d3ee" fill-opacity=".8" stroke="#f6f6f6" stroke-width="2.2"/><rect x="2.5" y="10" width="27" height="11" rx="1.6" fill="none" stroke="#9aa3ad" stroke-width=".8"/><path d="M14.5 13h3" stroke="#f6f6f6" stroke-width="2.2"/>',
+ '<path d="M3 9Q16 18 29 9" stroke="#d6282f" stroke-width="4.4" fill="none" stroke-linecap="round"/><circle cx="8" cy="11.2" r="1" fill="#f2c230"/><circle cx="24" cy="11.2" r="1" fill="#f2c230"/><path d="M16 15v3" stroke="#a8800f" stroke-width="1.6"/><path d="M10.5 26Q10.5 18 16 18Q21.5 18 21.5 26Z" fill="#f2c230"/><rect x="9.5" y="25" width="13" height="2.4" rx="1.2" fill="#d9a91d"/><circle cx="16" cy="28.4" r="1.6" fill="#6b5410"/><path d="M13 21q1-1.6 2.6-1.8" stroke="#fff6c8" stroke-width="1.2" fill="none" stroke-linecap="round"/>'
+];
+const sgIco=i=>`<svg class="sg-ic" viewBox="0 0 32 32" aria-hidden="true" focusable="false">${SG_ACC_ICO[i]||""}</svg>`;
 let sgN=0;
 const SPHYNX=9; // "Rosa" vira gato Sphynx (sem pelo)
 // cores derivadas do pelo (sombra e brilho) para o gatinho "Fofinho"
@@ -17,7 +39,7 @@ const lumHex=h=>{const p=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);return 
 // então quem já montou o gato vê o mesmo gato, com o traço novo.
 function catSVG(o){
   const sph=o.fur===SPHYNX,id="g"+(sgN++);
-  const fur=sph?"#efb6c4":SG.fur[o.fur][1],eye=SG.eye[o.eye][1],bg=SG.bg[o.bg][1],clo=o.clo,acc=o.acc,pat=sph?0:o.pat;
+  const fur=sph?"#efb6c4":SG.fur[o.fur][1],eyes=[SG.eye[o.eye][1],SG.eye[o.eye][2]||SG.eye[o.eye][1]],bg=SG.bg[o.bg][1],clo=o.clo,acc=o.acc,pat=sph?0:o.pat;
   const claro=lumHex(fur)>.55;
   const ln="",lnS=""; // sem contorno (estilo Fofinho)
   const dk=claro?"rgba(80,60,40,.30)":"rgba(0,0,0,.30)";
@@ -26,7 +48,10 @@ function catSVG(o){
   let s=`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><defs>
    <radialGradient id="${id}" cx="50%" cy="30%" r="80%"><stop offset="0" stop-color="${bg[0]}"/><stop offset="1" stop-color="${bg[1]}"/></radialGradient>
    <radialGradient id="${id}h" cx="45%" cy="35%" r="70%"><stop offset="0" stop-color="${furL}"/><stop offset="1" stop-color="${fur}"/></radialGradient>
-   <pattern id="${id}p" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 6H12M6 0V12" stroke="#00000055" stroke-width="2"/></pattern></defs>
+   <pattern id="${id}p" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 6H12M6 0V12" stroke="#00000055" stroke-width="2"/></pattern>
+   <pattern id="${id}l" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="5" fill="#1f3a7a"/></pattern>
+   <pattern id="${id}t" width="10" height="9" patternUnits="userSpaceOnUse"><path d="M0 2L2.5 6L5 2L7.5 6L10 2" stroke="#ffffff40" stroke-width="1.6" fill="none"/></pattern>
+   <radialGradient id="${id}s" cx="50%" cy="62%" r="42%"><stop offset="0" stop-color="${mixHex(fur,"#2a1a12",.62)}"/><stop offset=".65" stop-color="${mixHex(fur,"#2a1a12",.45)}" stop-opacity=".7"/><stop offset="1" stop-color="${fur}" stop-opacity="0"/></radialGradient></defs>
    <rect width="200" height="200" fill="url(#${id})"/>`;
   const skin=`url(#${id}h)`;
   // corpo (ombros) + roupa
@@ -40,13 +65,21 @@ function catSVG(o){
   else if(clo===4) s+=`<path d="${gola}" fill="${cc}" ${ln}/><path d="M100 162V205" stroke="#2c3a20" stroke-width="3"/><path d="M66 150Q100 168 134 150" stroke="#d98a2a" stroke-width="6" fill="none"/>`;
   else if(clo===5) s+=`<path d="${gola}" fill="${cc}" ${ln}/><path d="${gola}" fill="url(#${id}p)"/><path d="M84 150L100 168L116 150" stroke="#7a1218" stroke-width="3" fill="none"/>`;
   else if(clo===6) s+=`<path d="M72 148L78 205M128 148L122 205" stroke="${cc}" stroke-width="10"/>`;
+  else if(clo===8) s+=`<path d="${gola}" fill="${cc}" ${ln}/><path d="M84 150L100 168L116 150" stroke="#1e9a4a" stroke-width="5" fill="none" stroke-linejoin="round"/><path d="M40 196Q44 170 60 160M160 196Q156 170 140 160" stroke="#1e9a4a" stroke-width="4" fill="none"/>`;
+  else if(clo===9) s+=`<path d="${gola}" fill="${cc}" ${ln}/><clipPath id="${id}g"><path d="${gola}"/></clipPath><g clip-path="url(#${id}g)">${[[58,172,"#ffd23f"],[86,190,"#ff6b8a"],[120,176,"#ffd23f"],[148,192,"#ff6b8a"],[70,200,"#fff3b0"],[136,160,"#fff3b0"]].map(([x,y,c])=>`<g fill="${c}"><circle cx="${x-5}" cy="${y}" r="5"/><circle cx="${x+5}" cy="${y}" r="5"/><circle cx="${x}" cy="${y-5}" r="5"/><circle cx="${x}" cy="${y+5}" r="5"/></g><circle cx="${x}" cy="${y}" r="3" fill="#c2410c"/>`).join("")}<path d="M50 160l10 8M150 168l-8 10M104 200l10-4" stroke="#0d6b4a" stroke-width="4" stroke-linecap="round"/></g><path d="M84 148L100 166L116 148" stroke="#137a78" stroke-width="3" fill="none"/>`;
+  else if(clo===10) s+=`<path d="${gola}" fill="${cc}" ${ln}/><path d="M82 148L100 192L118 148Z" fill="#fff"/><path d="M96 156h8l2 26-6 8-6-8z" fill="#b3262d"/><path d="M76 146L100 192M124 146L100 192" stroke="#1a1d26" stroke-width="4"/><circle cx="100" cy="199" r="2.2" fill="#c8ccd6"/>`;
+  else if(clo===11) s+=`<path d="${gola}" fill="${cc}" ${ln}/><path d="${gola}" fill="url(#${id}l)"/><path d="M80 148Q100 162 120 148" stroke="#1f3a7a" stroke-width="4" fill="none"/>`;
+  else if(clo===12) s+=`<path d="M30 205Q32 152 74 143Q100 160 126 143Q168 152 170 205Z" fill="${cc}" ${ln}/><g stroke="#a8361b" stroke-width="2.4" fill="none"><path d="M36 176Q100 168 164 176M33 192Q100 184 167 192M48 160Q100 154 152 160"/></g><path d="M100 160V205" stroke="#5a1a0c" stroke-width="3"/><path d="M70 146Q100 162 130 146" stroke="#c4441f" stroke-width="7" fill="none"/>`;
+  else if(clo===13) s+=`<path d="${gola}" fill="${cc}" ${ln}/><path d="${gola}" fill="url(#${id}t)"/><path d="M72 150Q100 170 128 150" stroke="#5c3a82" stroke-width="8" fill="none"/><path d="M76 151Q100 168 124 151" stroke="#9a72c8" stroke-width="2" fill="none" stroke-dasharray="2 3"/>`;
   if(acc===6) s+=`<path d="M64 140Q100 152 136 140L100 184Z" fill="#d6282f" ${lnS}/><circle cx="90" cy="152" r="2" fill="#fff"/><circle cx="108" cy="152" r="2" fill="#fff"/><circle cx="99" cy="166" r="2" fill="#fff"/>`;
+  if(acc===13) s+=`<path d="M100 152L80 141Q76 152 80 163Z" fill="#c21f3a"/><path d="M100 152L120 141Q124 152 120 163Z" fill="#c21f3a"/><rect x="94" y="146" width="12" height="12" rx="4" fill="#9a1830"/>`;
+  if(acc===17) s+=`<path d="M64 146Q100 160 136 146" stroke="#d6282f" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="100" cy="162" r="7.5" fill="#f2c230"/><path d="M93 161h14" stroke="#b8901a" stroke-width="1.6"/><circle cx="100" cy="165" r="1.8" fill="#6b5410"/><circle cx="97" cy="158" r="2" fill="#fff" opacity=".7"/>`;
   // orelhas
   if(sph){
     s+=`<path d="M56 86Q40 40 36 12Q70 26 104 52Z" fill="${fur}" ${ln}/><path d="M144 86Q160 40 164 12Q130 26 96 52Z" fill="${fur}" ${ln}/>
      <path d="M62 74Q50 44 48 26Q72 38 92 54Z" fill="${inner}"/><path d="M138 74Q150 44 152 26Q128 38 108 54Z" fill="${inner}"/>`;
   }else{
-    const e=pat===4?"#4b3a30":fur;
+    const e=pat===4?"#4b3a30":pat===7?mixHex(fur,"#2a1a12",.55):pat===5?"#2a1d17":fur;
     s+=`<path d="M50 84Q44 40 56 24Q66 18 100 54Z" fill="${e}" ${ln}/><path d="M150 84Q156 40 144 24Q134 18 100 54Z" fill="${e}" ${ln}/>
      <path d="M60 70Q56 44 62 34Q70 32 88 54Z" fill="${inner}"/><path d="M140 70Q144 44 138 34Q130 32 112 54Z" fill="${inner}"/>`;
     s+=`<path d="M62 40l4 9M68 36l3 9M138 40l-4 9M132 36l-3 9" stroke="${furL}" stroke-width="2" stroke-linecap="round" opacity=".9"/>`;
@@ -59,15 +92,19 @@ function catSVG(o){
   if(pat===2) s+=`<g fill="${dk}"><ellipse cx="68" cy="70" rx="9" ry="7"/><ellipse cx="134" cy="72" rx="8" ry="6"/><circle cx="52" cy="108" r="7"/><circle cx="150" cy="104" r="6"/></g>`;
   if(pat===3) s+=`<path d="M100 50Q90 76 92 98L108 98Q110 76 100 50Z" fill="#f6f2ea"/><ellipse cx="100" cy="128" rx="34" ry="24" fill="#f6f2ea"/>`;
   if(pat===4) s+=`<ellipse cx="100" cy="104" rx="40" ry="30" fill="#4b3a30" opacity=".55"/>`;
+  if(pat===5) s+=`<g><path d="M44 70Q66 52 86 58Q80 80 62 86Q48 88 44 70Z" fill="#2a1d17" opacity=".85"/><path d="M118 56Q146 58 156 86Q140 92 126 80Q114 70 118 56Z" fill="#d9731f" opacity=".9"/><path d="M40 112Q52 104 64 116Q56 132 42 128Z" fill="#d9731f" opacity=".85"/><path d="M138 112Q156 106 160 122Q150 136 140 128Z" fill="#2a1d17" opacity=".85"/><path d="M96 52Q104 62 100 74Q94 64 96 52Z" fill="#d9731f" opacity=".8"/></g>`;
+  if(pat===6) s+=`<path d="M100 50Q90 76 92 98L108 98Q110 76 100 50Z" fill="#f6f2ea"/><ellipse cx="100" cy="128" rx="34" ry="24" fill="#f6f2ea"/><path d="M44 66Q64 50 86 56Q82 78 64 84Q48 84 44 66Z" fill="#d9731f"/><path d="M116 56Q144 56 156 82Q138 90 126 78Q114 68 116 56Z" fill="#2a1d17"/>`;
+  if(pat===7) s+=`<ellipse cx="100" cy="112" rx="46" ry="38" fill="url(#${id}s)"/>`;
   if(sph) s+=`<g stroke="#d48a9f" stroke-width="2.2" fill="none" stroke-linecap="round"><path d="M82 62Q100 55 118 62"/><path d="M86 70Q100 65 114 70"/><path d="M92 77Q100 74 108 77"/></g>`;
   s+=`</g>`;
+  if(pat===8){const t=furL;s+=`<path d="M46 112L30 116L42 122L28 130L44 132L34 140L52 138Q46 128 46 112Z" fill="${fur}"/><path d="M154 112L170 116L158 122L172 130L156 132L166 140L148 138Q154 128 154 112Z" fill="${fur}"/><path d="M70 146L76 158L84 148L92 162L100 150L108 162L116 148L124 158L130 146Q100 156 70 146Z" fill="${t}"/><path d="M58 30l-4-10M64 28l2-11M142 30l4-10M136 28l-2-11" stroke="${fur}" stroke-width="3" stroke-linecap="round"/>`}
   // focinho claro
-  if(!sph&&pat!==3) s+=`<ellipse cx="100" cy="124" rx="22" ry="14" fill="#fff" opacity="${claro?.35:.22}"/>`;
+  if(!sph&&pat!==3&&pat!==6) s+=`<ellipse cx="100" cy="124" rx="22" ry="14" fill="#fff" opacity="${claro?.35:.22}"/>`;
   // bochechas rosadas
   s+=`<ellipse cx="66" cy="122" rx="10" ry="6" fill="#ff7a9a" opacity=".38"/><ellipse cx="134" cy="122" rx="10" ry="6" fill="#ff7a9a" opacity=".38"/>`;
   // olhos
   const OY=102,OX=[76,124];
-  OX.forEach(x=>{
+  OX.forEach((x,i)=>{const eye=eyes[i];
     s+=`<ellipse cx="${x}" cy="${OY}" rx="13" ry="14" fill="#fff"/><ellipse cx="${x}" cy="${OY+1}" rx="11" ry="12.5" fill="${eye}"/>
        <ellipse cx="${x}" cy="${OY+2}" rx="6.5" ry="9" fill="#14101a"/><circle cx="${x-4}" cy="${OY-5}" r="4" fill="#fff"/><circle cx="${x+4}" cy="${OY+5.5}" r="1.8" fill="#fff" opacity=".9"/>
        <path d="M${x-13} ${OY-8}Q${x} ${OY-18} ${x+13} ${OY-8}" stroke="${furD}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>`;
@@ -85,6 +122,13 @@ function catSVG(o){
   if(acc===5) s+=`<path d="M46 106Q38 24 100 24Q162 24 154 106" stroke="#222" stroke-width="7" fill="none"/><rect x="32" y="88" width="20" height="36" rx="10" fill="#2a2a36" ${lnS}/><rect x="148" y="88" width="20" height="36" rx="10" fill="#2a2a36" ${lnS}/><rect x="37" y="95" width="9" height="22" rx="4.5" fill="#3d8bff"/><rect x="154" y="95" width="9" height="22" rx="4.5" fill="#3d8bff"/>`;
   if(acc===7) s+=`<path d="M70 150Q100 180 130 150" stroke="#f0c040" stroke-width="5" fill="none" stroke-dasharray="7 3"/>`;
   if(acc===8) s+=`<circle cx="124" cy="102" r="17" fill="#ffffff14" stroke="#d4a82a" stroke-width="3"/><path d="M140 114Q148 146 136 176" stroke="#d4a82a" stroke-width="1.8" fill="none"/>`;
+  if(acc===9) s+=`<path d="M48 74Q100 56 152 74" stroke="#f4f4f4" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M54 76Q100 62 146 76Q144 92 100 90Q56 92 54 76Z" fill="#19c29a" opacity=".85"/><path d="M62 80Q100 70 138 80" stroke="#fff" stroke-opacity=".5" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  if(acc===10) s+=`<path d="M130 80Q138 83 139 93" stroke="#c3cad4" stroke-width="2.6" fill="none" stroke-linecap="round"/><circle cx="130" cy="80" r="4" fill="#eef1f5" stroke="#7d8591" stroke-width="1.2"/><circle cx="139" cy="93" r="4" fill="#eef1f5" stroke="#7d8591" stroke-width="1.2"/><circle cx="128.8" cy="78.8" r="1.3" fill="#fff"/><circle cx="137.8" cy="91.8" r="1.3" fill="#fff"/>`;
+  if(acc===11) s+=`<g transform="rotate(-18 136 54)"><path d="M136 54L112 40Q106 54 112 68Z" fill="#ff4fa3"/><path d="M136 54L160 40Q166 54 160 68Z" fill="#ff4fa3"/><path d="M118 46L128 54M154 46L144 54" stroke="#c22f7a" stroke-width="2"/><circle cx="136" cy="54" r="6.5" fill="#e0338c"/></g>`;
+  if(acc===12) s+=`<path d="M66 60L62 28L82 44L100 20L118 44L138 28L134 60Q100 52 66 60Z" fill="#f4c430" stroke="#c9971a" stroke-width="2" stroke-linejoin="round"/><circle cx="100" cy="46" r="4.5" fill="#e0245e"/><circle cx="80" cy="52" r="3.2" fill="#2f8cff"/><circle cx="120" cy="52" r="3.2" fill="#19c29a"/><circle cx="62" cy="28" r="3" fill="#f4c430"/><circle cx="100" cy="20" r="3.4" fill="#f4c430"/><circle cx="138" cy="28" r="3" fill="#f4c430"/>`;
+  if(acc===14) s+=`<rect x="68" y="2" width="64" height="56" rx="5" fill="#17171d"/><rect x="68" y="42" width="64" height="11" fill="#b3262d"/><ellipse cx="100" cy="60" rx="52" ry="9" fill="#24242c"/><path d="M76 8v34" stroke="#ffffff22" stroke-width="5"/>`;
+  if(acc===15) s+=`<circle cx="52" cy="80" r="6.5" fill="none" stroke="#f0c040" stroke-width="2.6"/><circle cx="148" cy="80" r="6.5" fill="none" stroke="#f0c040" stroke-width="2.6"/>`;
+  if(acc===16) s+=`<rect x="56" y="88" width="40" height="27" rx="3" fill="#ff2d3d" fill-opacity=".55" stroke="#f6f6f6" stroke-width="4"/><rect x="104" y="88" width="40" height="27" rx="3" fill="#22d3ee" fill-opacity=".55" stroke="#f6f6f6" stroke-width="4"/><path d="M96 96h8M56 94L44 88M144 94L156 88" stroke="#f6f6f6" stroke-width="4"/>`;
   return s+"</svg>";
 }
 
@@ -92,7 +136,7 @@ const rnd=n=>Math.floor(Math.random()*n);
 let sgO={fur:0,pat:1,eye:0,acc:0,clo:0,bg:0},sgTab=0;
 const SG_TABS=["Pelo","Acessórios","Roupa","Fundo"];
 function sgRender(){
-  document.getElementById("sgBig").innerHTML=catSVG(sgO);const br=document.getElementById("sgBreed");if(br)br.innerHTML=sgO.fur===SPHYNX?"Raça: <b>Sphynx</b> · sem pelo, orelhas grandes e muitas ruguinhas":"Raça: <b>Gato padrão</b> · "+SG.fur[sgO.fur][0].toLowerCase();
+  document.getElementById("sgBig").innerHTML=catSVG(sgO);const br=document.getElementById("sgBreed");if(br)br.innerHTML=sgO.fur===SPHYNX?"Raça: <b>Sphynx</b> · sem pelo, orelhas grandes e muitas ruguinhas":sgO.pat===7?"Raça: <b>Siamês</b> · pontas escuras no rosto e nas orelhas":"Raça: <b>Gato padrão</b> · "+SG.fur[sgO.fur][0].toLowerCase()+(sgO.pat===8?", pelo longo":"");
   // o redesenho troca os botões: guarda onde estava o foco para devolvê-lo ao equivalente (teclado)
   const ae=document.activeElement,tabs0=document.getElementById("sgTabs"),opts0=document.getElementById("sgOpts");
   const focoAba=ae&&tabs0.contains(ae)?[...tabs0.children].indexOf(ae):-1;
@@ -106,10 +150,10 @@ function sgRender(){
     h+=`<h5>COR DO PELO</h5><div class="sg-row">${SG.fur.map((f,i)=>`<button type="button" class="sg-o${sel('fur',i)}" title="${f[0]}" aria-label="Pelo ${f[0]}" ${pr('fur',i)} onclick="sgSet('fur',${i})"><i style="background:${f[1]}"></i></button>`).join("")}</div>`;
     const sph=sgO.fur===SPHYNX;
     h+=`<h5>PADRÃO${sph?'<em>Sphynx não tem pelo, então não tem padrão</em>':''}</h5><div class="sg-row">${SG.pat.map((p,i)=>`<button type="button" class="sg-o sq${sph?'':sel('pat',i)}" ${sph?'disabled':''} aria-pressed="${!sph&&sgO.pat===i}" onclick="sgSet('pat',${i})">${p}</button>`).join("")}</div>`;
-    h+=`<h5>COR DOS OLHOS</h5><div class="sg-row">${SG.eye.map((f,i)=>`<button type="button" class="sg-o${sel('eye',i)}" title="${f[0]}" aria-label="Olhos ${f[0]}" ${pr('eye',i)} onclick="sgSet('eye',${i})"><i style="background:${f[1]}"></i></button>`).join("")}</div>`;
+    h+=`<h5>COR DOS OLHOS</h5><div class="sg-row">${SG.eye.map((f,i)=>`<button type="button" class="sg-o${sel('eye',i)}" title="${f[0]}" aria-label="Olhos ${f[0]}" ${pr('eye',i)} onclick="sgSet('eye',${i})"><i style="background:${f[2]?`linear-gradient(90deg,${f[1]} 50%,${f[2]} 50%)`:f[1]}"></i></button>`).join("")}</div>`;
   }
-  if(sgTab===1) h+=`<h5>ACESSÓRIOS (OPCIONAL)</h5><div class="sg-row">${SG.acc.map((a,i)=>`<button type="button" class="sg-o sq${sel('acc',i)}" ${pr('acc',i)} onclick="sgSet('acc',${i})"><span>${a[1]}</span>${a[0]}</button>`).join("")}</div>`;
-  if(sgTab===2) h+=`<h5>ROUPA (OPCIONAL)</h5><div class="sg-row">${SG.clo.map((c,i)=>`<button type="button" class="sg-o sq${sel('clo',i)}" ${pr('clo',i)} onclick="sgSet('clo',${i})"><i style="background:${c[1]==='#0000'?'#222':c[1]};width:26px;height:26px;margin-bottom:4px"></i>${c[0]}</button>`).join("")}</div>`;
+  if(sgTab===1) h+=`<h5>ACESSÓRIOS (OPCIONAL)</h5><div class="sg-row">${SG.acc.map((a,i)=>`<button type="button" class="sg-o sq${sel('acc',i)}" ${pr('acc',i)} onclick="sgSet('acc',${i})">${sgIco(i)}${a[0]}</button>`).join("")}</div>`;
+  if(sgTab===2) h+=`<h5>ROUPA (OPCIONAL)</h5><div class="sg-row">${SG.clo.map((c,i)=>[c,i]).sort((a,b)=>(a[1]===7)-(b[1]===7)).map(([c,i])=>`<button type="button" class="sg-o sq${sel('clo',i)}" ${pr('clo',i)} onclick="sgSet('clo',${i})"><i style="background:${c[1]==='#0000'?'#222':c[1]};width:26px;height:26px;margin-bottom:4px"></i>${c[0]}</button>`).join("")}</div>`;
   if(sgTab===3) h+=`<h5>FUNDO</h5><div class="sg-row">${SG.bg.map((b,i)=>`<button type="button" class="sg-o${sel('bg',i)}" title="${b[0]}" aria-label="Fundo ${b[0]}" ${pr('bg',i)} onclick="sgSet('bg',${i})"><i style="background:radial-gradient(circle at 35% 30%,${b[1][0]},${b[1][1]})"></i></button>`).join("")}</div>`;
   opts0.innerHTML=h;
   if(focoAba>=0){const b=tabs0.children[focoAba];b&&b.focus({preventScroll:true})}
@@ -275,7 +319,7 @@ function barrarSemPapel(acao,moderacao){
   return false;
 }
 // avatar_gato válido: 6 chaves inteiras dentro da faixa (nunca decidir cadastro por avatar_gato.length)
-const GATO_FAIXA={fur:10,pat:5,eye:5,acc:9,clo:8,bg:8};
+const GATO_FAIXA={fur:15,pat:9,eye:8,acc:18,clo:14,bg:8};
 const gatoValido=o=>!!o&&typeof o==="object"&&Object.keys(GATO_FAIXA).every(k=>Number.isInteger(o[k])&&o[k]>=0&&o[k]<GATO_FAIXA[k]);
 const FOTO_DISCORD=/^https:\/\/cdn\.discordapp\.com\/avatars\/[0-9]+\/[a-f0-9_]+\.png(\?size=[0-9]{1,4})?$/;
 const APELIDO_OK=/^[A-Za-z0-9_.-]{3,20}$/;

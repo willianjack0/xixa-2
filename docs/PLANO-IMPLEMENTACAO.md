@@ -4,7 +4,7 @@ Este documento reúne as etapas para transformar o protótipo visual (que roda c
 
 > Estado de partida: tag `v0.1-prototipo` (`main`). O trabalho novo acontece no branch `dev`, que publica sozinho em `naosalvo-dev.fishlab.com.br`. O `main` publica em `naosalvo-local.fishlab.com.br`.
 
-> **Atualizado em 19/11/2026.** Fase 1 pronta em dev e prod; Fase 2 pronta no dev (acervo, economia, login com Discord); Fase 4 em andamento por fatias (carteira, XP e álbum já ligados à API; ranking e criador de gato em curso); Fase 3 (admin) ainda não começou; Fase 5 parcial. Decisões da Fase 4 em `docs/decisoes-fase4.md`. Legenda das tarefas: `[x]` feito, `[ ]` pendente, "parcial" quando falta uma parte.
+> **Estado em 26/11/2026 (revisão de status).** Produção no vp3 com deploy automático. Fases 1 a 3 e a ligação do front (Fase 4) estão prontas no essencial: login com Discord, economia no servidor, votos por usuário, envios e moderação por consenso, ranking, painel `seppzone/` com auditoria, acervo e cartas lidos do banco, imagens no S3, Memepédia e **MCP com 16 ferramentas** (inclui `obter_memepedia`, `escrever_memepedia` e `moderar_memepedia`). Ainda abertos: autor do comentário vindo da sessão, recompensa de link antigo salvo, chave do YouTube como secret, aposentar `/dashboard` e o token fixo, cópia do backup fora do servidor, proteção do `main`, páginas legais, SEO e os ajustes de celular e acessibilidade. Legenda das tarefas: `[x]` feito, `[ ]` pendente, "parcial" quando falta uma parte. Decisões da Fase 4 em `docs/decisoes-fase4.md`.
 
 > **Estado em 25/11/2026.** Produção no vp3 (`naosalvo.fishlab.com.br`), com deploy automático (GitHub Actions + Portainer em modo Git, a cada 30 min). Fases 1 e 2 prontas; Fase 3 (admin) prontas as fatias 1 a 5 e parte da 6 (ver `PLANO-ADMIN.md`); **MCP** M1 a M5 em produção (ver `PLANO-MCP.md`); Fase 4: o site lê o acervo e as cartas do banco (`viewer.js`, `GET /api/cartas`), com imagens no S3 (otimizadas para WebP); **analytics** de navegação anônimo (`nav.js`, migração 024). Próximos: teste com cliente MCP real, política do bucket (sem listagem pública), backup do bucket, aposentar `/dashboard` e o token fixo.
 
@@ -24,6 +24,8 @@ Este documento reúne as etapas para transformar o protótipo visual (que roda c
 ---
 
 ## 1. Onde estamos
+
+> **Atenção:** esta tabela foi escrita em 19/11/2026 e está desatualizada em várias linhas (por exemplo, acervo, contas, votos, ranking, admin e envios já foram ligados). Vale o resumo do topo e os checklists de cada fase. As migrações vão até a 026.
 
 | Parte | Hoje | Falta para ser real |
 |---|---|---|
@@ -187,10 +189,10 @@ erDiagram
 ### 4.3 Regras que ficam no servidor
 
 - [x] **Pacotes:** o sorteio usa as chances da tabela `pacotes_tipo`, grava em `pacotes_abertos` e credita cartas, moedas e XP numa só transação. A economia segue `docs/subversivo011/economia-e-escassez.md`. — **feito**: sorteio com semente gravada em `pacotes_abertos`, tudo numa transação.
-- [ ] **Moedas e XP:** só mudam por linhas novas em `movimentos_moeda` e `eventos_xp`. Valores de recompensa (envio aprovado, link salvo, coleção completa) ficam numa tabela de configuração, não no código. — **parcial**: razão e cache na mesma transação, regras em `regras_economia`. Faltam as recompensas de envio aprovado, link salvo e jujuba, hoje desligadas no cliente.
-- [ ] **Consenso de moderação:** 2 votos iguais fecham o envio; votos divididos esperam o desempate de um Dono. Quem votou alinhado ao resultado ganha XP. — depende da Fase 3.
+- [ ] **Moedas e XP:** só mudam por linhas novas em `movimentos_moeda` e `eventos_xp`. Valores de recompensa (envio aprovado, link salvo, coleção completa) ficam numa tabela de configuração, não no código. — **parcial**: razão e cache na mesma transação, regras em `regras_economia`; envio aprovado, moderação alinhada e link antigo aprovado já pagam. Falta a jujuba.
+- [x] **Consenso de moderação:** 2 votos iguais fecham o envio; votos divididos esperam o desempate de um Dono. Quem votou alinhado ao resultado ganha XP. — **feito**: 2 votos iguais fecham, divididos esperam o desempate de um admin, o voto dos outros fica oculto (voto cego) e quem votou alinhado ganha XP (`api/routes/envios.js`).
 - [x] **Limites:** rate limit por usuário e por IP em todas as escritas; validação de entrada em cada rota; tamanho máximo de corpo. — **feito**: rate limit por usuário e por IP, validação de entrada e `CSRF`.
-- [ ] **Anti-duplicação de envio:** comparar URL normalizada e título parecido com o acervo. — depende do fluxo de envios (Fase 3).
+- [x] **Anti-duplicação de envio:** comparar URL normalizada e título parecido com o acervo. — **feito**: `POST /api/envios` normaliza a URL e recusa link já enviado ou já no acervo (409).
 - [x] **Documentação:** descrever as rotas num `docs/API.md` (ou OpenAPI) mantido junto do código. — **feito**: `docs/API.md`.
 
 ### 4.4 Testes
@@ -221,13 +223,13 @@ erDiagram
 
 ### 5.2 Tarefas
 
-- [ ] Proteger `/admin` pelo login: quem não tem patente Moderador vê só uma página de acesso negado.
-- [ ] Trocar os dados fictícios por chamadas à API, mantendo o visual (estados de carregando, vazio e erro).
-- [ ] Remover o botão "Ver como" e o "Reiniciar exemplo".
-- [ ] Mover Contribuidores, Feedback e Comentários do `/dashboard` para abas do admin e aposentar o `/dashboard` (redirecionar).
-- [ ] Toda ação do painel grava em `log_auditoria`.
-- [ ] Exportação CSV de contribuidores e feedback.
-- [ ] Ideias já discutidas, em ordem de valor: voto cego (só ver os votos dos outros depois de votar), XP de moderação só depois da decisão se confirmar, auditoria por amostragem das decisões de moderadores novos, proteção de itens polêmicos, página de discussão por item, temporadas de ranking.
+- [x] Proteger `/admin` pelo login: quem não tem patente Moderador vê só uma página de acesso negado. — **feito**: painel `seppzone/` (ver `docs/PLANO-ADMIN.md`).
+- [x] Trocar os dados fictícios por chamadas à API, mantendo o visual (estados de carregando, vazio e erro). — **feito**: painel `seppzone/` (ver `docs/PLANO-ADMIN.md`).
+- [x] Remover o botão "Ver como" e o "Reiniciar exemplo". — **feito**: painel `seppzone/` (ver `docs/PLANO-ADMIN.md`).
+- [x] Mover Contribuidores, Feedback e Comentários do `/dashboard` para abas do admin e aposentar o `/dashboard` (redirecionar). — **feito**: abas em `/seppzone/` (Comunidade) e `/dashboard/index.html` redireciona para `/seppzone/`. O token fixo segue como chave de emergência.
+- [x] Toda ação do painel grava em `log_auditoria`. — **feito**: painel `seppzone/` (ver `docs/PLANO-ADMIN.md`).
+- [x] Exportação CSV de contribuidores e feedback. — **feito**: painel `seppzone/` (ver `docs/PLANO-ADMIN.md`).
+- [ ] Ideias já discutidas, em ordem de valor: voto cego (só ver os votos dos outros depois de votar), XP de moderação só depois da decisão se confirmar, auditoria por amostragem das decisões de moderadores novos, proteção de itens polêmicos, página de discussão por item, temporadas de ranking. — **feito:** voto cego (em `api/routes/envios.js` e no painel).
 
 **Pronto quando:** um Moderador de verdade aprova um envio no `naosalvo-dev`, o meme aparece no acervo, o autor ganha XP e moedas, e a ação aparece no log.
 
@@ -239,14 +241,14 @@ erDiagram
 
 ### 6.1 Ligar as telas à API
 
-- [ ] **Acervo:** trocar `data.js` por `GET /api/memes`, `/api/eras`, `/api/categorias` (com cache curto e fallback). — a API já existe; falta trocar o `data.js` nas telas.
-- [ ] **Conta:** substituir a conta local pelo login com Discord; mostrar gato, XP, moedas e patente do servidor. O criador de gato salva o JSON no usuário. — **parcial**: login com Discord, cabeçalho com moedas, XP e patente do servidor e botão Sair prontos. Falta o criador de gato salvo no servidor e as boas-vindas ao concluir (fatia 3).
+- [x] **Acervo:** trocar `data.js` por `GET /api/memes`, `/api/eras`, `/api/categorias` (com cache curto e fallback). — **feito**: o viewer lê `/api/memes` e o álbum e o perfil leem `/api/cartas`, com o `data.js` como base e fallback.
+- [x] **Conta:** substituir a conta local pelo login com Discord; mostrar gato, XP, moedas e patente do servidor. O criador de gato salva o JSON no usuário. — **feito**: criador de gato salvo no servidor (`PATCH /api/eu`) e pacote de boas-vindas ao concluir o cadastro.
 - [x] **Álbum:** pacotes, compra, reciclagem e cartas via API; as animações continuam no front, o resultado vem do servidor. — **feito**: abrir, comprar, reciclar e ler o álbum pela API, sem spoiler antes da revelação (`cliente-economia.js`).
-- [ ] **Votos e comentários:** exigem login; um voto por pessoa; o autor do comentário vem da sessão (acaba a falsificação de nome).
-- [ ] **Ranking:** calculado dos eventos de XP; filtros por métrica. — em andamento (fatia 3).
-- [ ] **Envio de vídeos:** formulário grava em `envios`; o usuário acompanha o status.
-- [ ] **Moderação no site:** a fila e o "ver como moderador" usam as mesmas rotas do admin.
-- [ ] **Remoção:** o botão "Peça a remoção" do rodapé cria um registro em `remocoes` com prazo.
+- [ ] **Votos e comentários:** exigem login; um voto por pessoa; o autor do comentário vem da sessão (acaba a falsificação de nome). — **parcial**: votos por usuário (`votos_usuario`, migração 016, um por pessoa). Falta o comentário: `POST /api/comentarios` ainda recebe o `autor` digitado no corpo, em vez de usar a sessão.
+- [x] **Ranking:** calculado dos eventos de XP; filtros por métrica. — **feito**: `GET /api/ranking` ligado às telas, com abas por métrica.
+- [x] **Envio de vídeos:** formulário grava em `envios`; o usuário acompanha o status. — **feito**: `POST /api/envios` e `GET /api/envios/meus`.
+- [x] **Moderação no site:** a fila e o "ver como moderador" usam as mesmas rotas do admin. — **feito**: o painel e o site usam `/api/mod/fila`.
+- [x] **Remoção:** o botão "Peça a remoção" do rodapé cria um registro em `remocoes` com prazo. — **feito**: o rodapé grava em `/api/remocoes`, com prazo de 72 h.
 - [ ] **Visualizações do YouTube:** guardar a chave da YouTube Data API como secret para as visualizações reais aparecerem.
 
 ### 6.2 Ajustes pendentes conhecidos
@@ -261,7 +263,7 @@ erDiagram
 - [ ] SEO e compartilhamento: título, descrição e imagem de pré-visualização (Open Graph) por página e por meme.
 - [ ] Páginas legais: política de privacidade e termos (hoje só o aviso legal do rodapé). Necessário antes de divulgar, por causa dos dados pessoais.
 - [ ] Revisão de texto: padronizar termos (patente, nível, moedas) e remover frases de protótipo ("Em construção", "só funciona no Netlify").
-- [ ] Trocar o aviso "dados de exemplo" em ranking e moderação por dados reais ou por estado vazio bem escrito.
+- [x] Trocar o aviso "dados de exemplo" em ranking e moderação por dados reais ou por estado vazio bem escrito. — **feito**: ranking e moderação usam dados reais (resta código de protótipo sem uso em `index.html`).
 
 **Pronto quando:** nenhum dado da tela vem de `data.js` nem de `localStorage` (exceto preferências como o tema), e as telas passam na checagem de celular, tablet e desktop.
 

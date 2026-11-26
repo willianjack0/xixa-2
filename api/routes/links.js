@@ -18,15 +18,20 @@ export default function registrar(r) {
     return send(res, 200, out, { 'Cache-Control': 'public, max-age=120' });
   });
 
-  r.post('/api/links', async ({ req, res, pool, ip, adminToken }) => {
+  r.post('/api/links', async ({ req, res, pool, ip, adminToken, usuario }) => {
     if (limited('l:' + ip, 10)) return send(res, 429, { erro: 'Muitos envios seguidos. Aguarde um pouco.' });
     const b = await lerJson(req);
-    if (b === undefined) return send(res, 400, { erro: 'json inválido' });
+    if (b === undefined || b === null || typeof b !== 'object' || Array.isArray(b)) return send(res, 400, { erro: 'json inválido' });
     if (b['bot-field']) return send(res, 201, { ok: true });
-    const id = String(b.id || ''), yt = String(b.yt || ''), autor = clean(b.autor, 20);
+    if ('autor' in b && b.autor !== undefined) return send(res, 422, { erro: 'O autor é definido pela conta logada e não deve ser enviado.' });
+    const id = String(b.id || ''), yt = String(b.yt || '');
     if (!VOTE_ID.test(id)) return send(res, 400, { erro: 'id inválido' });
     if (!/^[\w-]{11}$/.test(yt)) return send(res, 422, { erro: 'Link do YouTube inválido.' });
-    if (!/^[\w.\-]{3,20}$/.test(autor)) return send(res, 422, { erro: 'Nome de usuário inválido.' });
+
+    const { rows: uRows } = await pool.query('SELECT apelido FROM usuarios WHERE id = $1', [usuario.id]);
+    if (!uRows.length || !uRows[0].apelido) return send(res, 401, { erro: 'usuário não encontrado' });
+    const autor = uRows[0].apelido;
+
     // anti-spam de pendentes: poucos por meme+IP e um teto por meme (o aprovado/recusado não conta)
     const ipHash = hashIp(adminToken, ip);
     const { rows: [qt] } = await pool.query(
@@ -37,13 +42,13 @@ export default function registrar(r) {
     let ins;
     try {
       ins = await pool.query(
-        'INSERT INTO links_sugeridos (meme_id, yt, autor, ip_hash) VALUES ($1,$2,$3,$4) ON CONFLICT (meme_id, yt) DO NOTHING RETURNING id', [id, yt, autor, ipHash]);
+        'INSERT INTO links_sugeridos (meme_id, yt, autor, usuario_id, ip_hash) VALUES ($1,$2,$3,$4,$5) ON CONFLICT (meme_id, yt) DO NOTHING RETURNING id', [id, yt, autor, usuario.id, ipHash]);
     } catch (e) {
       if (e.code === '23503') return send(res, 404, { erro: 'meme não encontrado' }); // FK: meme_id inexistente
       throw e;
     }
     return send(res, ins.rowCount ? 201 : 200, { ok: true, repetido: !ins.rowCount });
-  });
+  }, { autenticada: true });
 
   // equipe (edita_direto) ou admin: adiciona ou troca o link do vídeo, publicado na hora (vale o aprovado mais recente). Não dá XP.
   r.post('/api/links/direto', async (ctx) => {

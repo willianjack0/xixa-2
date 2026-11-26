@@ -192,7 +192,17 @@ function initComments(el,m){
     f.onsubmit=async ev=>{ev.preventDefault();const t=f.t.value.trim();if(!t)return;
       if(!temConta()){needAccount("comentar");return}
       const btn=f.querySelector("button");btn.disabled=true;
-      const r=await apiPost("/api/comentarios",{id:m.id,autor:meuApelido(),texto:t,"bot-field":f["bot-field"].value});
+      let r=null;
+      try{
+        if(typeof postComSessao==="function"){
+          r=await postComSessao("/api/comentarios",{id:m.id,texto:t,"bot-field":f["bot-field"].value});
+        }else{
+          r=await apiPost("/api/comentarios",{id:m.id,texto:t,"bot-field":f["bot-field"].value});
+        }
+      }catch(e){
+        if(e&&e.status===401){btn.disabled=false;needAccount("comentar");return}
+        toast((e&&e.erro)||"Não foi possível enviar o comentário.",3200);
+      }
       btn.disabled=false;
       const c=r&&r.texto?r:{autor:meuApelido(),texto:t,em:new Date().toISOString(),local:true};
       if(!r){localCmts(m.id).push(c);nsSave()}
@@ -218,8 +228,12 @@ function enviarLinkSugerido(m,u){
   NS.linkSugs=NS.linkSugs||[];
   if(NS.linkSugs.some(x=>x.meme===m.id&&x.yt===yt))return'<div class="chk warn">Você já enviou esse link. Ele está na fila da moderação.</div>';
   const sug={id:"l"+Date.now(),meme:m.id,t:m.t,yt,by:meuApelido(),status:"pending",ts:Date.now()};
-  return apiPost("/api/links",{id:m.id,yt,autor:meuApelido(),"bot-field":""}).then(r=>{sug.online=!!r;NS.linkSugs.push(sug);nsSave();
-    return`<div class="chk ok">Link enviado! Um moderador vai conferir${r?"":" (salvo neste navegador até o site estar no ar)"}. Se for aprovado, o vídeo aparece aqui.</div>`});
+  const enviarFn=typeof postComSessao==="function"?postComSessao:apiPost;
+  return enviarFn("/api/links",{id:m.id,yt,"bot-field":""}).then(r=>{sug.online=!!r;NS.linkSugs.push(sug);nsSave();
+    return`<div class="chk ok">Link enviado! Um moderador vai conferir${r?"":" (salvo neste navegador até o site estar no ar)"}. Se for aprovado, o vídeo aparece aqui.</div>`}).catch(e=>{
+      if(e&&e.status===401){needAccount("enviar o link");return'<div class="chk bad">Entre na sua conta para enviar o link.</div>'}
+      return`<div class="chk bad">${escapeHtml((e&&e.erro)||"Não consegui enviar o link.")}</div>`;
+    });
 }
 // links aprovados pelos moderadores entram no acervo para todo mundo
 const LINKS_OK={};

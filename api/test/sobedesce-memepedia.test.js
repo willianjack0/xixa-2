@@ -44,6 +44,10 @@ test('memepédia: só aparece depois de aprovado', { skip: pular }, async () => 
   const fila = await api.get('/api/admin/memepedia', { headers: { Authorization: 'Bearer segredo' } });
   const id = fila.json.items[0].id;
   assert.equal((await api.post('/api/admin/memepedia/' + id, { status: 'aprovado' }, { headers: { Authorization: 'Bearer segredo' } })).status, 200);
+  const [log] = (await db.pool.query("SELECT acao, alvo, detalhe FROM log_auditoria WHERE acao = 'memepedia.moderar' ORDER BY id DESC LIMIT 1")).rows;
+  assert.equal(log?.acao, 'memepedia.moderar');
+  assert.equal(log?.alvo, 'memes:tapa-na-pantera');
+  assert.equal(log?.detalhe?.para, 'aprovado');
   const pub = await api.get('/api/memepedia?id=tapa-na-pantera');
   assert.match(pub.json['tapa-na-pantera'].origem.texto, /Esmir Filho/);
 });

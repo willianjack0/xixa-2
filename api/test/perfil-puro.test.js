@@ -31,7 +31,7 @@ test('avatar_gato: aceita todas as faixas válidas, inclusive os limites', () =>
 
 test('avatar_gato: recusa fora da faixa, tipo errado, chave faltando ou sobrando (422, campo avatar_gato)', () => {
   const ruins = [
-    { ...GATO, fur: 10 }, { ...GATO, pat: 5 }, { ...GATO, eye: 5 }, { ...GATO, acc: 9 }, { ...GATO, clo: 8 }, { ...GATO, bg: 8 },
+    { ...GATO, fur: 15 }, { ...GATO, pat: 9 }, { ...GATO, eye: 8 }, { ...GATO, acc: 18 }, { ...GATO, clo: 14 }, { ...GATO, bg: 8 },
     { ...GATO, fur: -1 }, { ...GATO, fur: 1.5 }, { ...GATO, fur: '1' }, { ...GATO, fur: null }, { ...GATO, fur: true }, { ...GATO, fur: NaN },
     { ...GATO, fur: Infinity }, { ...GATO, fur: [1] }, { ...GATO, fur: { v: 1 } }, { ...GATO, fur: 1e9 },
     { fur: 1, pat: 0, eye: 2, acc: 3, clo: 0 },                           // falta bg
