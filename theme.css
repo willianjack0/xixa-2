@@ -601,3 +601,13 @@ img.cdo-blur{filter:blur(16px) saturate(.6);transform:scale(1.15)}
 .ft-legal .ft-arte .ico{width:17px;height:17px}
 .ft-legal .ft-arte:hover{background:#fff}
 .ft-legal .ft-arte:focus-visible{outline:3px solid #fff;outline-offset:3px}
+
+/* ---- acessibilidade (fase 4): foco visivel de reserva, link "pular", movimento reduzido ---- */
+/* :where() tem especificidade 0: qualquer regra de foco mais especifica da pagina continua valendo */
+:where(a[href],button,summary,select,input:not([type=hidden]),textarea,[tabindex]:not([tabindex="-1"])):focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
+.skip-link{position:fixed;left:12px;top:-120px;z-index:10000;min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:12px;background:#111;color:#fff;font:700 15px/1 Inter,system-ui,sans-serif;text-decoration:none;border:2px solid #ffbf00}
+.skip-link:focus,.skip-link:focus-visible{top:12px;outline:3px solid #ffbf00;outline-offset:2px}
+main:focus{outline:none}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
+}
