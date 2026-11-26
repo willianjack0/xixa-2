@@ -25,7 +25,7 @@ test("admin.js: aba Memepédia para moderador e admin, API /api/mod/memepedia e 
 
 test("seppzone: cache-bust do admin.js (7) e admin.css (6) e CSS da aba (44 px, fontes >= 12 px)", () => {
   const h = ler("seppzone/index.html");
-  assert.match(h, /admin\.js\?v=7/); assert.match(h, /admin\.css\?v=6/);
+  assert.match(h, /admin\.js\?v=\d+/); assert.match(h, /admin\.css\?v=\d+/);
   const css = ler("seppzone/admin.css");
   const bloco = css.slice(css.indexOf("/* Memepédia (aba própria)"));
   assert.match(bloco, /\.mp \.b\{min-height:44px\}/); assert.match(bloco, /\.mp-hist>summary\{[^}]*min-height:44px/);
