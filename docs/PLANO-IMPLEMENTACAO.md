@@ -284,7 +284,7 @@ Acontece em paralelo, mas precisa estar pronta antes de abrir ao público.
 - [ ] **LGPD:** base legal, retenção, exclusão de conta e de cadastro de contribuidor.
 - [ ] **Antiabuso:** captcha ou verificação nos pontos públicos (comentário, feedback, formulário de contribuidor) se houver spam.
 - [ ] **Segredos:** nunca no repositório; rotação do token de admin e das credenciais. — **parcial**: tudo em Docker secrets; falta a rotação do token de admin e das credenciais.
-- [ ] **Promoção `dev` → `main`:** checklist de release (migrações testadas, backup feito, rollback conhecido), com tag a cada versão. — feita três vezes (PRs #11, #14 e #21) com backup antes e verificação depois; falta virar um checklist escrito.
+- [x] **Promoção `dev` → `main`:** checklist de release (migrações testadas, backup feito, rollback conhecido), com tag a cada versão. — **feito**: `docs/checklist-release.md` (antes do PR, o PR, conferência depois do merge, rollback e tag), com a regra de nunca editar migração aplicada (teste `api/test/migracoes-aplicadas.test.js`).
 
 ---
 
