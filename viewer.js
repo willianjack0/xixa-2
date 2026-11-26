@@ -83,8 +83,8 @@ const headBar=e=>{
 const btns=y=>`<div class="vbs"><button class="vb" data-act="year">Ver o ano ${y}</button><button class="vb mp" data-act="wiki">${icon("book","in")}Memepédia</button><button class="vb sec" data-act="close">Fechar</button></div>`;
 // equipe/moderação (editaDireto): adiciona ou troca o link de qualquer meme, publicado na hora
 const linkEquipe=()=>typeof editaDireto==="function"&&editaDireto();
-const linkBox=m=>linkEquipe()?`<div class="lbx"><b>${m.yt?"Trocar o link do vídeo":"Vídeo original não encontrado."}</b> Você é da equipe: o link entra direto, sem moderação.<div class="in"><input class="ol" placeholder="https://youtube.com/watch?v=…"><button data-act="savelink">${m.yt?"Trocar link":"Publicar link"}</button></div><div class="olm"></div></div>`
-  :m.yt?"":`<div class="lbx"><b>Vídeo original não encontrado.</b> Conhece o link no YouTube? Envie para a moderação conferir.<div class="in"><input class="ol" placeholder="https://youtube.com/watch?v=…"><button data-act="savelink">Enviar para a moderação</button></div><div class="olm"></div></div>`;
+const linkBox=m=>linkEquipe()?`<div class="lbx"><b>${m.yt||m.fb?"Trocar o link do vídeo":"Vídeo original não encontrado."}</b> Você é da equipe: o link entra direto, sem moderação.<div class="in"><input class="ol" placeholder="https://youtube.com/watch?v=…"><button data-act="savelink">${m.yt?"Trocar link":"Publicar link"}</button></div><div class="olm"></div></div>`
+  :m.yt||m.fb?"":`<div class="lbx"><b>Vídeo original não encontrado.</b> Conhece o link no YouTube? Envie para a moderação conferir.<div class="in"><input class="ol" placeholder="https://youtube.com/watch?v=…"><button data-act="savelink">Enviar para a moderação</button></div><div class="olm"></div></div>`;
 const descTxt=m=>escapeHtml(m.d||"");
 
 // ---- notas: estrelas (2004–2009) ou curtidas (2010+) ----
@@ -274,10 +274,11 @@ const ACERVO_PRONTO=sincronizarAcervo().catch(()=>false).then(ok=>{
 
 // compartilhar: sempre o link do vídeo original no YouTube (desligado em memes com selo de cuidado)
 async function compartilharYT(m){if(m.cuidado){avisoCuidadoOff();return}
-  if(!m.yt){toast("Este meme ainda não tem o vídeo original do YouTube.",2800);return}
-  const url="https://www.youtube.com/watch?v="+m.yt;
+  if(!m.yt&&!m.fb){toast("Este meme ainda não tem o vídeo original do YouTube.",2800);return}
+  // vídeo que só existe no Facebook: compartilha o link de lá
+  const url=m.yt?"https://www.youtube.com/watch?v="+m.yt:m.fb;
   if(navigator.share&&matchMedia("(pointer:coarse)").matches){try{await navigator.share({title:m.t,url});return}catch(e){if(e&&e.name==="AbortError")return}}
-  try{await navigator.clipboard.writeText(url);toast("Link do YouTube copiado: "+url,3200)}catch(e){prompt("Copie o link do YouTube:",url)}
+  const onde=m.yt?"do YouTube":"do Facebook";try{await navigator.clipboard.writeText(url);toast("Link "+onde+" copiado: "+url,3200)}catch(e){prompt("Copie o link "+onde+":",url)}
 }
 
 // ---- abrir / fechar ----

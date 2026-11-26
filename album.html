@@ -164,7 +164,7 @@
 @media(max-width:1100px){.layout{grid-template-columns:210px minmax(0,1fr)}.det{grid-column:1/-1;border:0;padding:0;position:static;max-width:380px;margin:0 auto}}
 @media(max-width:720px){.layout{grid-template-columns:1fr;padding:12px}.cards{grid-template-columns:repeat(2,1fr)}.album{padding-left:34px}.pack{grid-template-columns:repeat(3,1fr);gap:8px}}
 </style>
-<link rel="stylesheet" href="album.css?v=20261128a">
+<link rel="stylesheet" href="album.css?v=20261130a">
 </head>
 <body>
 
@@ -218,9 +218,9 @@
 
 <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden><input name="tipo"><textarea name="msg"></textarea><input name="contato"><input name="pagina"><input name="bot-field"></form>
 <script src="common.js?v=20261125e"></script>
-<script src="data.js?v=20261129b"></script>
-<script src="player.js?v=20261129a"></script>
-<script src="viewer.js?v=20261127a"></script>
+<script src="data.js?v=20261130b"></script>
+<script src="player.js?v=20261130c"></script>
+<script src="viewer.js?v=20261130b"></script>
 <script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("album",{sub:[
@@ -341,16 +341,21 @@ function virar(dir){
     const t=document.createElement("div");t.className="tira";t.style.width=(w+1.2)+"px";
     if(dir>0)t.style.left=(k?w:0)+"px";else t.style.right=(k?w:0)+"px";
     const xf=dir>0?k*w:W-(k+1)*w,xv=dir>0?W-(k+1)*w:k*w;
-    t.innerHTML=`<div class="cara f"><div class="pgw" style="width:${W}px;left:${-xf}px">${frente}</div><i></i></div><div class="cara v"><div class="pgw" style="width:${W}px;left:${-xv}px">${verso}</div><i></i></div>`;
+    t.innerHTML=`<div class="cara f"><div class="pgw" style="width:${W}px;left:${-xf}px">${frente}</div><i></i></div><div class="cara v" style="visibility:hidden"><div class="pgw" style="width:${W}px;left:${-xv}px">${verso}</div><i></i></div>`;
     pai.appendChild(t);tiras.push(t);pai=t;
   }
   $("livro").appendChild(m);
+  // o contador já mostra as páginas de destino (antes só mudava no fim da animação)
+  $("mesaN").textContent=`Páginas ${novo+1}${novo+1<PAGS.length?" e "+(novo+2):""} de ${PAGS.length}`;
   const dur=calmo?520:1000,atraso=calmo?0:.3,t0=performance.now(),ease=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2,s=dir>0?-1:1;
   const ang=(p,k)=>180*ease(Math.min(1,Math.max(0,(p-atraso*(1-(N>1?k/(N-1):1)))/(1-atraso))));
   const sb=a=>Math.sin(a*Math.PI/180)*.22,g=(x,y)=>`linear-gradient(90deg,rgba(0,0,0,${x.toFixed(3)}),rgba(0,0,0,${y.toFixed(3)}))`;
   function quadro(agora){
     const p=Math.min(1,(agora-t0)/dur);let antes=0,sAnt=sb(ang(p,0));
     tiras.forEach((t,k)=>{const a=ang(p,k);t.style.transform=`rotateY(${s*(a-antes)}deg)`;antes=a;
+      // o Safari do iPhone nem sempre respeita backface-visibility nas tiras encadeadas (o verso aparecia espelhado por cima):
+      // aqui cada tira mostra só a cara que está virada para a gente, pelo ângulo total dela
+      const vs=a>90;t.children[0].style.visibility=vs?"hidden":"visible";t.children[1].style.visibility=vs?"visible":"hidden";
       const sA=sAnt,sB=sb(a);sAnt=sB;const [fa,fb]=dir>0?[sA,sB]:[sB,sA];
       t.children[0].lastElementChild.style.background=g(fa,fb);t.children[1].lastElementChild.style.background=g(fb,fa)});
     if(p<1)requestAnimationFrame(quadro);else{esq=novo;abertura();m.remove();virando=false}

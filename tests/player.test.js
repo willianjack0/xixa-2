@@ -46,3 +46,23 @@ test("meme com vídeo do YouTube continua com botão de play", () => {
   assert.doesNotMatch(html, /vp-noyt/);
   assert.match(html, /data-a="play"/);
 });
+
+test("meme que só existe no Facebook toca no mesmo player da época, com link para o Facebook", () => {
+  const { playerHTML } = carregaPlayer();
+  const fb = { id: "hebe-nair-lolita-jo", t: "Hebe, Nair Bello e Lolita no Jô", y: 2000, e: "👵", fb: "https://www.facebook.com/zelezinparaiba/videos/x/428872962595311/" };
+  const html = playerHTML(fb, false);
+  assert.doesNotMatch(html, /vp-noyt/);
+  assert.doesNotMatch(html, /Vídeo original fora do ar/);
+  assert.match(html, /data-a="play"/);
+  assert.match(html, /vp-e0/, "continua com a cara do player do ano 2000");
+  assert.match(html, /href="https:\/\/www\.facebook\.com\/zelezinparaiba\/videos\/x\/428872962595311\/"[^>]*>Assistir no Facebook/);
+  assert.doesNotMatch(html, /youtube\.com\/watch/);
+});
+
+test("data.js: Hebe, Nair e Lolita no Jô usa o vídeo do Facebook (o do YouTube não toca)", () => {
+  const ctx = vm.createContext({});
+  vm.runInContext(fs.readFileSync(path.join(__dirname, "..", "data.js"), "utf8") + ";this.M=MEMES", ctx);
+  const m = ctx.M.find(x => x.id === "hebe-nair-lolita-jo");
+  assert.strictEqual(m.yt, undefined);
+  assert.match(m.fb, /^https:\/\/www\.facebook\.com\/zelezinparaiba\/videos\/.*428872962595311\/$/);
+});

@@ -322,7 +322,7 @@ body.mesa-on{overflow:hidden}
 /* folha molinha: tiras encadeadas que dobram em sequência */
 .mola{position:absolute;top:0;bottom:0;width:50%;z-index:8;transform-style:preserve-3d;pointer-events:none}
 .mola.prox{left:50%}.mola.ant{left:0}
-.tira{position:absolute;top:0;bottom:0;transform-style:preserve-3d;will-change:transform}
+.tira{position:absolute;top:0;bottom:0;transform-style:preserve-3d;-webkit-transform-style:preserve-3d}
 /* no livro as figurinhas já estão coladas: sem a animação de "distribuir" (ela repetia a cada virada e dentro da folha que vira) */
 .livro .slot{animation:none}
 .mola.prox .tira{transform-origin:left center}.mola.ant .tira{transform-origin:right center}

@@ -38,21 +38,36 @@ function playerHTML(m,bare){
   if(e.id===4) under=`<div class="u4"><h4>${escapeHtml(m.t)}</h4><div class="u4r"><span class="av4">🐱</span><span class="ch">acervo_naosalvo</span><button class="sub4">Inscrever-se <em>${fmt(Math.round(likes*3))}</em></button><b class="vw">${views} visualizações</b></div><div class="u4l"><span>👍 ${fmt(likes)}</span><span>👎 ${fmt(dis)}</span><i><s style="width:94%"></s></i></div></div>`;
   if(e.id===5) under=`<div class="u5"><h4>${escapeHtml(m.t)}</h4><div class="u5r"><span class="av4">🐱</span><span class="ch">acervo_naosalvo<small>${fmt(Math.round(likes*3))} inscritos</small></span><button class="sub5">Inscrever-se</button><span class="pill">👍 ${fmt(likes)} │ 👎</span><span class="pill">↗ Compartilhar</span></div><div class="u5d"><b>${views} visualizações · há ${yearsAgo} anos</b></div></div>`;
   if(bare)under="";
-  return `<div class="vp vp-e${e.id}${bare?" bare":""}${m.yt?"":" vp-noyt"}${m.vert?" vp-vert":""}">
+  const tem=!!(m.yt||m.fb);
+  return `<div class="vp vp-e${e.id}${bare?" bare":""}${tem?"":" vp-noyt"}${m.vert?" vp-vert":""}">
    ${e.id===0&&!bare?`<div class="vp-title"><span><i class="vp-ti">${VPI.play}</i>Reproduzindo: ${slug}.wmv</span><span>_ □ ×</span></div>`:""}
    <div class="vp-stage">
-    <div class="vp-screen" style="background:${vpGrad(m.t)}">${m.img?`<img class="vp-thumb" src="${escapeHtml(m.img)}" alt="" onerror="this.remove()">`:m.yt?`<img class="vp-thumb" src="https://i.ytimg.com/vi/${m.yt}/hqdefault.jpg" alt="" onerror="this.remove()">`:""}${m.yt||m.img?"":`<span class="vp-emo">${m.e}</span>`}<div class="vp-noise"></div>
-      ${m.yt?`<button class="vp-big" data-a="play" aria-label="Assistir">${VPI.play}</button>`:`<div class="vp-off"><b>Vídeo original fora do ar</b><small>Conhece o link no YouTube? Mande pelo campo abaixo do vídeo.</small></div>`}<div class="vp-buf"><span></span>${e.id<=1?"Carregando… (conexão discada?)":"Carregando…"}</div><div class="vp-end"></div></div>
-    <div class="vp-bar">${m.yt?`<button class="vp-pp" data-a="play" aria-label="Assistir">${VPI.play}</button>`:""}<div class="vp-track"><i class="vp-load"></i><i class="vp-prog"></i><b class="vp-knob"></b></div>
-      <span class="vp-time">${m.yt?"0:00 / --:--":"--:--"}</span>${q?`<span class="vp-q">${q}</span>`:""}${m.yt?`<span class="vp-vol"><button class="vp-ic vp-mute" title="Som" aria-label="Tirar o som">${VPI.vol}</button><input class="vp-vs" type="range" min="0" max="100" step="5" value="100" aria-label="Volume" title="Volume"></span>`:""}${e.id>=4?`<span class="vp-ic" aria-hidden="true">${VPI.gear}</span>`:''}${m.yt?`<button class="vp-ic vp-fs" title="Tela cheia" aria-label="Tela cheia">${VPI.fs}</button>`:""}</div>
+    <div class="vp-screen" style="background:${vpGrad(m.t)}">${m.img?`<img class="vp-thumb" src="${escapeHtml(m.img)}" alt="" onerror="this.remove()">`:m.yt?`<img class="vp-thumb" src="https://i.ytimg.com/vi/${m.yt}/hqdefault.jpg" alt="" onerror="this.remove()">`:""}${m.yt||m.img||m.fb?"":`<span class="vp-emo">${m.e}</span>`}<div class="vp-noise"></div>
+      ${tem?`<button class="vp-big" data-a="play" aria-label="Assistir">${VPI.play}</button>`:`<div class="vp-off"><b>Vídeo original fora do ar</b><small>Conhece o link no YouTube? Mande pelo campo abaixo do vídeo.</small></div>`}<div class="vp-buf"><span></span>${e.id<=1?"Carregando… (conexão discada?)":"Carregando…"}</div><div class="vp-end"></div></div>
+    <div class="vp-bar">${tem?`<button class="vp-pp" data-a="play" aria-label="Assistir">${VPI.play}</button>`:""}<div class="vp-track"><i class="vp-load"></i><i class="vp-prog"></i><b class="vp-knob"></b></div>
+      <span class="vp-time">${tem?"0:00 / --:--":"--:--"}</span>${q?`<span class="vp-q">${q}</span>`:""}${tem?`<span class="vp-vol"><button class="vp-ic vp-mute" title="Som" aria-label="Tirar o som">${VPI.vol}</button><input class="vp-vs" type="range" min="0" max="100" step="5" value="100" aria-label="Volume" title="Volume"></span>`:""}${e.id>=4?`<span class="vp-ic" aria-hidden="true">${VPI.gear}</span>`:''}${m.yt?`<button class="vp-ic vp-fs" title="Tela cheia" aria-label="Tela cheia">${VPI.fs}</button>`:""}</div>
    </div>${under}
-   ${bare?"":`<div class="vp-era">📼 ${e.name} · ${e.note}${m.yt?` · <a class="vp-ytl" href="https://www.youtube.com/watch?v=${m.yt}" target="_blank" rel="noopener">Assistir no YouTube ↗</a>`:" · vídeo original ainda não encontrado"}</div>`}</div>`;
+   ${bare?"":`<div class="vp-era">📼 ${e.name} · ${e.note}${m.yt?` · <a class="vp-ytl" href="https://www.youtube.com/watch?v=${m.yt}" target="_blank" rel="noopener">Assistir no YouTube ↗</a>`:m.fb?` · <a class="vp-ytl vp-fbl" href="${escapeHtml(m.fb)}" target="_blank" rel="noopener">Assistir no Facebook ↗</a>`:" · vídeo original ainda não encontrado"}</div>`}</div>`;
+}
+
+// SDK do Facebook: carregado só quando alguém dá play num vídeo que só existe lá (uma vez por página)
+let FBSDK=null;
+function carregarFB(){
+  if(FBSDK)return FBSDK;
+  FBSDK=new Promise((ok,erro)=>{
+    if(window.FB&&window.FB.XFBML)return ok(window.FB);
+    const prev=window.fbAsyncInit;
+    window.fbAsyncInit=()=>{try{window.FB.init({xfbml:false,version:"v21.0"})}catch(x){}ok(window.FB);prev&&prev()};
+    const sc=document.createElement("script");sc.src="https://connect.facebook.net/pt_BR/sdk.js";sc.async=true;sc.defer=true;sc.crossOrigin="anonymous";
+    sc.onerror=()=>{FBSDK=null;erro(new Error("sdk"))};document.head.appendChild(sc);
+  });
+  return FBSDK;
 }
 
 // reprodução: vídeo real do YouTube dentro do visual da época (quando o meme tem link).
 // Sem link não há o que tocar: o player fica parado com o aviso "fora do ar".
 function initPlayer(root,m,related,onPick,hooks){
-  if(!m.yt)return {stop:()=>{}};
+  if(!m.yt&&!m.fb)return {stop:()=>{}};
   hooks=hooks||{};
   const e=eraOf(m.y),$q=s=>root.querySelector(s);
   const prog=$q(".vp-prog"),knob=$q(".vp-knob"),time=$q(".vp-time"),scr=$q(".vp-screen"),pp=$q(".vp-pp"),load=$q(".vp-load");
@@ -104,6 +119,67 @@ function initPlayer(root,m,related,onPick,hooks){
       mute:v=>send(v?"mute":"unMute"),
       volume:v=>send("setVolume",[v]),
       stop:()=>{removeEventListener("message",onMsg);clearTimeout(timer);clearInterval(poke);send("pauseVideo");if(ifr){ifr.remove();ifr=null}}};
+  }
+  else if(m.fb){
+    // ---- vídeo que só existe no Facebook: toca dentro do mesmo player da época, controlado pelo SDK do Facebook ----
+    // O vídeo já é montado parado ao abrir, para a tela mostrar a capa do próprio Facebook (um quadro do vídeo) no lugar do emoji.
+    let fp=null,ready=false,timer=0,tick=0,wrap=null,subs=[],pegou=0,fbOuvinte=null,quer=false,pausouEm=0;
+    const fail=msg=>{clearTimeout(timer);clearInterval(tick);scr.classList.remove("buffering");scr.classList.add("ytfail");
+      $q(".vp-end").innerHTML=`<div class="vp-fail">${msg}</div><a class="vp-again" href="${escapeHtml(m.fb)}" target="_blank" rel="noopener">${VPI.play}Assistir no Facebook ↗</a>`;scr.classList.add("ended")};
+    const tocar=()=>{try{fp.play()}catch(x){}
+      // navegador barrou o play com som: libera o toque direto no vídeo (e deixa liberado: no celular o play pela barra pode ser barrado de novo)
+      setTimeout(()=>{if(!pegou&&wrap)scr.classList.add("fbtoque")},2500)};
+    // montar(false): capa parada ao abrir; montar(true): no play troca por um com autoplay (no celular o parado pedia dois toques
+    // e dois players do Facebook juntos se atrapalhavam)
+    const montar=auto=>{
+      if(wrap)wrap.remove();ready=false;
+      wrap=document.createElement("div");wrap.className="vp-yt vp-fbw";const meu=wrap;
+      const id="fbv-"+Math.random().toString(36).slice(2),
+        larg=Math.max(360,Math.round(Math.min(scr.clientWidth,scr.clientHeight*4/3))||480); // abaixo de ~350 px o Facebook troca o layout (vira cartão com texto); depois é escalado
+      wrap.innerHTML=`<div class="fb-video" id="${id}" data-href="${escapeHtml(m.fb)}" data-width="${larg}" data-autoplay="${auto}" data-allowfullscreen="false" data-show-text="false" data-show-captions="false"></div>`;
+      scr.prepend(wrap);
+      carregarFB().then(FB=>{
+        // o Facebook às vezes avisa "pronto" duas vezes (no celular a primeira instância nem responde): fica sempre a última
+        const h=msg=>{if(!msg||msg.type!=="video"||msg.id!==id||wrap!==meu)return;
+          meu.classList.add("ok");
+          subs.forEach(x=>{try{x.release()}catch(y){}});subs=[];clearInterval(tick);
+          const novo=!ready;fp=msg.instance;ready=true;scr.classList.add("fbok");encaixar();
+          const ev=(k,f)=>{try{subs.push(fp.subscribe(k,f))}catch(x){}};
+          ev("startedPlaying",()=>{pegou=1;clearTimeout(timer);scr.classList.add("yt","fbv");scr.classList.remove("ended","buffering");setPlaying(true);hooks.onPlay&&hooks.onPlay()});
+          ev("paused",()=>setPlaying(false));
+          ev("finishedPlaying",()=>endScreen());
+          ev("startedBuffering",()=>scr.classList.add("buffering"));
+          ev("finishedBuffering",()=>scr.classList.remove("buffering"));
+          ev("error",()=>fail("Este vídeo não pode ser reproduzido fora do Facebook."));
+          try{if(muted)fp.mute();else{fp.unmute();fp.setVolume(vol/100)}}catch(x){}
+          tick=setInterval(()=>{try{const d=fp.getDuration();if(d>0)dur=d;const n=fp.getCurrentPosition()||0;
+            // o celular nem sempre avisa "começou": se o tempo andou, está tocando
+            if(n>t+.2&&!playing&&quer&&Date.now()-pausouEm>2000){pegou=1;clearTimeout(timer);scr.classList.remove("buffering");setPlaying(true)}t=n;if(dur)load.style.width="100%";draw();encaixar()}catch(x){}},250);
+          if(novo&&quer){clearTimeout(timer);scr.classList.remove("buffering");tocar()}
+        };
+        const antes=fbOuvinte;antes&&antes();fbOuvinte=()=>{try{FB.Event.unsubscribe("xfbml.ready",h)}catch(x){}};
+        FB.Event.subscribe("xfbml.ready",h);FB.XFBML.parse(wrap);
+      }).catch(()=>{if(quer)fail("Não deu para carregar o vídeo do Facebook aqui.")});
+    };
+    // o Facebook não respeita a largura pedida (a janela ainda está se ajustando): o vídeo é escalado para caber na tela,
+    // centralizado, e o botão de play dele fica embaixo do nosso
+    const encaixar=()=>{const f=wrap&&wrap.querySelector(".fb-video"),fr=f&&f.querySelector("iframe");if(!fr)return;
+      const W=fr.offsetWidth,H=fr.offsetHeight,w=scr.clientWidth,h=scr.clientHeight;if(!W||!H||!w||!h)return;
+      // só a parte do vídeo (topo, 4:3) entra na tela: no celular o Facebook põe um cartão de texto embaixo, que fica cortado
+      const V=Math.min(H,W*3/4),k=Math.min(w/W,h/V);f.style.transformOrigin="0 0";f.style.transform=`translate(${(w-W*k)/2}px,${(h-V*k)/2}px) scale(${k})`};
+    let ro=null;try{ro=new ResizeObserver(()=>encaixar());ro.observe(scr)}catch(x){}
+    montar(false);
+    const start=()=>{started=true;quer=true;scr.classList.add("yt","fbv","buffering");
+      subs.forEach(x=>{try{x.release()}catch(y){}});subs=[];clearInterval(tick);fp=null;
+      montar(true);
+      timer=setTimeout(()=>{if(!ready)fail("Não deu para carregar o vídeo do Facebook aqui.")},(e.id<=1?14000:12000));
+    };
+    api={play:()=>{if(!started){if(hooks.beforeStart&&!hooks._ok){started=true;hooks.beforeStart().then(()=>{hooks._ok=1;started=false;api.play()});return}return start()}try{fp&&fp.play()}catch(x){}},
+      // o evento "pausou" nem sempre chega: a barra já mostra pausado (se o vídeo continuar, o tempo andando volta o estado)
+      pause:()=>{try{fp&&fp.pause()}catch(x){}pausouEm=Date.now();setPlaying(false)},seek:s=>{t=s;draw();try{fp&&fp.seek(s)}catch(x){}},
+      mute:v=>{try{fp&&(v?fp.mute():fp.unmute())}catch(x){}},
+      volume:v=>{try{fp&&fp.setVolume(v/100)}catch(x){}},
+      stop:()=>{clearTimeout(timer);clearInterval(tick);ro&&ro.disconnect();fbOuvinte&&fbOuvinte();subs.forEach(x=>{try{x.release()}catch(y){}});subs=[];try{fp&&fp.pause()}catch(x){}scr.querySelectorAll(".vp-fbw").forEach(w=>w.remove());wrap=null;fp=null}};
   }
   const toggle=()=>{if(scr.classList.contains("ended")&&!scr.classList.contains("ytfail")){scr.classList.remove("ended");api.seek(0);api.play();return}playing?api.pause():api.play()};
   root.querySelectorAll(".vp-big,.vp-pp").forEach(b=>b.onclick=ev=>{ev.stopPropagation();toggle()});
@@ -164,6 +240,10 @@ const PLAYER_CSS=`
 .vp-screen.playing .vp-thumb,.vp-screen.yt .vp-thumb,.vp-screen.yt .vp-emo{display:none}
 .vp-yt{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:1;pointer-events:none}
 .vp-screen .vp-noise{z-index:2}.vp-screen .vp-big,.vp-screen .vp-buf,.vp-screen .vp-end{z-index:3}
+.vp-fbw{display:block;background:#000;overflow:hidden}
+.vp-fbw .fb-video>span,.vp-fbw iframe{display:block}
+.vp-fbw{opacity:0;transition:opacity .3s}.vp-fbw .fb-video{position:absolute;left:0;top:0}.vp-fbw.ok{opacity:1}
+.vp-screen.fbv .vp-big{display:none}.vp-screen.fbtoque .vp-fbw{pointer-events:auto}
 .vp-e0 .vp-yt{filter:saturate(.7) contrast(1.15) blur(.6px)}.vp-e1 .vp-yt{filter:saturate(.85) blur(.35px)}
 .vp-fail{color:#fff;font:600 13px Inter,sans-serif;text-align:center;max-width:80%}
 a.vp-again{text-decoration:none}

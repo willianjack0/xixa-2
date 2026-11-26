@@ -94,9 +94,9 @@
 </div>
 
 <script src="common.js?v=20261125e"></script>
-<script src="data.js?v=20261129b"></script>
-<script src="player.js?v=20261129a"></script>
-<script src="viewer.js?v=20261127a"></script>
+<script src="data.js?v=20261130b"></script>
+<script src="player.js?v=20261130c"></script>
+<script src="viewer.js?v=20261130b"></script>
 <script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("memepedia",{sub:[
@@ -114,8 +114,6 @@ const $=id=>document.getElementById(id);
 const CAMPOS=[
   ["origem","De onde surgiu","Quem fez, onde e quando apareceu pela primeira vez."],
   ["porque","Por que viralizou","O que fez todo mundo compartilhar."],
-  ["usos","Como é usado","Em que situações o meme aparece, frases e variações."],
-  ["rede","Onde ficou famoso","Rede social, programa ou site onde estourou."],
   ["hoje","Onde está hoje","O que aconteceu com as pessoas ou o meme depois."],
   ["curiosidades","Curiosidades","Bastidores, processos, remixes, homenagens."]
 ];
@@ -123,16 +121,11 @@ const yKey=y=>{y=parseInt(y)||2020;return y<2000?"1995–1999":y<=2003?"2000–2
 const yLab=k=>(YEAR_INFO[k]&&YEAR_INFO[k].rot)||k;
 const L=[...MEMES].sort((a,b)=>a.t.localeCompare(b.t,"pt-BR"));
 const WK={srv:{},ano:"",q:""};
-// rede provável pela época (marcado como estimativa até a comunidade escrever)
-function redeEstimada(m){const y=parseInt(m.y)||2020;
-  if(m.tipo==="foto")return y<=2006?"Fotolog e e-mail":y<=2011?"Orkut":y<=2014?"Facebook e Tumblr":y<=2019?"Instagram, Twitter e WhatsApp":"TikTok, Instagram e X";
-  return y<=2004?"TV, e-mail e CD gravado":y<=2011?"YouTube e Orkut":y<=2015?"YouTube e Facebook":y<=2019?"YouTube, Facebook e WhatsApp":"TikTok, Reels e YouTube Shorts"}
 const fotoDe=m=>m.img?m.img:m.yt?`https://i.ytimg.com/vi/${m.yt}/hqdefault.jpg`:"";
 function texto(m,c){
   const s=(WK.srv[m.id]||{})[c];if(s)return{t:s.texto,by:s.autor,fonte:s.fonte};
   const l=((NS.wiki||{})[m.id]||{})[c];if(l)return{t:l.texto,by:l.autor,fonte:l.fonte,local:1};
   if(c==="origem")return{t:m.d,by:"acervo do Não Salvo"};
-  if(c==="rede")return{t:redeEstimada(m),est:1};
   return null}
 
 function lista(){
@@ -149,7 +142,7 @@ function home(){
   const dest=[...MEMES].sort((a,b)=>b.views-a.views).slice(0,12);
   $("wm").innerHTML=`<div class="wk-home"><div class="wk-bc">Não Salvo › Memepédia</div><h1>Memepédia</h1>
     <div class="wk-sub">A enciclopédia dos memes brasileiros, escrita pela comunidade · ${MEMES.length} verbetes</div>
-    <p class="lead">Cada meme do acervo tem um verbete: de onde surgiu, por que viralizou, como é usado, em qual rede estourou e onde as pessoas estão hoje. Qualquer pessoa com conta pode escrever ou corrigir uma seção. Tudo passa pela moderação antes de aparecer.</p>
+    <p class="lead">Cada meme do acervo tem um verbete: de onde surgiu, por que viralizou, onde as pessoas estão hoje e curiosidades. Qualquer pessoa com conta pode escrever ou corrigir uma seção. Tudo passa pela moderação antes de aparecer.</p>
     <div class="wk-sec" style="margin-top:22px"><h2>Mais acessados</h2><div class="wk-rel">${dest.map(rel).join("")}</div></div>
     <p class="wk-hint">Dica: escreva com suas palavras e coloque a fonte (link de notícia, vídeo original, perfil). Informação sem fonte pode ser recusada.</p></div>`;
 }

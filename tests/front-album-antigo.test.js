@@ -236,6 +236,29 @@ test("expandir com prefers-reduced-motion: a folha ainda vira, inteira e rápida
   await ctx.close();
 });
 
+test("expandir: cada tira mostra só a cara virada para a gente (Safari não espelha o verso) e o contador já vai para o destino", opts, async () => {
+  const { ctx, page, erros } = await abrirAlbum();
+  await page.click("#btExp");
+  // relógio da animação controlado pelo teste
+  await page.evaluate(() => { window.__T = 0; performance.now = () => window.__T; window.__q = []; window.requestAnimationFrame = (f) => { window.__q.push(f); }; });
+  await page.evaluate(() => virar(1));
+  assert.strictEqual(await page.textContent("#mesaN"), `Páginas 3 e 4 de ${await page.evaluate(() => PAGS.length)}`);
+  const caras = () => page.$$eval(".mola .tira", (l) => l.map((t) => t.children[0].style.visibility[0] + t.children[1].style.visibility[0]));
+  const passo = (t) => page.evaluate((t) => { window.__T = t; const q = window.__q; window.__q = []; q.forEach((f) => f(t)); }, t);
+  await passo(1);
+  assert.ok((await caras()).every((c) => c === "vh"), "no começo só a frente aparece");
+  await passo(550);
+  const meio = await caras();
+  assert.ok(meio.every((c) => c === "vh" || c === "hv"), "nunca as duas caras juntas");
+  assert.ok(meio.includes("vh") && meio.includes("hv"), "no meio a ponta já mostra o verso e a lombada ainda a frente");
+  await passo(990);
+  assert.ok((await caras()).every((c) => c === "hv"), "no fim só o verso aparece");
+  await passo(1001);
+  assert.strictEqual(await page.evaluate(() => esq), 2);
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
 // ---------- cartas do banco no álbum: imagem enviada no painel, edição e carta nova ----------
 const NOVA_ID = `orkut-${COLECOES.find((c) => c.id === "orkut").cards.length}`;
 const cartasApi = () => {
