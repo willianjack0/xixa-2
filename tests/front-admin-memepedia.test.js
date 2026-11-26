@@ -23,9 +23,9 @@ test("admin.js: aba Memepédia para moderador e admin, API /api/mod/memepedia e 
   assert.match(bloco, /MP_CAMPOS = \["origem", "porque", "usos", "rede", "hoje", "curiosidades"\]/);
 });
 
-test("seppzone: cache-bust do admin.js (6) e admin.css (5) e CSS da aba (44 px, fontes >= 12 px)", () => {
+test("seppzone: cache-bust do admin.js (7) e admin.css (6) e CSS da aba (44 px, fontes >= 12 px)", () => {
   const h = ler("seppzone/index.html");
-  assert.match(h, /admin\.js\?v=6/); assert.match(h, /admin\.css\?v=5/);
+  assert.match(h, /admin\.js\?v=7/); assert.match(h, /admin\.css\?v=6/);
   const css = ler("seppzone/admin.css");
   const bloco = css.slice(css.indexOf("/* Memepédia (aba própria)"));
   assert.match(bloco, /\.mp \.b\{min-height:44px\}/); assert.match(bloco, /\.mp-hist>summary\{[^}]*min-height:44px/);

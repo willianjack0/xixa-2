@@ -6,9 +6,9 @@ import { detectarImagem } from '../mcp/imagem.js';
 
 export const PERFIS = {
   meme: { lado: 1600, qualidade: 80 }, // fotos e capturas dos memes
-  carta: { lado: 800, qualidade: 82 } // arte das cartas do álbum
+  carta: { lado: 800, qualidade: 82, maxPixels: 16_000_000 } // arte das cartas do álbum (~ 4000 x 4000): a saída tem no máximo 800 px
 };
-const MAX_PIXELS = 40_000_000; // ~ 6300 x 6300
+const MAX_PIXELS = 40_000_000; // ~ 6300 x 6300 (padrão dos outros perfis)
 
 export class ErroImagem extends Error {}
 
@@ -16,13 +16,14 @@ export class ErroImagem extends Error {}
 export async function otimizarImagem(entrada, perfil = 'meme') {
   const cfg = PERFIS[perfil];
   if (!cfg) throw new Error('perfil de imagem desconhecido: ' + perfil);
+  const limite = cfg.maxPixels || MAX_PIXELS;
   const det = detectarImagem(entrada);
   if (!det) throw new ErroImagem('o arquivo não é uma imagem jpeg, png ou webp');
   try {
     // animated: true só para ENXERGAR os quadros (sem isso o sharp conta 1 página); a conversão abaixo usa só o primeiro
-    const meta = await sharp(entrada, { limitInputPixels: MAX_PIXELS, animated: true }).metadata();
+    const meta = await sharp(entrada, { limitInputPixels: limite, animated: true }).metadata();
     if ((meta.pages || 1) > 1) throw new ErroImagem('imagem animada não é aceita: envie uma imagem estática');
-    const { data, info } = await sharp(entrada, { limitInputPixels: MAX_PIXELS, failOn: 'error' })
+    const { data, info } = await sharp(entrada, { limitInputPixels: limite, failOn: 'error' })
       .rotate() // respeita a orientação do EXIF
       .resize({ width: cfg.lado, height: cfg.lado, fit: 'inside', withoutEnlargement: true })
       .webp({ quality: cfg.qualidade, effort: 4 })
@@ -33,7 +34,7 @@ export async function otimizarImagem(entrada, perfil = 'meme') {
     };
   } catch (e) {
     if (e instanceof ErroImagem) throw e;
-    if (/pixel limit|exceeds/i.test(String(e.message))) throw new ErroImagem('imagem grande demais (máximo de 40 milhões de pixels)');
+    if (/pixel limit|exceeds/i.test(String(e.message))) throw new ErroImagem(`imagem grande demais (máximo de ${limite / 1_000_000} milhões de pixels)`);
     throw new ErroImagem('não consegui ler a imagem: o arquivo está corrompido ou não é uma imagem válida');
   }
 }

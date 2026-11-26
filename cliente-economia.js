@@ -25,13 +25,14 @@
 
   async function bruto(metodo, caminho, corpo, comCsrf) {
     var headers = { Accept: 'application/json' };
-    if (corpo !== undefined) headers['Content-Type'] = 'application/json';
+    var arquivo = typeof Blob !== 'undefined' && corpo instanceof Blob; // imagem enviada como corpo binário (envio de arte de carta)
+    if (corpo !== undefined) headers['Content-Type'] = arquivo ? corpo.type : 'application/json';
     if (comCsrf && csrf) headers['X-CSRF'] = csrf;
     var r;
     try {
       r = await fetch(caminho, {
         method: metodo, credentials: 'same-origin', cache: 'no-store', headers: headers,
-        body: corpo !== undefined ? JSON.stringify(corpo) : undefined
+        body: corpo === undefined ? undefined : arquivo ? corpo : JSON.stringify(corpo)
       });
     } catch (e) { throw erro(0, 'sem conexão'); }
     var json = null;
@@ -101,6 +102,15 @@
     apagarRecado: function (id, o) { return pedir('DELETE', '/api/recados/' + encodeURIComponent(id), undefined, o); },
     publicar: function (p, o) { return pedir('POST', '/api/publicacoes', p, o); },
     apagarPublicacao: function (id, o) { return pedir('DELETE', '/api/publicacoes/' + encodeURIComponent(id), undefined, o); },
+    // envio de arte de carta (enviar-arte.html): lista das cartas sem arte, envio da imagem (Blob) e meus envios
+    arteCartas: function (qs, o) { return pedir('GET', '/api/arte/cartas' + (qs ? '?' + qs : ''), undefined, o); },
+    arteEnviar: function (cartaId, arquivo, o) { return pedir('POST', '/api/arte/envios?carta=' + encodeURIComponent(cartaId), arquivo, o); },
+    arteMeus: function (o) { return pedir('GET', '/api/arte/meus', undefined, o); },
+    arteCancelar: function (id, o) { return pedir('DELETE', '/api/arte/envios/' + encodeURIComponent(id), undefined, o); },
+    // moderação das artes (seppzone): fila, aprovar e rejeitar
+    arteFila: function (status, o) { return pedir('GET', '/api/mod/arte/envios?status=' + encodeURIComponent(status || 'pendente'), undefined, o); },
+    arteAprovar: function (id, o) { return pedir('POST', '/api/mod/arte/envios/' + encodeURIComponent(id) + '/aprovar', {}, o); },
+    arteRejeitar: function (id, motivo, o) { return pedir('POST', '/api/mod/arte/envios/' + encodeURIComponent(id) + '/rejeitar', { motivo: motivo }, o); },
     ranking: function (metrica, limite, o) {
       return pedir('GET', '/api/ranking?metrica=' + encodeURIComponent(metrica || 'xp') + '&limite=' + encodeURIComponent(limite || 50), undefined, o);
     }
