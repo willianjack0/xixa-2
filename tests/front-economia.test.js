@@ -78,6 +78,7 @@ function criarApi(over = {}) {
       if (p === "/api/eu") return json(route, 200, { usuario: { id: 1, apelido: "teste", avatar_gato: null, avatar_url: null, perfil_layout: st.layout || "orkut" }, patente: st.patente, proxima_patente: st.proxima, moedas: st.moedas, xp: st.xp, csrf: "tok" });
       if (p === "/api/carteira") return st.carteiraStatus === 200 ? json(route, 200, carteira()) : json(route, st.carteiraStatus, { erro: "não autenticado" });
       if (p === "/api/album") return json(route, 200, album());
+      if (p === "/api/jujuba") { const nova = !st.jujubaPaga; st.jujubaPaga = true; if (nova) st.xp += 15; return json(route, 200, { dia: "2026-11-19", nova, xp_ganho: nova ? 15 : 0, carteira: { xp: st.xp, moedas: st.moedas } }); }
       if (p === "/api/visita") return json(route, 200, { dia: "2026-11-19", primeira_visita_do_dia: true, xp_ganho: 10, pacotes_ganhos: [], carteira: { xp: st.xp, moedas: st.moedas } });
       if (p === "/api/pacotes/tipos") return json(route, 200, { itens: TIPOS });
       if (p === "/api/pacotes/comprar") return st.comprar402 ? json(route, 402, { erro: "moedas insuficientes" }) : json(route, 201, { estoque_id: 1, tipo: "classico", carteira: { xp: st.xp, moedas: st.moedas } });
@@ -308,7 +309,7 @@ test("compartilhar figurinha: vira publicação no perfil, no jeito da rede esco
   const { ctx, page, api, erros } = await abrirPagina("/album.html", { pacotes: [], qtd: { [id]: 1 }, layout: "twitter" });
   await esperarEconomia(page);
   await page.evaluate((id) => pick(id), id);
-  await page.click("text=COMPARTILHAR");
+  await page.click(".det .shrbtn");
   await page.waitForSelector("#shrOk");
   assert.match(await page.$eval("#mbox", (e) => e.innerText), /um tweet/);
   for (const sel of ["#shrOk", ".shr-bt .ghost2"]) assert.ok((await page.$eval(sel, (e) => e.getBoundingClientRect().height)) >= 44, sel + " >= 44px");
@@ -316,6 +317,21 @@ test("compartilhar figurinha: vira publicação no perfil, no jeito da rede esco
   await page.click("#shrOk");
   await page.waitForSelector('.shr-bt a[href="perfil.html?u=teste"]');
   assert.deepStrictEqual(api.st.corpoPublicar, { carta_id: id, legenda: "saiu!!" });
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+test("jujuba escondida: achar dá XP e mostra quanto (+15 XP) e o XP da carteira sobe", opts, async () => {
+  // a jujuba de hoje pode estar em qualquer página: o teste a coloca na página aberta
+  const { ctx, page, api, erros } = await abrirPagina("/album.html", { pacotes: [] });
+  await esperarEconomia(page);
+  await page.evaluate(() => { NS.jujuba = null; nsSave(); jujubaDeHoje = () => ({ pagina: paginaDaJujuba(), lugar: ".side .tot", canto: ["right", "top"], todos: [".side .tot"] }); document.querySelector(".jjb")?.remove(); esconderJujuba(); });
+  await page.click(".jjb");
+  await page.waitForSelector(".xpfl");
+  assert.strictEqual(await page.textContent(".xpfl"), "+15 XP");
+  await page.waitForFunction(() => /\+15 XP/.test(document.getElementById("toast")?.textContent || ""));
+  assert.strictEqual(api.n("POST /api/jujuba"), 1);
+  assert.strictEqual(await page.evaluate(() => ECO.xp), 215);
   assert.deepStrictEqual(erros, []);
   await ctx.close();
 });

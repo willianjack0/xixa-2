@@ -83,6 +83,7 @@
     carteira: function (o) { return pedir('GET', '/api/carteira', undefined, o); },
     album: function (o) { return pedir('GET', '/api/album', undefined, o); },
     visita: function (o) { return pedir('POST', '/api/visita', {}, o); },
+    jujuba: function (o) { return pedir('POST', '/api/jujuba', {}, o); },
     tipos: function (o) { return pedir('GET', '/api/pacotes/tipos', undefined, o); },
     comprar: function (p, o) { return pedir('POST', '/api/pacotes/comprar', p, o); },
     abrir: function (p, o) { return pedir('POST', '/api/pacotes/abrir', p, o); },

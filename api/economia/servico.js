@@ -193,6 +193,23 @@ export async function visita(pool, usuario, { agora = new Date() } = {}) {
   });
 }
 
+/** Jujuba escondida (easter-egg do site): quem acha ganha XP uma vez por dia (no fuso das regras).
+ *  Valor em regras_economia.xp_ganho.jujuba (padrão 15). Sem índice único para o motivo: a trava do usuário serializa. */
+export const XP_JUJUBA_PADRAO = 15;
+export async function jujuba(pool, usuario, { agora = new Date() } = {}) {
+  return transacao(pool, async (cli) => {
+    await travarUsuario(cli, usuario.id);
+    const regras = await carregarRegras(cli);
+    const dia = diaNoFuso(agora, regras.limites.fuso);
+    const valor = Number.isInteger(regras.xp_ganho.jujuba) && regras.xp_ganho.jujuba > 0 ? regras.xp_ganho.jujuba : XP_JUJUBA_PADRAO;
+    const { rows: [ja] } = await cli.query("SELECT 1 AS ok FROM eventos_xp WHERE usuario_id = $1 AND motivo = 'jujuba' AND ref = $2", [usuario.id, dia]);
+    const razao = criarRazao(cli, usuario.id);
+    if (!ja) await razao.xp(valor, 'jujuba', dia);
+    const saldo = await razao.aplicar();
+    return { dia, nova: !ja, xp_ganho: razao.soma.xp, carteira: saldo };
+  });
+}
+
 export async function comprarPacote(pool, usuario, { tipo, colecao_id = null }) {
   return transacao(pool, async (cli) => {
     const u = await travarUsuario(cli, usuario.id);

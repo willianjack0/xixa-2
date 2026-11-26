@@ -233,7 +233,7 @@ function avisoEconomiaOff(on){
   if(b)return;
   b=document.createElement("div");b.id="ecooff";b.setAttribute("role","alert");
   b.style.cssText="position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:9999;background:var(--panel,#fff);color:var(--txt,#111);border:1px solid var(--line2,#bbb);border-radius:12px;padding:10px 14px;box-shadow:0 8px 30px #0004;display:flex;gap:12px;align-items:center;font:600 14px Inter,sans-serif;max-width:calc(100vw - 24px)";
-  b.innerHTML='<span>Não consegui falar com o servidor: moedas, álbum e pacotes estão indisponíveis.</span><button type="button" style="flex:none;padding:7px 12px;border-radius:8px;border:0;background:var(--brand,#1597d3);color:#fff;font:700 13px Inter,sans-serif;cursor:pointer">Tentar de novo</button>';
+  b.innerHTML='<span>Não consegui falar com o servidor: moedas, álbum e pacotes estão indisponíveis.</span><button type="button" style="flex:none;min-height:44px;padding:7px 14px;border-radius:8px;border:0;background:var(--brand,#1597d3);color:#fff;font:700 13px Inter,sans-serif;cursor:pointer">Tentar de novo</button>';
   b.querySelector("button").onclick=()=>iniciarEconomia();
   document.body.appendChild(b);
 }
@@ -519,6 +519,8 @@ function openTestPanel(){
 
 // ---- Ícones dos menus (SVG próprios, traço único) ----
 const ICONS={
+ expand:'<path d="M9 4H4v5M4 4l6 6M15 4h5v5M20 4l-6 6M9 20H4v-5M4 20l6-6M15 20h5v-5M20 20l-6-6"/>',
+ back:'<path d="M10 6l-6 6 6 6M4 12h16"/>',
  book:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/><path d="M9 7.5h7M9 11h5"/>',
  care:'<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.2 7.5 9.5 4.4-1.3 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="M12 8.5v4.5M12 16h.01"/>',
  eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/>',
@@ -668,7 +670,7 @@ function renderSub(items){if(items)SUB=items;aplicarGates();const n=document.get
   // índice original (data-i) preservado; separador só entre dois itens visíveis
   const vis=SUB.map(x=>subVisivel(x));
   const mostrar=SUB.map((x,i)=>x.sp?(SUB.slice(0,i).some((y,j)=>!y.sp&&vis[j])&&SUB.slice(i+1).some((y,j)=>!y.sp&&vis[i+1+j])):vis[i]);
-  n.innerHTML=SUB.map((x,i)=>!mostrar[i]?"":x.sp?`<span class="sp"></span>`:x.href?`<a href="${x.href}" class="${x.k===subOn?"on":""} ${x.cta?"cta":""}"${x.k===subOn?' aria-current="page"':""}>${icon(x.ic)}${x.label}</a>`:`<button data-i="${i}" class="${x.k===subOn?"on":""} ${x.cta?"cta":""} ${x.dd?"dd":""}">${icon(x.ic)}${x.label}</button>`).join("");
+  n.innerHTML=SUB.map((x,i)=>!mostrar[i]?"":x.sp?`<span class="sp"></span>`:x.href?`<a href="${x.href}" class="${x.k===subOn?"on":""} ${x.cta?"cta":""} ${x.cls||""}"${x.k===subOn?' aria-current="page"':""}>${icon(x.ic)}${x.label}</a>`:`<button data-i="${i}" class="${x.k===subOn?"on":""} ${x.cta?"cta":""} ${x.dd?"dd":""}">${icon(x.ic)}${x.label}</button>`).join("");
   n.querySelector(".dd")?.setAttribute("aria-expanded","false");
   n.querySelectorAll("button[data-i]").forEach(b=>b.onclick=e=>{const x=SUB[+b.dataset.i];x.fn&&x.fn(e,b)});
 }
@@ -786,7 +788,7 @@ function renderFooter(){
     <div class="ft-legal">${socialHTML()}<b>Aviso legal</b>
       <p>O Não Salvo é apenas um compilado de vídeos e fotos que já estão publicados na internet. Não hospedamos nenhum vídeo: todos são exibidos direto do YouTube, pelo player oficial, e continuam pertencendo aos seus autores e canais de origem. As fotos e marcas citadas pertencem aos seus respectivos donos.</p>
       <p>É dono de algum conteúdo e quer que ele saia daqui? <button onclick="openFeedback('remocao')">Peça a remoção</button> e a gente tira.</p>
-      <small>© ${new Date().getFullYear()} Não Salvo · projeto do Xet, sem fins lucrativos</small></div>
+      <small>© ${new Date().getFullYear()} Não Salvo · projeto do Xet, sem fins lucrativos · <a href="privacidade.html">Privacidade</a> · <a href="termos.html">Termos de uso</a></small></div>
     <div class="fq fq-in">
       <span class="fq-art" onclick="openFeedback()" aria-hidden="true">${PHONE_SVG}</span>
       <span class="fq-txt"><span class="fq-logo">fala<i>.</i>que<i>.</i>eu<i>.</i>te<i>.</i>escut<span class="fq-o">o</span></span>
@@ -903,6 +905,9 @@ function jujubaDeHoje(){const d=nsToday();let h=7;for(const c of d)h=(h*131+c.ch
   const pags=Object.keys(JUJUBA_LUGARES),pg=pags[h%pags.length],L=JUJUBA_LUGARES[pg];
   const h2=Math.imul(h^(h>>>13),2654435761)>>>0,x=L[h2%L.length];
   return{pagina:pg,lugar:x[0],canto:[x[1],x[2]],todos:L.map(y=>y[0])}}
+// "+15 XP" que sobe de onde a jujuba estava
+function xpFlutuante(el,n){const r=el.getBoundingClientRect(),f=document.createElement("div");f.className="xpfl";f.setAttribute("aria-hidden","true");f.textContent=`+${fmt(n)} XP`;
+  f.style.left=(r.left+r.width/2)+"px";f.style.top=(r.top)+"px";document.body.appendChild(f);setTimeout(()=>f.remove(),1700)}
 function esconderJujuba(){
   if(document.querySelector(".jjb")||NS.jujuba===nsToday())return;
   const j=jujubaDeHoje();if(j.pagina!==paginaDaJujuba())return;
@@ -910,9 +915,18 @@ function esconderJujuba(){
   if(getComputedStyle(el).position==="static")el.style.position="relative";
   const b=document.createElement("button");b.className="jjb";b.type="button";b.title="?";b.setAttribute("aria-label","Uma jujuba?");b.innerHTML=JUJUBA_SVG;
   b.style[j.canto[0]]="8px";b.style[j.canto[1]]="6px";
-  b.onclick=ev=>{ev.preventDefault();ev.stopPropagation();NS.jujuba=nsToday();NS.jujubas=(NS.jujubas||0)+1;nsSave();
+  b.onclick=async ev=>{ev.preventDefault();ev.stopPropagation();if(b.classList.contains("pego"))return;NS.jujuba=nsToday();NS.jujubas=(NS.jujubas||0)+1;nsSave();
     b.classList.add("pego");setTimeout(()=>b.remove(),700);
-    toast(NS.jujubas===1?"🍬 Você achou a jujuba escondida! Amanhã ela se esconde em outro lugar do site.":`🍬 Jujuba nº ${NS.jujubas} encontrada!`,4200)};
+    const achou=NS.jujubas===1?"🍬 Você achou a jujuba escondida!":`🍬 Jujuba nº ${NS.jujubas} encontrada!`;
+    // XP: só com conta (o servidor dá uma vez por dia e diz quanto)
+    if(!(typeof SESSAO!=="undefined"&&SESSAO&&SESSAO.usuario)){toast(`${achou} Entre na sua conta para ganhar XP com ela.`,4600);return}
+    try{const r=await Api.jujuba({silencioso:true});
+      if(r&&r.xp_ganho>0){
+        if(r.carteira&&Number.isFinite(r.carteira.xp)){ECO.xp=r.carteira.xp;if(Number.isFinite(r.carteira.moedas))ECO.moedas=r.carteira.moedas;renderWallet()}
+        xpFlutuante(b,r.xp_ganho);
+        toast(`${achou} Você ganhou +${fmt(r.xp_ganho)} XP. Amanhã ela se esconde em outro lugar do site.`,5000);
+      }else toast(`${achou} O XP da jujuba de hoje você já ganhou. Amanhã tem outra!`,4600);
+    }catch(e){toast(`${achou} Não consegui dar o XP agora; tente de novo mais tarde.`,4600);NS.jujuba=null;NS.jujubas=Math.max(0,(NS.jujubas||1)-1);nsSave()}};
   el.appendChild(b);
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(esconderJujuba,400));else setTimeout(esconderJujuba,400);

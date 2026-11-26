@@ -4,7 +4,7 @@ Este documento reúne as etapas para transformar o protótipo visual (que roda c
 
 > Estado de partida: tag `v0.1-prototipo` (`main`). O trabalho novo acontece no branch `dev`, que publica sozinho em `naosalvo-dev.fishlab.com.br`. O `main` publica em `naosalvo-local.fishlab.com.br`.
 
-> **Estado em 26/11/2026 (revisão de status).** Produção no vp3 com deploy automático. Fases 1 a 3 e a ligação do front (Fase 4) estão prontas no essencial: login com Discord, economia no servidor, votos por usuário, envios e moderação por consenso, ranking, painel `seppzone/` com auditoria, acervo e cartas lidos do banco, imagens no S3, Memepédia e **MCP com 16 ferramentas** (inclui `obter_memepedia`, `escrever_memepedia` e `moderar_memepedia`). Ainda abertos: autor do comentário vindo da sessão, recompensa de link antigo salvo, chave do YouTube como secret, aposentar `/dashboard` e o token fixo, cópia do backup fora do servidor, proteção do `main`, páginas legais, SEO e os ajustes de celular e acessibilidade. Legenda das tarefas: `[x]` feito, `[ ]` pendente, "parcial" quando falta uma parte. Decisões da Fase 4 em `docs/decisoes-fase4.md`.
+> **Estado em 26/11/2026 (revisão de status).** Produção no vp3 com deploy automático. Fases 1 a 3 e a ligação do front (Fase 4) estão prontas no essencial: login com Discord, economia no servidor, votos por usuário, envios e moderação por consenso, ranking, painel `seppzone/` com auditoria, acervo e cartas lidos do banco, imagens no S3, Memepédia e **MCP com 16 ferramentas** (inclui `obter_memepedia`, `escrever_memepedia` e `moderar_memepedia`). Ainda abertos: chave do YouTube como secret, aposentar o token fixo, cópia do backup fora do servidor, proteção do `main`, revisão jurídica das páginas legais, SEO por meme e os ajustes de celular e acessibilidade. Legenda das tarefas: `[x]` feito, `[ ]` pendente, "parcial" quando falta uma parte. Decisões da Fase 4 em `docs/decisoes-fase4.md`.
 
 > **Estado em 25/11/2026.** Produção no vp3 (`naosalvo.fishlab.com.br`), com deploy automático (GitHub Actions + Portainer em modo Git, a cada 30 min). Fases 1 e 2 prontas; Fase 3 (admin) prontas as fatias 1 a 5 e parte da 6 (ver `PLANO-ADMIN.md`); **MCP** M1 a M5 em produção (ver `PLANO-MCP.md`); Fase 4: o site lê o acervo e as cartas do banco (`viewer.js`, `GET /api/cartas`), com imagens no S3 (otimizadas para WebP); **analytics** de navegação anônimo (`nav.js`, migração 024). Próximos: teste com cliente MCP real, política do bucket (sem listagem pública), backup do bucket, aposentar `/dashboard` e o token fixo.
 
@@ -244,7 +244,7 @@ erDiagram
 - [x] **Acervo:** trocar `data.js` por `GET /api/memes`, `/api/eras`, `/api/categorias` (com cache curto e fallback). — **feito**: o viewer lê `/api/memes` e o álbum e o perfil leem `/api/cartas`, com o `data.js` como base e fallback.
 - [x] **Conta:** substituir a conta local pelo login com Discord; mostrar gato, XP, moedas e patente do servidor. O criador de gato salva o JSON no usuário. — **feito**: criador de gato salvo no servidor (`PATCH /api/eu`) e pacote de boas-vindas ao concluir o cadastro.
 - [x] **Álbum:** pacotes, compra, reciclagem e cartas via API; as animações continuam no front, o resultado vem do servidor. — **feito**: abrir, comprar, reciclar e ler o álbum pela API, sem spoiler antes da revelação (`cliente-economia.js`).
-- [ ] **Votos e comentários:** exigem login; um voto por pessoa; o autor do comentário vem da sessão (acaba a falsificação de nome). — **parcial**: votos por usuário (`votos_usuario`, migração 016, um por pessoa). Falta o comentário: `POST /api/comentarios` ainda recebe o `autor` digitado no corpo, em vez de usar a sessão.
+- [x] **Votos e comentários:** exigem login; um voto por pessoa; o autor do comentário vem da sessão (acaba a falsificação de nome). — **feito**: votos por usuário (`votos_usuario`, migração 016) e `POST /api/comentarios` com login obrigatório, autor tirado da sessão e recusa de `autor` no corpo (#117).
 - [x] **Ranking:** calculado dos eventos de XP; filtros por métrica. — **feito**: `GET /api/ranking` ligado às telas, com abas por métrica.
 - [x] **Envio de vídeos:** formulário grava em `envios`; o usuário acompanha o status. — **feito**: `POST /api/envios` e `GET /api/envios/meus`.
 - [x] **Moderação no site:** a fila e o "ver como moderador" usam as mesmas rotas do admin. — **feito**: o painel e o site usam `/api/mod/fila`.
@@ -253,16 +253,16 @@ erDiagram
 
 ### 6.2 Ajustes pendentes conhecidos
 
-- [ ] Álbum no celular: 8 alvos de toque abaixo de 44 px e 24 textos pequenos (home já foi corrigida).
-- [ ] Link do logo no cabeçalho do celular com 31 px de altura (fica abaixo do mínimo de toque).
+- [x] Álbum no celular: alvos de toque de 44 px e textos de carta com 12 px. — **feito**, medido a 360 e 390 px (0 alvos e 0 textos abaixo do limite no álbum, linha do tempo, Memepédia e entrar; o link da carta na linha do tempo cobre o cartão inteiro).
+- [x] Link do logo no cabeçalho do celular com 31 px de altura. — **feito**: a medição a 360 px não acusa mais o logo.
 - [ ] Tablet e celular pequeno (360 px): conferir de novo timeline, viewer e álbum depois de ligar os dados.
 - [ ] Rótulo de ~5 px cortado em dois vídeos da era Tumblr em 360 px.
-- [ ] Erro de digitação na roupa do criador de gato ("Maletom", provavelmente "Moletom").
+- [x] Erro de digitação na roupa do criador de gato ("Maletom" virou "Moletom"). — **feito** (#116).
 - [ ] Carregamento: imagens com `loading="lazy"`, tamanhos corretos e miniaturas, para não baixar a foto inteira na grade.
 - [ ] Acessibilidade: revisar foco, nomes de botões e contraste em todas as telas, não só na home.
-- [ ] SEO e compartilhamento: título, descrição e imagem de pré-visualização (Open Graph) por página e por meme.
-- [ ] Páginas legais: política de privacidade e termos (hoje só o aviso legal do rodapé). Necessário antes de divulgar, por causa dos dados pessoais.
-- [ ] Revisão de texto: padronizar termos (patente, nível, moedas) e remover frases de protótipo ("Em construção", "só funciona no Netlify").
+- [ ] SEO e compartilhamento: título, descrição e imagem de pré-visualização (Open Graph) por página e por meme. — **parcial**: título, descrição, Open Graph e Twitter nas 6 páginas principais (#116). Falta a pré-visualização por meme.
+- [x] Páginas legais: política de privacidade e termos. — **feito**: `privacidade.html` e `termos.html`, ligadas no rodapé. Texto escrito a partir do que o código coleta; **pendente revisão jurídica** e definir o canal oficial de contato do controlador (hoje o formulário de feedback).
+- [ ] Revisão de texto: padronizar termos (patente, nível, moedas) e remover frases de protótipo ("Em construção", "só funciona no Netlify"). — **parcial**: saiu o aviso "Protótipo" do álbum e os formulários ocultos do Netlify (album e index). Falta padronizar patente/nível/moedas e limpar o código de protótipo sem uso em `index.html` (fila de moderação local `SEED_QUEUE`, wiki e links locais em `localStorage`).
 - [x] Trocar o aviso "dados de exemplo" em ranking e moderação por dados reais ou por estado vazio bem escrito. — **feito**: ranking e moderação usam dados reais (resta código de protótipo sem uso em `index.html`).
 
 **Pronto quando:** nenhum dado da tela vem de `data.js` nem de `localStorage` (exceto preferências como o tema), e as telas passam na checagem de celular, tablet e desktop.

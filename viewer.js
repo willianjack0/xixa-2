@@ -132,15 +132,34 @@ function videoPage(m,rel){
 }
 
 // ---- vídeos verticais (2020+): visual de app de vídeo curto ----
+// Shorts do YouTube (vídeo em pé): mesmo que o meme seja antigo, o vídeo é vertical, então abre no visual de vídeo curto.
+// Lista conferida em /shorts/<id> (200 = é Short); vídeos novos são detectados na hora pela miniatura em proporção original.
+const YT_VERTICAIS=new Set(["-3eGe6azSOA", "-GwuMvoEjBc", "0IWjopqBkIQ", "0KoFxC7BhRk", "0Kt6FPWTMEQ", "0YbwuCyX1OM", "2tqljFkY-BE", "4UGBvNHcOm4", "8A0urVkQisk", "8xuiT9cDLOo", "9FskwvMUrWQ", "A9W_fSG-ELA", "J1nSi5_W_8I", "LvDxCC4_jyY", "MUSYpLp1kas", "Nu1cge6dt2E", "OATq8YrIz-c", "PaQEmE0R8PA", "RHJ1wFUzHaM", "RKdQavGLvXU", "X6oC-BKHFLA", "b6q3d75osGE", "b7pXupS6T9c", "glM4VqA2LIs", "j-WjW9XjK04", "k4-eoo-V2jQ", "mgNIqM77Llo", "oodMuQ6rq-8", "rlXUSm_Y8BU", "vJZn983p_ow", "yRa8hzfj9_0", "zU85gkaX9-E"]);
+const VERT_CACHE=(()=>{try{return JSON.parse(localStorage.getItem("ns_vert")||"{}")||{}}catch(e){return{}}})();
+function marcarVertical(m){if(m&&m.yt&&!m.fb&&m.tipo!=="foto"&&(YT_VERTICAIS.has(m.yt)||VERT_CACHE[m.yt]===1))m.vert=true;return m}
+// a miniatura "oardefault" só existe para Shorts e vem em pé (1080×1920); vídeo comum dá 404
+function detectarVertical(yt){return new Promise(ok=>{const i=new Image();let fim=false;const r=v=>{if(fim)return;fim=true;ok(v)};
+  i.onload=()=>r(i.naturalHeight>i.naturalWidth);i.onerror=()=>r(false);setTimeout(()=>r(null),2500);i.src=`https://i.ytimg.com/vi/${yt}/oardefault.jpg`}).then(v=>{
+  if(v===true){VERT_CACHE[yt]=1;try{localStorage.setItem("ns_vert",JSON.stringify(VERT_CACHE))}catch(e){}}return v})}
+if(typeof MEMES!=="undefined")MEMES.forEach(marcarVertical);
+// cada vídeo curto abre com a cara de um app: antes de 2020 é o Shorts (o vídeo é um Short do YouTube); depois, TikTok, Reels, Shorts ou Kwai
+const APPS_CURTOS={
+  tiktok:{top:`<span class="tkt"><b>Para você</b><span>Seguindo</span></span>`,seguir:"Seguir",tag:"#fyp"},
+  reels:{top:`<span class="tkt tkt-logo"><b>Reels</b></span>`,seguir:"Seguir",tag:"#reels"},
+  shorts:{top:`<span class="tkt tkt-logo"><i class="tk-yt" aria-hidden="true"></i><b>Shorts</b></span>`,seguir:"Inscrever-se",tag:"#shorts"},
+  kwai:{top:`<span class="tkt tkt-logo"><b>kwai</b></span>`,seguir:"Seguir",tag:"#kwai"}
+};
+function appCurto(m){if((m.y|0)<2020)return"shorts";let h=0;for(const ch of String(m.id))h=(h*31+ch.charCodeAt(0))>>>0;return["tiktok","reels","shorts","kwai"][h%4]}
 function shortPage(m){
   const T=escapeHtml(m.t),pl=playerHTML(m,true),c=canal(m),h="@"+(("naosalvo").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9_.]+/g,""));
+  const ak=appCurto(m),A=APPS_CURTOS[ak];
   const x=`<button class="vx" data-act="close" title="Fechar (Esc)">${icon("xmark")}</button>`,snd=`<button class="snd" data-act="snd" title="Sons da época">${icon(SND.on?"volume":"mute")}<span>Sons da época</span></button>`;
-  return`<div class="tkp"><header class="tkh"><span class="tkt"><b>Para você</b><span>Seguindo</span></span><div class="lk">${snd}${x}</div></header>
+  return`<div class="tkp tk-${ak}"><header class="tkh">${A.top}<div class="lk">${snd}${x}</div></header>
     <div class="tkw"><div class="tkv">${pl}
       <div class="tko"><b>${escapeHtml(h)}</b><p>${T}</p><small>♫ som original · ${c}</small></div>
       <div class="tkr"><span class="tka"><img src="${avSrc(m)}" alt=""><i>+</i></span><div data-rt></div><span class="tki">${icon("comment")}<small>${short(Math.round((m.saves||100)*1.3))}</small></span><span class="tki" data-act="share">${icon("share")}<small>Compartilhar</small></span></div></div>
-      <div class="tkd"><div class="tkc"><img src="${avSrc(m)}" alt=""><div><b>${c}</b><small>${escapeHtml(h)} · ${dNum(m.date)}</small></div><span class="tkf">Seguir</span></div>
-        <h1>${T}</h1><p>${descTxt(m)}</p><div class="tg">#${escapeHtml(m.c.toLowerCase())} #meme #${m.y} #fyp</div><div class="vwc5"><span data-views></span></div>${btns(m.y)}</div></div></div>`;
+      <div class="tkd"><div class="tkc"><img src="${avSrc(m)}" alt=""><div><b>${c}</b><small>${escapeHtml(h)} · ${dNum(m.date)}</small></div><span class="tkf">${A.seguir}</span></div>
+        <h1>${T}</h1><p>${descTxt(m)}</p><div class="tg">#${escapeHtml(m.c.toLowerCase())} #meme #${m.y} ${A.tag}</div><div class="vwc5"><span data-views></span></div>${btns(m.y)}</div></div></div>`;
 }
 
 // ---- página da foto por rede social ----
@@ -266,6 +285,7 @@ function memeDoServidor(m,s){
   else{delete m.img;delete m.srcImg;delete m.credit}
   const vd=md.find(d=>d.tipo==="video_arquivo"&&d.caminho);if(vd)m.vid=vd.caminho;else delete m.vid;
   if(m.views==null)m.views=0;if(m.saves==null)m.saves=0;
+  if(!yt||m.fb)delete m.vert;marcarVertical(m);
 }
 async function sincronizarAcervo(){
   if(typeof MEMES==="undefined")return false;
@@ -299,7 +319,10 @@ async function compartilharYT(m){if(m.cuidado){avisoCuidadoOff();return}
 let VW=null;
 function closeViewer(){if(!VW)return;removeEventListener("resize",VW.rs);VW.player&&VW.player.stop();clearInterval(VW.clock);clearTimeout(VW.toastT);VW.el.remove();document.body.classList.remove("vw-open");document.removeEventListener("keydown",VW.key);const cb=VW.onClose;VW=null;cb&&cb()}
 function openViewer(m,opt={}){
-  closeViewer();
+  closeViewer();marcarVertical(m);
+  // vídeo que ainda não sabemos se é Short: confere pela miniatura e, se for, reabre em pé (só se o vídeo ainda não começou)
+  if(m.yt&&!m.vert&&!m.fb&&m.tipo!=="foto"&&!(m.yt in VERT_CACHE))detectarVertical(m.yt).then(v=>{if(v!==true)return;m.vert=true;
+    if(VW&&VW.m===m&&!VW.el.querySelector(".vp-screen.yt,.vp-screen.playing,.vp-screen.buffering,iframe"))openViewer(m,opt)});
   const isPhoto=m.tipo==="foto",rel=(opt.related||[]).filter(r=>r.id!==m.id);
   const cls=isPhoto?"vw-photo":m.vert?"vw-short vw-e5":`vw-e${vEra(m.y)}`;
   const el=document.createElement("div");el.className="vw "+cls;el.setAttribute("role","dialog");el.setAttribute("aria-label",m.t);
@@ -376,13 +399,18 @@ function dialUp(root){return new Promise(res=>{
 })}
 
 // ---- janela inteira na tela: diminui a mídia até tudo caber, sem rolagem dentro da janela ----
+// O vídeo (ou a foto) tem que caber inteiro na tela, com os controles, sem rolar. Antes a janela INTEIRA tinha que caber,
+// então cada coisa nova embaixo do vídeo (troca de link, comentários, botões) encolhia o vídeo até ele ficar miúdo.
+// Agora só o topo da janela até o fim do vídeo precisa caber; o resto (descrição, botões…) rola dentro da janela.
 function encaixarJanela(el){
   const w=el.querySelector(".vw-win");if(!w)return;
   const media=w.querySelector(".tkv")||w.querySelector(".vp-stage")||w.querySelector(".pimg");if(!media)return;
   media.style.maxWidth="";media.style.maxHeight="";
-  const pad=innerWidth<=700||innerHeight<800?16:48,room=innerHeight-pad,minH=innerWidth<=700?140:120;
+  const pad=innerWidth<=700||innerHeight<800?16:48,room=innerHeight-pad,folga=innerWidth<=700?8:24;
+  const minH=innerWidth<=700?180:Math.min(300,Math.round(innerHeight*.42));
+  const fim=()=>{const wr=w.getBoundingClientRect(),mr=media.getBoundingClientRect();return mr.bottom-wr.top+folga};
   for(let i=0;i<4;i++){
-    const over=w.offsetHeight-room;if(over<=1)return;
+    const over=fim()-room;if(over<=1)return;
     if(media.classList.contains("pimg")){const h=media.getBoundingClientRect().height;if(h<=minH)return;media.style.maxHeight=Math.max(minH,h-over)+"px";continue}
     const scr=media.querySelector(".vp-screen")||media,sr=scr.getBoundingClientRect();if(sr.height<=minH)return;
     const ar=sr.width/Math.max(1,sr.height),h=Math.max(minH,sr.height-over);

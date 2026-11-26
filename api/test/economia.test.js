@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { servidor, bancoDeTeste, semBanco } from './helpers.js';
 import { criarAutenticadorStub } from '../auth-stub.js';
 import { criarRng, sortearPacote } from '../economia/sorteio.js';
-import { visita } from '../economia/servico.js';
+import { visita, jujuba } from '../economia/servico.js';
 
 const skip = semBanco();
 let db, s;
@@ -63,6 +63,21 @@ test('visita: XP e pacote diário (sem boas-vindas); idempotente no mesmo dia', 
   assert.equal(c.xp, 10); assert.equal(c.moedas, 0); assert.equal(c.patente.id, 'discado');
   assert.deepEqual(c.pacotes.map((p) => [p.tipo, p.quantidade]), [['diario', 1]]);
   await conferirRazao('visitante');
+});
+
+test('jujuba: dá XP uma vez por dia (diz quanto), mesmo com cliques ao mesmo tempo; sem login 401', { skip }, async () => {
+  assert.equal((await s.post('/api/jujuba', {})).status, 401);
+  await GET('/api/carteira', 'cacador');
+  const r = await Promise.all([1, 2, 3].map(() => POST('/api/jujuba', {}, 'cacador')));
+  assert.deepEqual(r.map((x) => x.status), [200, 200, 200]);
+  assert.deepEqual(r.map((x) => x.json.xp_ganho).sort(), [0, 0, 15]);
+  const pago = r.find((x) => x.json.xp_ganho > 0).json;
+  assert.equal(pago.nova, true); assert.equal(pago.carteira.xp, 15);
+  // outro dia: ganha de novo
+  const id = await uid('cacador');
+  const amanha = await jujuba(db.pool, { id }, { agora: new Date(Date.now() + 2 * 86400e3) });
+  assert.equal(amanha.xp_ganho, 15); assert.equal(amanha.carteira.xp, 30);
+  await conferirRazao('cacador');
 });
 
 test('visita: pacote diário acumula até 7 e o dia segue o fuso de São Paulo', { skip }, async () => {

@@ -574,19 +574,33 @@ body.vw-open{overflow:hidden}
 .tko b{font-size:14px}.tko p{margin:4px 0;font-size:13px}.tko small{font-size:12px;opacity:.9}
 .tkr{position:absolute;right:8px;bottom:56px;z-index:5;display:flex;flex-direction:column;align-items:center;gap:14px}
 .tka{position:relative;width:44px;height:44px}.tka img{width:44px;height:44px;border-radius:50%;border:2px solid #fff}
-.tka i{position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:#fe2c55;color:#fff;font:700 13px/18px sans-serif;text-align:center;font-style:normal}
+.tka i{position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:var(--tk,#fe2c55);color:#fff;font:700 13px/18px sans-serif;text-align:center;font-style:normal}
 .tki,.tkl{display:flex;flex-direction:column;align-items:center;gap:2px;color:#fff;background:none;border:0;cursor:pointer;font-size:11px;text-shadow:0 1px 3px #000c}
 .tki .ico,.tkl .ico{width:30px;height:30px;padding:6px;border-radius:50%;background:#0006;stroke-width:2}
-.tkl.on .ico{color:#fe2c55;fill:#fe2c55}
+.tkl.on .ico{color:var(--tk,#fe2c55);fill:var(--tk,#fe2c55)}
 .tkd{min-width:0}
 .tkc{display:flex;align-items:center;gap:10px;margin-bottom:12px}.tkc img{width:42px;height:42px;border-radius:50%}
 .tkc b{display:block}.tkc small{opacity:.6;font-size:12px}
-.tkf{margin-left:auto;background:#fe2c55;color:#fff;font-weight:700;border-radius:6px;padding:6px 18px;font-size:13px}
+.tkf{margin-left:auto;background:var(--tk,#fe2c55);color:var(--tk-on,#fff);font-weight:700;border-radius:6px;padding:6px 18px;font-size:13px}
 .tkd h1{font-size:20px;margin:0 0 8px;line-height:1.25}
 .tkd p{margin:0 0 8px;opacity:.85}.tkd .tg{color:#8ab4f8;font-size:13px}
 .tkd .vwc5{font-size:12px;opacity:.6;margin:8px 0}
 .tkd .vbs .vb{background:#ffffff1a;color:#fff;border-color:#ffffff33}
-.tkd .vbs .vb:first-child{background:#fe2c55;border-color:#fe2c55}
+.tkd .vbs .vb:first-child{background:var(--tk,#fe2c55);border-color:var(--tk,#fe2c55);color:var(--tk-on,#fff)}
+/* cada app de vídeo curto com a sua cara (sem logos oficiais): TikTok, Reels, Shorts e Kwai */
+.tk-tiktok{--tk:#fe2c55}
+.tkt-logo b{font-size:19px;letter-spacing:-.3px}.tkt-logo b::after{display:none}
+.tk-reels{--tk:#c13584;background:#000}
+.tk-reels .tkt-logo b{background:linear-gradient(90deg,#f9ce34,#ee2a7b,#6228d7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tk-reels .tkf{background:none;border:1px solid #ffffff66;color:#fff}
+.tk-shorts{--tk:#fff;--tk-on:#0f0f0f;background:#0f0f0f}
+.tk-shorts .tkt-logo{align-items:center;gap:8px}
+.tk-shorts .tk-yt{display:inline-block;width:22px;height:26px;border-radius:7px;background:#ff0033;position:relative}
+.tk-shorts .tk-yt::after{content:"";position:absolute;left:8px;top:8px;border:5px solid transparent;border-left:8px solid #fff;border-right:0}
+.tk-shorts .tkf{border-radius:99px}
+.tk-shorts .tkl.on .ico{color:#ff0033;fill:#ff0033}.tk-shorts .tka i{background:#ff0033}
+.tk-kwai{--tk:#c94a00}
+.tk-kwai .tkt-logo b{color:#ff7a1a;font-size:22px;font-weight:900;font-style:italic}
 @media(max-width:700px){.tkw{grid-template-columns:1fr;padding:10px}.tkv{width:min(100%,calc((100vh - 120px)*9/16));margin:0 auto}}
 
 /* ===== selo de cuidado ===== */

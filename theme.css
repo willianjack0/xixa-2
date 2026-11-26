@@ -73,6 +73,10 @@ a{color:inherit}
 .sub .sp{flex:1}
 .sub .cta{color:var(--on-brand)!important;background:linear-gradient(180deg,var(--btn-a),var(--btn-b))!important;box-shadow:0 4px 14px var(--glow)}
 .sub .cta:hover{box-shadow:0 6px 18px var(--glow),0 0 0 2px var(--brand-ink)} /* hover sem filter: o filtro escurecia o texto junto e derrubava o contraste */
+/* "Voltar ao site" (álbum): botão de saída, contornado e com seta, diferente dos itens do menu */
+.sub .back{border:1.5px dashed var(--line2)!important;color:var(--txt)!important;background:var(--panel)!important;font-weight:700}
+.sub .back .ico{opacity:1;transition:transform .15s}
+.sub .back:hover{border-style:solid!important;border-color:var(--brand)!important}.sub .back:hover .ico{transform:translateX(-3px)}
 .sub .dd::after{content:"▾";font-size:10px;opacity:.7}
 .pop{position:fixed;z-index:40;background:var(--panel);border:1px solid var(--line2);border-radius:14px;padding:8px;box-shadow:var(--shadow);display:none;min-width:220px}
 .pop.open{display:block;animation:popin .15s ease}
@@ -285,6 +289,7 @@ body.home::before{background:radial-gradient(1200px 620px at 50% -20%,var(--bg-g
 .ft-legal p{font-size:13px;line-height:1.6;max-width:820px;margin-bottom:8px;color:#d9d0df}
 .ft-legal p button{color:#fff;text-decoration:underline;font-weight:700}
 .ft-legal small{display:block;font-size:12px;color:#9d92a6;margin-top:10px}
+.ft-legal small a{color:#fff;text-decoration:underline;font-weight:600}
 .ft-boneco{position:absolute;right:40px;bottom:0;height:270px;width:auto;filter:drop-shadow(-6px 0 16px #0006);pointer-events:none;transform-origin:50% 100%;animation:peek 5s ease-in-out infinite}
 @keyframes peek{0%,100%{transform:rotate(0)}50%{transform:rotate(-3deg)}}
 /* feedback modal */
@@ -527,6 +532,10 @@ img.cdo-blur{filter:blur(16px) saturate(.6);transform:scale(1.15)}
 .jjb{position:absolute;width:22px;height:22px;padding:0;border:0;background:none;cursor:pointer;opacity:.55;z-index:5;transition:transform .2s,opacity .2s;filter:drop-shadow(0 1px 1px #0003)}
 .jjb:hover,.jjb:focus-visible{opacity:1;transform:scale(1.35) rotate(-12deg)}
 .jjb svg{width:100%;height:100%;display:block}
+.xpfl{position:fixed;z-index:9999;transform:translate(-50%,-50%);pointer-events:none;padding:6px 12px;border-radius:99px;background:linear-gradient(180deg,#1f8f44,#176b33);color:#fff;font:800 15px Inter,sans-serif;box-shadow:0 6px 16px #1d8a4066;animation:xpfl 1.6s ease-out forwards}
+@keyframes xpfl{0%{opacity:0;transform:translate(-50%,-30%) scale(.7)}15%{opacity:1;transform:translate(-50%,-60%) scale(1.1)}70%{opacity:1;transform:translate(-50%,-160%) scale(1)}100%{opacity:0;transform:translate(-50%,-200%) scale(1)}}
+@media(prefers-reduced-motion:reduce){.xpfl{animation:none;transform:translate(-50%,-120%)}}
+.jjb::after{content:"";position:absolute;inset:-11px}
 .jjb.pego{animation:jjpop .7s ease forwards}
 @keyframes jjpop{40%{transform:scale(1.8) rotate(20deg);opacity:1}100%{transform:translateY(-60px) scale(.2);opacity:0}}
 @media(prefers-reduced-motion:reduce){.jjb.pego{animation:none;opacity:0}.jjb:hover{transform:none}}

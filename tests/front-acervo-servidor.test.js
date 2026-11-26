@@ -54,6 +54,9 @@ async function abrir(url, { comBanco = true, vistos = null } = {}) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   if (vistos) await ctx.addInitScript((v) => { try { localStorage.setItem("ns_anos_vistos", JSON.stringify(v)); } catch (e) { /* sem storage */ } }, vistos);
   await ctx.route((u) => u.hostname !== "127.0.0.1", (r) => r.abort());
+  // miniatura em proporção original (só existe para Shorts): o meme novo do MCP é um Short em pé
+  const PNG_EM_PE = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAkAAAAQCAIAAABLKsIUAAAAFklEQVR4XmP8z4ATMOGWGpXDAegdZgDbEAEfwIIAoQAAAABJRU5ErkJggg==", "base64");
+  await ctx.route("https://i.ytimg.com/vi/*/oardefault.jpg", (r) => /CCCCCCCCCCC/.test(r.request().url()) ? r.fulfill({ status: 200, contentType: "image/png", body: PNG_EM_PE }) : r.fulfill({ status: 404, body: "" }));
   const json = (route, status, corpo) => route.fulfill({ status, contentType: "application/json", body: JSON.stringify(corpo) });
   await ctx.route("**/api/**", (route) => {
     const u = new URL(route.request().url()), p = u.pathname;
@@ -105,4 +108,28 @@ test("linha do tempo pelo menu (sem ano): sorteia um ano ainda não visto e guar
   const b = await abrir("/linha-do-tempo.html#2014");
   assert.strictEqual(await b.page.evaluate(() => ST.ano), "2014");
   await b.ctx.close();
+});
+
+test("Shorts do YouTube abrem em pé, no visual de app de vídeo curto (lista conferida + detecção de vídeo novo)", opts, async () => {
+  const { ctx, page, erros } = await abrir("/linha-do-tempo.html#2012");
+  await page.waitForFunction(() => MEMES.some((m) => m.id === "meme-do-mcp"));
+  // Short conhecido (vídeo antigo repostado como Short): continua vertical depois do acervo do banco
+  assert.strictEqual(await page.evaluate(() => !!MEMES.find((m) => m.id === "pedala-robinho").vert), true);
+  assert.strictEqual(await page.evaluate(() => !!MEMES.find((m) => m.id === "o-pintinho-piu").vert), false);
+  await page.evaluate(() => openViewer(MEMES.find((m) => m.id === "pedala-robinho")));
+  assert.strictEqual(await page.$eval(".vw", (e) => e.className.includes("vw-short")), true);
+  assert.strictEqual(await page.$eval(".tkp", (e) => e.className), "tkp tk-shorts", "antes de 2020: cara de Shorts");
+  assert.ok(await page.$(".vp-vert"), "player vertical");
+  await page.evaluate(() => closeViewer());
+  // meme novo (MCP) que é Short: abre deitado, confere a miniatura e reabre em pé; da próxima vez já abre em pé
+  await page.evaluate(() => openViewer(MEMES.find((m) => m.id === "meme-do-mcp")));
+  await page.waitForSelector(".vw.vw-short .tkp");
+  assert.strictEqual(await page.evaluate(() => JSON.parse(localStorage.getItem("ns_vert")).CCCCCCCCCCC), 1);
+  await page.evaluate(() => closeViewer());
+  // vídeo comum não vira vertical
+  await page.evaluate(() => openViewer(MEMES.find((m) => m.id === "o-pintinho-piu")));
+  await page.waitForTimeout(400);
+  assert.strictEqual(await page.$eval(".vw", (e) => e.className.includes("vw-short")), false);
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
 });

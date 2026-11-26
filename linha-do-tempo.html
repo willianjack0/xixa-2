@@ -5,7 +5,7 @@
 <link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
 <link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
 <script src="gate.js?v=20261120c"></script>
-<script src="cliente-economia.js?v=20261125c"></script>
+<script src="cliente-economia.js?v=20261203a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Linha do tempo · NÃO SALVO</title>
 <meta name="description" content="A linha do tempo completa da internet brasileira: escolha um ano e veja tudo o que estava bombando, em ordem cronológica, no visual da internet daquela época.">
@@ -23,8 +23,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261130h">
-<link rel="stylesheet" href="viewer.css?v=20261125b">
+<link rel="stylesheet" href="theme.css?v=20261203a">
+<link rel="stylesheet" href="viewer.css?v=20261203a">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 <style>
 /* ===== estrutura (identidade do site) ===== */
@@ -52,7 +52,7 @@
 .ry.on small{opacity:1;color:#0a6a9a;font-weight:800}
 :root[data-theme="dark"] .ry.on small{color:#7fd3ff}
 .ry.era0 .ert{position:absolute;top:-2px}
-@media(max-width:760px){.lt-rail{grid-template-columns:30px minmax(0,1fr) 30px;padding:8px 4px 4px;border-radius:16px}.rl-arr{width:30px;height:30px;font-size:17px}.ry{flex-basis:64px;height:84px;font-size:14px}.ry small{top:62px}.lt-yrs{scroll-snap-type:x proximity}
+@media(max-width:760px){.lt-rail{grid-template-columns:44px minmax(0,1fr) 44px;padding:8px 4px 4px;border-radius:16px}.rl-arr{width:44px;height:44px;font-size:20px}.ry{flex-basis:64px;height:84px;font-size:14px}.ry small{top:62px}.lt-yrs{scroll-snap-type:x proximity}
   /* igual à home no mobile: o ano ativo não aparece na régua (só a bolinha maior); o título do herói já mostra o ano.
      O texto continua no DOM (font-size 0, não display:none), então o botão mantém o nome acessível "2022 · 3 memes". */
   .ry.on .rl{font-size:0;line-height:0;padding:0;background:none;box-shadow:none;color:transparent}
@@ -114,7 +114,7 @@
 @media(prefers-reduced-motion:reduce){.lt-tick .tk span{animation:none}.lt-it{opacity:1;transform:none;transition:none}.lt-yrs{scroll-behavior:auto}.lt-it:hover,.ry:hover .dt,.rl-arr:hover{transform:none}}
 @media(max-width:760px){
   .lt-wrap{padding:14px 12px 30px}
-  .lt-hero{grid-template-columns:40px 1fr 40px;padding:22px 10px 20px;gap:6px}.lt-hero .nav{width:38px;height:38px}
+  .lt-hero{grid-template-columns:44px 1fr 44px;padding:22px 10px 20px;gap:6px}.lt-hero .nav{width:44px;height:44px}.lt-chips button{min-height:44px}.lt-mais button{min-height:44px}
   .lt-body{padding:4px 12px 22px}
   .lt-it{grid-template-columns:1fr;gap:10px;padding:10px}
   .lt-it h3{font-size:18px}
@@ -439,10 +439,10 @@ body.ep-xp .lt-top small{color:#fff}
   <p class="lt-marcas">Visual inspirado na internet de cada época. Marcas, nomes e estilos citados pertencem aos seus donos.</p>
 </main>
 
-<script src="common.js?v=20261130i"></script>
+<script src="common.js?v=20261203a"></script>
 <script src="data.js?v=20261201a"></script>
 <script src="player.js?v=20261130c"></script>
-<script src="viewer.js?v=20261130d"></script>
+<script src="viewer.js?v=20261203a"></script>
 <script src="alertas.js?v=20261125b"></script>
 <script>
 renderHeader("tl",{sub:[

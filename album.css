@@ -183,7 +183,6 @@
 .rings i{display:block;width:44px;height:12px;border-radius:99px;background:linear-gradient(180deg,#f4f7fb,#b7c0cf 55%,#7d8798);box-shadow:0 2px 3px #0005,inset 0 1px 0 #fff}
 @media(max-width:720px){.rings{left:6px;width:30px}.rings i{width:30px;height:9px}}
 .layout{padding-bottom:120px}
-@media(max-width:720px){.layout>.album{order:-1}.layout>.det{order:0}.layout>.side{order:1}}
 
 /* ===================================================================================================
    Álbum com cara de álbum de banca (anos 90/2000): papel, vagas numeradas com moldura, figurinhas de
@@ -345,3 +344,48 @@ body.mesa-on{overflow:hidden}
 .livro .pg .grade{flex:1;align-content:space-evenly;min-height:0}
 .livro .pg .premio{margin:2cqi 0 4cqi}
 :root[data-theme="dark"] .pg .about.exp{background:linear-gradient(180deg,#ffd84a,#f2b10a);color:#3a2a00;box-shadow:0 0 0 1px #c98f00,0 3px 8px #c98f0040}
+
+/* celular: alvos de toque de 44px e textos de carta com 12px */
+.ghost{min-height:44px}
+@media(max-width:600px){.card .top,.card .top em,.card .ft,.card .yr,.card .cp,.card .nm,.nm{font-size:12px}}
+
+/* ===== celular: coleções primeiro (faixa que rola de lado), depois o álbum de ponta a ponta, a carta e o resumo ===== */
+@media(max-width:720px){
+  .layout{padding:10px 10px 96px;gap:12px}
+  .layout>.side{display:contents}
+  .side>h6:first-child{order:-6;margin:2px 4px -4px}
+  #cols{order:-5;display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scroll-padding:0 10px;margin:0 -10px;padding:4px 10px 8px;scrollbar-width:none}
+  #cols::-webkit-scrollbar{display:none}
+  #cols .col{flex:0 0 auto;width:auto;min-width:168px;max-width:220px;grid-template-columns:34px 1fr;gap:8px;padding:8px 10px;margin:0;scroll-snap-align:start;background:var(--panel);box-shadow:0 0 0 1px var(--line)}
+  #cols .col:hover{transform:none}
+  #cols .col.on{background:var(--brand-soft);box-shadow:0 0 0 2px var(--brand),0 4px 12px var(--glow)}
+  #cols .col .ic{width:34px;height:34px;border-radius:10px}#cols .col .ic .ico{width:18px;height:18px}
+  #cols .col b{font-size:12.5px;white-space:nowrap}
+  #cols .col small{font-size:12px}
+  #cols .col .prow{gap:6px}
+  .layout>.album{order:-4;padding:0}
+  .layout>.det{order:-3}
+  .side>.ib{order:-1;margin:0!important}
+  .side>.tot,.side>.wallet{order:-2;margin:0}
+  .note{order:1}
+  /* a página do álbum usa a tela toda */
+  .album .page.pg{padding:16px 10px 14px 30px;border-radius:14px}
+  .rings{left:4px;width:22px}.rings i{width:22px;height:8px}
+  .pg .grade{gap:12px 3%}
+  .ahead h1{font-size:24px}
+  .a-bts{gap:8px}.a-bts .about{min-height:44px;padding:0 10px;font-size:13px}
+  /* detalhe da carta: carta pequena ao lado das informações, botões embaixo */
+  .det{display:grid;grid-template-columns:112px minmax(0,1fr);column-gap:14px;align-items:start;max-width:none;width:100%;padding:14px;border-radius:18px;background:var(--panel);box-shadow:0 0 0 1px var(--line)}
+  .det>*{grid-column:1/-1}
+  .det>.h{margin-bottom:8px}
+  .det>.card{grid-column:1;grid-row:2/span 4;margin:0;width:224px;zoom:.5}
+  .det>h2,.det>p,.det>.kv{grid-column:2}
+  .det>h2{font-size:20px}
+  .det>p{margin:4px 0 8px;font-size:12.5px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .det>.kv{padding:2px 0}
+  .det>.play,.det>.bigbtn{margin-top:12px}
+  /* botão flutuante de pacotes menor, sem tampar a paginação */
+  .pfab{padding:6px 14px 6px 8px;gap:8px;border-radius:18px}
+  .pfab .pf-t small{display:none}
+  .pfab.empty{opacity:.92}
+}

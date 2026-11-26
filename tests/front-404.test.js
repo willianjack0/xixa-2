@@ -56,15 +56,16 @@ async function contrastes(page, raiz = "#pf") {
 }
 
 
-async function abrir(vp, { tema = "light", logado = false } = {}) {
-  const ctx = await browser.newContext({ viewport: vp, hasTouch: vp.width < 600, isMobile: vp.width < 600 });
-  await ctx.addInitScript((t) => { try { localStorage.setItem("ns_theme", t); } catch (e) { /* sem storage */ } }, tema);
-  await ctx.route((url) => url.hostname !== "127.0.0.1", (r) => r.abort());
+async function abrir(vp, { tema = "light", logado = false, gato = null, ctxPronto = null } = {}) {
+  const ctx = ctxPronto || await browser.newContext({ viewport: vp, hasTouch: vp.width < 600, isMobile: vp.width < 600 });
+  if (!ctxPronto) await ctx.addInitScript((t) => { try { localStorage.setItem("ns_theme", t); } catch (e) { /* sem storage */ } }, tema);
+  if (!ctxPronto) await ctx.route((url) => url.hostname !== "127.0.0.1", (r) => r.abort());
+  await ctx.unroute("**/api/**");
   const json = (route, status, corpo) => route.fulfill({ status, contentType: "application/json", body: JSON.stringify(corpo) });
   await ctx.route("**/api/**", (route) => {
     const p = new URL(route.request().url()).pathname;
     if (!logado) return json(route, 401, { erro: "não autenticado" });
-    if (p === "/api/eu") return json(route, 200, { usuario: { id: 1, apelido: "Ana", avatar_gato: null, avatar_url: null, cadastro_completo: true }, patente: { id: "discado", nome: "Discado", cor: "#9aa3b2" }, moedas: 7, xp: 0, csrf: "t" });
+    if (p === "/api/eu") return json(route, 200, { usuario: { id: 1, apelido: "Ana", avatar_gato: gato, avatar_url: null, cadastro_completo: true }, patente: { id: "discado", nome: "Discado", cor: "#9aa3b2" }, moedas: 7, xp: 0, csrf: "t" });
     if (p === "/api/carteira") return json(route, 200, { moedas: 7, xp: 0, patente: { id: "discado", nome: "Discado", cor: "#9aa3b2" }, proxima_patente: null, pacotes: [], cartas: { distintas: 0, total_no_album: 109, quantidade_total: 0, repetidas: 0 }, valor_das_repetidas: 0 });
     if (p === "/api/visita") return json(route, 200, { carteira: { xp: 0, moedas: 7 }, pacotes_ganhos: [] });
     return json(route, 200, { itens: [] });
@@ -120,6 +121,32 @@ test("404 com login: cabeçalho com a conta; Meme aleatório leva a um verbete q
   await page.waitForURL(/memepedia\.html#/);
   const id = decodeURIComponent(new URL(page.url()).hash.slice(1));
   assert.ok(await page.evaluate((id) => MEMES.some((m) => m.id === id), id), "verbete existe: " + id);
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+test("404: o gatinho é o avatar de quem está logado e já aparece atualizado na próxima visita", opts, async () => {
+  const g1 = { fur: 5, pat: 2, eye: 3, acc: 9, clo: 7, bg: 4 }, g2 = { fur: 2, pat: 1, eye: 1, acc: 0, clo: 3, bg: 1 };
+  let { ctx, page, erros } = await abrir({ width: 1280, height: 900 }, { logado: true, gato: g1 });
+  await page.waitForFunction(() => typeof ECO !== "undefined" && ECO.pronto === true);
+  const norm = (h) => h.replace(/\bg\d+/g, "g"); // ids dos gradientes mudam a cada desenho
+  const svg = async (o) => norm(await page.evaluate((o) => { const d = document.createElement("div"); d.innerHTML = catSVG(o); return d.innerHTML; }, o));
+  const atual = async () => norm(await page.$eval("#gato", (e) => e.innerHTML));
+  assert.strictEqual(await atual(), await svg(g1));
+  assert.notStrictEqual(await svg(g1), await svg({ fur: 1, pat: 1, eye: 1, acc: 3, clo: 0, bg: 0 }));
+  await page.close();
+  // trocou o avatar: na próxima 404 já vem o novo (e o guardado aparece antes da sessão carregar)
+  ({ page, erros } = await abrir({ width: 1280, height: 900 }, { logado: true, gato: g2, ctxPronto: ctx }));
+  await page.waitForFunction(() => typeof ECO !== "undefined" && ECO.pronto === true);
+  assert.strictEqual(await atual(), await svg(g2));
+  assert.deepStrictEqual(await page.evaluate(() => JSON.parse(localStorage.getItem("ns_gato404"))), g2);
+  await page.close();
+  // sem login: gatinho padrão e o guardado é esquecido
+  ({ page } = await abrir({ width: 1280, height: 900 }, { ctxPronto: ctx }));
+  await page.waitForSelector(".account-login");
+  assert.strictEqual(await atual(), await svg({ fur: 1, pat: 1, eye: 1, acc: 3, clo: 0, bg: 0 }));
+  assert.strictEqual(await page.evaluate(() => localStorage.getItem("ns_gato404")), null);
+  assert.strictEqual(await page.$$eval(".rays,.rays-wrap", (l) => l.length), 0, "sem os raios próprios da 404: fica o fundo do site");
   assert.deepStrictEqual(erros, []);
   await ctx.close();
 });

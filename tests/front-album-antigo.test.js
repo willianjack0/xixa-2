@@ -208,13 +208,22 @@ test("expandir: abre na página atual, setas viram de 2 em 2, Esc fecha e o foco
 test("expandir: a folha vira molinha (tiras) e some no fim; clicar numa figurinha do livro seleciona e fecha", opts, async () => {
   const { ctx, page, erros } = await abrirAlbum();
   await page.click("#btExp");
+  // relógio da animação controlado pelo teste (medir a animação "ao vivo" dependia do ritmo dos quadros e era instável)
+  await page.evaluate(() => { window.__T = 0; performance.now = () => window.__T; window.__q = []; window.__raf = window.requestAnimationFrame; window.requestAnimationFrame = (f) => { window.__q.push(f); }; });
+  const passo = (t) => page.evaluate((t) => { window.__T = t; const q = window.__q; window.__q = []; q.forEach((f) => f(t)); }, t);
   await page.click("#btProx");
   await page.waitForSelector(".mola .tira");
   const n = await page.$$eval(".mola .tira", (l) => l.length);
-  assert.strictEqual(n, 12);
-  const angulos = await page.$$eval(".mola .tira", (l) => l.map((t) => t.style.transform));
-  assert.ok(new Set(angulos).size > 2, "as tiras dobram em ângulos diferentes (papel curvando)");
-  await page.waitForFunction(() => !document.querySelector(".mola"), null, { timeout: 4000 });
+  assert.strictEqual(n, await page.evaluate(() => TIRAS));
+  assert.ok(n >= 16, "folha fina: bastante tiras");
+  for (const t of [300, 600]) {
+    await passo(t);
+    const angulos = await page.$$eval(".mola .tira", (l) => l.map((x) => x.style.transform));
+    assert.ok(new Set(angulos).size > 2, "as tiras dobram em ângulos diferentes (papel curvando) em " + t + "ms");
+  }
+  await passo(5000);
+  assert.strictEqual(await page.evaluate(() => document.querySelector(".mola")), null);
+  await page.evaluate(() => { window.requestAnimationFrame = window.__raf; });
   assert.strictEqual(await page.evaluate(() => esq), 2);
   const id = await page.$eval("#ladoE .vaga .fig", (f) => f.closest(".vaga").getAttribute("onclick").match(/'([^']+)'/)[1]);
   await page.click("#ladoE .vaga:has(.fig)");
@@ -253,8 +262,12 @@ test("expandir: cada tira mostra só a cara virada para a gente (Safari não esp
   assert.ok(meio.includes("vh") && meio.includes("hv"), "no meio a ponta já mostra o verso e a lombada ainda a frente");
   await passo(990);
   assert.ok((await caras()).every((c) => c === "hv"), "no fim só o verso aparece");
-  await passo(1001);
+  await passo(1300);
+  assert.ok((await caras()).every((c) => c === "hv"), "na assentada (a ponta levanta um pouco) continua só o verso");
+  assert.ok(await page.evaluate(() => !!document.querySelector(".mola")), "a folha ainda está assentando");
+  await passo(1600);
   assert.strictEqual(await page.evaluate(() => esq), 2);
+  assert.strictEqual(await page.evaluate(() => document.querySelector(".mola")), null);
   assert.deepStrictEqual(erros, []);
   await ctx.close();
 });
@@ -295,5 +308,51 @@ test("álbum: carta que perde a imagem no painel volta para a miniatura do víde
   await page.waitForFunction(() => byId["orkut-0"].name === "Carta Editada");
   assert.strictEqual(await page.evaluate(() => byId["orkut-0"].img), undefined);
   assert.strictEqual(await page.$('#cards img[src^="/midias/"]'), null);
+  await ctx.close();
+});
+
+test("expandir: fechar no meio da virada termina a virada (sem folha sobrando) e reabrir funciona", opts, async () => {
+  const { ctx, page, erros } = await abrirAlbum();
+  await page.click("#btExp");
+  await page.click("#btProx");
+  await page.waitForSelector(".mola .tira");
+  await page.keyboard.press("Escape");
+  assert.strictEqual(await page.$eval("#mesa", (m) => m.hidden), true);
+  assert.strictEqual(await page.evaluate(() => [!!document.querySelector(".mola"), virando, esq].join()), "false,false,2");
+  await page.click("#btExp");
+  await page.click("#btProx");
+  await page.waitForSelector(".mola .tira");
+  await page.waitForFunction(() => !document.querySelector(".mola"), null, { timeout: 4000 });
+  assert.strictEqual(await page.evaluate(() => esq), 4);
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+test("menu do álbum: só Coleções, Loja, Converter, Ranking e o botão diferente “Voltar ao site”; Expandir com ícone de 4 setas", opts, async () => {
+  const { ctx, page, erros } = await abrirAlbum();
+  const itens = await page.$$eval("#sub a,#sub button", (l) => l.map((e) => e.textContent.trim()));
+  assert.deepStrictEqual(itens, ["Coleções", "Loja", "Converter repetidas", "Ranking", "Voltar ao site"]);
+  const volta = await page.$eval("#sub a.back", (a) => ({ href: a.getAttribute("href"), borda: getComputedStyle(a).borderStyle }));
+  assert.deepStrictEqual(volta, { href: "index.html", borda: "dashed" });
+  assert.match(await page.$eval("#btExp .ico", (s) => s.innerHTML), /M9 4H4v5/);
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+test("celular: coleções vêm antes do álbum (faixa que rola de lado), depois a carta; compartilhar diz “no seu perfil”", opts, async () => {
+  const { ctx, page, erros } = await abrirAlbum({ vp: { width: 390, height: 844 } });
+  const y = (s) => page.$eval(s, (e) => e.getBoundingClientRect().top + scrollY);
+  assert.ok((await y("#cols")) < (await y(".album")), "coleções antes do álbum");
+  assert.ok((await y(".album")) < (await y("#det")), "álbum antes da carta");
+  assert.ok((await y("#det")) < (await y(".wallet")), "moedas depois da carta");
+  const faixa = await page.$eval("#cols", (e) => ({ d: getComputedStyle(e).display, rola: e.scrollWidth > e.clientWidth, h: e.getBoundingClientRect().height }));
+  assert.strictEqual(faixa.d, "flex"); assert.ok(faixa.rola, "a faixa rola de lado"); assert.ok(faixa.h < 120, "faixa baixinha: " + faixa.h);
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "sem overflow horizontal");
+  const alb = await page.$eval(".album", (e) => e.getBoundingClientRect().width);
+  assert.ok(alb >= 360, "álbum de ponta a ponta: " + alb);
+  await page.evaluate(() => { const id = CARDS.find((c) => owned(c) > 0).id; pick(id); });
+  assert.match(await page.$eval("#det .shrbtn .tx", (b) => b.firstChild.textContent.trim()), /^Compartilhar no seu perfil$/);
+  assert.ok((await page.$eval("#det .shrbtn", (b) => b.getBoundingClientRect().height)) >= 44);
+  assert.deepStrictEqual(erros, []);
   await ctx.close();
 });

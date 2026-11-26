@@ -60,7 +60,7 @@ const PACK_SIZE = 5;
 const REGRAS = [
   ['valor_repetida', { Comum: 5, Relevante: 10, Raro: 20, 'Relíquia': 40, 'Lendário': 80, 'Mítico': 150 }, 'Moedas que uma carta repetida vale, por raridade'],
   ['recompensa_moedas', { envio_aprovado: 25, link_antigo: 5, colecao_completa: 100 }, 'Moedas por ação'],
-  ['xp_ganho', { visita: 10, pacote: 5, envio_aprovado: 50, link_antigo: 10, colecao_completa: 100, carta_nova: { Comum: 2, Relevante: 4, Raro: 8, 'Relíquia': 15, 'Lendário': 30, 'Mítico': 60 } }, 'XP por ação']
+  ['xp_ganho', { visita: 10, pacote: 5, envio_aprovado: 50, link_antigo: 10, colecao_completa: 100, jujuba: 15, carta_nova: { Comum: 2, Relevante: 4, Raro: 8, 'Relíquia': 15, 'Lendário': 30, 'Mítico': 60 } }, 'XP por ação']
 ];
 
 const nulo = (v) => (v === undefined || v === '' ? null : v);

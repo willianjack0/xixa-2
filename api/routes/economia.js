@@ -2,7 +2,7 @@
 // Rotas com { autenticada: true } exigem usuário: hoje vem do auth-stub (X-Test-User, só com AUTH_STUB=1);
 // o login Discord vai fornecer o mesmo `ctx.usuario` e estas rotas não mudam.
 import { send, lerJson, limited } from '../lib/http.js';
-import { ErroNegocio, carteira, album, visita, comprarPacote, abrirPacote, reciclar, ranking, tiposDePacote } from '../economia/servico.js';
+import { ErroNegocio, carteira, album, visita, jujuba, comprarPacote, abrirPacote, reciclar, ranking, tiposDePacote } from '../economia/servico.js';
 
 const A = { autenticada: true };
 const LIMITE_ESCRITAS = 60; // por usuário, janela de 10 min (além do limite da transação, que já é serial por usuário)
@@ -23,6 +23,12 @@ export default function registrar(r) {
   r.post('/api/visita', ({ res, pool, usuario }) => ouErro(res, async () => {
     if (limited('eco:' + usuario.id, LIMITE_ESCRITAS)) return send(res, 429, { erro: 'Muitas ações. Aguarde um pouco.' });
     return send(res, 200, await visita(pool, usuario));
+  }), A);
+
+  // jujuba escondida: XP uma vez por dia
+  r.post('/api/jujuba', ({ res, pool, usuario }) => ouErro(res, async () => {
+    if (limited('eco:' + usuario.id, LIMITE_ESCRITAS)) return send(res, 429, { erro: 'Muitas ações. Aguarde um pouco.' });
+    return send(res, 200, await jujuba(pool, usuario));
   }), A);
 
   r.post('/api/pacotes/comprar', ({ req, res, pool, usuario }) => ouErro(res, async () => {
