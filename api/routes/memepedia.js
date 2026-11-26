@@ -82,16 +82,29 @@ export default function registrar(r) {
     return send(res, 200, { items: rows });
   });
   r.post(/^\/api\/admin\/memepedia\/(\d+)$/, async (ctx) => {
-    const { req, res, pool, params } = ctx;
+    const { req, res, params } = ctx;
     const b = await lerJson(req);
     const st = b && ['aprovado', 'recusado', 'pendente'].includes(b.status) ? b.status : null;
     if (!st) return send(res, 400, { erro: 'status inválido' });
-    const { rows: [antes] } = await pool.query('SELECT id, meme_id, campo, status FROM memepedia_edicoes WHERE id = $1', [params[0]]);
-    if (!antes) return send(res, 404, { erro: 'não encontrado' });
-    if (antes.status !== st) {
-      await pool.query('UPDATE memepedia_edicoes SET status = $1, revisado_em = now() WHERE id = $2', [st, params[0]]);
-      await auditar(ctx, 'memepedia.moderar', 'memes:' + antes.meme_id, { edicao_id: antes.id, campo: antes.campo, de: antes.status, para: st });
-    }
-    return send(res, 200, { ok: true });
+    const out = await decidirEdicao(ctx, params[0], st);
+    return send(res, out.status, out.corpo);
   });
+}
+
+/**
+ * Muda o status de uma edição e audita (usado por /api/admin/memepedia/:id e pelo painel em /api/mod/memepedia/edicoes/:id/decidir).
+ * somentePendente: só decide edição que ainda está pendente (409 senão). O UPDATE é condicional ao status lido: duas decisões
+ * ao mesmo tempo não se atropelam (a segunda recebe 409). Devolve { status, corpo } para quem chama responder.
+ */
+export async function decidirEdicao(ctx, id, st, { somentePendente = false } = {}) {
+  const { pool } = ctx;
+  const { rows: [antes] } = await pool.query('SELECT id, meme_id, campo, status FROM memepedia_edicoes WHERE id = $1', [id]);
+  if (!antes) return { status: 404, corpo: { erro: 'não encontrado' } };
+  if (somentePendente && antes.status !== 'pendente') return { status: 409, corpo: { erro: 'essa edição já foi decidida' } };
+  if (antes.status !== st) {
+    const { rowCount } = await pool.query('UPDATE memepedia_edicoes SET status = $1, revisado_em = now() WHERE id = $2 AND status = $3', [st, id, antes.status]);
+    if (!rowCount) return { status: 409, corpo: { erro: 'essa edição mudou ao mesmo tempo; recarregue' } };
+    await auditar(ctx, 'memepedia.moderar', 'memes:' + antes.meme_id, { edicao_id: Number(antes.id), campo: antes.campo, de: antes.status, para: st });
+  }
+  return { status: 200, corpo: { ok: true, edicao_id: Number(antes.id), meme_id: antes.meme_id, campo: antes.campo, status_novo: st } };
 }
