@@ -23,6 +23,7 @@ import authRotas from './routes/auth.js';
 import sobedesce from './routes/sobedesce.js';
 import analytics from './routes/analytics.js';
 import memepedia from './routes/memepedia.js';
+import adminMemepedia from './routes/admin-memepedia.js';
 import perfis from './routes/perfis.js';
 import og from './routes/og.js';
 
@@ -30,6 +31,6 @@ import og from './routes/og.js';
 export function criarApp({ pool, adminToken = '', ytKey = '', autenticar = null, auth = {} } = {}) {
   const cfgAuth = { discord: null, fetch: globalThis.fetch, cookieSecure: true, origemSite: '', ...auth };
   const router = criarRouter({ pool, adminToken, autenticar, extras: { ytKey, auth: cfgAuth } });
-  for (const modulo of [saude, acervo, contribuidores, votos, feedback, comentarios, links, yt, authRotas, economia, sobedesce, analytics, memepedia, perfis, og, admin, adminUsuarios, adminAcervo, envios, arteCarta, adminMcp, adminUploads, mcp]) modulo(router);
+  for (const modulo of [saude, acervo, contribuidores, votos, feedback, comentarios, links, yt, authRotas, economia, sobedesce, analytics, memepedia, adminMemepedia, perfis, og, admin, adminUsuarios, adminAcervo, envios, arteCarta, adminMcp, adminUploads, mcp]) modulo(router);
   return { router, server: http.createServer((req, res) => router.tratar(req, res)) };
 }

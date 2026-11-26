@@ -178,7 +178,7 @@ function verbete(m){
     ${m.cuidado?`<div class="wk-care">${cuidadoHTML(m)}</div>`:""}
     <div class="wk-art"><div>${CAMPOS.map(sec).join("")}
       ${irmaos.length?`<section class="wk-sec"><h2>Memes da mesma época</h2><div class="wk-rel">${irmaos.map(rel).join("")}</div></section>`:""}</div>
-      <aside class="wk-box"><div class="im">${m.cuidado?`<span class="cdo-t">${icon("care","in")}<b>Selo de cuidado</b></span>`:""}${fotoDe(m)?`<img src="${escapeHtml(fotoDe(m))}" alt=""${m.cuidado?' class="cdo-blur"':""}>`:""}</div>
+      <aside class="wk-box"><div class="im">${m.cuidado?`<span class="cdo-t">${icon("care","in")}<b>Selo de cuidado</b></span>`:""}${fotoDe(m)?`<img src="${escapeHtml(fotoDe(m))}" alt="" decoding="async"${m.cuidado?' class="cdo-blur"':""}>`:""}</div>
         <h3>${escapeHtml(m.t)}</h3><dl><dt>Ano</dt><dd>${m.y}</dd><dt>Tipo</dt><dd>${m.tipo==="foto"?"Foto":m.vert?"Vídeo vertical":"Vídeo"}</dd><dt>Categoria</dt><dd>${escapeHtml(m.c)}</dd><dt>Raridade</dt><dd>${escapeHtml(m.r)}</dd>${m.by?`<dt>Origem</dt><dd>${escapeHtml(m.by)}</dd>`:""}${m.canal?`<dt>Canal</dt><dd>${escapeHtml(m.canal)}</dd>`:""}${m.credit?`<dt>Imagem</dt><dd><a href="${escapeHtml(m.credit.url)}" target="_blank" rel="noopener">${escapeHtml(m.credit.by)}</a></dd>`:""}</dl>
         <button class="wk-play" onclick="ver('${m.id}')">${icon(m.tipo==="foto"?"photo":"video","in")}Ver meme</button></aside></div>`;
 }

@@ -35,7 +35,9 @@ const CONGELADAS = {
   '022_chaves_api.sql': '4600991b229b06ef2cd4ba23ec877c176949d2cc121c1cd417699319f89a273d',
   '023_cartas_imagem.sql': 'c2405726803f4ee8fc5aef020ea52852e014c587335791fedb008960af105013',
   '024_analytics.sql': '7459b6d117186116cb0b3e2591efad71882df6f663715f4e0c9eb6ecf428e829',
-  '025_memes_catalogo_doc.sql': 'ebc03e522311623b05ef6cd3e2ad7231735062c7379516680fe9f6467b4e4bd5'
+  '025_memes_catalogo_doc.sql': 'ebc03e522311623b05ef6cd3e2ad7231735062c7379516680fe9f6467b4e4bd5',
+  '030_envios_arte_carta.sql': 'fcbd5363592dbbe4a6a92b6742343945ed9215c5f3ba4f97d03fcb2b338c46d6',
+  '031_memes_catalogo_doc_lote3.sql': '4eb957f7de956511dc3d38eb38d2a141ef53d367d6c1f56145acf8f22ea0590a'
 };
 
 test('migrações já aplicadas em produção não foram editadas (crie uma migração nova em vez disso)', () => {

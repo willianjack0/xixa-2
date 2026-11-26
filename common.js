@@ -590,6 +590,17 @@ const icon=(k,cls)=>`<svg class="ico ${cls||""}" viewBox="0 0 24 24" fill="none"
 function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem("ns_theme",t)}catch(e){}const b=document.getElementById("themeB");if(b){b.setAttribute("aria-checked",t==="dark");b.title=t==="dark"?"Modo escuro ativo · clique para o modo claro":"Modo claro ativo · clique para o modo escuro"}}
 function toggleTheme(){setTheme(document.documentElement.dataset.theme==="light"?"dark":"light")}
 
+// ---- Link "Pular para o conteúdo" (1º item do tab): foca o <main> sem depender de #hash (a 404 usa <base href="/">) ----
+function pularParaConteudo(){
+  if(document.querySelector(".skip-link"))return;
+  const a=document.createElement("a");a.className="skip-link";a.href="#conteudo";a.textContent="Pular para o conteúdo";
+  a.addEventListener("click",e=>{
+    const m=document.querySelector("main");if(!m)return;
+    e.preventDefault();if(!m.hasAttribute("tabindex"))m.setAttribute("tabindex","-1");
+    m.focus({preventScroll:true});m.scrollIntoView({block:"start"});
+  });
+  document.body.prepend(a);
+}
 // ---- Cabeçalho + sub-menu compartilhados ----
 // page: "inicio" | "album"; sub: [{k,ic,label,fn,cta,dd,href}]
 function renderHeader(page,opt={}){
@@ -598,6 +609,7 @@ function renderHeader(page,opt={}){
    <div class="tools">${opt.search?`<label class="srch">${icon("search","s-ic")}<input id="q" type="search" placeholder="Buscar memes, anos, categorias…" aria-label="Buscar"></label>`:""}
    <div id="wallet"></div><div id="acct"></div><button class="tsw" id="themeB" role="switch" aria-label="Modo escuro" onclick="toggleTheme()">${icon("sun","t-l")}${icon("moon","t-d")}</button></div>`;
   document.body.prepend(hd);
+  pularParaConteudo();
   const tools=hd.querySelector(".tools");
   tools.insertAdjacentHTML("beforebegin",`<button type="button" class="hd-icon menu-toggle" aria-label="Menu principal" aria-expanded="false" aria-controls="header-menu">${icon("menu")}</button>
     <div class="header-menu" id="header-menu">
@@ -795,7 +807,7 @@ function renderFooter(){
         <span class="fq-l1">Tem ideia, bug ou crítica?</span><span class="fq-l2">Ajoelha e envia: a gente lê tudo.</span></span>
       <span class="fq-acts"><button class="fq-go" onclick="openFeedback()">${icon("send")}Mandar feedback</button><a class="fq-go alt" href="/contribuir/">${icon("user")}Quero contribuir</a></span>
     </div>
-    <img class="ft-boneco" src="boneco.png?v=2" alt="" width="478" height="600">
+    <img class="ft-boneco" src="boneco.png?v=2" alt="" width="478" height="600" loading="lazy" decoding="async">
   </div></div>`;
   document.body.appendChild(f);
   mostrarVersao();

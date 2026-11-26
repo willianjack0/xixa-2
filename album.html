@@ -283,7 +283,7 @@ function cardHTML(c,opt={}){
   return `<button class="card ${FOIL.has(c.r)?'foil':''} ${c.r} ${opt.sel?'sel':''}" style="--rc:${rc}" onclick="pick('${c.id}')">
    <div class="top"><span>${c.num}</span><em>${c.r}</em></div>
    ${favId()===c.id?'<span class="star">⭐</span>':''}${owned(c)>1&&!opt.force?`<span class="cp">x${owned(c)}</span>`:''}${c.y?`<span class="yr">${c.y}</span>`:""}
-   <div class="art" style="background:linear-gradient(150deg,${col.bg[0]},${col.bg[1]})">${cardArt(c)?`<img src="${cardArt(c)}" alt="" loading="lazy" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:""}<span class="emo"${cardArt(c)?" hidden":""}>${c.e}</span></div>
+   <div class="art" style="background:linear-gradient(150deg,${col.bg[0]},${col.bg[1]})">${cardArt(c)?`<img src="${cardArt(c)}" alt="" loading="lazy" decoding="async" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:""}<span class="emo"${cardArt(c)?" hidden":""}>${c.e}</span></div>
    <div class="nm">${escapeHtml(c.name)}</div><div class="ft">${col.n.toUpperCase()}</div></button>`;
 }
 function renderCols(){
@@ -303,7 +303,7 @@ function slotHTML(c,sel){
   const has=owned(c)>0,col=COLLECTIONS[c.ci],yt=cardArt(c),n=owned(c);
   const rot=((c.i*37+c.ci*11)%5-2)*.6;
   return `<div class="slot"><button type="button" class="vaga${sel?" sel":""}" onclick="pick('${c.id}')" aria-label="${has?`${escapeHtml(c.name)}, ${c.r}, número ${c.num}${n>1?`, ${n} cópias`:""}`:`Carta ${c.num}: você ainda não tem`}">
-   <b class="nv">${c.num}</b>${has?`<span class="fig${FOIL.has(c.r)?" foil":""}" style="--bg:linear-gradient(150deg,${col.bg[0]},${col.bg[1]});--rc:var(--${c.r});--rot:${rot}deg"><span class="art">${yt?`<img src="${yt}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:""}<span class="emo"${yt?" hidden":""}>${c.e}</span></span><span class="tag">${+c.num}</span><span class="rar">${c.r}</span>${n>1?`<span class="cp">x${n}</span>`:""}${favId()===c.id?'<span class="star" aria-hidden="true">⭐</span>':""}</span>`:""}
+   <b class="nv">${c.num}</b>${has?`<span class="fig${FOIL.has(c.r)?" foil":""}" style="--bg:linear-gradient(150deg,${col.bg[0]},${col.bg[1]});--rc:var(--${c.r});--rot:${rot}deg"><span class="art">${yt?`<img src="${yt}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:""}<span class="emo"${yt?" hidden":""}>${c.e}</span></span><span class="tag">${+c.num}</span><span class="rar">${c.r}</span>${n>1?`<span class="cp">x${n}</span>`:""}${favId()===c.id?'<span class="star" aria-hidden="true">⭐</span>':""}</span>`:""}
   </button><div class="nm">${has?escapeHtml(c.name):"???"}</div></div>`;
 }
 const premioHTML=(col,list)=>`Complete do nº ${list[0].num} ao nº ${list[list.length-1].num} e ganhe um <b>bônus de moedas e XP!</b>`;

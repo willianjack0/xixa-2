@@ -1,5 +1,66 @@
 # Backup e restauração do Postgres
 
+## Produção (vp3): backup automático na stack
+
+O banco `naosalvo` do vp3 é salvo por um serviço `backup` dentro de `deploy/vp3/stack.yml` (o Portainer sobe junto com a stack). As seções abaixo sobre o servidor 2 (`lab4`) são histórico: o naosalvo não roda mais lá.
+
+- **Quando:** um dump logo que o serviço sobe, e depois 2x ao dia, às **03:00 e 12:00 de Brasília** (06:00 e 15:00 UTC).
+- **O que faz:** `pg_dump -Fc --no-owner`, grava em `.partial`, valida com `pg_restore --list` e só então renomeia para `naosalvo_AAAAMMDD_HHMMSSZ.dump`. Dump quebrado nunca aparece como backup.
+- **Retenção:** apaga dumps com mais de 14 dias, nunca deixando menos que 3.
+- **Onde fica:** `/opt/naosalvo-backups` no host do vp3 (pasta `700`, arquivos `600`). Crie a pasta uma vez, antes do deploy da stack: `mkdir -p /opt/naosalvo-backups && chmod 700 /opt/naosalvo-backups`.
+- **Marcadores:** `ULTIMO_OK` (data do último dump bom) e `ULTIMA_FALHA` (existe só se o último falhou). Conferir: `cat /opt/naosalvo-backups/ULTIMO_OK` e `docker service logs naosalvo_backup --tail 20`.
+- **Senha:** do Docker secret `naosalvo_db_password`; nada no repositório.
+- **Antes de uma promoção com migração pesada:** rode um backup à mão (reinicie o serviço: `docker service update --force naosalvo_backup` faz um dump na subida) e confira o `ULTIMO_OK`.
+
+### Restaurar (incidente)
+
+```bash
+# 1. copie o dump mais novo para uma pasta de trabalho
+ls -1t /opt/naosalvo-backups/naosalvo_*.dump | head -3
+# 2. teste primeiro num banco descartável (mesma versão major, 14)
+docker run -d --name pg-restore-teste -e POSTGRES_PASSWORD=x postgres:14
+docker exec -i pg-restore-teste pg_restore -U postgres --no-owner -C -d postgres < /opt/naosalvo-backups/naosalvo_XXXX.dump
+# 3. só depois, na produção: pare a API, restaure no banco naosalvo e suba a API (veja "Restaurar de verdade" abaixo)
+```
+
+### Cópia fora do servidor: servidor 2 puxa para `/mnt/lab_data/backup`
+
+Dump no mesmo disco do banco não protege contra perda do servidor. O destino escolhido é o disco do laboratório: `/mnt/lab_data/backup/naosalvo-vp3` no servidor 2 (`lab4`), que o Windows enxerga como `\\192.168.0.9\lab_data\backup\naosalvo-vp3`. Como o vp3 não alcança a rede do laboratório, o **servidor 2 puxa** (script `scripts/backup/puxar-do-vp3.sh`, por `rsync` sobre SSH), 2x ao dia, logo depois de cada dump.
+
+O script copia só `naosalvo_*.dump` e os marcadores, **sem apagar nada no vp3**, confere que o `ULTIMO_OK` não é mais velho que 30 h, valida o dump mais novo com `pg_restore --list`, guarda 60 dias (mínimo 10) e escreve `ALERTA.txt` na pasta de destino se algo falhar (saída 1).
+
+**Instalação (uma vez). Os passos 1 e 3 mexem em acesso SSH do vp3: faça com consciência.**
+
+1. No **servidor 2**, crie uma chave só para isso (sem senha, porque o cron roda sozinho):
+   ```bash
+   ssh-keygen -t ed25519 -N '' -C naosalvo-backup-pull -f ~/.ssh/naosalvo_backup_ed25519
+   cat ~/.ssh/naosalvo_backup_ed25519.pub
+   ```
+2. No **vp3**, confirme onde está o `rrsync` (vem no pacote `rsync`): `command -v rrsync` (em geral `/usr/bin/rrsync`).
+3. No **vp3**, acrescente **uma linha** ao `/root/.ssh/authorized_keys` com a chave pública do passo 1, presa a leitura da pasta de backups (não dá shell, não escreve, não sai dessa pasta):
+   ```
+   restrict,command="/usr/bin/rrsync -ro /opt/naosalvo-backups" ssh-ed25519 AAAA...resto-da-chave naosalvo-backup-pull
+   ```
+4. No **servidor 2**, rode uma vez à mão e confira a saída `ok:` e os arquivos em `/mnt/lab_data/backup/naosalvo-vp3`:
+   ```bash
+   bash /mnt/lab_data/github/naosalvo-2/scripts/backup/puxar-do-vp3.sh
+   ```
+5. No **servidor 2**, agende (o serviço do vp3 gera dumps às 03:00 e 12:00 de Brasília; ajuste ao fuso do servidor):
+   ```cron
+   # /etc/cron.d/naosalvo-copia-backup
+   30 3,12 * * * jack bash /mnt/lab_data/github/naosalvo-2/scripts/backup/puxar-do-vp3.sh >> /mnt/lab_data/backup/naosalvo-vp3/copia.log 2>&1
+   ```
+
+Para revogar o acesso, apague a linha do passo 3 no vp3. A chave não consegue ler mais nada além de `/opt/naosalvo-backups`.
+
+**Segunda opção, se um dia o servidor 2 deixar de servir:** enviar para um bucket de outro provedor (Backblaze B2, Cloudflare R2) com `rclone` e uma chave só de escrita. O MinIO do próprio vp3 só protege contra falha do Postgres, não do servidor.
+
+### Alerta
+
+O serviço marca `ULTIMA_FALHA` e escreve `backup FALHOU` no log. Ainda falta ligar isso a um aviso (monitor de uptime ou checagem diária do `ULTIMO_OK`).
+
+---
+
 Script: `scripts/backup/pg-backup.sh`. Faz `pg_dump -Fc` (formato custom, comprimido) dos bancos `naosalvo` e `naosalvo_dev`, valida cada dump com `pg_restore --list`, e apaga os antigos pela retenção. Sem credenciais no script.
 
 ## Configuração

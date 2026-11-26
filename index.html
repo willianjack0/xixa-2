@@ -185,19 +185,19 @@ main{display:flex;flex-direction:column}
       <div class="btns"><a class="btn" href="linha-do-tempo.html"><i data-ic="timeline"></i>Explorar por ano</a><button class="btn ghost" data-gate="logado" onclick="openSubmit()"><i data-ic="send"></i>Enviar meme</button></div>
     </div>
     <div>
-      <div class="sec-title"><span><i data-ic="star"></i>Clássicos da internet brasileira</span><a onclick="setView('todos')">Ver todos →</a></div>
+      <div class="sec-title"><span role="heading" aria-level="2"><i data-ic="star"></i>Clássicos da internet brasileira</span><a onclick="setView('todos')">Ver todos →</a></div>
       <div class="classics" id="rail"></div>
     </div>
   </section>
 
   <section class="pulse">
-    <div class="panel"><div class="sec-title"><span><i data-ic="clock"></i>Hoje na história da web</span><a onclick="randomPick()"><i data-ic="random"></i>Aleatório</a></div><div id="today"></div></div>
+    <div class="panel"><div class="sec-title"><span role="heading" aria-level="2"><i data-ic="clock"></i>Hoje na história da web</span><a onclick="randomPick()"><i data-ic="random"></i>Aleatório</a></div><div id="today"></div></div>
     <div class="panel sdp"><div id="hot"></div></div>
-    <div class="panel"><div class="sec-title"><span><i data-ic="new"></i>Últimos adicionados</span><a data-gate="moderador" onclick="openMod()">Fila →</a></div><div id="latest"></div></div>
+    <div class="panel"><div class="sec-title"><span role="heading" aria-level="2"><i data-ic="new"></i>Últimos adicionados</span><a data-gate="moderador" onclick="openMod()">Fila →</a></div><div id="latest"></div></div>
   </section>
 
   <section class="timeline" id="tl">
-    <div class="sec-title"><span><i data-ic="clock"></i>Linha do tempo da internet brasileira</span><a href="linha-do-tempo.html">Ver todos os anos →</a></div>
+    <div class="sec-title"><span role="heading" aria-level="2"><i data-ic="clock"></i>Linha do tempo da internet brasileira</span><a href="linha-do-tempo.html">Ver todos os anos →</a></div>
     <div class="decs" id="decs" role="group" aria-label="Décadas"></div>
     <div class="years" id="years"></div>
     <div class="stage">
@@ -208,7 +208,7 @@ main{display:flex;flex-direction:column}
   </section>
 
   <section id="browse">
-    <div class="sec-title"><span id="browseTitle">Todos os registros</span><a data-gate="logado" onclick="openSubmit()"><i data-ic="send"></i>Enviar meme</a></div>
+    <div class="sec-title"><span role="heading" aria-level="2" id="browseTitle">Todos os registros</span><a data-gate="logado" onclick="openSubmit()"><i data-ic="send"></i>Enviar meme</a></div>
     <div class="chips" id="chips"></div>
     <div class="grid" id="grid"></div>
   </section>
@@ -329,7 +329,7 @@ async function renderSobeDesce(){
     return`<button class="sd-i ${u?"up":"dn"}" onclick="openM('${a.id}')">${icon(u?"arrowUp":"arrowDown")}<span><u>${escapeHtml(a.t)}</u><small>${sub}</small></span></button>`};
   const vazio=u=>`<p class="sd-vz">${u?(SD.periodo==="hoje"?`Ninguém ${SD.tipo==="visitados"?"abriu":"deu play em"} um meme hoje. Seja o primeiro!`:"Ainda sem dados."):(SD.periodo==="hoje"?"Nada caiu desde ontem.":"Ainda sem dados.")}</p>`;
   const ups=d.sobe.map(x=>li(x,1)).join(""),dns=d.desce.map(x=>li(x,0)).join("");
-  el.querySelectorAll(".sd-nota").forEach(x=>x.remove());el.querySelector(".sd").outerHTML=`<div class="sd" id="sd-painel" role="tabpanel" aria-labelledby="sd-tab-${SD.tipo}"><div><h6 class="up">${icon("arrowUp")}sobe</h6>${ups||vazio(1)}</div><div><h6 class="dn">${icon("arrowDown")}desce</h6>${dns||vazio(0)}</div></div>${d.local?`<p class="sd-nota">Contando só os acessos deste navegador até o site entrar no ar.</p>`:""}`;
+  el.querySelectorAll(".sd-nota").forEach(x=>x.remove());el.querySelector(".sd").outerHTML=`<div class="sd" id="sd-painel" role="tabpanel" aria-labelledby="sd-tab-${SD.tipo}"><div><h6 class="up" aria-level="3">${icon("arrowUp")}sobe</h6>${ups||vazio(1)}</div><div><h6 class="dn" aria-level="3">${icon("arrowDown")}desce</h6>${dns||vazio(0)}</div></div>${d.local?`<p class="sd-nota">Contando só os acessos deste navegador até o site entrar no ar.</p>`:""}`;
 }
 
 // ---- Linha do tempo (layout original) ----
