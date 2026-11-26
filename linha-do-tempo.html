@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css?v=20261203a">
-<link rel="stylesheet" href="viewer.css?v=20261203a">
+<link rel="stylesheet" href="viewer.css?v=20261205a">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 <style>
 /* ===== estrutura (identidade do site) ===== */
@@ -157,7 +157,7 @@ body.ep-xp .lt-top small{color:#fff}
 .th-95 .lt-d{color:#800000;font-family:"Courier New",monospace}
 .th-95 .lt-cat{background:#ffff00;border-radius:0;border:1px solid #000}
 .th-95 .lt-mais button{background:#c0c0c0;border:2px solid;border-color:#fff #404040 #404040 #fff;border-radius:0;font-family:"MS Sans Serif",Tahoma,sans-serif;color:#000}
-/* 2000–2003: Windows XP + Kazaa/ICQ */
+/* 2000 a 2003: Windows XP + Kazaa/ICQ */
 .th-xp{background:linear-gradient(180deg,#3a8ee6 0%,#7ec0f5 45%,#5fae3e 46%,#3f8f2a 100%);color:#000;font-family:Tahoma,Verdana,sans-serif;--lt-bg:#ece9d8}
 .th-xp .lt-hero{background:#ece9d8;margin:16px;border:3px solid #0a54d6;border-top:30px solid #0a54d6;border-radius:8px 8px 0 0;box-shadow:0 10px 30px #0005}
 .th-xp .lt-hero:before{content:"Explorando a internet - Kazaa Media Desktop";position:absolute;left:10px;top:-24px;color:#fff;font:bold 13px Tahoma,sans-serif;text-shadow:1px 1px #0005}
@@ -440,7 +440,7 @@ body.ep-xp .lt-top small{color:#fff}
 </main>
 
 <script src="common.js?v=20261203a"></script>
-<script src="data.js?v=20261201a"></script>
+<script src="data.js?v=20261204a"></script>
 <script src="player.js?v=20261130c"></script>
 <script src="viewer.js?v=20261203a"></script>
 <script src="alertas.js?v=20261125b"></script>
@@ -455,7 +455,9 @@ renderHeader("tl",{sub:[
 ]});
 setSubOn("tl");renderWallet();
 const $=id=>document.getElementById(id);
-const yKey=y=>{y=parseInt(y)||2020;return y<2000?"1995–1999":y<=2003?"2000–2003":y>=2026?"2026":String(y)};
+const yKey=y=>{y=parseInt(y)||2020;return y<2000?"1995–1999":y>=2026?"2026":String(y)};
+// endereços antigos: os anos 2000–2003 eram um bloco só; agora cada ano tem a sua página
+const ANO_LEGADO={"2000–2003":"2000","2000-2003":"2000"};
 const temAno=k=>typeof k==="string"&&Object.hasOwn(YEAR_INFO,k); // "#constructor" e afins não são anos
 const yLab=k=>(temAno(k)&&YEAR_INFO[k].rot)||k;
 const KEYS=Object.keys(YEAR_INFO).sort((a,b)=>parseInt(a)-parseInt(b));
@@ -471,7 +473,10 @@ const epAnos=e=>{const ks=KEYS.filter(k=>EPOCA(k)===e),g=[];ks.forEach(k=>{const
 // detalhe de cada ano (faixinha e notícia correndo)
 const DETALHE={
  "1995–1999":["👁 Você é o visitante nº 000.031.415","Bem-vindo à minha home page!!! · Melhor visualizado em 800x600 · Página em construção 🚧 · Assine meu livro de visitas"],
- "2000–2003":["⬇ baixando musica_nova.mp3 · 2 dias restantes","ICQ: uh-oh! · Kazaa · Winamp: it really whips · Discador da internet grátis conectado a 56 Kbps"],
+ "2000":["💾 Bug do milênio: tudo certo, o mundo não acabou","Discador conectando… · Internet grátis a 56 Kbps · Napster: baixando musica.mp3"],
+ "2001":["⬇ baixando musica_nova.mp3 · 2 dias restantes","ICQ: uh-oh! · Kazaa · Winamp: it really whips · Casa dos Artistas ao vivo no SBT"],
+ "2002":["🏆 Penta! Brasil campeão do mundo","MSN Messenger: Fulano acabou de entrar · ICQ: uh-oh! · Big Brother Brasil 1"],
+ "2003":["📶 Banda larga instalada! Adeus, barulho do modem","Kazaa · Winamp · funk no domingo · CD gravado com as mais tocadas"],
  "2004":["💜 Você tem 3 scraps novos","O Orkut chegou · Comunidade “Eu odeio acordar cedo” · Fulano quer ser seu amigo"],
  "2005":["📷 12 assinaturas novas no seu flog","Nasce o YouTube · Fotolog com fila para postar · Lan house lotada · Joseph Climber no e-mail"],
  "2006":["📼 Vídeos caseiros","Tapa na Pantera · Sanduíche-íche · Cansei de ser sexy"],
@@ -551,13 +556,13 @@ function ver(id){const m=ALL.find(x=>x.id===id);if(!m)return;const rel=ALL.filte
   openViewer(m,{related:rel,onPick:ver,onYear:y=>ir(yKey(y))})}
 $("yl").onclick=()=>{const i=KEYS.indexOf(ST.ano);if(KEYS[i-1])ir(KEYS[i-1],()=>$("yl").disabled?$("yr"):$("yl"))};$("yr").onclick=()=>{const i=KEYS.indexOf(ST.ano);if(KEYS[i+1])ir(KEYS[i+1],()=>$("yr").disabled?$("yl"):$("yr"))};
 addEventListener("keydown",e=>{if(document.querySelector(".vw"))return;const i=KEYS.indexOf(ST.ano);if(e.key==="ArrowRight"&&KEYS[i+1])ir(KEYS[i+1]);if(e.key==="ArrowLeft"&&KEYS[i-1])ir(KEYS[i-1])});
-addEventListener("hashchange",()=>{const h=decodeURIComponent(location.hash.slice(1));const k=temAno(h)?h:/^\d{4}$/.test(h)?yKey(h):null;if(k&&k!==ST.ano)ir(k)});
+addEventListener("hashchange",()=>{let h=decodeURIComponent(location.hash.slice(1));h=ANO_LEGADO[h]||h;const k=temAno(h)?h:/^\d{4}$/.test(h)?yKey(h):null;if(k&&k!==ST.ano)ir(k)});
 // sem ano no endereço (veio pelo menu "Linha do tempo"): abre num ano sorteado que a pessoa ainda não viu, como na home
 // (a lista de anos vistos é a mesma da home: ns_anos_vistos)
 function anosVistos(){try{const v=JSON.parse(localStorage.getItem("ns_anos_vistos")||"[]");return Array.isArray(v)?v.filter(x=>typeof x==="string"):[]}catch(e){return[]}}
 function marcarAnoVisto(k){try{const v=anosVistos();if(!v.includes(k)){v.push(k);localStorage.setItem("ns_anos_vistos",JSON.stringify(v.slice(-60)))}}catch(e){}}
 function anoSorteado(){const vis=anosVistos(),novos=KEYS.filter(k=>!vis.includes(k));const L=novos.length?novos:KEYS;return L[Math.floor(Math.random()*L.length)]||"2012"}
-const h0=decodeURIComponent(location.hash.slice(1));ST.ano=temAno(h0)?h0:/^\d{4}$/.test(h0)?yKey(h0):anoSorteado();
+let h0=decodeURIComponent(location.hash.slice(1));h0=ANO_LEGADO[h0]||h0;ST.ano=temAno(h0)?h0:/^\d{4}$/.test(h0)?yKey(h0):anoSorteado();
 marcarAnoVisto(ST.ano);
 anos();palco();
 // o acervo do servidor chegou (link trocado, meme novo ou oculto): refaz a régua e o palco no mesmo ano

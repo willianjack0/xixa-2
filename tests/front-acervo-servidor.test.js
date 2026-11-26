@@ -133,3 +133,27 @@ test("Shorts do YouTube abrem em pé, no visual de app de vídeo curto (lista co
   assert.deepStrictEqual(erros, []);
   await ctx.close();
 });
+
+test("player preenchido: na home o vídeo ocupa a largura da janela (sem faixas brancas), inclusive o de 4:3 de 2005", opts, async () => {
+  const { ctx, page, erros } = await abrir("/linha-do-tempo.html#2012");
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto(base + "/index.html");
+  await page.waitForFunction(() => typeof openViewer === "function" && typeof MEMES !== "undefined");
+  for (const id of ["o-pintinho-piu", "gordinho-da-saveiro", "cleiton-rasta-cabeca-de-gelo", "carminha-me-serve-vadia", "jeremias-muito-louco"]) {
+    const tem = await page.evaluate((id) => MEMES.some((m) => m.id === id), id);
+    if (!tem) continue;
+    await page.evaluate((id) => openViewer(MEMES.find((m) => m.id === id)), id);
+    await page.waitForTimeout(400);
+    const r = await page.evaluate(() => {
+      const main = document.querySelector(".vw .yc>main"), yc = main.parentElement, tela = document.querySelector(".vw .vp-screen");
+      const cy = getComputedStyle(yc), larg = yc.clientWidth - parseFloat(cy.paddingLeft) - parseFloat(cy.paddingRight);
+      return { main: main.getBoundingClientRect().width, larg, tela: tela.getBoundingClientRect().width, base: tela.getBoundingClientRect().bottom, alt: innerHeight };
+    });
+    assert.ok(Math.abs(r.main - r.larg) < 2, id + ": o conteúdo ocupa a coluna toda " + JSON.stringify(r));
+    assert.ok(r.tela >= r.larg * 0.8 || r.base >= r.alt - 80, id + ": vídeo largo (ou limitado pela altura) " + JSON.stringify(r));
+    assert.ok(r.base <= r.alt, id + ": o vídeo cabe na tela");
+    await page.evaluate(() => closeViewer());
+  }
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});

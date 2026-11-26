@@ -96,6 +96,14 @@ button:hover>.thumb>.play,button:hover>.ct>.play,.tthumb:hover>.play,.card:hover
 .timeline{border:0;border-radius:24px;padding:20px 24px 24px;background:var(--panel);box-shadow:0 1px 2px #0000000d,0 10px 34px #00000014}
 :root[data-theme="dark"] .timeline{box-shadow:0 0 0 1px var(--line),0 10px 34px #0005}
 .years{padding:16px 0 6px}
+/* abas de década em cima da linha do tempo */
+.decs{display:flex;gap:6px;padding:4px;margin:2px 0 4px;border-radius:14px;background:var(--sunk);width:max-content;max-width:100%}
+.decs button{border:0;background:none;min-height:44px;padding:0 18px;border-radius:10px;font:700 14px Inter,sans-serif;color:var(--mut);white-space:nowrap;cursor:pointer;transition:color .15s,background .15s}
+.decs button:hover{color:var(--txt)}
+.decs button.on{background:var(--panel);color:var(--brand-text);box-shadow:0 2px 8px #0000001a}
+:root[data-theme="dark"] .decs button.on{box-shadow:0 0 0 1px var(--line2)}
+.decs button:focus-visible{outline:3px solid #ffbf00;outline-offset:2px}
+@media(max-width:760px){.decs{display:grid;grid-template-columns:repeat(4,1fr);width:auto;margin:4px 16px 0}.decs button{padding:0 4px;font-size:13px}}
 .timeline .years{gap:0;scrollbar-width:none}
 .timeline .years::-webkit-scrollbar{display:none}
 .timeline .years::before{content:none}
@@ -169,7 +177,7 @@ button:hover>.thumb>.play,button:hover>.ct>.play,.tthumb:hover>.play,.card:hover
   .years{gap:8px;padding:8px 16px 12px;justify-content:flex-start;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 16px),transparent);mask:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 16px),transparent)}
   .years::-webkit-scrollbar{display:none}
   .years::before{display:none}
-  .y{flex:0 0 auto;min-width:0;padding:8px 14px;border-radius:99px;font-size:15px;background:var(--sunk);box-shadow:0 0 0 1px var(--line);scroll-snap-align:center;color:var(--mut)}
+  .y{flex:0 0 auto;min-width:0;min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:8px 14px;border-radius:99px;font-size:15px;background:var(--sunk);box-shadow:0 0 0 1px var(--line);scroll-snap-align:center;color:var(--mut)}
   .y::after{display:none}
   .y.on{font-size:15px;background:var(--brand-fill);color:var(--on-brand);box-shadow:0 4px 14px var(--glow)}
   .stage{display:block;margin:0}

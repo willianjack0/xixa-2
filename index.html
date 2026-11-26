@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://i.ytimg.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css?v=20261203a">
-<link rel="stylesheet" href="viewer.css?v=20261203a">
+<link rel="stylesheet" href="viewer.css?v=20261205a">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 <style>
 main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
@@ -170,7 +170,7 @@ main{display:flex;flex-direction:column}
 .top,.cur{grid-template-columns:1fr}.stage{grid-template-columns:1fr}.side{display:none}.rail{grid-template-columns:1fr 1fr}.rail .card:nth-child(3){display:none}main{padding:16px 16px 40px}}
 @media(max-width:600px){.f .two{grid-template-columns:1fr}.today{grid-template-columns:110px 1fr}.box .body{padding:16px}}
 </style>
-<link rel="stylesheet" href="home.css?v=20261125a">
+<link rel="stylesheet" href="home.css?v=20261204b">
 </head>
 <body class="home">
 <div class="rays-wrap" aria-hidden="true"><div class="rays" id="rays"></div></div>
@@ -198,6 +198,7 @@ main{display:flex;flex-direction:column}
 
   <section class="timeline" id="tl">
     <div class="sec-title"><span><i data-ic="clock"></i>Linha do tempo da internet brasileira</span><a href="linha-do-tempo.html">Ver todos os anos →</a></div>
+    <div class="decs" id="decs" role="group" aria-label="Décadas"></div>
     <div class="years" id="years"></div>
     <div class="stage">
       <div class="side" id="prev"></div>
@@ -224,7 +225,7 @@ main{display:flex;flex-direction:column}
 <div class="modal" id="modal" onclick="if(event.target===this)closeM()"><div class="box" id="box"></div></div>
 
 <script src="common.js?v=20261203a"></script>
-<script src="data.js?v=20261201a"></script>
+<script src="data.js?v=20261204a"></script>
 <script src="player.js?v=20261130c"></script>
 <script src="viewer.js?v=20261203a"></script>
 <script src="alertas.js?v=20261125b"></script>
@@ -234,7 +235,9 @@ document.querySelectorAll("[data-ic]").forEach(e=>e.outerHTML=icon(e.dataset.ic)
 // ===================== ACERVO =====================
 const CAT_IC={"Vídeos":"video","TV":"tv","Música":"music","Cultura":"culture","Zoeira":"zoeira","Fotos":"photo","Esportes":"sports"};
 const CAT_EMO={"Vídeos":"🎞️","TV":"📺","Música":"🎵","Cultura":"🌐","Zoeira":"🤡","Fotos":"📸","Esportes":"⚽"};
-const yKey=y=>{y=parseInt(y)||2020;return y<2000?"1995–1999":y<=2003?"2000–2003":y>=2026?"2026":String(y)};
+const yKey=y=>{y=parseInt(y)||2020;return y<2000?"1995–1999":y>=2026?"2026":String(y)};
+// endereços antigos: os anos 2000–2003 eram um bloco só; agora cada ano tem a sua página
+const ANO_LEGADO={"2000–2003":"2000","2000-2003":"2000"};
 const yLab=k=>(YEAR_INFO[k]&&YEAR_INFO[k].rot)||k;
 const KEYS=Object.keys(YEAR_INFO).sort((a,b)=>parseInt(a)-parseInt(b)); // "2004" vem antes de "1995–1999" no Object.keys
 const GRAD=["#1d3a8a,#0b0f2a","#5b1d8a,#14061f","#8a3a1d,#2a0f06","#1d8a6e,#06241d","#8a1d4a,#240614","#1d6e8a,#06202a","#7a8a1d,#1f2406"];
@@ -340,8 +343,17 @@ async function renderSobeDesce(){
 }
 
 // ---- Linha do tempo (layout original) ----
+// décadas: as abas em cima da linha; a linha mostra só os anos da década do ano atual (no máximo 10)
+const DECADAS=[["90","Anos 90"],["2000","Anos 2000"],["2010","Anos 2010"],["2020","Anos 2020"]];
+const decada=k=>{const y=parseInt(k);return y<2000?"90":y<2010?"2000":y<2020?"2010":"2020"};
+const anosDaDecada=d=>KEYS.filter(k=>decada(k)===d);
+function irDecada(d){const l=anosDaDecada(d);if(l.length&&decada(cur)!==d)go(l[0])}
 function renderYears(){
-  $("years").innerHTML=KEYS.map(y=>`<button class="y ${y===cur?'on':''}" onclick="go('${y}')">${yLab(y)}</button>`).join("");
+  const d=decada(cur);
+  const teclado=document.activeElement&&document.activeElement.closest&&document.activeElement.closest("#decs");
+  $("decs").innerHTML=DECADAS.filter(([k])=>anosDaDecada(k).length).map(([k,l])=>`<button type="button" class="${k===d?"on":""}" aria-pressed="${k===d}" onclick="irDecada('${k}')">${l}</button>`).join("");
+  if(teclado){const b=$("decs").querySelector("button.on");if(b)b.focus({preventScroll:true})} // innerHTML destrói o botão focado: devolve o foco à aba ativa
+  $("years").innerHTML=anosDaDecada(d).map(y=>`<button class="y ${y===cur?'on':''}" onclick="go('${y}')">${yLab(y)}</button>`).join("");
   const ys=$("years"),el=ys.querySelector(".on");if(el)ys.scrollTo({left:el.offsetLeft-ys.clientWidth/2+el.clientWidth/2,behavior:"smooth"});
 }
 // prévia da linha do tempo: 3 memes sorteados a cada visita (e a cada volta ao ano), misturando vídeo e foto quando houver
@@ -367,7 +379,7 @@ function renderCur(){
   el.innerHTML=`<div class="cur-t"><div class="cur-h"><button class="mnav" ${p?`onclick="go('${p}')"`:"disabled"} aria-label="Ano anterior">‹</button><div><h2 class="disp">${yLab(cur)}</h2><div class="lema">${d.lema}</div></div><button class="mnav" ${n?`onclick="go('${n}')"`:"disabled"} aria-label="Próximo ano">›</button></div>
     <p>${d.txt}</p><button class="btn dexp" onclick="${exp}">Explorar ${yLab(cur)} →</button></div>
     <div class="mini">${fill.join("")}</div>
-    <div class="mfoot"><span class="mdots">${KEYS.map(k=>`<i class="${k===cur?"on":""}"></i>`).join("")}</span><button class="btn mexp" onclick="${exp}">Ver tudo de ${yLab(cur)} →</button></div>`;
+    <div class="mfoot"><span class="mdots">${anosDaDecada(decada(cur)).map(k=>`<i class="${k===cur?"on":""}"></i>`).join("")}</span><button class="btn mexp" onclick="${exp}">Ver tudo de ${yLab(cur)} →</button></div>`;
 }
 function renderGrid(){
   let list=ALL,title="Todos os registros";
@@ -582,7 +594,7 @@ const timerTick=setInterval(()=>{
   const m=Math.floor((Date.now()-t0)/60000);
   b.textContent=m<1?"Você chegou agora":"Você está aqui há";el.textContent=m<1?"Bem-vindo ao museu.":m+" min passeando pelo museu.";
 },15000);
-const h=decodeURIComponent(location.hash.slice(1)).replace("mais","+");if(Object.hasOwn(YEAR_INFO,h))cur=h;else if(/^\d{4}$/.test(h))cur=yKey(h);
+let h=decodeURIComponent(location.hash.slice(1)).replace("mais","+");h=ANO_LEGADO[h]||h;if(Object.hasOwn(YEAR_INFO,h))cur=h;else if(/^\d{4}$/.test(h))cur=yKey(h);
 renderWallet();renderAll();scheduleApprovals();
 if(["rank","mod","send","rand","tl","todos"].includes(h))setTimeout(()=>{ftGo(h);history.replaceState(null,"",location.pathname)},300);
 // centraliza os raios do fundo no logo

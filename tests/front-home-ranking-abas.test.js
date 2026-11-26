@@ -89,3 +89,34 @@ test("no desktop as abas continuam compactas", opts, async () => {
   assert.ok(h < 44, "desktop mantém a altura compacta: " + h);
   await ctx.close();
 });
+
+// linha do tempo da home: abas de década em cima; a linha com bolinhas mostra só os anos da década (2000 a 2003 separados)
+for (const vp of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
+  test(`linha do tempo da home ${vp.width}px: abas de década e anos 2000, 2001, 2002, 2003 separados`, opts, async () => {
+    const { ctx, page, erros } = await abrir({ vp });
+    await page.evaluate(() => go("2001"));
+    const est = () => page.evaluate(() => ({ cur, aba: document.querySelector("#decs .on").textContent, anos: [...document.querySelectorAll("#years .y")].map((b) => b.textContent), dots: document.querySelectorAll(".mdots i").length }));
+    let e = await est();
+    assert.strictEqual(e.aba, "Anos 2000");
+    assert.deepStrictEqual(e.anos, ["2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009"]);
+    assert.deepStrictEqual(await page.$$eval("#decs button", (l) => l.map((b) => b.textContent)), ["Anos 90", "Anos 2000", "Anos 2010", "Anos 2020"], "só o nome da década, sem contagem");
+    for (const b of await page.$$eval("#decs button", (l) => l.map((x) => x.getBoundingClientRect()))) assert.ok(b.height >= 44 && b.width >= 44);
+    await page.click('#decs button:has-text("Anos 2010")');
+    e = await est(); assert.strictEqual(e.cur, "2010"); assert.strictEqual(e.anos.length, 10); assert.strictEqual(e.dots, 10);
+    // passar de 2019 para o próximo troca a aba sozinho
+    await page.evaluate(() => { go("2019"); go(KEYS[KEYS.indexOf(cur) + 1]); });
+    e = await est(); assert.strictEqual(e.cur, "2020"); assert.strictEqual(e.aba, "Anos 2020");
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "sem overflow horizontal");
+    assert.deepStrictEqual(erros, []);
+    await ctx.close();
+  });
+}
+
+test("linha do tempo da home: endereço antigo #2000–2003 abre 2000", opts, async () => {
+  const { ctx, page } = await abrir({ vp: { width: 1280, height: 900 } });
+  await page.goto("about:blank");
+  await page.goto(base + "/index.html#" + encodeURIComponent("2000–2003"));
+  await page.waitForFunction(() => typeof cur !== "undefined" && document.querySelector("#decs .on"));
+  assert.strictEqual(await page.evaluate(() => cur), "2000");
+  await ctx.close();
+});

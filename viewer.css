@@ -639,3 +639,9 @@ body.vw-open{overflow:hidden}
 
 /* aviso de época: a classe .top colidia com ".top{display:contents}" da home (no celular o aviso sumia) */
 .vw-win .etoast{display:flex!important}
+
+/* o <main> do player não pode herdar o "main{padding;margin:0 auto}" da página (a home tem isso): com margem automática
+   o grid parava de esticar o conteúdo e o vídeo ficava estreito, com faixas brancas dos lados */
+.vw-win .yc>main{margin:0;max-width:none;min-width:0;width:auto;justify-self:stretch;padding-left:0;padding-right:0;padding-top:0}
+/* player de 2005 (4:3): na janela ele ocupa a largura toda (o encaixe da janela reduz se não couber na altura) */
+.vw-win .vp-e1 .vp-screen{max-width:none}
