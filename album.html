@@ -5,7 +5,7 @@
 <link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
 <link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
 <script src="gate.js?v=20261120c"></script>
-<script src="cliente-economia.js?v=20261205a"></script>
+<script src="cliente-economia.js?v=20261207a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NÃO SALVO — Álbum de Figurinhas da Internet</title>
 <meta name="description" content="Colecione figurinhas dos maiores memes e personalidades da internet brasileira. Abra pacotes diários e complete suas coleções.">
@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Baloo+2:wght@700;800&family=Lilita+One&family=Comfortaa:wght@700&family=Luckiest+Guy&family=Anton&family=Permanent+Marker&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261205a">
+<link rel="stylesheet" href="theme.css?v=20261207a">
 <link rel="stylesheet" href="viewer.css?v=20261206a">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 <style>
@@ -236,7 +236,7 @@
 <button class="pfab" id="pfab" onclick="packFab()" aria-label="Abrir pacotes"></button>
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="mbox" id="mbox"></div></div>
 
-<script src="common.js?v=20261205a"></script>
+<script src="common.js?v=20261207a"></script>
 <script src="data.js?v=20261204a"></script>
 <script src="player.js?v=20261130c"></script>
 <script src="viewer.js?v=20261206a"></script>
@@ -283,7 +283,7 @@ function cardHTML(c,opt={}){
   return `<button class="card ${FOIL.has(c.r)?'foil':''} ${c.r} ${opt.sel?'sel':''}" style="--rc:${rc}" onclick="pick('${c.id}')">
    <div class="top"><span>${c.num}</span><em>${c.r}</em></div>
    ${favId()===c.id?'<span class="star">⭐</span>':''}${owned(c)>1&&!opt.force?`<span class="cp">x${owned(c)}</span>`:''}${c.y?`<span class="yr">${c.y}</span>`:""}
-   <div class="art" style="background:linear-gradient(150deg,${col.bg[0]},${col.bg[1]})">${cardArt(c)?`<img src="${cardArt(c)}" alt="" loading="lazy" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:""}<span class="emo"${cardArt(c)?" hidden":""}>${c.e}</span></div>
+   <div class="art" style="background:linear-gradient(150deg,${col.bg[0]},${col.bg[1]})">${cardArt(c)?`<img src="${cardArt(c)}" alt="" loading="lazy" decoding="async" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:""}<span class="emo"${cardArt(c)?" hidden":""}>${c.e}</span></div>
    <div class="nm">${escapeHtml(c.name)}</div><div class="ft">${col.n.toUpperCase()}</div></button>`;
 }
 function renderCols(){
@@ -303,7 +303,7 @@ function slotHTML(c,sel){
   const has=owned(c)>0,col=COLLECTIONS[c.ci],yt=cardArt(c),n=owned(c);
   const rot=((c.i*37+c.ci*11)%5-2)*.6;
   return `<div class="slot"><button type="button" class="vaga${sel?" sel":""}" onclick="pick('${c.id}')" aria-label="${has?`${escapeHtml(c.name)}, ${c.r}, número ${c.num}${n>1?`, ${n} cópias`:""}`:`Figurinha ${c.num}: você ainda não tem`}">
-   <b class="nv">${c.num}</b>${has?`<span class="fig${FOIL.has(c.r)?" foil":""}" style="--bg:linear-gradient(150deg,${col.bg[0]},${col.bg[1]});--rc:var(--${c.r});--rot:${rot}deg"><span class="art">${yt?`<img src="${yt}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:""}<span class="emo"${yt?" hidden":""}>${c.e}</span></span><span class="tag">${+c.num}</span><span class="rar">${c.r}</span>${n>1?`<span class="cp">x${n}</span>`:""}${favId()===c.id?'<span class="star" aria-hidden="true">⭐</span>':""}</span>`:""}
+   <b class="nv">${c.num}</b>${has?`<span class="fig${FOIL.has(c.r)?" foil":""}" style="--bg:linear-gradient(150deg,${col.bg[0]},${col.bg[1]});--rc:var(--${c.r});--rot:${rot}deg"><span class="art">${yt?`<img src="${yt}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:""}<span class="emo"${yt?" hidden":""}>${c.e}</span></span><span class="tag">${+c.num}</span><span class="rar">${c.r}</span>${n>1?`<span class="cp">x${n}</span>`:""}${favId()===c.id?'<span class="star" aria-hidden="true">⭐</span>':""}</span>`:""}
   </button><div class="nm">${has?escapeHtml(c.name):"???"}</div></div>`;
 }
 const premioHTML=(col,list)=>`Complete do nº ${list[0].num} ao nº ${list[list.length-1].num} e ganhe um <b>bônus de moedas e XP!</b>`;

@@ -5,7 +5,7 @@
 <link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
 <link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
 <script src="gate.js?v=20261120c"></script>
-<script src="cliente-economia.js?v=20261205a"></script>
+<script src="cliente-economia.js?v=20261207a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Linha do tempo · NÃO SALVO</title>
 <meta name="description" content="A linha do tempo completa da internet brasileira: escolha um ano e veja tudo o que estava bombando, em ordem cronológica, no visual da internet daquela época.">
@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261205a">
+<link rel="stylesheet" href="theme.css?v=20261207a">
 <link rel="stylesheet" href="viewer.css?v=20261206a">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 <style>
@@ -439,7 +439,7 @@ body.ep-xp .lt-top small{color:#fff}
   <p class="lt-marcas">Visual inspirado na internet de cada época. Marcas, nomes e estilos citados pertencem aos seus donos.</p>
 </main>
 
-<script src="common.js?v=20261205a"></script>
+<script src="common.js?v=20261207a"></script>
 <script src="data.js?v=20261204a"></script>
 <script src="player.js?v=20261130c"></script>
 <script src="viewer.js?v=20261206a"></script>
@@ -526,12 +526,12 @@ function palco(){
   const st=$("stage");st.className="lt-stage th-"+e;document.body.className=document.body.className.replace(/\bep-\w+/g,"").trim()+" ep-"+e;
   st.innerHTML=`
    <div class="lt-hero"><button class="nav" ${p?`data-k="${escapeHtml(p)}" data-f="prev"`:"disabled"} aria-label="Ano anterior">‹</button>
-     <div><div class="lt-era">${EPOCA_NOME[e]} · ${escapeHtml(epAnos(e))}</div><div class="lt-big">${escapeHtml(yLab(k))}</div><div class="lt-lema">${escapeHtml(info.lema)}</div>
+     <div><div class="lt-era">${EPOCA_NOME[e]} · ${escapeHtml(epAnos(e))}</div><div class="lt-big" role="heading" aria-level="2">${escapeHtml(yLab(k))}</div><div class="lt-lema">${escapeHtml(info.lema)}</div>
       <p class="lt-sub">${L.length} ${L.length===1?"viral salvo":"virais salvos"} · ${escapeHtml(info.txt)}</p>${det[0]?`<span class="lt-deco">${escapeHtml(det[0])}</span>`:""}</div>
      <button class="nav" ${n?`data-k="${escapeHtml(n)}" data-f="next"`:"disabled"} aria-label="Próximo ano">›</button></div>
    <div class="lt-body"><div class="lt-chips">${cats.map(c=>`<button class="${c===ST.cat?"on":""}" data-c="${escapeHtml(c)}">${c==="Todas"?`Tudo de ${escapeHtml(yLab(k))}`:icon(CAT_IC[c]||"video")+escapeHtml(c)} <small>${c==="Todas"?L.length:L.filter(m=>m.c===c).length}</small></button>`).join("")}</div>
     <div class="lt-list">${grupos.length?grupos.map(g=>`<div class="lt-mes"><span>${escapeHtml(g.g)}</span></div>${g.its.map(m=>`<article class="lt-it">
-       <div class="lt-th${m.vert?" vert":""}">${m.cuidado?`<span class="cdo-t">${icon("care","in")}<b>Selo de cuidado</b><small>clique para saber mais</small></span>`:""}${foto(m)?`<img src="${escapeHtml(foto(m))}" alt="" loading="lazy"${m.cuidado?' class="cdo-blur"':""}>`:""}<span class="yb">${m.y}</span>${m.yt&&m.tipo!=="foto"?`<span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="display:block;margin-left:2px"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg></span>`:""}</div>
+       <div class="lt-th${m.vert?" vert":""}">${m.cuidado?`<span class="cdo-t">${icon("care","in")}<b>Selo de cuidado</b><small>clique para saber mais</small></span>`:""}${foto(m)?`<img src="${escapeHtml(foto(m))}" alt="" loading="lazy" decoding="async"${m.cuidado?' class="cdo-blur"':""}>`:""}<span class="yb">${m.y}</span>${m.yt&&m.tipo!=="foto"?`<span class="pl" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="display:block;margin-left:2px"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg></span>`:""}</div>
        <div class="lt-tx"><div class="lt-d">${escapeHtml(dataTxt(m))}</div><h3><button class="lt-ab" data-id="${escapeHtml(m.id)}">${escapeHtml(m.t)}</button></h3><p>${escapeHtml(m.d||"")}</p>
         <span class="lt-meta"><span class="lt-cat">${icon(CAT_IC[m.c]||"video")}${escapeHtml(m.c)}</span>${m.by?`<span>por ${escapeHtml(m.by)}</span>`:""}${m.tipo==="foto"?"<span>📷 foto</span>":m.vert?"<span>📱 vídeo vertical</span>":""}</span>
         <div class="lt-foot">${rodape[e](m)}</div></div></article>`).join("")}`).join(""):`<div class="lt-vazio">Nada desse tipo em ${escapeHtml(yLab(k))} ainda. <a href="index.html#send">Envie um meme</a>!</div>`}</div>
