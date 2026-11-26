@@ -260,6 +260,7 @@ test("histórico: lista aprovadas, recusadas e pendentes com autor e data; resta
   await page.waitForFunction(() => /Versão restaurada/.test(document.querySelector(".avisos").textContent));
   const post = api.n(/POST \/api\/mod\/memepedia\/edicoes\/1\/restaurar/)[0];
   assert.ok(post); assert.strictEqual(post.csrf, "tok-csrf");
+  await page.waitForFunction(() => document.getElementById("mp-t-origem").value === "Primeira versão do texto da origem.");
   assert.strictEqual(await page.inputValue("#mp-t-origem"), "Primeira versão do texto da origem.", "a restaurada é a publicada");
   assert.ok(await page.$eval(bloco + " details", (d) => d.open), "o histórico continua aberto depois de recarregar");
   assert.match(await page.textContent(bloco + " summary"), /Histórico \(4\)/, "nada foi apagado");
