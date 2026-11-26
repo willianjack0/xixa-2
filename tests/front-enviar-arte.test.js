@@ -123,7 +123,8 @@ test("seppzone: seção 'Artes de cartas' na moderação, com prévia, aprovar, 
   assert.match(a, /motivo: \{ rotulo: "Motivo \(3 a 300 caracteres\)"/);
   assert.ok(!/innerHTML/.test(a.slice(a.indexOf("async function carregarArtes"), a.indexOf("async function carregarMeusEnvios") > 0 ? a.indexOf("async function carregarMeusEnvios") : undefined)));
   const i = ler("seppzone/index.html");
-  assert.match(i, /admin\.js\?v=6/); assert.match(i, /admin\.css\?v=5/);
+  // a versão exata muda a cada PR que mexe no painel: só confere que há ?v= (o aviso de ?v= do CI cobre a coerência)
+  assert.match(i, /admin\.js\?v=\d+/); assert.match(i, /admin\.css\?v=\d+/);
 });
 
 // ---------------------------------------------------------------- parte 2: navegador

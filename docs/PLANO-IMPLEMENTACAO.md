@@ -266,6 +266,7 @@ erDiagram
 - [x] Trocar o aviso "dados de exemplo" em ranking e moderação por dados reais ou por estado vazio bem escrito. — **feito**: ranking e moderação usam dados reais (resta código de protótipo sem uso em `index.html`).
 
 - [x] **Envio de arte de carta (página temporária)** — **feito**: `enviar-arte.html` (guia de tamanhos e margens, exemplos aplicados no álbum, no perfil e na miniatura, busca de cartas sem imagem e formulário), botão "Enviar arte de carta" no rodapé, moderação em "Artes de cartas" no `/seppzone/` e API em `/api/arte/*` e `/api/mod/arte/*` (migração 030), com cancelamento do próprio envio, limpeza periódica de pendentes e guia de zona segura pela proporção real das cartas. Ver `docs/API.md`. **Pendente:** definir até quando a campanha dura (depois, tirar a página, o botão e as rotas); decidir se quem envia ganha XP ou moedas (hoje não ganha); aviso ao autor quando a arte é decidida (hoje ele vê em "Seus envios"); só a moderação vê o arquivo pendente, sem lista pública das artes concorrentes.
+- [x] **Memepédia no admin** — **feito**: aba "Memepédia" no `/seppzone/` (moderador e admin) com busca, filtros (sem texto, incompleto, completos, com pendentes) e cobertura por campo; editor por meme com texto atual de cada um dos 6 campos, publicação direta com fonte opcional e contagem de caracteres, histórico de edições, restaurar versão e aprovar ou recusar pendentes com um clique. API em `/api/mod/memepedia/*`, com auditoria e sem migração. Ver `docs/API.md`. **Pendente:** apagar edição (não existe, por desenho), editar o texto de uma edição pendente, aviso ao autor quando a sugestão é decidida, e filtro por categoria ou ano na lista.
 
 **Pronto quando:** nenhum dado da tela vem de `data.js` nem de `localStorage` (exceto preferências como o tema), e as telas passam na checagem de celular, tablet e desktop.
 
@@ -284,7 +285,7 @@ Acontece em paralelo, mas precisa estar pronta antes de abrir ao público.
 - [ ] **LGPD:** base legal, retenção, exclusão de conta e de cadastro de contribuidor.
 - [ ] **Antiabuso:** captcha ou verificação nos pontos públicos (comentário, feedback, formulário de contribuidor) se houver spam.
 - [ ] **Segredos:** nunca no repositório; rotação do token de admin e das credenciais. — **parcial**: tudo em Docker secrets; falta a rotação do token de admin e das credenciais.
-- [ ] **Promoção `dev` → `main`:** checklist de release (migrações testadas, backup feito, rollback conhecido), com tag a cada versão. — feita três vezes (PRs #11, #14 e #21) com backup antes e verificação depois; falta virar um checklist escrito.
+- [x] **Promoção `dev` → `main`:** checklist de release (migrações testadas, backup feito, rollback conhecido), com tag a cada versão. — **feito**: `docs/checklist-release.md` (antes do PR, o PR, conferência depois do merge, rollback e tag), com a regra de nunca editar migração aplicada (teste `api/test/migracoes-aplicadas.test.js`).
 
 ---
 
