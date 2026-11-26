@@ -18,6 +18,7 @@ Só memes com `status = 'publicado'`. Fonte da verdade: Postgres (carga inicial 
 | `GET /api/memes/:id` | Um meme (`400` id inválido, `404` inexistente ou não publicado) |
 | `GET /api/eras` | `{ itens[] }` com `ano`, `ano_fim` (`null` na era aberta "2020+"), `rotulo`, `lema`, `texto` |
 | `GET /api/categorias` | `{ itens[] }` com `nome`, `icone`, `emoji`, `total` de memes publicados |
+| `GET /api/og/meme/:id` | Pré-visualização de link (HTML, não JSON): `og:*`, `twitter:*`, `canonical` com título, descrição e imagem do meme, e `meta refresh` para `memepedia.html#:id`. `404` (texto) para id inválido, inexistente, `oculto` ou `removido`, sem dizer qual. Texto do banco escapado; `Cache-Control: public, max-age=300`; CSP `default-src 'none'`. Origem do site: `SITE_ORIGIN` (ou a origem do `DISCORD_REDIRECT_URI`); sem nenhum dos dois, `https://naosalvo.fishlab.com.br` |
 
 Cada meme: `id, titulo, ano, data, categoria, tipo, raridade, emoji, descricao, autor, duracao, youtube_id, adicionado_em, midias[]`; cada mídia: `tipo` (`imagem` ou `video_arquivo`), `caminho`, `origem_url`, `credito_por`, `credito_url`, `largura`, `altura`.
 

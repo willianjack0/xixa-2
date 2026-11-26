@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
 <link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
-<script src="gate.js?v=20261120c"></script>
-<script src="cliente-economia.js?v=20261205a"></script>
+<script src="gate.js?v=20261207b"></script>
+<script src="cliente-economia.js?v=20261207b"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NÃO SALVO — Álbum de Figurinhas da Internet</title>
 <meta name="description" content="Colecione figurinhas dos maiores memes e personalidades da internet brasileira. Abra pacotes diários e complete suas coleções.">
@@ -23,8 +23,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Baloo+2:wght@700;800&family=Lilita+One&family=Comfortaa:wght@700&family=Luckiest+Guy&family=Anton&family=Permanent+Marker&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261205a">
-<link rel="stylesheet" href="viewer.css?v=20261206a">
+<link rel="stylesheet" href="theme.css?v=20261207b">
+<link rel="stylesheet" href="viewer.css?v=20261207b">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 <style>
 :root{--Comum:#8e939c;--Relevante:#2fbf5b;--Raro:#2f86ff;--Relíquia:#a35cff;--Lendário:#e8a317;--Mítico:#ff4a4a}
@@ -185,7 +185,7 @@
 @media(max-width:1100px){.layout{grid-template-columns:210px minmax(0,1fr)}.det{grid-column:1/-1;border:0;padding:0;position:static;max-width:380px;margin:0 auto}}
 @media(max-width:720px){.layout{grid-template-columns:1fr;padding:12px}.cards{grid-template-columns:repeat(2,1fr)}.album{padding-left:34px}.pack{grid-template-columns:repeat(3,1fr);gap:8px}}
 </style>
-<link rel="stylesheet" href="album.css?v=20261203a">
+<link rel="stylesheet" href="album.css?v=20261207b">
 </head>
 <body>
 
@@ -236,11 +236,11 @@
 <button class="pfab" id="pfab" onclick="packFab()" aria-label="Abrir pacotes"></button>
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="mbox" id="mbox"></div></div>
 
-<script src="common.js?v=20261205a"></script>
-<script src="data.js?v=20261204a"></script>
-<script src="player.js?v=20261130c"></script>
-<script src="viewer.js?v=20261206a"></script>
-<script src="alertas.js?v=20261125b"></script>
+<script src="common.js?v=20261207b"></script>
+<script src="data.js?v=20261207b"></script>
+<script src="player.js?v=20261207b"></script>
+<script src="viewer.js?v=20261207b"></script>
+<script src="alertas.js?v=20261207b"></script>
 <script>
 renderHeader("album",{sub:[
   {k:"cols",ic:"collections",label:"Coleções",fn:()=>{setSubOn("cols");document.querySelector(".side>h6").scrollIntoView({behavior:"smooth",block:"start"})}},
@@ -302,7 +302,7 @@ function renderCols(){
 function slotHTML(c,sel){
   const has=owned(c)>0,col=COLLECTIONS[c.ci],yt=cardArt(c),n=owned(c);
   const rot=((c.i*37+c.ci*11)%5-2)*.6;
-  return `<div class="slot"><button type="button" class="vaga${sel?" sel":""}" onclick="pick('${c.id}')" aria-label="${has?`${escapeHtml(c.name)}, ${c.r}, número ${c.num}${n>1?`, ${n} cópias`:""}`:`Figurinha ${c.num}: você ainda não tem`}">
+  return `<div class="slot"><button type="button" class="vaga${sel?" sel":""}" onclick="pick('${c.id}')" aria-label="${has?`${escapeHtml(c.name)}, ${c.r}, número ${c.num}${n>1?`, ${n} cópias`:""}`:`Carta ${c.num}: você ainda não tem`}">
    <b class="nv">${c.num}</b>${has?`<span class="fig${FOIL.has(c.r)?" foil":""}" style="--bg:linear-gradient(150deg,${col.bg[0]},${col.bg[1]});--rc:var(--${c.r});--rot:${rot}deg"><span class="art">${yt?`<img src="${yt}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="var e=this.nextElementSibling;if(e)e.hidden=false;this.remove()">`:""}<span class="emo"${yt?" hidden":""}>${c.e}</span></span><span class="tag">${+c.num}</span><span class="rar">${c.r}</span>${n>1?`<span class="cp">x${n}</span>`:""}${favId()===c.id?'<span class="star" aria-hidden="true">⭐</span>':""}</span>`:""}
   </button><div class="nm">${has?escapeHtml(c.name):"???"}</div></div>`;
 }
@@ -439,8 +439,8 @@ function share(){
   const u=typeof SESSAO!=="undefined"&&SESSAO&&SESSAO.usuario;
   if(!u){copiarShare();return}
   const lay=COMO_POST[u.perfil_layout]?u.perfil_layout:"orkut";
-  openModal(`<h3>Compartilhar no seu perfil</h3><div class="shr">${cardHTML(c,{})}<div class="shr-tx"><p>A figurinha <b>${escapeHtml(c.name)}</b> vai aparecer como <b>${COMO_POST[lay]}</b> no seu perfil, para quem visitar.</p>
-   <label for="shrL">Legenda (opcional)</label><textarea id="shrL" maxlength="140" rows="3" placeholder="Escreva algo sobre essa figurinha…"></textarea><small id="shrN" aria-live="polite">140 caracteres restantes</small></div></div>
+  openModal(`<h3>Compartilhar no seu perfil</h3><div class="shr">${cardHTML(c,{})}<div class="shr-tx"><p>A carta <b>${escapeHtml(c.name)}</b> vai aparecer como <b>${COMO_POST[lay]}</b> no seu perfil, para quem visitar.</p>
+   <label for="shrL">Legenda (opcional)</label><textarea id="shrL" maxlength="140" rows="3" placeholder="Escreva algo sobre essa carta…"></textarea><small id="shrN" aria-live="polite">140 caracteres restantes</small></div></div>
    <div class="shr-bt"><button type="button" class="mclose" id="shrOk">Publicar no meu perfil</button><button type="button" class="mclose ghost2" onclick="copiarShare()">Só copiar o texto</button></div>`,"shrbox");
   const t=$("shrL"),n=$("shrN");t.oninput=()=>{n.textContent=`${140-[...t.value].length} caracteres restantes`};
   $("shrOk").onclick=async()=>{const b=$("shrOk");b.disabled=true;
@@ -626,6 +626,6 @@ async function sincronizarCartas(){
 }
 sincronizarCartas().then(ok=>{if(ok)renderAll()});
 </script>
-<script src="/nav.js?v=20261129a"></script>
+<script src="/nav.js?v=20261207b"></script>
 </body>
 </html>

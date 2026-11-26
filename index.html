@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
 <link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
-<script src="gate.js?v=20261120c"></script>
-<script src="cliente-economia.js?v=20261205a"></script>
+<script src="gate.js?v=20261207b"></script>
+<script src="cliente-economia.js?v=20261207b"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NÃO SALVO — Museu da Internet Brasileira</title>
 <meta name="description" content="O museu da internet brasileira: relembre os maiores memes, virais e momentos históricos da web nacional dos anos 90 até hoje.">
@@ -24,8 +24,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://i.ytimg.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261205a">
-<link rel="stylesheet" href="viewer.css?v=20261206a">
+<link rel="stylesheet" href="theme.css?v=20261207b">
+<link rel="stylesheet" href="viewer.css?v=20261207b">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 <style>
 main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
@@ -170,7 +170,7 @@ main{display:flex;flex-direction:column}
 .top,.cur{grid-template-columns:1fr}.stage{grid-template-columns:1fr}.side{display:none}.rail{grid-template-columns:1fr 1fr}.rail .card:nth-child(3){display:none}main{padding:16px 16px 40px}}
 @media(max-width:600px){.f .two{grid-template-columns:1fr}.today{grid-template-columns:110px 1fr}.box .body{padding:16px}}
 </style>
-<link rel="stylesheet" href="home.css?v=20261204b">
+<link rel="stylesheet" href="home.css?v=20261207b">
 </head>
 <body class="home">
 <div class="rays-wrap" aria-hidden="true"><div class="rays" id="rays"></div></div>
@@ -219,16 +219,16 @@ main{display:flex;flex-direction:column}
     <div class="fact"><i data-ic="cloud"></i><b>Eternizado</b><span>Caiu na internet? Fica aqui pra sempre.</span></div>
     <div class="fact fact-tempo"><i data-ic="clock"></i><b id="timerB">Você chegou agora</b><span id="timer">Bem-vindo ao museu.</span></div>
   </section>
-  <p class="note">Protótipo · os registros são exemplos para testar a navegação e precisam ser revisados antes de virar acervo de verdade. Moedas, cartas e envios ficam só neste navegador.</p>
+  <p class="note">O acervo cresce com a ajuda da galera: viu um meme que falta? Envie, e a moderação revisa antes de ele entrar.</p>
 </main>
 
 <div class="modal" id="modal" onclick="if(event.target===this)closeM()"><div class="box" id="box"></div></div>
 
-<script src="common.js?v=20261205a"></script>
-<script src="data.js?v=20261204a"></script>
-<script src="player.js?v=20261130c"></script>
-<script src="viewer.js?v=20261206a"></script>
-<script src="alertas.js?v=20261125b"></script>
+<script src="common.js?v=20261207b"></script>
+<script src="data.js?v=20261207b"></script>
+<script src="player.js?v=20261207b"></script>
+<script src="viewer.js?v=20261207b"></script>
+<script src="alertas.js?v=20261207b"></script>
 <script>
 renderHeader("inicio",{search:true,sub:[]});
 document.querySelectorAll("[data-ic]").forEach(e=>e.outerHTML=icon(e.dataset.ic));
@@ -243,21 +243,11 @@ const KEYS=Object.keys(YEAR_INFO).sort((a,b)=>parseInt(a)-parseInt(b)); // "2004
 const GRAD=["#1d3a8a,#0b0f2a","#5b1d8a,#14061f","#8a3a1d,#2a0f06","#1d8a6e,#06241d","#8a1d4a,#240614","#1d6e8a,#06202a","#7a8a1d,#1f2406"];
 const grad=s=>"linear-gradient(135deg,"+GRAD[[...s].reduce((a,c)=>a+c.charCodeAt(0),0)%GRAD.length]+")";
 
-// fila de moderação com envios de outras pessoas (exemplos)
-const SEED_QUEUE=[
- {id:"q1",t:"Luiza que está no Canadá",y:2012,c:"TV",by:"novato_2012",rank:0,url:"https://www.youtube.com/watch?v=exemploLuiza",d:"O comercial em que o pai cita a filha que está no Canadá e a frase vira piada nacional."},
- {id:"q2",t:"Para Nossa Alegria (versão HD)",y:2012,c:"Música",by:"repostador",rank:1,url:"https://youtu.be/exemploAlegria",d:"Reenvio do mesmo vídeo em outra qualidade."},
- {id:"q3",t:"Inês Brasil: Alô, alô, graças a Deus",y:2014,c:"Vídeos",by:"bandalarga99",rank:1,url:"https://youtu.be/exemploInes",d:"O vídeo de inscrição para um reality que virou bordão."},
- {id:"q4",t:"Carreta Furacão",y:2014,c:"Música",by:"zap_da_tia",rank:0,url:"https://www.youtube.com/watch?v=exemploCarreta",d:"Os personagens dançando em cima do trenzinho da alegria."},
- {id:"q5",t:"Nana Gouvêa posando no furacão",y:2012,c:"Fotos",by:"fotologueira",rank:1,url:"https://www.instagram.com/p/exemploNana/",d:"Ensaio de fotos em Nova York no meio da passagem de um furacão."}
-];
-
 const art=a=>(a.cuidado?`<span class="cdo-t" title="Selo de cuidado: contém conteúdo preconceituoso">${icon("care","in")}<b>Selo de cuidado</b><small>clique para saber mais</small></span>`:"")+((a.img||a.yt)?`<img class="th${a.cuidado?" cdo-blur":""}" src="${a.img||"https://i.ytimg.com/vi/"+a.yt+"/mqdefault.jpg"}" alt="" loading="lazy" decoding="async" width="320" height="180" onerror="this.remove()">`:"")+`<span class="ph">${a.art||icon(CAT_IC[a.c]||"video","art")}</span>`;
 let ALL=[];
 function buildAll(){
   ALL=MEMES.map(m=>{const l=NS.links[m.id],k=l?normUrl(l):"";return{...m,yt:m.yt||(k.startsWith("yt:")?k.slice(3):undefined),url:l||(m.yt?"https://www.youtube.com/watch?v="+m.yt:null)}});
   NS.subs.filter(s=>s.status==="approved").forEach(s=>ALL.push({...s,r:"Clássico",views:120+((s.ts/1000)%300|0),saves:12,dur:35,added:s.approvedAt||nsToday(),date:s.y+"-06-01",mine:true}));
-  SEED_QUEUE.filter(q=>NS.modDone[q.id]==="ok").forEach(q=>ALL.push({...q,e:CAT_EMO[q.c],r:"Clássico",views:300,saves:20,dur:40,added:NS.modDoneAt?.[q.id]||nsToday(),date:q.y+"-06-01"}));
   ALL.forEach(a=>{if(!a.e)a.e=CAT_EMO[a.c]||"🎞️";a.art=icon(CAT_IC[a.c]||"video","art")});
 }
 buildAll();
@@ -432,10 +422,9 @@ function sim(a,b){a=normName(a).replace(/ /g,"");b=normName(b).replace(/ /g,"");
   if(a.length>5&&b.length>5&&(a.includes(b)||b.includes(a)))return .9;
   const bg=s=>{const m=new Map();for(let i=0;i<s.length-1;i++){const k=s.slice(i,i+2);m.set(k,(m.get(k)||0)+1)}return m};
   const A=bg(a),B=bg(b);let n=0;A.forEach((v,k)=>{n+=Math.min(v,B.get(k)||0)});return 2*n/(a.length+b.length-2)}
-function pool(){ // tudo que já existe: acervo + fila pendente
+function pool(){ // tudo que já existe: acervo + envios pendentes
   const p=ALL.map(a=>({t:a.t,key:a.url?normUrl(a.url):"",id:a.id,where:"acervo"}));
   NS.subs.filter(s=>s.status==="pending").forEach(s=>p.push({t:s.t,key:s.key,id:s.id,where:"fila",ticket:s.ticket}));
-  SEED_QUEUE.filter(q=>!NS.modDone[q.id]).forEach(q=>p.push({t:q.t,key:normUrl(q.url),id:q.id,where:"fila",ticket:"#"+(300+parseInt(q.id.slice(1)))}));
   return p;
 }
 function dupCheck(url,name){
@@ -520,47 +509,7 @@ function openMod(){
   if(barrarSemPapel("moderar",true))return;
   if(!economiaPronta("moderar"))return;
   location.href="/seppzone/#moderacao"; // a fila real (envios, votos, remoções) fica na área adm
-  return;
-  /* protótipo antigo abaixo (fila de exemplo no navegador), sem uso: sai na limpeza */
-  const r=nivelPatente(),canMod=r>=3;
-  const mine=NS.subs.slice().reverse();
-  const qs=SEED_QUEUE.map(q=>{const st=NS.modDone[q.id];const best=ALL.filter(a=>!a.by||a.id!==q.id).map(a=>({a,s:sim(q.t,a.t)})).sort((x,y)=>y.s-x.s)[0];
-    const flag=best&&best.s>=.55?`<div class="flag">${icon("alert","in")}Possível duplicata de “${escapeHtml(best.a.t)}” (${Math.round(best.s*100)}% parecido)</div>`:"";
-    const lower=q.rank<r;
-    return `<div class="q ${st?'done':''}"><h4>${icon(CAT_IC[q.c]||"video","in")}${escapeHtml(q.t)} <small style="color:var(--mut);font-family:Inter;font-size:12px">· ${q.y}</small></h4>
-     <div class="by">Ticket #${300+parseInt(q.id.slice(1))} · por <b>${q.by}</b> <span style="color:${RANKS[q.rank].color}">(${RANKS[q.rank].name})</span> · ${escapeHtml(normUrl(q.url))}</div><p>${escapeHtml(q.d)}</p>${flag}
-     <div class="act">${st?`<span class="${st==='ok'?'st-approved':'st-pending'}">${st==='ok'?'Aprovado por você':'Recusado por você'}</span>`:canMod&&lower?`<button class="btn" onclick="moderate('${q.id}','ok')">${icon("check")}Aprovar</button><button class="btn ghost" onclick="moderate('${q.id}','no')">${icon("xmark")}Recusar${best&&best.s>=.55?" (duplicata)":""}</button>`:`<span style="font-size:12px;color:var(--mut)">${icon("lock","in")}${canMod?"Só quem tem patente maior que a do autor pode moderar.":`Moderação é a partir de <b style="color:${RANKS[3].color}">Moderador</b> (${fmt(RANKS[3].xp)} XP).`}</span>`}</div></div>`}).join("");
-  $("box").className="box";
-  $("box").innerHTML=`<div class="body"><h2 class="disp">${icon("moderation","h")}Fila de moderação</h2><p>Quem tem patente mais alta modera quem tem patente mais baixa.</p>
-  ${mine.length?`<h4 class="h4">SEUS ENVIOS</h4>${mine.map(s=>`<div class="mine"><span>${icon(CAT_IC[s.c]||"video","in")}${escapeHtml(s.t)} <small>(${s.ticket})</small></span><span class="st-${s.status}">${s.status==="approved"?"aprovado":"aguardando moderação"}</span></div>`).join("")}<div style="height:14px"></div>`:""}
-  ${linksQ(canMod)}
-  ${wikiQ(canMod)}
-  <h4 class="h4">ENVIOS DA COMUNIDADE</h4>${qs}
-  <button class="btn ghost" onclick="closeM()" style="margin-top:6px">Fechar</button></div>`;
-  $("modal").classList.add("open");
 }
-// links do YouTube enviados para vídeos sem original (no site real, o moderador aprova em /dashboard/)
-function linksQ(canMod){
-  const L=(NS.linkSugs||[]).slice().reverse();if(!L.length)return"";
-  return `<h4 class="h4">LINKS DE VÍDEO ENVIADOS</h4>${L.map(x=>`<div class="q ${x.status!=="pending"?"done":""}"><h4>${icon("link","in")}${escapeHtml(x.t)}</h4>
-    <div class="by">por <b>${escapeHtml(x.by)}</b> · <a href="https://www.youtube.com/watch?v=${x.yt}" target="_blank" rel="noopener">youtu.be/${x.yt}</a></div>
-    <div class="act">${x.status==="ok"?'<span class="st-approved">Aprovado: o vídeo já aparece no acervo</span>':x.status==="no"?'<span class="st-pending">Recusado</span>':canMod?`<button class="btn" onclick="moderarLink('${x.id}','ok')">${icon("check")}Aprovar</button><button class="btn ghost" onclick="moderarLink('${x.id}','no')">${icon("xmark")}Recusar</button>`:`<span style="font-size:12px;color:var(--mut)">${icon("clock","in")}Aguardando um moderador</span>`}</div></div>`).join("")}`;
-}
-// textos da Memepédia enviados pela comunidade (no site real, o moderador aprova em /dashboard/)
-const WIKI_CAMPO={origem:"De onde surgiu",porque:"Por que viralizou",usos:"Como é usado",rede:"Onde ficou famoso",hoje:"Onde está hoje",curiosidades:"Curiosidades"};
-function wikiQ(canMod){
-  const L=(NS.wikiSugs||[]).slice().reverse();if(!L.length)return"";
-  return `<h4 class="h4">MEMEPÉDIA: TEXTOS ENVIADOS</h4>${L.map(x=>`<div class="q ${x.status!=="pending"?"done":""}"><h4>${icon("book","in")}${escapeHtml(x.t)} <small style="color:var(--mut);font-family:Inter;font-size:12px">· ${WIKI_CAMPO[x.campo]||x.campo}</small></h4>
-    <div class="by">por <b>${escapeHtml(x.by)}</b>${x.fonte?` · <a href="${escapeHtml(x.fonte)}" target="_blank" rel="noopener nofollow">fonte</a>`:""}</div><p>${escapeHtml(x.texto)}</p>
-    <div class="act">${x.status==="ok"?'<span class="st-approved">Aprovado: já aparece na Memepédia</span>':x.status==="no"?'<span class="st-pending">Recusado</span>':canMod?`<button class="btn" onclick="moderarWiki('${x.id}','ok')">${icon("check")}Aprovar</button><button class="btn ghost" onclick="moderarWiki('${x.id}','no')">${icon("xmark")}Recusar</button>`:`<span style="font-size:12px;color:var(--mut)">${icon("clock","in")}Aguardando um moderador</span>`}</div></div>`).join("")}`;
-}
-function moderarWiki(id,v){const x=(NS.wikiSugs||[]).find(z=>z.id===id);if(!x)return;x.status=v;
-  if(v==="ok"){NS.wiki=NS.wiki||{};(NS.wiki[x.meme]=NS.wiki[x.meme]||{})[x.campo]={texto:x.texto,autor:x.by,fonte:x.fonte}}
-  nsSave();openMod()}
-function moderarLink(id,v){const x=(NS.linkSugs||[]).find(z=>z.id===id);if(!x)return;x.status=v;
-  if(v==="ok"){NS.links[x.meme]="https://youtu.be/"+x.yt;}
-  nsSave();buildAll();renderAll();openMod();toast(v==="ok"?"Link aprovado: o vídeo entrou no acervo.":"Link recusado.")}
-function moderate(id,v){NS.modDone[id]=v;NS.modDoneAt=NS.modDoneAt||{};NS.modDoneAt[id]=nsToday();nsSave();buildAll();renderAll();openMod();toast(v==="ok"?"Aprovado e adicionado ao acervo":"Recusado")}
 
 // ---- Ranking da galera ----
 function openRank(){
@@ -601,6 +550,6 @@ if(["rank","mod","send","rand","tl","todos"].includes(h))setTimeout(()=>{ftGo(h)
 function placeRays(){const im=document.querySelector(".hero .sun img"),r=$("rays");if(!im||!r)return;const b=im.getBoundingClientRect();r.style.left=(b.left+b.width/2+scrollX)+"px";r.style.top=(b.top+b.height*0.42+scrollY)+"px"}
 placeRays();addEventListener("resize",placeRays);addEventListener("load",placeRays);document.querySelector(".hero .sun img").addEventListener("load",placeRays);
 </script>
-<script src="/nav.js?v=20261129a"></script>
+<script src="/nav.js?v=20261207b"></script>
 </body>
 </html>
