@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
+<script src="gate.js?v=20261120c"></script>
+<script src="cliente-economia.js?v=20261205a"></script>
+<title>Roteiro de teste · NÃO SALVO</title>
+<meta name="description" content="Página temporária: roteiro passo a passo para testar o Não Salvo e avisar o que não funcionar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css?v=20261205a">
+<link rel="stylesheet" href="roteiro-teste.css?v=20261206a">
+<script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
+</head>
+<body>
+<div class="rt-bar" id="rtBar">
+  <div class="rt-bar-in">
+    <span class="rt-count" id="rtCount" aria-live="polite">0 de 0</span>
+    <div class="rt-track" id="rtTrack" role="progressbar" aria-label="Progresso do roteiro" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="rt-fill" id="rtFill"></div></div>
+    <button class="rt-reset" id="rtReset" type="button">Limpar</button>
+  </div>
+</div>
+
+<main class="rt" id="rt">
+  <p class="rt-k">Página temporária · teste com a comunidade</p>
+  <h1>Roteiro de teste do Não Salvo</h1>
+  <p class="rt-lead">Leva de 20 a 30 minutos. Faça com calma, na ordem, e marque cada passo conforme for testando. Anote tudo que parecer estranho, mesmo que pequeno.</p>
+
+  <section class="rt-sec" aria-labelledby="h-antes">
+    <h2 id="h-antes">Antes de começar</h2>
+    <ul class="rt-lista">
+      <li>Tenha uma conta do Discord. O login do site é só por ela.</li>
+      <li>Se puder, repita o roteiro em dois aparelhos: computador e celular.</li>
+      <li>Use, se possível, um navegador diferente do seu de costume (Chrome, Firefox, Safari).</li>
+      <li>Os passos que você marcar ficam salvos neste aparelho, então dá para voltar depois.</li>
+    </ul>
+  </section>
+
+  <section class="rt-sec" aria-labelledby="h-relato">
+    <h2 id="h-relato">Como avisar de um problema</h2>
+    <p>Mande uma mensagem com estes itens. O print da tela é o mais importante, principalmente se aparecer uma mensagem de erro.</p>
+    <pre class="rt-tpl" id="rtTpl" tabindex="0">Passo: (ex.: 2.4)
+Esperava:
+Aconteceu:
+Aparelho e navegador: (ex.: iPhone 13, Safari)
+Print: (anexe a imagem)</pre>
+    <button class="rt-btn" id="rtCopy" type="button">Copiar modelo de mensagem</button>
+  </section>
+
+  <div id="rtBlocos"></div>
+  <noscript><p class="rt-aviso">Este roteiro precisa de JavaScript para mostrar os passos.</p></noscript>
+
+  <section class="rt-sec" aria-labelledby="h-fim">
+    <h2 id="h-fim">No fim, conte pra gente</h2>
+    <ul class="rt-lista">
+      <li>O que foi mais difícil de entender ou de achar?</li>
+      <li>O que você mais gostou?</li>
+      <li>Alguma coisa ficou lenta? Diga onde.</li>
+      <li>Faltou algo que você esperava encontrar?</li>
+    </ul>
+  </section>
+  <p class="rt-fim">Obrigado por ajudar a deixar o Não Salvo melhor. <a href="index.html">Voltar ao site</a></p>
+</main>
+<div class="rt-toast" id="rtToast" role="status" aria-live="polite"></div>
+
+<script src="common.js?v=20261205a"></script>
+<script src="data.js?v=20261201a"></script>
+<script src="roteiro-teste.js?v=20261206a"></script>
+<script>
+renderHeader("roteiro",{sub:[
+  {k:"inicio",ic:"home",label:"Início",href:"index.html"},
+  {k:"tl",ic:"timeline",label:"Linha do tempo",href:"linha-do-tempo.html"},
+  {k:"wiki",ic:"book",label:"Memepédia",href:"memepedia.html"},
+  {k:"album",ic:"album",label:"Álbum de figurinhas",href:"album.html"},
+  {sp:1},
+  {k:"send",ic:"send",label:"Enviar meme",cta:1,href:"index.html#send"}
+]});
+renderWallet();
+RoteiroTeste.iniciar();
+</script>
+<script src="/nav.js?v=20261129a"></script>
+</body>
+</html>
