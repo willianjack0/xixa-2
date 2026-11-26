@@ -134,7 +134,7 @@ test("Shorts do YouTube abrem em pé, no visual de app de vídeo curto (lista co
   await ctx.close();
 });
 
-test("player preenchido: na home o vídeo ocupa a largura da janela (sem faixas brancas), inclusive o de 4:3 de 2005", opts, async () => {
+test("player preenchido: na home o vídeo ocupa a largura da janela (sem faixas brancas); o 4:3 de 2005 com as informações ao lado e lugar para os avisos", opts, async () => {
   const { ctx, page, erros } = await abrir("/linha-do-tempo.html#2012");
   await page.setViewportSize({ width: 1366, height: 768 });
   await page.goto(base + "/index.html");
@@ -150,7 +150,14 @@ test("player preenchido: na home o vídeo ocupa a largura da janela (sem faixas 
       return { main: main.getBoundingClientRect().width, larg, tela: tela.getBoundingClientRect().width, base: tela.getBoundingClientRect().bottom, alt: innerHeight };
     });
     assert.ok(Math.abs(r.main - r.larg) < 2, id + ": o conteúdo ocupa a coluna toda " + JSON.stringify(r));
-    assert.ok(r.tela >= r.larg * 0.8 || r.base >= r.alt - 80, id + ": vídeo largo (ou limitado pela altura) " + JSON.stringify(r));
+    if (id === "jeremias-muito-louco") {
+      // 4:3 (2005): o vídeo diminui um pouco para a descrição embaixo aparecer inteira, sem rolar
+      // 4:3 (2005) no PC: informações numa coluna ao lado do vídeo; botões à vista e lugar livre embaixo para a lan house e os avisos
+      const lado = await page.evaluate(() => { const v = document.querySelector(".vw .vp-screen").getBoundingClientRect(), b = document.querySelector(".vw .vbs").getBoundingClientRect(), w = document.querySelector(".vw .vw-win").getBoundingClientRect(); return { vDir: v.right, bEsq: b.left, bBase: b.bottom, wBase: w.bottom }; });
+      assert.ok(lado.bEsq >= lado.vDir, id + ": informações ao lado do vídeo " + JSON.stringify(lado));
+      assert.ok(lado.bBase <= r.alt && lado.wBase - lado.bBase >= 140, id + ": botões à vista e lugar para os avisos " + JSON.stringify(lado));
+      assert.ok(r.tela >= 600, id + ": vídeo grande " + JSON.stringify(r));
+    } else assert.ok(r.tela >= r.larg * 0.8 || r.base >= r.alt - 80, id + ": vídeo largo (ou limitado pela altura) " + JSON.stringify(r));
     assert.ok(r.base <= r.alt, id + ": o vídeo cabe na tela");
     await page.evaluate(() => closeViewer());
   }
