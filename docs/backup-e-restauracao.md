@@ -23,15 +23,37 @@ docker exec -i pg-restore-teste pg_restore -U postgres --no-owner -C -d postgres
 # 3. só depois, na produção: pare a API, restaure no banco naosalvo e suba a API (veja "Restaurar de verdade" abaixo)
 ```
 
-### Cópia fora do servidor (pendente)
+### Cópia fora do servidor: servidor 2 puxa para `/mnt/lab_data/backup`
 
-Dump no mesmo disco do banco não protege contra perda do servidor. Falta uma cópia em outro lugar. Opções, da mais simples:
+Dump no mesmo disco do banco não protege contra perda do servidor. O destino escolhido é o disco do laboratório: `/mnt/lab_data/backup/naosalvo-vp3` no servidor 2 (`lab4`), que o Windows enxerga como `\\192.168.0.9\lab_data\backup\naosalvo-vp3`. Como o vp3 não alcança a rede do laboratório, o **servidor 2 puxa** (script `scripts/backup/puxar-do-vp3.sh`, por `rsync` sobre SSH), 2x ao dia, logo depois de cada dump.
 
-1. **Puxar de outra máquina** (`rsync` ou `scp` por SSH, uma vez ao dia) de `/opt/naosalvo-backups` para um disco que não seja do vp3.
-2. **Enviar para um bucket de outro provedor** (Backblaze B2, Cloudflare R2) com `rclone`, usando uma chave só de escrita.
-3. **Bucket MinIO do próprio vp3** só protege contra falha do Postgres, não do servidor: serve de segunda cópia, não de cópia externa.
+O script copia só `naosalvo_*.dump` e os marcadores, **sem apagar nada no vp3**, confere que o `ULTIMO_OK` não é mais velho que 30 h, valida o dump mais novo com `pg_restore --list`, guarda 60 dias (mínimo 10) e escreve `ALERTA.txt` na pasta de destino se algo falhar (saída 1).
 
-O destino e a credencial dependem de uma escolha do dono do projeto.
+**Instalação (uma vez). Os passos 1 e 3 mexem em acesso SSH do vp3: faça com consciência.**
+
+1. No **servidor 2**, crie uma chave só para isso (sem senha, porque o cron roda sozinho):
+   ```bash
+   ssh-keygen -t ed25519 -N '' -C naosalvo-backup-pull -f ~/.ssh/naosalvo_backup_ed25519
+   cat ~/.ssh/naosalvo_backup_ed25519.pub
+   ```
+2. No **vp3**, confirme onde está o `rrsync` (vem no pacote `rsync`): `command -v rrsync` (em geral `/usr/bin/rrsync`).
+3. No **vp3**, acrescente **uma linha** ao `/root/.ssh/authorized_keys` com a chave pública do passo 1, presa a leitura da pasta de backups (não dá shell, não escreve, não sai dessa pasta):
+   ```
+   restrict,command="/usr/bin/rrsync -ro /opt/naosalvo-backups" ssh-ed25519 AAAA...resto-da-chave naosalvo-backup-pull
+   ```
+4. No **servidor 2**, rode uma vez à mão e confira a saída `ok:` e os arquivos em `/mnt/lab_data/backup/naosalvo-vp3`:
+   ```bash
+   bash /mnt/lab_data/github/naosalvo-2/scripts/backup/puxar-do-vp3.sh
+   ```
+5. No **servidor 2**, agende (o serviço do vp3 gera dumps às 03:00 e 12:00 de Brasília; ajuste ao fuso do servidor):
+   ```cron
+   # /etc/cron.d/naosalvo-copia-backup
+   30 3,12 * * * jack bash /mnt/lab_data/github/naosalvo-2/scripts/backup/puxar-do-vp3.sh >> /mnt/lab_data/backup/naosalvo-vp3/copia.log 2>&1
+   ```
+
+Para revogar o acesso, apague a linha do passo 3 no vp3. A chave não consegue ler mais nada além de `/opt/naosalvo-backups`.
+
+**Segunda opção, se um dia o servidor 2 deixar de servir:** enviar para um bucket de outro provedor (Backblaze B2, Cloudflare R2) com `rclone` e uma chave só de escrita. O MinIO do próprio vp3 só protege contra falha do Postgres, não do servidor.
 
 ### Alerta
 
