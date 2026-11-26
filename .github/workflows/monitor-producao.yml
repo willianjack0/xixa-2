@@ -1,0 +1,78 @@
+# Monitor de produção: a cada 15 minutos confere o site e a API do Não Salvo e abre uma issue se algo falhar
+# (e fecha a issue quando voltar). Sem segredos: só requisições públicas. O workflow agendado roda na branch padrão (main).
+# Para rodar na hora: Actions > Monitor de producao > Run workflow.
+name: Monitor de producao
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: monitor-producao
+  cancel-in-progress: false
+
+env:
+  SITE: https://naosalvo.fishlab.com.br
+  ROTULO: producao-fora
+
+jobs:
+  conferir:
+    name: Conferir site e API
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Conferir (3 tentativas por item)
+        id: checar
+        shell: bash
+        run: |
+          falhas=""
+          tenta() {
+            nome="$1"; url="$2"; padrao="$3"
+            for i in 1 2 3; do
+              corpo="$(curl -fsS -m 15 -A 'naosalvo-monitor/1' "$url" 2>/dev/null)" && echo "$corpo" | grep -q -E "$padrao" && { echo "ok  $nome"; return 0; }
+              sleep 10
+            done
+            echo "FALHOU $nome ($url)"; falhas="$falhas- $nome: $url"$'\n'
+          }
+          tenta "API saude" "$SITE/api/health" '"ok":[[:space:]]*true.*"banco":[[:space:]]*"ok"'
+          tenta "Versão do site" "$SITE/versao.json" '"sha"'
+          tenta "Página inicial" "$SITE/" 'NÃO SALVO|NãoSalvo|Não Salvo'
+          {
+            echo 'falhas<<EOF'
+            printf '%s' "$falhas"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+          [ -z "$falhas" ]
+        continue-on-error: true
+
+      - name: Abrir ou atualizar a issue (se falhou)
+        if: steps.checar.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FALHAS: ${{ steps.checar.outputs.falhas }}
+        shell: bash
+        run: |
+          gh label create "$ROTULO" --color B60205 --description "Produção fora do ar (monitor automático)" 2>/dev/null || true
+          aberta="$(gh issue list --repo "$GITHUB_REPOSITORY" --label "$ROTULO" --state open --json number --jq '.[0].number // empty')"
+          corpo="O monitor não conseguiu confirmar a produção em $(date -u +%FT%TZ):"$'\n\n'"$FALHAS"$'\n'"Execução: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          if [ -n "$aberta" ]; then
+            gh issue comment "$aberta" --repo "$GITHUB_REPOSITORY" --body "$corpo"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --label "$ROTULO" --title "Produção fora do ar ($SITE)" --body "$corpo"
+          fi
+          exit 1
+
+      - name: Fechar a issue (se voltou)
+        if: steps.checar.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          for n in $(gh issue list --repo "$GITHUB_REPOSITORY" --label "$ROTULO" --state open --json number --jq '.[].number'); do
+            gh issue close "$n" --repo "$GITHUB_REPOSITORY" --comment "Produção respondendo de novo em $(date -u +%FT%TZ)."
+          done

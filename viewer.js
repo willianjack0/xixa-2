@@ -2,8 +2,7 @@
 //  NÃO SALVO — tela do vídeo/foto no visual da época
 //  Vídeos: página no estilo do YouTube do ano do meme (canal Não Salvo; logo próprio que lembra o YouTube, não o oficial).
 //  Fotos: página no estilo da rede social de fotos da época.
-//  Votos (curtidas/estrelas) e visualizações vêm das funções do Netlify
-//  (/api/votos e /api/yt-stats). Sem elas, funciona só no navegador.
+//  Votos (curtidas/estrelas) e visualizações vêm da API do site (/api/votos e /api/yt-stats).
 // =====================================================================
 const API={votos:"/api/votos",stats:"/api/yt-stats"};
 const CANAL="Não Salvo",AV="avatar-ns.png";

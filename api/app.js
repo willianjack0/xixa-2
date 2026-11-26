@@ -25,12 +25,13 @@ import analytics from './routes/analytics.js';
 import memepedia from './routes/memepedia.js';
 import adminMemepedia from './routes/admin-memepedia.js';
 import perfis from './routes/perfis.js';
+import og from './routes/og.js';
 import conta from './routes/conta.js';
 
 // auth = { discord: config | null, fetch, cookieSecure, origemSite }  (ver routes/auth.js e auth/discord.js)
 export function criarApp({ pool, adminToken = '', ytKey = '', autenticar = null, auth = {} } = {}) {
   const cfgAuth = { discord: null, fetch: globalThis.fetch, cookieSecure: true, origemSite: '', ...auth };
   const router = criarRouter({ pool, adminToken, autenticar, extras: { ytKey, auth: cfgAuth } });
-  for (const modulo of [saude, acervo, contribuidores, votos, feedback, comentarios, links, yt, authRotas, conta, economia, sobedesce, analytics, memepedia, adminMemepedia, perfis, admin, adminUsuarios, adminAcervo, envios, arteCarta, adminMcp, adminUploads, mcp]) modulo(router);
+  for (const modulo of [saude, acervo, contribuidores, votos, feedback, comentarios, links, yt, authRotas, conta, economia, sobedesce, analytics, memepedia, adminMemepedia, perfis, og, admin, adminUsuarios, adminAcervo, envios, arteCarta, adminMcp, adminUploads, mcp]) modulo(router);
   return { router, server: http.createServer((req, res) => router.tratar(req, res)) };
 }
