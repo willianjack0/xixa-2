@@ -14,8 +14,9 @@ test('script: sintaxe bash válida', () => {
 });
 
 test('script: só puxa (rsync sem --delete), só dumps e marcadores, chave dedicada e sem senha', () => {
+  const codigo = sh.split('\n').filter((l) => !l.trim().startsWith('#')).join('\n'); // comentários citam "--delete" ao explicar que não é usado
   assert.match(sh, /rsync -a --partial/);
-  assert.doesNotMatch(sh, /--delete/);
+  assert.doesNotMatch(codigo, /--delete/);
   assert.match(sh, /--include='naosalvo_\*\.dump'/); assert.match(sh, /--exclude='\*'/);
   assert.match(sh, /BatchMode=yes/); assert.match(sh, /IdentitiesOnly=yes/);
   assert.match(sh, /naosalvo_backup_ed25519/);
