@@ -1288,7 +1288,7 @@ function listaMemepedia(raiz) {
   const idB = uid("mpb"), idF = uid("mpf");
   const inBusca = h("input", { id: idB, type: "search", autocomplete: "off", maxLength: 60, placeholder: "título ou id do meme" });
   const selF = h("select", { id: idF, value: "todos" }, MP_FILTROS.map(([v, r]) => h("option", { value: v }, r)));
-  const resumoEl = h("div", { class: "mp-resumo" }), info = h("p", { class: "mini", role: "status" }), ul = h("ul", { class: "lista" });
+  const resumoEl = h("div", { class: "mp-resumo" }), info = h("p", { class: "mini", role: "status" }), ul = h("ul", { class: "lista mp-grade" });
   const mais = h("button", { class: "b", type: "button", hidden: true, on: { click: () => carregar(false) } }, "Mostrar mais memes");
   trocar(raiz,
     h("div", { class: "sec" }, h("h2", null, "Memepédia"), resumoEl),
@@ -1297,18 +1297,22 @@ function listaMemepedia(raiz) {
 
   function desenharResumo(r) {
     const total = r.resumo.campos_total;
-    trocar(resumoEl,
+    const pct = total ? Math.round(r.resumo.campos_preenchidos / total * 100) : 0;
+    const anel = h("div", { class: "mp-anel", role: "img", "aria-label": "Cobertura: " + pct + "%" }, h("span", null, pct + "%"));
+    anel.style.setProperty("--pct", pct);
+    resumoEl.className = "mp-resumo mp-resumo-card";
+    trocar(resumoEl, anel, h("div", { class: "mp-resumo-txt" },
       h("p", { class: "mp-cobertura" }, h("b", null, r.resumo.campos_preenchidos + " de " + total), " campos com texto aprovado (", total ? Math.round(r.resumo.campos_preenchidos / total * 100) : 0, "%) em ", r.resumo.memes, " memes"),
       barraCobertura(r.resumo.campos_preenchidos, total, "Cobertura da Memepédia"),
       h("ul", { class: "mp-numeros" },
         h("li", null, h("b", null, r.resumo.sem_nenhum), " sem nenhum texto"),
         h("li", null, h("b", null, r.resumo.incompletos), " com texto incompleto"),
         h("li", null, h("b", null, r.resumo.completos), " completos"),
-        h("li", null, h("b", null, r.resumo.pendentes), " edições esperando moderação")));
+        h("li", { class: r.resumo.pendentes ? "mp-num-pend" : null }, h("b", null, r.resumo.pendentes), " edições esperando moderação"))));
   }
 
   function cartao(i) {
-    return h("li", { class: "item" },
+    return h("li", { class: "item mp-meme" + (i.pendentes ? " mp-meme-pend" : "") },
       h("div", { class: "item-h" }, h("h3", null, i.titulo),
         i.status !== "publicado" ? chip(STATUS_MEME[i.status] || i.status, "warn") : null,
         i.pendentes ? chip(i.pendentes + (i.pendentes === 1 ? " pendente" : " pendentes"), "warn") : null,
@@ -1453,11 +1457,11 @@ function editorMemepedia(raiz, id, voltar) {
   function desenhar() {
     const m = dados.meme, feitos = dados.campos.filter((c) => c.atual).length;
     trocar(corpo,
-      h("div", { class: "sec" },
+      h("div", { class: "sec mp-cab" },
         h("h2", null, m.titulo, h("a", { class: "b peq", href: "/memepedia.html#" + encodeURIComponent(m.id), target: "_blank", rel: "noopener noreferrer" }, "Ver na Memepédia")),
         h("div", { class: "meta" }, chip(m.ano + " · " + m.categoria), m.status !== "publicado" ? chip(STATUS_MEME[m.status] || m.status, "warn") : null, chip(feitos + "/6 campos com texto", feitos === 6 ? "ok" : ""), h("span", { class: "mini" }, m.id)),
         barraCobertura(feitos, 6, "Cobertura deste meme")),
-      dados.campos.map(blocoCampo));
+      h("div", { class: "mp-campos-grade" }, dados.campos.map(blocoCampo)));
   }
   carregar(false);
 }
