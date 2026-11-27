@@ -132,7 +132,12 @@ async function abrir(over = {}, { largura = 1280, tema, hash = "" } = {}) {
   return { ctx, page, api, erros };
 }
 const abas = (page) => page.$$eval('[role="tab"]', (n) => n.map((x) => x.textContent.trim()));
-const irPara = async (page, nome) => { await page.click(`[role="tab"]:has-text("${nome}")`); };
+// no celular/tablet o menu é gaveta: abre antes de clicar na aba (fecha sozinha ao escolher)
+const irPara = async (page, nome) => {
+  const menu = page.locator("#menu-btn");
+  if (await menu.isVisible() && (await menu.getAttribute("aria-expanded")) === "false") await menu.click();
+  await page.click(`[role="tab"]:has-text("${nome}")`);
+};
 
 test("sem sessão (401): pede para entrar, com link de volta para /seppzone/, sem abas", opts, async () => {
   const { ctx, page, api, erros } = await abrir({ papel: null });
@@ -165,7 +170,7 @@ test("moderador: só a aba Moderação; fila ausente (404) vira aviso, sem quebr
 test("admin: todas as abas, visão geral só com números das rotas, sem Ver como/Reiniciar/banner", opts, async () => {
   const { ctx, page, erros } = await abrir();
   await page.waitForSelector("#p-visao .num");
-  assert.deepStrictEqual(await abas(page), ["Visão geral", "Moderação", "Memepédia", "Usuários", "Memes", "Cartas e coleções", "Eras", "Comunidade", "Log", "MCP"]);
+  assert.deepStrictEqual(await abas(page), ["Visão geral", "Moderação", "Memepédia", "Memes", "Cartas e coleções", "Eras", "Usuários", "Comunidade", "Log", "MCP"]);
   await page.waitForFunction(() => [...document.querySelectorAll("#p-visao .num")].every((n) => n.textContent !== "…"));
   const nums = await page.$$eval("#p-visao .card:has(h2)", (c) => c.map((x) => x.querySelector("h2").textContent + "=" + x.querySelector(".num").textContent));
   assert.deepStrictEqual(nums, ["Memes=1", "Moderação=1", "Remoções=2", "Links sugeridos=1", "Feedback=1"]);
@@ -441,7 +446,7 @@ test("sessão que expira no meio (401) leva à tela de entrar", opts, async () =
 
 test("celular 390px: sem rolagem horizontal, fonte >= 12px e alvos >= 44px em todas as abas", opts, async () => {
   const { ctx, page, erros } = await abrir({}, { largura: 390 });
-  for (const nome of ["Visão geral", "Moderação", "Memepédia", "Usuários", "Memes", "Cartas e coleções", "Eras", "Comunidade", "Log", "MCP"]) {
+  for (const nome of ["Visão geral", "Moderação", "Memepédia", "Memes", "Cartas e coleções", "Eras", "Usuários", "Comunidade", "Log", "MCP"]) {
     await irPara(page, nome);
     await page.waitForTimeout(300);
     await page.waitForFunction(() => !document.querySelector(".spin"));
@@ -567,3 +572,142 @@ test("MCP: revogar pede confirmação, manda CSRF e a chave passa a revogada", o
   assert.deepStrictEqual(erros, []);
   await ctx.close();
 });
+
+// ---------------------------------------------------------------- shell: sidebar agrupada, topbar, gaveta
+test("shell: arquivos de CSS por aba existem, estão ligados no index com ?v= e os PNG do Stitch ficam fora do git", () => {
+  const html = fs.readFileSync(path.join(RAIZ, "seppzone/index.html"), "utf8");
+  for (const aba of ["visao", "moderacao", "memepedia", "usuarios", "memes", "cartas", "eras", "comunidade", "log", "mcp"]) {
+    assert.ok(fs.existsSync(path.join(RAIZ, `seppzone/admin-${aba}.css`)), aba);
+    assert.ok(html.includes(`/seppzone/admin-${aba}.css?v=`), "ligado: " + aba);
+  }
+  assert.match(html, /\/seppzone\/admin\.css\?v=\d+/);
+  const ign = fs.readFileSync(path.join(RAIZ, ".gitignore"), "utf8");
+  assert.match(ign, /docs\/admin-stitch\/\*\.png/);
+});
+
+test("shell: abas agrupadas (Moderação, Acervo, Pessoas, Sistema), role=tablist vertical, hash de rota e título da página", opts, async () => {
+  const { ctx, page, erros } = await abrir({}, { hash: "#memes" });
+  await page.waitForSelector("#p-memes:not([hidden])");
+  assert.strictEqual(await page.getAttribute('[role="tablist"]', "aria-orientation"), "vertical");
+  const grupos = await page.$$eval(".nav-grupo", (g) => g.map((x) => [(x.querySelector(".nav-rot") || {}).textContent || null, [...x.querySelectorAll('[role="tab"]')].map((t) => t.textContent.trim())]));
+  assert.deepStrictEqual(grupos, [
+    [null, ["Visão geral"]], ["Moderação", ["Moderação", "Memepédia"]], ["Acervo", ["Memes", "Cartas e coleções", "Eras"]],
+    ["Pessoas", ["Usuários", "Comunidade"]], ["Sistema", ["Log", "MCP"]]]);
+  assert.strictEqual(await page.textContent("#titulo"), "Memes");
+  assert.strictEqual(await page.getAttribute("#t-memes", "aria-selected"), "true");
+  await irPara(page, "Eras");
+  await page.waitForFunction(() => location.hash === "#eras");
+  await page.waitForFunction(() => document.getElementById("titulo").textContent === "Eras");
+  assert.strictEqual(await page.textContent("#titulo"), "Eras");
+  assert.strictEqual(await page.getAttribute("#t-eras", "aria-controls"), "p-eras");
+  // teclado: seta para baixo anda pela lista na ordem visual e muda o hash
+  await page.focus("#t-eras"); await page.keyboard.press("ArrowDown");
+  await page.waitForFunction(() => location.hash === "#usuarios");
+  assert.strictEqual(await page.evaluate(() => document.activeElement.id), "t-usuarios");
+  assert.deepStrictEqual(erros, []);
+  await ctx.close();
+});
+
+test("shell: topbar com usuário, chip de papel, switch de tema e Voltar ao site; moderador só vê o grupo Moderação", opts, async () => {
+  const { ctx, page } = await abrir({}, { hash: "#visao" });
+  await page.waitForSelector("#quem .chip");
+  assert.strictEqual((await page.textContent("#quem")).replace(/\s+/g, " ").trim(), "AnaAdmin");
+  assert.strictEqual(await page.getAttribute("#tema", "role"), "switch");
+  assert.strictEqual(await page.getAttribute(".bar a.b", "href"), "/");
+  await page.click("#tema");
+  assert.strictEqual(await page.getAttribute("html", "data-theme"), "dark");
+  assert.strictEqual(await page.getAttribute("#tema", "aria-checked"), "true");
+  await ctx.close();
+  const m = await abrir({ papel: "moderador" });
+  await m.page.waitForSelector("#quem .chip");
+  assert.match(await m.page.textContent("#quem"), /Moderador/);
+  assert.deepStrictEqual(await m.page.$$eval(".nav-rot", (n) => n.map((x) => x.textContent)), ["Moderação"]);
+  await m.ctx.close();
+});
+
+test("shell: selo da fila de moderação mostra a contagem da API e some se a rota não existe", opts, async () => {
+  const a = await abrir({}, { hash: "#visao" });
+  await a.page.waitForFunction(() => { const s = document.querySelector("#t-moderacao + .nav-selo"); return s && !s.hidden && s.textContent === "1"; });
+  assert.strictEqual(await a.page.getAttribute("#t-moderacao", "aria-describedby"), "bd-moderacao");
+  assert.strictEqual(await a.page.textContent("#bd-moderacao"), "1 envio na fila");
+  assert.strictEqual(await a.page.textContent("#t-moderacao"), "Moderação", "o selo não entra no nome da aba");
+  await a.ctx.close();
+  const b = await abrir({ modAusente: true }, { hash: "#visao" });
+  await b.page.waitForSelector("#t-moderacao");
+  await b.page.waitForTimeout(300);
+  assert.strictEqual(await b.page.$eval("#t-moderacao + .nav-selo", (s) => s.hidden), true);
+  assert.strictEqual(await b.page.getAttribute("#t-moderacao", "aria-describedby"), null);
+  await b.ctx.close();
+});
+
+test("shell desktop: botão recolhe a sidebar (só ícones, nome acessível mantido) e lembra a escolha", opts, async () => {
+  const { ctx, page } = await abrir({}, { hash: "#visao" });
+  await page.waitForSelector("#t-visao");
+  const larg = () => page.$eval("#side", (e) => Math.round(e.getBoundingClientRect().width));
+  assert.ok((await larg()) >= 240);
+  await page.click("#recolher-btn");
+  await page.waitForFunction(() => document.getElementById("side").getBoundingClientRect().width < 100);
+  assert.strictEqual(await page.getAttribute("#recolher-btn", "aria-expanded"), "false");
+  assert.strictEqual(await page.getAttribute("#t-moderacao", "title"), "Moderação");
+  assert.strictEqual(await page.$eval("#t-moderacao .tab-nome", (e) => e.getBoundingClientRect().width), 1, "texto só para leitor de tela");
+  await page.reload(); await page.waitForSelector("#t-visao");
+  await page.waitForFunction(() => document.getElementById("side").getBoundingClientRect().width < 100);
+  await ctx.close();
+});
+
+test("shell celular: sidebar vira gaveta (fora da tela e sem foco), abre pelo botão, fecha com Escape/escolha/fundo e devolve o foco", opts, async () => {
+  const { ctx, page } = await abrir({}, { largura: 360, hash: "#visao" });
+  await page.waitForSelector("#menu-btn");
+  assert.strictEqual(await page.isVisible("#side"), false);
+  assert.strictEqual(await page.isVisible("#recolher-btn"), false);
+  await page.click("#menu-btn");
+  await page.waitForSelector("#side", { state: "visible" });
+  assert.strictEqual(await page.getAttribute("#menu-btn", "aria-expanded"), "true");
+  assert.strictEqual(await page.evaluate(() => document.activeElement.id), "t-visao");
+  await page.keyboard.press("Escape");
+  await page.waitForSelector("#side", { state: "hidden" });
+  assert.strictEqual(await page.evaluate(() => document.activeElement.id), "menu-btn");
+  await page.click("#menu-btn"); await page.click('[role="tab"]:has-text("Log")');
+  await page.waitForFunction(() => location.hash === "#log");
+  await page.waitForSelector("#side", { state: "hidden" });
+  await page.waitForFunction(() => document.getElementById("titulo").textContent === "Log");
+  assert.strictEqual(await page.textContent("#titulo"), "Log");
+  await page.click("#menu-btn"); await page.click("#scrim", { position: { x: 340, y: 400 } });
+  await page.waitForSelector("#side", { state: "hidden" });
+  await ctx.close();
+});
+
+for (const largura of [360, 768, 1280]) {
+  for (const tema of ["light", "dark"]) {
+    test(`shell ${largura}px ${tema}: sem rolagem lateral, alvos >= 44px, fonte >= 12px e contraste >= 4,5:1 na sidebar e na topbar`, opts, async () => {
+      const { ctx, page, erros } = await abrir({}, { largura, tema, hash: "#visao" });
+      await page.waitForSelector("#t-visao", { state: "attached" });
+      if (await page.isVisible("#menu-btn")) await page.click("#menu-btn");
+      await page.waitForSelector("#side", { state: "visible" });
+      await page.waitForTimeout(300);
+      const r = await page.evaluate(() => {
+        const rgb = (s) => { const m = s.match(/rgba?\(([^)]+)\)/); if (!m) return null; const [r, g, b, a = 1] = m[1].split(/[ ,/]+/).filter(Boolean).map(Number); return { r, g, b, a }; };
+        const lum = ({ r, g, b }) => { const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+        const fundo = (e) => { for (let n = e; n; n = n.parentElement) { const c = rgb(getComputedStyle(n).backgroundColor); if (c && c.a > 0.95) return c; } return rgb(getComputedStyle(document.body).backgroundColor); };
+        const vis = (e) => { const b = e.getBoundingClientRect(); return b.width > 0 && b.height > 0 && getComputedStyle(e).visibility !== "hidden"; };
+        const ruins = [], pequenos = [], fontes = [];
+        for (const e of document.querySelectorAll("#side *, .bar *")) {
+          if (!vis(e)) continue;
+          if (e.matches("button, a")) { const b = e.getBoundingClientRect(); if (b.height < 43.5 || b.width < 43.5) pequenos.push(e.id || e.textContent.trim().slice(0, 20)); }
+          if (![...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) continue;
+          if (parseFloat(getComputedStyle(e).fontSize) < 12) fontes.push(e.textContent.trim().slice(0, 20));
+          const fg = rgb(getComputedStyle(e).color), bg = fundo(e); if (!fg || !bg) continue;
+          const L1 = lum(fg), L2 = lum(bg), c = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+          if (c < 4.5) ruins.push(e.className + " '" + e.textContent.trim().slice(0, 20) + "' " + c.toFixed(2));
+        }
+        return { ruins, pequenos, fontes, sobra: document.documentElement.scrollWidth - innerWidth };
+      });
+      assert.ok(r.sobra <= 0, "rolagem horizontal " + r.sobra);
+      assert.deepStrictEqual(r.pequenos, [], "alvos pequenos");
+      assert.deepStrictEqual(r.fontes, [], "fonte < 12px");
+      assert.deepStrictEqual(r.ruins, [], "contraste");
+      assert.deepStrictEqual(erros, []);
+      await ctx.close();
+    });
+  }
+}

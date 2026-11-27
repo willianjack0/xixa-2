@@ -1,9 +1,56 @@
 /* Admin · Não Salvo. Usa só os tokens do theme.css (claro/escuro). Fonte mínima 12px, alvos de toque >= 44px no celular. */
-.wrap{max-width:1180px;margin:0 auto;padding:16px 20px 80px}
-.bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.bar h1{font-size:28px;letter-spacing:.5px}
-.sp{flex:1}
 .quem{font-size:13px;color:var(--mut-strong);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* shell: sidebar agrupada + topbar */
+.adm{display:grid;grid-template-columns:var(--side-w,252px) minmax(0,1fr);min-height:100vh;transition:grid-template-columns .2s}
+.adm.recolhida{--side-w:76px}
+.col{min-width:0;display:flex;flex-direction:column}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:18px 20px 80px}
+.sp{flex:1}
+.ico{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.side{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;overflow-x:hidden;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px 10px 24px;gap:10px;z-index:30}
+.side-marca{display:flex;align-items:center;min-height:44px;padding:0 8px}
+.side-marca img{width:auto;height:30px;max-width:100%;object-fit:contain;object-position:left}
+.adm.recolhida .side-marca{justify-content:center;padding:0;overflow:hidden}
+.adm.recolhida .side-marca img{width:36px;height:30px;object-fit:cover;object-position:left}
+.tabs{display:flex;flex-direction:column;gap:14px}
+.nav-grupo{display:flex;flex-direction:column;gap:2px}
+.nav-rot{font:700 12px Inter,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut-strong);padding:6px 12px 4px}
+.nav-item{position:relative}
+.tab{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid transparent;border-left:3px solid transparent;font:700 15px Rajdhani,sans-serif;letter-spacing:.6px;text-transform:uppercase;color:var(--mut-strong);text-align:left;background:transparent}
+.tab:hover{color:var(--txt);background:var(--panel2)}
+.tab[aria-selected=true]{color:var(--brand-ink);background:var(--brand-soft);border-left-color:var(--brand)}
+.tab-nome{flex:1;min-width:0;overflow-wrap:anywhere}
+.nav-selo{position:absolute;right:10px;top:50%;transform:translateY(-50%);min-width:24px;height:22px;padding:0 7px;border-radius:99px;background:var(--btn-b);color:var(--on-brand);font:700 12px Inter,sans-serif;display:inline-flex;align-items:center;justify-content:center;pointer-events:none}
+.adm.recolhida .nav-rot,.adm.recolhida .tab-nome{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.adm.recolhida .tab{justify-content:center;padding:8px 0;border-left-width:1px}
+.adm.recolhida .tab[aria-selected=true]{border-color:var(--brand)}
+.adm.recolhida .nav-selo{right:2px;top:2px;transform:none;min-width:20px;height:20px;padding:0 5px}
+.adm.recolhida .nav-grupo+.nav-grupo{border-top:1px solid var(--line);padding-top:10px}
+.bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 20px;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar-tit{min-width:0}
+.crumb{font:600 12px Inter,sans-serif;letter-spacing:.8px;text-transform:uppercase;color:var(--mut-strong)}
+.bar h1{font-size:28px;line-height:1.1;letter-spacing:.5px}
+.quem{font-size:13px;color:var(--mut-strong);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bar .b{min-height:44px}
+.b.ibtn{width:44px;padding:0}
+.b.so-gaveta{display:none}
+.scrim{position:fixed;inset:0;background:var(--overlay);z-index:40}
+@media (max-width:900px){
+  .adm,.adm.recolhida{grid-template-columns:minmax(0,1fr)}
+  .b.so-gaveta{display:inline-flex}.b.so-desk{display:none}
+  .side{position:fixed;z-index:50;left:0;top:0;bottom:0;width:min(300px,86vw);height:100dvh;transform:translateX(-102%);visibility:hidden;box-shadow:var(--shadow)}
+  .gaveta-aberta .side{transform:none;visibility:visible}
+  .adm.recolhida .nav-rot,.adm.recolhida .tab-nome{position:static;width:auto;height:auto;clip:auto;white-space:normal}
+  .adm.recolhida .tab{justify-content:flex-start;padding:8px 12px;border-left-width:3px}
+  .adm.recolhida .nav-selo{right:10px;top:50%;transform:translateY(-50%);min-width:24px;height:22px;padding:0 7px}
+  .adm.recolhida .side-marca{justify-content:flex-start;padding:0 8px}.adm.recolhida .side-marca img{width:auto;object-fit:contain}
+  .bar{padding:10px 12px}
+  .bar-tit{flex:1}
+  .bar h1{font-size:24px}
+  .bar .quem{order:5}
+}
+@media (prefers-reduced-motion:reduce){.adm,.side{transition:none!important}}
 a{color:var(--brand-text)}
 a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -20,11 +67,6 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .b:disabled{opacity:.5;cursor:default}
 .b.peq{min-height:36px;padding:5px 11px;font-size:12px}
 
-/* abas */
-.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto;scrollbar-width:thin}
-.tab{padding:10px 14px;min-height:44px;font:700 15px Rajdhani,sans-serif;letter-spacing:.6px;text-transform:uppercase;color:var(--mut-strong);border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap;flex:none}
-.tab:hover{color:var(--txt)}
-.tab[aria-selected=true]{color:var(--brand-ink);border-color:var(--brand)}
 .sub{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .sub button{padding:8px 14px;min-height:44px;border-radius:999px;border:1px solid var(--line2);font:600 13px Inter,sans-serif;color:var(--mut-strong);background:var(--panel)}
 .sub button[aria-pressed=true]{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-ink)}
@@ -126,7 +168,6 @@ dialog::backdrop{background:var(--overlay)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
 @media (max-width:640px){
   .wrap{padding:12px 12px 90px}
-  .bar h1{font-size:24px}
   .b,.b.peq,.acts select{min-height:44px}
   .acts .b{flex:1 1 auto}
   dialog{width:100vw;max-width:100vw;max-height:100vh;height:100vh;border-radius:0}

@@ -310,47 +310,120 @@ function listaPaginada(box, { buscar, desenhar, vazio: txtVazio, resumo }) {
   return { recarregar: () => carregar(true) };
 }
 
-// ---------- navegação por abas ----------
+// ---------- navegação por abas (sidebar agrupada) ----------
 const ABAS = [
-  { id: "visao", nome: "Visão geral", papeis: ["admin"], montar: abaVisao, sempre: true },
-  { id: "moderacao", nome: "Moderação", papeis: ["moderador", "admin"], montar: abaMod, sempre: true },
-  { id: "memepedia", nome: "Memepédia", papeis: ["moderador", "admin"], montar: abaMemepedia },
-  { id: "usuarios", nome: "Usuários", papeis: ["admin"], montar: abaUsuarios },
-  { id: "memes", nome: "Memes", papeis: ["admin"], montar: abaMemes },
-  { id: "cartas", nome: "Cartas e coleções", papeis: ["admin"], montar: abaCartas },
-  { id: "eras", nome: "Eras", papeis: ["admin"], montar: abaEras },
-  { id: "comunidade", nome: "Comunidade", papeis: ["admin"], montar: abaComunidade },
-  { id: "log", nome: "Log", papeis: ["admin"], montar: abaLog },
-  { id: "mcp", nome: "MCP", papeis: ["admin"], montar: abaMcp }
+  { id: "visao", nome: "Visão geral", grupo: null, papeis: ["admin"], montar: abaVisao, sempre: true },
+  { id: "moderacao", nome: "Moderação", grupo: "Moderação", papeis: ["moderador", "admin"], montar: abaMod, sempre: true },
+  { id: "memepedia", nome: "Memepédia", grupo: "Moderação", papeis: ["moderador", "admin"], montar: abaMemepedia },
+  { id: "memes", nome: "Memes", grupo: "Acervo", papeis: ["admin"], montar: abaMemes },
+  { id: "cartas", nome: "Cartas e coleções", grupo: "Acervo", papeis: ["admin"], montar: abaCartas },
+  { id: "eras", nome: "Eras", grupo: "Acervo", papeis: ["admin"], montar: abaEras },
+  { id: "usuarios", nome: "Usuários", grupo: "Pessoas", papeis: ["admin"], montar: abaUsuarios },
+  { id: "comunidade", nome: "Comunidade", grupo: "Pessoas", papeis: ["admin"], montar: abaComunidade },
+  { id: "log", nome: "Log", grupo: "Sistema", papeis: ["admin"], montar: abaLog },
+  { id: "mcp", nome: "MCP", grupo: "Sistema", papeis: ["admin"], montar: abaMcp }
 ];
+// ícones fixos do próprio código (nunca dado da API): traço 24x24 com currentColor
+const ICONES = {
+  visao: "M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z",
+  moderacao: "M12 3v18M5 7h14M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0zM8 21h8",
+  memepedia: "M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M9 8h6",
+  memes: "M3 6h18v13H3zM3 6l3-3h12l3 3M8 12l3 2-3 2z",
+  cartas: "M7 4h9a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9 9h6M9 13h6",
+  eras: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2",
+  usuarios: "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 7M22 21a7 7 0 0 0-4-6",
+  comunidade: "M4 5h16v11H9l-5 4zM8 9h8M8 12h5",
+  log: "M6 3h12v18H6zM9 8h6M9 12h6M9 16h4",
+  mcp: "M8 15a4 4 0 1 1 3.9-5H22v4h-3v3h-3v-3h-4.1A4 4 0 0 1 8 15z"
+};
+function icone(nome) {
+  const NS = "http://www.w3.org/2000/svg";
+  const s = document.createElementNS(NS, "svg");
+  s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false"); s.setAttribute("class", "ico");
+  const p = document.createElementNS(NS, "path"); p.setAttribute("d", ICONES[nome] || ""); s.append(p); return s;
+}
 
 function painel() {
   const visiveis = ABAS.filter((a) => a.papeis.includes(eu.papel));
-  const tabs = h("div", { class: "tabs", role: "tablist", "aria-label": "Seções do painel" });
+  const tabs = h("div", { class: "tabs", role: "tablist", "aria-orientation": "vertical", "aria-label": "Seções do painel" });
   const paineis = h("div");
   const mapa = {};
+  let grupoAtual, caixa = null;
   for (const a of visiveis) {
-    const b = h("button", { class: "tab", type: "button", role: "tab", id: "t-" + a.id, "aria-controls": "p-" + a.id, "aria-selected": "false", tabindex: "-1" }, a.nome);
+    if (!caixa || a.grupo !== grupoAtual) {
+      grupoAtual = a.grupo;
+      caixa = h("div", { class: "nav-grupo", role: "none" });
+      if (a.grupo) caixa.append(h("span", { class: "nav-rot", "aria-hidden": "true" }, a.grupo));
+      tabs.append(caixa);
+    }
+    const b = h("button", { class: "tab", type: "button", role: "tab", id: "t-" + a.id, "aria-controls": "p-" + a.id, "aria-selected": "false", tabindex: "-1", title: a.nome }, icone(a.id), h("span", { class: "tab-nome" }, a.nome));
     const p = h("section", { role: "tabpanel", id: "p-" + a.id, "aria-labelledby": "t-" + a.id, hidden: true, tabindex: "0" });
-    b.addEventListener("click", () => { if (location.hash !== "#" + a.id) location.hash = a.id; else ativar(a.id); });
-    tabs.append(b); paineis.append(p); mapa[a.id] = { a, b, p, montado: false };
+    b.addEventListener("click", () => { fecharGaveta(); if (location.hash !== "#" + a.id) location.hash = a.id; else ativar(a.id); });
+    caixa.append(h("div", { class: "nav-item", role: "none" }, b));
+    paineis.append(p); mapa[a.id] = { a, b, p, montado: false };
   }
   tabs.addEventListener("keydown", (e) => {
     const ids = Object.keys(mapa); const i = ids.findIndex((k) => mapa[k].b === document.activeElement);
     if (i < 0) return; let j = null;
-    if (e.key === "ArrowRight") j = (i + 1) % ids.length; else if (e.key === "ArrowLeft") j = (i - 1 + ids.length) % ids.length;
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") j = (i + 1) % ids.length; else if (e.key === "ArrowUp" || e.key === "ArrowLeft") j = (i - 1 + ids.length) % ids.length;
     else if (e.key === "Home") j = 0; else if (e.key === "End") j = ids.length - 1;
     if (j == null) return; e.preventDefault(); mapa[ids[j]].b.focus(); location.hash = ids[j];
   });
+  // selo com a contagem da fila de moderação (só aparece se a API entregar o número; erro = sem selo)
+  const selo = h("span", { class: "nav-selo", "aria-hidden": "true", hidden: true });
+  const desc = h("span", { class: "sr", id: "bd-moderacao" });
+  if (mapa.moderacao) mapa.moderacao.b.parentNode.append(selo, desc);
+  let contando = false;
+  async function contarFila() {
+    if (!mapa.moderacao || contando) return; contando = true;
+    try {
+      const r = await api("GET", "/api/mod/fila");
+      const n = r.ok && r.data && Array.isArray(r.data.itens) ? r.data.itens.length : 0;
+      selo.hidden = !n; selo.textContent = n > 99 ? "99+" : n ? String(n) : "";
+      desc.textContent = n ? n + (n === 1 ? " envio na fila" : " envios na fila") : "";
+      if (n) mapa.moderacao.b.setAttribute("aria-describedby", "bd-moderacao"); else mapa.moderacao.b.removeAttribute("aria-describedby");
+    } catch (e) { /* sem selo */ } finally { contando = false; }
+  }
   function ativar(id) {
     if (!mapa[id]) id = visiveis[0].id;
     for (const [k, t] of Object.entries(mapa)) { const on = k === id; t.b.setAttribute("aria-selected", on); t.b.tabIndex = on ? 0 : -1; t.p.hidden = !on; }
     const t = mapa[id];
+    titulo(t.a.nome);
     if (!t.montado || t.a.sempre) { t.montado = true; trocar(t.p); t.a.montar(t.p); }
+    contarFila();
   }
   window.addEventListener("hashchange", () => { if ($("#p-" + (location.hash.slice(1) || "x")) || !location.hash) ativar(location.hash.slice(1)); });
-  trocar(app, tabs, paineis);
+  trocar($("#nav"), tabs);
+  trocar(app, paineis);
   ativar(location.hash.slice(1));
+}
+function titulo(nome) {
+  const t = $("#titulo"); if (t) t.textContent = nome;
+  const c = $("#crumb"); if (c) c.textContent = nome;
+  document.title = nome + " · Admin · NÃO SALVO";
+}
+// gaveta (celular) e recolher (desktop)
+function abrirGaveta() {
+  $("#adm").classList.add("gaveta-aberta"); $("#scrim").hidden = false;
+  $("#menu-btn").setAttribute("aria-expanded", "true");
+  const sel = $("#nav [role=tab][aria-selected=true]") || $("#nav [role=tab]"); if (sel) sel.focus();
+}
+function fecharGaveta(devolverFoco) {
+  const adm = $("#adm"); if (!adm.classList.contains("gaveta-aberta")) return;
+  adm.classList.remove("gaveta-aberta"); $("#scrim").hidden = true;
+  $("#menu-btn").setAttribute("aria-expanded", "false");
+  if (devolverFoco) $("#menu-btn").focus();
+}
+function ligarShell() {
+  const adm = $("#adm"), menu = $("#menu-btn"), rec = $("#recolher-btn");
+  let r0 = false; try { r0 = localStorage.getItem("ns_admin_nav") === "1"; } catch (e) { /* sem storage */ }
+  const pinta = (r) => { adm.classList.toggle("recolhida", r); rec.setAttribute("aria-expanded", String(!r)); rec.setAttribute("aria-label", r ? "Expandir menu lateral" : "Recolher menu lateral"); };
+  pinta(r0);
+  rec.addEventListener("click", () => { const r = !adm.classList.contains("recolhida"); pinta(r); try { localStorage.setItem("ns_admin_nav", r ? "1" : "0"); } catch (e) { /* sem storage */ } });
+  menu.addEventListener("click", () => (adm.classList.contains("gaveta-aberta") ? fecharGaveta(true) : abrirGaveta()));
+  $("#scrim").addEventListener("click", () => fecharGaveta(true));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && adm.classList.contains("gaveta-aberta") && !document.querySelector("dialog[open]")) { e.preventDefault(); fecharGaveta(true); } });
+  window.matchMedia("(max-width: 900px)").addEventListener("change", () => fecharGaveta(false));
 }
 
 // ---------- Visão geral ----------
@@ -1387,7 +1460,7 @@ function sessaoExpirou() {
   telaEntrar("Sua sessão expirou. Entre de novo para continuar.");
 }
 function telaEntrar(msg) {
-  eu = null; mostraQuem();
+  eu = null; mostraQuem(); trocar($("#nav")); fecharGaveta(false); titulo("Admin");
   trocar(app, h("div", { class: "estado" }, h("h2", null, "Entre para acessar"), h("p", null, msg || "O painel é só para a equipe do Não Salvo. Entre com o Discord para continuar."),
     h("p", null, h("a", { class: "b pri", href: "/entrar.html?voltar=/seppzone/" }, "Entrar"))));
   app.querySelector("h2").tabIndex = -1; app.querySelector("h2").focus();
@@ -1410,8 +1483,9 @@ async function boot() {
 }
 
 const temaB = $("#tema");
-const pintaTema = () => { const d = document.documentElement.dataset.theme === "dark"; temaB.setAttribute("aria-checked", d); temaB.textContent = d ? "Tema: escuro" : "Tema: claro"; };
+const pintaTema = () => { const d = document.documentElement.dataset.theme === "dark"; temaB.setAttribute("aria-checked", d); temaB.querySelector(".rot").textContent = d ? "Tema: escuro" : "Tema: claro"; };
 temaB.addEventListener("click", () => { const n = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = n; try { localStorage.setItem("ns_theme", n); } catch (e) { /* sem storage */ } pintaTema(); });
 pintaTema();
+ligarShell();
 boot();
 })();

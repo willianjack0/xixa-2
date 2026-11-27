@@ -14,7 +14,7 @@ const ler = (f) => fs.readFileSync(path.join(RAIZ, f), "utf8");
 // ---------------------------------------------------------------- parte 1: sem navegador
 test("admin.js: aba Memepédia para moderador e admin, API /api/mod/memepedia e nada de innerHTML no bloco novo", () => {
   const js = ler("seppzone/admin.js");
-  assert.match(js, /\{ id: "memepedia", nome: "Memepédia", papeis: \["moderador", "admin"\], montar: abaMemepedia \}/);
+  assert.match(js, /\{ id: "memepedia", nome: "Memepédia", grupo: "Moderação", papeis: \["moderador", "admin"\], montar: abaMemepedia \}/);
   const i = js.indexOf("// ---------- Memepédia: cobertura"), f = js.indexOf("// ---------- telas de acesso e inicialização");
   assert.ok(i > 0 && f > i);
   const bloco = js.slice(i, f);

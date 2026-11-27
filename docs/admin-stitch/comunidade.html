@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"primary-fixed-dim":"#ffb95f","secondary-fixed-dim":"#4cd7f6","on-secondary-fixed":"#001f26","on-primary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","secondary-container":"#03b5d3","inverse-surface":"#d3e4fe","tertiary-container":"#30c88f","primary-fixed":"#ffddb8","surface-container":"#102034","on-surface-variant":"#d8c3ad","on-primary-container":"#613b00","secondary-fixed":"#acedff","on-tertiary":"#003824","on-tertiary-fixed-variant":"#005236","on-background":"#d3e4fe","surface-container-highest":"#26364a","on-primary-fixed":"#2a1700","outline-variant":"#534434","primary-container":"#f59e0b","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","inverse-on-surface":"#213145","on-secondary-container":"#00424e","on-error":"#690005","on-secondary-fixed-variant":"#004e5c","error":"#ffb4ab","surface-variant":"#26364a","on-error-container":"#ffdad6","surface-container-low":"#0b1c30","surface-dim":"#031427","outline":"#a08e7a","error-container":"#93000a","primary":"#ffc174","on-primary":"#472a00","surface":"#031427","secondary":"#4cd7f6","on-tertiary-container":"#004e34","tertiary-fixed":"#6ffbbe","inverse-primary":"#855300","surface-bright":"#2a3a4f","on-surface":"#d3e4fe","background":"#031427","tertiary":"#56e5a9","surface-container-high":"#1b2b3f","on-secondary":"#003640","surface-tint":"#ffb95f"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-sm":"0.5rem","margin-desktop":"1.5rem","gutter":"1rem","margin":"1rem","gutter-desktop":"1.25rem","space-md":"0.75rem","space-xl":"1.75rem","space-lg":"1.25rem","space-xs":"0.25rem"},"fontFamily":{"headline-lg-mobile":["Oswald"],"body-sm":["Inter"],"title-md":["Inter"],"label-mono":["JetBrains Mono"],"body-lg":["Inter"],"headline-lg":["Oswald"],"headline-sm":["Oswald"],"label-lg":["Inter"],"headline-md":["Oswald"],"display-lg":["Oswald"],"body-md":["Inter"],"label-md":["Inter"]},"fontSize":{"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"0.03em","fontWeight":"600"}],"body-sm":["11px",{"lineHeight":"16px","fontWeight":"400"}],"title-md":["16px",{"lineHeight":"22px","fontWeight":"600"}],"label-mono":["11px",{"lineHeight":"14px","letterSpacing":"0em","fontWeight":"500"}],"body-lg":["15px",{"lineHeight":"22px","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"38px","letterSpacing":"0.03em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"0.02em","fontWeight":"500"}],"label-lg":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"30px","letterSpacing":"0.02em","fontWeight":"600"}],"display-lg":["48px",{"lineHeight":"52px","letterSpacing":"0.04em","fontWeight":"700"}],"body-md":["13px",{"lineHeight":"18px","fontWeight":"400"}],"label-md":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"600"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low z-50 hidden md:flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="flex flex-col h-full overflow-hidden"><div class="h-14 px-gutter-desktop flex items-center justify-between shrink-0 bg-surface-container-low"><div class="flex items-center gap-space-sm"><img alt="Logo Não Salvo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB_wCaM1dJa0JTXZqPdTQpEDG9lWMv54hWBga6RdAKrd1TW_6gIWtAGuG_Bmci8G9cAYG6QoHdkgD29FISuvW_4_g8SR2bxHg_PThwlBou-5a3miuOn8LM4D_G09qlMBL5_U9eFkGboH2i1fhd-9_Ou3Pi98AOXY8iB3oVk7ViuWeFAh9VCYw7fDiQkwin6oG0N8N2u74IuAYHt7eIjwtbh_Tv1Oq00trDay1IHJRE"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm uppercase tracking-wider text-primary leading-none">NÃO SALVO</span><span class="font-label-mono text-label-mono text-secondary tracking-normal uppercase">MUSEU MEMÉTICA</span></div></div><span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface-variant">v3.4</span></div><nav class="flex-1 px-space-sm py-space-sm overflow-y-auto space-y-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg"><div class="mb-space-xs"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="visao-geral" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Visão Geral</span></a></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">MODERAÇÃO</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="moderacao" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Moderação</span><span class="font-label-mono text-label-mono px-1.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-bold">14</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="memepedia" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Memepédia</span></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">ACERVO</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="memes" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Memes</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="cartas-e-colecoes" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Cartas e Coleções</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="eras" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Eras Históricas</span></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">PESSOAS</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="usuarios" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Usuários</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="comunidade" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Comunidade</span><span class="font-label-mono text-label-mono px-1 py-0.5 rounded bg-surface-container-highest text-secondary text-[9px]">RADAR</span></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">SISTEMA</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="log-de-auditoria" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Log Auditoria</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="mcp-api-keys" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">MCP / API Keys</span></a></div></div></nav><div class="p-space-sm bg-surface-container-lowest shrink-0"><div class="p-space-sm rounded bg-surface-container flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-primary text-[16px]">tune</span><span class="font-label-mono text-label-mono text-on-surface uppercase">Visão Ativa</span></div><div class="flex items-center gap-1 bg-surface-container-highest p-0.5 rounded"><span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-bold">ADM</span><span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded text-outline hover:text-on-surface cursor-pointer">MOD</span></div></div></div></div></aside><div class="md:pl-64"><header class="fixed top-0 left-0 md:left-64 right-0 h-14 bg-surface/85 backdrop-blur-xl z-40 px-gutter md:px-gutter-desktop flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.25)]"><div class="flex items-center gap-space-md"><div class="md:hidden flex items-center gap-space-sm"><img alt="Logo Não Salvo" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB_wCaM1dJa0JTXZqPdTQpEDG9lWMv54hWBga6RdAKrd1TW_6gIWtAGuG_Bmci8G9cAYG6QoHdkgD29FISuvW_4_g8SR2bxHg_PThwlBou-5a3miuOn8LM4D_G09qlMBL5_U9eFkGboH2i1fhd-9_Ou3Pi98AOXY8iB3oVk7ViuWeFAh9VCYw7fDiQkwin6oG0N8N2u74IuAYHt7eIjwtbh_Tv1Oq00trDay1IHJRE"/></div><div class="flex items-center gap-space-xs font-label-mono text-label-mono text-outline"><span class="text-on-surface-variant uppercase font-semibold">PAINEL</span><span>/</span><span class="text-on-surface-variant uppercase font-semibold">PESSOAS</span><span>/</span><span class="text-secondary font-semibold uppercase">COMUNIDADE</span></div></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-primary-container/20 text-primary-fixed-dim"><span class="material-symbols-outlined text-[14px]">verified_user</span><span class="font-label-mono text-label-mono font-bold tracking-wider">ADMIN ONLY</span></div><button class="flex items-center gap-1 p-space-xs rounded bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[18px]">dark_mode</span></button><a class="hidden lg:flex items-center gap-space-xs text-on-surface-variant hover:text-secondary font-label-mono text-label-mono transition-colors" href="#"><span class="uppercase tracking-wider">Voltar ao site</span><span class="material-symbols-outlined text-[15px]">open_in_new</span></a><div class="flex items-center gap-space-sm pl-space-xs"><div class="hidden sm:flex flex-col text-right leading-none"><span class="font-label-lg text-label-lg text-on-surface">Cid / Arquivista-Chefe</span><span class="font-label-mono text-[10px] text-outline">cid@naosalvo.com.br</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrqS8A3T25Mr_xsOMlRcBjnSdPgK1FelWgnb0Hp5i0e5L-bKqZzl0U-Y1xelnJMfYYM81fHrtDg8GyheHoAC4UtpM51KdEkKZkT9dJz4xcB913V48maRu1I0AYyNMyFS2yC0F3RPA3mawtBDKY7WPSFby4haiX586XCDU0ECvkskoHYv6VzZcIrg2jmwNMeXTzR2HRFwFGBxaIGats6DsKK4JySI11eOu7u1aqGrD69prI_CF9TA2svMpj8CnMwA"/></div></div></header><main class="w-full pt-14 px-gutter md:px-gutter-desktop min-h-screen bg-surface"><div class="flex flex-col w-full pb-16">
+<!-- Top Meta Banner & Page Header -->
+<section class="flex flex-col gap-space-md py-space-md">
+<!-- Sub-breadcrumb & Badges Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex flex-wrap items-center gap-space-xs font-label-mono text-label-mono">
+<span class="text-on-surface-variant uppercase tracking-wider font-semibold">PAINEL</span>
+<span class="text-outline">/</span>
+<span class="text-on-surface-variant uppercase tracking-wider font-semibold">ADMIN</span>
+<span class="text-outline">/</span>
+<span class="text-on-surface-variant uppercase tracking-wider font-semibold">PESSOAS</span>
+<span class="text-outline">/</span>
+<span class="text-primary uppercase tracking-wider font-bold">COMUNIDADE</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-primary-container/20 text-primary-fixed text-label-mono font-bold tracking-wider uppercase">
+          ADMIN ONLY
+        </span>
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-highest text-secondary text-label-mono font-medium tracking-tight uppercase">
+          MODERAÇÃO COMUNITÁRIA v3.4
+        </span>
+<span class="px-space-xs py-0.5 rounded-full bg-tertiary-container/20 text-tertiary text-label-mono font-medium tracking-tight uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+          CANAL ABERTO
+        </span>
+</div>
+</div>
+<!-- Main Title + Quick Global Actions -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="max-w-4xl space-y-space-xs">
+<h1 class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-wider leading-none">
+          GESTÃO DA COMUNIDADE &amp; CURADORIA POPULAR
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl leading-relaxed">
+          Moderação unificada de interações sociais, feedbacks de preservação, sugestões de links do acervo e governança de contribuidores do museu histórico da internet brasileira.
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm shrink-0">
+<button class="px-space-md py-space-sm rounded bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-mono text-label-mono uppercase flex items-center gap-space-xs shadow-sm" id="btnExportCsv">
+<span class="material-symbols-outlined text-secondary text-[16px]">file_download</span>
+<span>Exportar Relatório Geral (CSV)</span>
+</button>
+<button class="px-space-md py-space-sm rounded bg-primary-container text-on-primary-container hover:bg-primary transition-colors font-headline-sm text-headline-sm uppercase font-bold flex items-center gap-space-xs shadow-md" id="btnNewNotice">
+<span class="material-symbols-outlined text-[18px]">add_alert</span>
+<span>+ Criar Aviso Comunitário</span>
+</button>
+</div>
+</div>
+</section>
+<!-- KPI Metrics Telemetry Deck -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-sm py-space-sm">
+<!-- KPI 1: Contribuidores -->
+<div class="p-space-md rounded bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-outline uppercase tracking-wider">Contribuidores Ativos</span>
+<span class="material-symbols-outlined text-primary text-[18px]">badge</span>
+</div>
+<div class="my-space-xs flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-on-surface tracking-wide">4.820</span>
+<span class="font-label-mono text-label-mono text-tertiary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">trending_up</span>+12% mês
+        </span>
+</div>
+<div class="w-full flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>312 curadores certificados</span>
+<span class="text-outline">Tier 1-4</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary/30"></div>
+</div>
+<!-- KPI 2: Comentários -->
+<div class="p-space-md rounded bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-outline uppercase tracking-wider">Comentários Auditados</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">forum</span>
+</div>
+<div class="my-space-xs flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-on-surface tracking-wide">1.240</span>
+<span class="font-label-mono text-label-mono px-1.5 py-0.2 rounded bg-primary-container text-on-primary-container font-bold">
+          38 sob análise
+        </span>
+</div>
+<div class="w-full flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Filtro anti-spam ativo (99.4%)</span>
+<span class="text-tertiary font-label-mono">OK</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-0.5 bg-secondary/30"></div>
+</div>
+<!-- KPI 3: Feedbacks -->
+<div class="p-space-md rounded bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-outline uppercase tracking-wider">Feedbacks &amp; Bugs</span>
+<span class="material-symbols-outlined text-error text-[18px]">bug_report</span>
+</div>
+<div class="my-space-xs flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-on-surface tracking-wide">17</span>
+<span class="font-label-mono text-label-mono text-error flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">priority_high</span>3 críticos
+        </span>
+</div>
+<div class="w-full flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Dessincronia de player FLAC</span>
+<span class="text-error font-label-mono">VÍDEO</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-0.5 bg-error/40"></div>
+</div>
+<!-- KPI 4: Sugestões de Links -->
+<div class="p-space-md rounded bg-surface-container-low shadow-sm flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-outline uppercase tracking-wider">Sugestões de Links</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">link</span>
+</div>
+<div class="my-space-xs flex items-baseline gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-on-surface tracking-wide">54</span>
+<span class="font-label-mono text-label-mono text-secondary">
+          Wayback / YT / DM
+        </span>
+</div>
+<div class="w-full flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Taxa de aproveitamento 82%</span>
+<span class="text-tertiary font-label-mono">ALTA</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-0.5 bg-tertiary/30"></div>
+</div>
+</section>
+<!-- Segmented Controls & Multi-Parameter Filter Matrix -->
+<section class="my-space-sm flex flex-col gap-space-sm bg-surface-container-low p-space-md rounded shadow-sm">
+<!-- Upper Navigation Segmented Tabs -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="inline-flex p-1 rounded bg-surface-container-lowest gap-1 overflow-x-auto max-w-full">
+<button class="tab-btn px-space-md py-space-xs rounded font-label-mono text-label-mono uppercase tracking-wide transition-all bg-primary-container text-on-primary-container font-bold flex items-center gap-space-xs" data-tab="todos">
+<span>Visão Unificada</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-lowest text-primary text-[10px]">142</span>
+</button>
+<button class="tab-btn px-space-md py-space-xs rounded font-label-mono text-label-mono uppercase tracking-wide transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container flex items-center gap-space-xs" data-tab="comentarios">
+<span>Comentários</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-[10px]">38</span>
+</button>
+<button class="tab-btn px-space-md py-space-xs rounded font-label-mono text-label-mono uppercase tracking-wide transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container flex items-center gap-space-xs" data-tab="links">
+<span>Links sugeridos</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-[10px]">54</span>
+</button>
+<button class="tab-btn px-space-md py-space-xs rounded font-label-mono text-label-mono uppercase tracking-wide transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container flex items-center gap-space-xs" data-tab="feedback">
+<span>Feedback</span>
+<span class="px-1.5 py-0.2 rounded-full bg-error-container text-on-error-container text-[10px] font-bold">17</span>
+</button>
+<button class="tab-btn px-space-md py-space-xs rounded font-label-mono text-label-mono uppercase tracking-wide transition-all text-on-surface-variant hover:text-on-surface hover:bg-surface-container flex items-center gap-space-xs" data-tab="contribuidores">
+<span>Contribuidores</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant text-[10px]">4.820</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs text-outline font-label-mono text-label-mono">
+<span class="material-symbols-outlined text-[16px] text-tertiary">wifi_tethering</span>
+<span>STREAM DE ENTRADA: 12ms SYNC</span>
+</div>
+</div>
+<!-- Filter Bar Row -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-xs items-center">
+<!-- Search Input -->
+<div class="md:col-span-5 relative">
+<span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-space-md py-space-xs rounded bg-surface-container text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:bg-surface-container-high shadow-sm" id="searchInput" placeholder="Buscar por autor, termo, URL, hash SHA-1 ou ID..." type="text"/>
+</div>
+<!-- Status Filter -->
+<div class="md:col-span-3">
+<div class="relative">
+<select class="w-full appearance-none px-space-md py-space-xs pr-8 rounded bg-surface-container text-on-surface font-label-mono text-label-mono uppercase focus:outline-none focus:bg-surface-container-high cursor-pointer shadow-sm" id="statusFilter">
+<option value="all">Status: Todos os Registros</option>
+<option value="pending">Status: Pendente / Em Revisão</option>
+<option value="approved">Status: Aprovado / Ativo</option>
+<option value="hidden">Status: Oculto / Rejeitado</option>
+<option value="resolved">Status: Arquivado / Resolvido</option>
+</select>
+<span class="material-symbols-outlined absolute right-space-sm top-1/2 -translate-y-1/2 text-outline text-[16px] pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Date Filter -->
+<div class="md:col-span-2">
+<div class="relative">
+<select class="w-full appearance-none px-space-md py-space-xs pr-8 rounded bg-surface-container text-on-surface font-label-mono text-label-mono uppercase focus:outline-none focus:bg-surface-container-high cursor-pointer shadow-sm" id="dateFilter">
+<option value="7d">Últimos 7 dias</option>
+<option value="30d">Últimos 30 dias</option>
+<option value="2024">Ano de 2024</option>
+<option value="custom">Personalizado</option>
+</select>
+<span class="material-symbols-outlined absolute right-space-sm top-1/2 -translate-y-1/2 text-outline text-[16px] pointer-events-none">calendar_month</span>
+</div>
+</div>
+<!-- Reset & Indicators -->
+<div class="md:col-span-2 flex items-center justify-end gap-space-xs">
+<button class="w-full md:w-auto px-space-sm py-space-xs rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors font-label-mono text-label-mono uppercase flex items-center justify-center gap-1 shadow-sm" id="btnClearFilters">
+<span class="material-symbols-outlined text-[14px]">filter_alt_off</span>
+<span>Limpar</span>
+</button>
+<span class="hidden xl:inline-block font-label-mono text-label-mono text-outline shrink-0">142 itens</span>
+</div>
+</div>
+</section>
+<!-- Contextual Bulk Actions Toolbar -->
+<section class="flex flex-wrap items-center justify-between gap-space-sm py-space-xs px-space-md mb-space-xs rounded bg-surface-container-highest shadow-sm" id="bulkActionsToolbar">
+<div class="flex items-center gap-space-sm">
+<label class="flex items-center gap-space-xs cursor-pointer select-none">
+<input class="w-4 h-4 rounded bg-surface-container text-primary-container focus:ring-0 cursor-pointer accent-primary" id="selectAllCheckbox" type="checkbox"/>
+<span class="font-label-mono text-label-mono uppercase font-bold text-on-surface tracking-wide">
+          Selecionar Todos (<span class="text-primary" id="selectedCount">1</span> selecionado)
+        </span>
+</label>
+<span class="text-outline">|</span>
+<span class="font-label-mono text-label-mono text-secondary uppercase hidden sm:inline">Operações em Lote Concorrentes</span>
+</div>
+<!-- Dynamic Actions according to current perspective -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<!-- Comentários batch actions -->
+<button class="bulk-action-btn px-space-sm py-0.5 rounded bg-surface-container hover:bg-error/20 hover:text-error text-on-surface-variant transition-colors font-label-mono text-label-mono uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">visibility_off</span>
+<span>Ocultar Selecionados</span>
+</button>
+<button class="bulk-action-btn px-space-sm py-0.5 rounded bg-surface-container hover:bg-primary/20 hover:text-primary text-on-surface-variant transition-colors font-label-mono text-label-mono uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+<span>Aprovar em Lote</span>
+</button>
+<button class="bulk-action-btn px-space-sm py-0.5 rounded bg-surface-container hover:bg-error-container hover:text-on-error-container text-on-surface-variant transition-colors font-label-mono text-label-mono uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">report</span>
+<span>Marcar Spam</span>
+</button>
+<div class="h-4 w-px bg-outline/20 mx-1 hidden md:block"></div>
+<!-- Links batch actions -->
+<button class="bulk-action-btn px-space-sm py-0.5 rounded bg-surface-container hover:bg-secondary/20 hover:text-secondary text-on-surface-variant transition-colors font-label-mono text-label-mono uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">rule</span>
+<span>Aprovar Links</span>
+</button>
+<button class="bulk-action-btn px-space-sm py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-colors font-label-mono text-label-mono uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">mark_email_read</span>
+<span>Lidos</span>
+</button>
+</div>
+</section>
+<!-- Master-Detail Split Workspace Layout -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- LEFT COLUMN: Dense Table / Items Stream (7 Cols on LG) -->
+<div class="lg:col-span-7 flex flex-col gap-space-xs">
+<div class="bg-surface-container-low rounded shadow-sm overflow-hidden flex flex-col">
+<!-- Table Column Headers -->
+<div class="grid grid-cols-12 gap-space-xs px-space-md py-space-sm bg-surface-container-lowest text-outline font-label-mono text-label-mono uppercase tracking-wider select-none">
+<div class="col-span-1 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">checklist</span>
+</div>
+<div class="col-span-3">Autor / Entidade</div>
+<div class="col-span-4">Trecho / Conteúdo</div>
+<div class="col-span-2">Data &amp; Hora</div>
+<div class="col-span-2 text-right">Status / Ação</div>
+</div>
+<!-- Scrollable Rows Container -->
+<div class="divide-y divide-surface-container/40 flex flex-col" id="itemsContainer">
+<!-- Row 1: Active Selected (Jeremias miniDV Comment) -->
+<div class="data-row cursor-pointer transition-colors p-space-md grid grid-cols-12 gap-space-xs items-center bg-surface-container/90 relative" data-id="COM-9842" data-status="pending" data-type="comentarios">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="col-span-1 flex items-center justify-center">
+<input checked="" class="item-checkbox w-4 h-4 rounded bg-surface-container-high text-primary-container focus:ring-0 accent-primary" type="checkbox"/>
+</div>
+<div class="col-span-3 min-w-0 pr-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-primary truncate font-bold">@pedrinho_orkut</span>
+</div>
+<span class="font-label-mono text-[10px] text-on-surface-variant flex items-center gap-1 uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Nível 4 • Veterano
+              </span>
+</div>
+<div class="col-span-4 min-w-0 pr-space-xs">
+<p class="font-body-sm text-body-sm text-on-surface line-clamp-2">
+                "O áudio original do Jeremias foi gravado em fita miniDV na rádio Cidade de Teresina, tenho a cópia sem vinheta..."
+              </p>
+<span class="font-label-mono text-[9px] text-secondary uppercase">#jeremias-muito-louco-2006</span>
+</div>
+<div class="col-span-2 min-w-0">
+<span class="font-label-mono text-label-mono text-on-surface-variant block">Hoje, 14:32</span>
+<span class="font-label-mono text-[9px] text-outline">IP: 177.18.230.x</span>
+</div>
+<div class="col-span-2 flex flex-col items-end justify-center gap-1">
+<span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-primary-container/20 text-primary-fixed font-bold uppercase">
+                Em Análise
+              </span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-error/20 hover:text-error text-on-surface-variant transition-colors" title="Ocultar">
+<span class="material-symbols-outlined text-[15px]">visibility_off</span>
+</button>
+<button class="p-1 rounded hover:bg-tertiary-container/20 hover:text-tertiary text-on-surface-variant transition-colors" title="Aprovar">
+<span class="material-symbols-outlined text-[15px]">check_circle</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Row 2: Suggested Link (Grávida de Taubaté) -->
+<div class="data-row cursor-pointer transition-colors p-space-md grid grid-cols-12 gap-space-xs items-center hover:bg-surface-container/40" data-id="LNK-4102" data-status="pending" data-type="links">
+<div class="col-span-1 flex items-center justify-center">
+<input class="item-checkbox w-4 h-4 rounded bg-surface-container-high text-primary-container focus:ring-0 accent-primary" type="checkbox"/>
+</div>
+<div class="col-span-3 min-w-0 pr-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-on-surface truncate">removida-49281</span>
+</div>
+<span class="font-label-mono text-[10px] text-outline uppercase">
+                LGPD Anônimo
+              </span>
+</div>
+<div class="col-span-4 min-w-0 pr-space-xs">
+<p class="font-body-sm text-body-sm text-on-surface line-clamp-2">
+                "Sugestão de espelho alternativo para o meme 'Grávida de Taubaté': https://web.archive.org/web/20120115/record..."
+              </p>
+<span class="font-label-mono text-[9px] text-tertiary uppercase">Wayback Machine Mirror</span>
+</div>
+<div class="col-span-2 min-w-0">
+<span class="font-label-mono text-label-mono text-on-surface-variant block">Hoje, 11:15</span>
+<span class="font-label-mono text-[9px] text-outline">SHA: a9f81d</span>
+</div>
+<div class="col-span-2 flex flex-col items-end justify-center gap-1">
+<span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-surface-container-highest text-secondary font-bold uppercase">
+                Pendente
+              </span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-tertiary-container/20 hover:text-tertiary text-on-surface-variant transition-colors" title="Aprovar Link">
+<span class="material-symbols-outlined text-[15px]">verified</span>
+</button>
+<button class="p-1 rounded hover:bg-error/20 hover:text-error text-on-surface-variant transition-colors" title="Rejeitar Link">
+<span class="material-symbols-outlined text-[15px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Row 3: Feedback Bug (Tapa na Pantera) -->
+<div class="data-row cursor-pointer transition-colors p-space-md grid grid-cols-12 gap-space-xs items-center hover:bg-surface-container/40" data-id="FB-3019" data-status="pending" data-type="feedback">
+<div class="col-span-1 flex items-center justify-center">
+<input class="item-checkbox w-4 h-4 rounded bg-surface-container-high text-primary-container focus:ring-0 accent-primary" type="checkbox"/>
+</div>
+<div class="col-span-3 min-w-0 pr-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-secondary truncate">@aline_dias</span>
+</div>
+<span class="font-label-mono text-[10px] text-on-surface-variant uppercase">
+                Curadora Licenciada
+              </span>
+</div>
+<div class="col-span-4 min-w-0 pr-space-xs">
+<p class="font-body-sm text-body-sm text-on-surface line-clamp-2">
+                "O player de vídeo do meme 'Tapa na Pantera' está dessincronizando o áudio FLAC remasterizado nos navegadores..."
+              </p>
+<span class="font-label-mono text-[9px] text-error uppercase">Bug de Reprodução</span>
+</div>
+<div class="col-span-2 min-w-0">
+<span class="font-label-mono text-label-mono text-on-surface-variant block">Ontem, 22:40</span>
+<span class="font-label-mono text-[9px] text-outline">Linux/Chromium</span>
+</div>
+<div class="col-span-2 flex flex-col items-end justify-center gap-1">
+<span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-bold uppercase">
+                Não Lido
+              </span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container-highest text-on-surface-variant transition-colors" title="Marcar Lido">
+<span class="material-symbols-outlined text-[15px]">done_all</span>
+</button>
+<button class="p-1 rounded hover:bg-primary/20 hover:text-primary text-on-surface-variant transition-colors" title="Responder">
+<span class="material-symbols-outlined text-[15px]">reply</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Row 4: Contribuidor (Morroida) -->
+<div class="data-row cursor-pointer transition-colors p-space-md grid grid-cols-12 gap-space-xs items-center hover:bg-surface-container/40" data-id="USR-0042" data-status="approved" data-type="contribuidores">
+<div class="col-span-1 flex items-center justify-center">
+<input class="item-checkbox w-4 h-4 rounded bg-surface-container-high text-primary-container focus:ring-0 accent-primary" type="checkbox"/>
+</div>
+<div class="col-span-3 min-w-0 pr-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-primary truncate font-bold">@morroida</span>
+</div>
+<span class="font-label-mono text-[10px] text-tertiary uppercase">
+                Arquivista-Chefe
+              </span>
+</div>
+<div class="col-span-4 min-w-0 pr-space-xs">
+<p class="font-body-sm text-body-sm text-on-surface line-clamp-2">
+                "Contribuidor cadastrado no acervo desde 2011. Especialidade: Era de Ouro do YouTube e Blogs pré-2010. 1.420 verbetes..."
+              </p>
+<span class="font-label-mono text-[9px] text-on-surface-variant uppercase">1.420 verbetes auditados</span>
+</div>
+<div class="col-span-2 min-w-0">
+<span class="font-label-mono text-label-mono text-on-surface-variant block">04 Mar 2024</span>
+<span class="font-label-mono text-[9px] text-outline">UID: #00042</span>
+</div>
+<div class="col-span-2 flex flex-col items-end justify-center gap-1">
+<span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-tertiary-container/20 text-tertiary font-bold uppercase">
+                Ativo / Seguro
+              </span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container-highest text-on-surface-variant transition-colors" title="Editar Permissões">
+<span class="material-symbols-outlined text-[15px]">edit_note</span>
+</button>
+<button class="p-1 rounded hover:bg-error/20 hover:text-error text-on-surface-variant transition-colors" title="Remover Cadastro">
+<span class="material-symbols-outlined text-[15px]">person_remove</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Row 5: Comentário Spam (Luíza no Canadá) -->
+<div class="data-row cursor-pointer transition-colors p-space-md grid grid-cols-12 gap-space-xs items-center hover:bg-surface-container/40 opacity-75" data-id="COM-8910" data-status="hidden" data-type="comentarios">
+<div class="col-span-1 flex items-center justify-center">
+<input class="item-checkbox w-4 h-4 rounded bg-surface-container-high text-primary-container focus:ring-0 accent-primary" type="checkbox"/>
+</div>
+<div class="col-span-3 min-w-0 pr-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-outline truncate">removida-1082</span>
+</div>
+<span class="font-label-mono text-[10px] text-error uppercase">
+                Anonimizado (Spammer)
+              </span>
+</div>
+<div class="col-span-4 min-w-0 pr-space-xs">
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                "Link suspeito de cassino online colocado nos comentários do verbete 'Luíza no Canadá' [BLOQUEADO AUTOMATICAMENTE]..."
+              </p>
+<span class="font-label-mono text-[9px] text-error uppercase">Auto-Flag: Phishing</span>
+</div>
+<div class="col-span-2 min-w-0">
+<span class="font-label-mono text-label-mono text-on-surface-variant block">Ontem, 18:05</span>
+<span class="font-label-mono text-[9px] text-outline">IP: 45.161.x.x</span>
+</div>
+<div class="col-span-2 flex flex-col items-end justify-center gap-1">
+<span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-surface-container-highest text-error font-bold uppercase">
+                Oculto / Spam
+              </span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container-highest text-on-surface-variant transition-colors" title="Mostrar Comentário">
+<span class="material-symbols-outlined text-[15px]">visibility</span>
+</button>
+<button class="p-1 rounded hover:bg-error-container hover:text-on-error-container text-on-surface-variant transition-colors" title="Expurgar Registro">
+<span class="material-symbols-outlined text-[15px]">delete_forever</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Row 6: Suggested Link Approved (Bic Muller / Coréia do Norte) -->
+<div class="data-row cursor-pointer transition-colors p-space-md grid grid-cols-12 gap-space-xs items-center hover:bg-surface-container/40" data-id="LNK-3901" data-status="approved" data-type="links">
+<div class="col-span-1 flex items-center justify-center">
+<input class="item-checkbox w-4 h-4 rounded bg-surface-container-high text-primary-container focus:ring-0 accent-primary" type="checkbox"/>
+</div>
+<div class="col-span-3 min-w-0 pr-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-secondary truncate">@bicmuller</span>
+</div>
+<span class="font-label-mono text-[10px] text-outline uppercase">
+                Curador-Mestre
+              </span>
+</div>
+<div class="col-span-4 min-w-0 pr-space-xs">
+<p class="font-body-sm text-body-sm text-on-surface line-clamp-2">
+                "Adicionar recorte de áudio histórico do Podpah com Cid explicando o meme da Coréia do Norte e o envio de cartas..."
+              </p>
+<span class="font-label-mono text-[9px] text-tertiary uppercase">Áudio Adicionado ao Verbete</span>
+</div>
+<div class="col-span-2 min-w-0">
+<span class="font-label-mono text-label-mono text-on-surface-variant block">28 Jan 2025</span>
+<span class="font-label-mono text-[9px] text-outline">Mod: @cid</span>
+</div>
+<div class="col-span-2 flex flex-col items-end justify-center gap-1">
+<span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-tertiary-container/20 text-tertiary font-bold uppercase">
+                Aprovado
+              </span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-error/20 hover:text-error text-on-surface-variant transition-colors" title="Reverter Aprovação">
+<span class="material-symbols-outlined text-[15px]">undo</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Terminal Console Pagination Footer -->
+<div class="px-space-md py-space-sm bg-surface-container-lowest flex flex-wrap items-center justify-between gap-space-sm font-label-mono text-label-mono text-outline">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[15px] text-secondary">terminal</span>
+<span>Exibindo 1-6 de 142 itens filtrados</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant hover:text-on-surface disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[13px]">chevron_left</span>
+</button>
+<button class="px-2.5 py-1 rounded bg-primary-container text-on-primary-container font-bold">1</button>
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high">2</button>
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high">3</button>
+<span class="px-1 text-outline">...</span>
+<button class="px-2.5 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high">24</button>
+<button class="px-2 py-1 rounded bg-surface-container text-on-surface hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-[13px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Live Broadcast Ingestion Microfeed -->
+<div class="p-space-md rounded bg-surface-container-low shadow-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-outline font-label-mono text-label-mono">
+<span class="uppercase tracking-wider flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[14px]">sensors</span>
+            Radar de Eventos da Comunidade (Ao Vivo)
+          </span>
+<span>Buffer: 4 eventos/min</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-xs text-body-sm font-body-sm">
+<div class="p-space-xs rounded bg-surface-container flex flex-col">
+<span class="text-on-surface font-semibold truncate">@danilogentili_fan</span>
+<span class="text-on-surface-variant text-[11px] truncate">Sugeriu link para o meme "Dança do Quadrado"</span>
+<span class="text-outline text-[10px] font-label-mono">Há 2 min</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container flex flex-col">
+<span class="text-on-surface font-semibold truncate">@viciado_em_youtube</span>
+<span class="text-on-surface-variant text-[11px] truncate">Comentou no verbete "Mamonas Assassinas 1995"</span>
+<span class="text-outline text-[10px] font-label-mono">Há 6 min</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container flex flex-col">
+<span class="text-on-surface font-semibold truncate">@bot_auditor_01</span>
+<span class="text-error text-[11px] truncate">Bloqueou tentativa de link duplicado</span>
+<span class="text-outline text-[10px] font-label-mono">Há 11 min</span>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Inspection Panel & Master-Detail Viewer (5 Cols on LG) -->
+<div class="lg:col-span-5 flex flex-col gap-space-sm">
+<!-- Item Detail Inspector Card -->
+<div class="p-space-md rounded bg-surface-container-low shadow-md flex flex-col gap-space-md relative overflow-hidden">
+<!-- Accent Glow Line -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-tertiary"></div>
+<!-- Detail Header -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-outline uppercase tracking-wider">
+              INSPEÇÃO DE REGISTRO #COM-9842
+            </span>
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-secondary font-label-mono text-[10px] uppercase font-bold">
+                COMENTÁRIO
+              </span>
+<span class="px-2 py-0.5 rounded bg-primary-container/20 text-primary font-label-mono text-[10px] uppercase font-bold">
+                AGUARDANDO MODERAÇÃO
+              </span>
+</div>
+</div>
+<h2 class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-wide">
+            Depoimento com Informação Primária de Mídia
+          </h2>
+</div>
+<!-- Author Dossier & Trust Score -->
+<div class="p-space-sm rounded bg-surface-container flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center font-headline-sm text-primary font-bold">
+                P
+              </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-on-surface">Pedro Santos</span>
+<span class="font-label-mono text-label-mono text-primary font-bold">@pedrinho_orkut</span>
+</div>
+<span class="font-label-mono text-[10px] text-outline">UID: #49281 • Conta criada em Junho 2018</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary font-label-mono text-label-mono uppercase font-bold">
+              Conta Limpa
+            </span>
+</div>
+<div class="grid grid-cols-3 gap-space-xs pt-space-xs text-center">
+<div class="p-space-xs rounded bg-surface-container-low">
+<span class="font-headline-sm text-headline-sm text-on-surface block">48</span>
+<span class="font-label-mono text-[9px] text-outline uppercase">Aprovados</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-low">
+<span class="font-headline-sm text-headline-sm text-tertiary block">0</span>
+<span class="font-label-mono text-[9px] text-outline uppercase">Denúncias</span>
+</div>
+<div class="p-space-xs rounded bg-surface-container-low">
+<span class="font-headline-sm text-headline-sm text-secondary block">98%</span>
+<span class="font-label-mono text-[9px] text-outline uppercase">Confiabilidade</span>
+</div>
+</div>
+</div>
+<!-- Full Content Block & Context Target -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between text-outline font-label-mono text-label-mono">
+<span class="uppercase">Conteúdo Submetido</span>
+<span class="text-secondary font-label-mono">148 caracteres</span>
+</div>
+<div class="p-space-md rounded bg-surface-container text-on-surface font-body-md text-body-md leading-relaxed">
+            "O áudio original do Jeremias foi gravado em fita miniDV na rádio Cidade de Teresina, tenho a cópia da fita sem vinheta da TV. Posso digitalizar se o acervo tiver interesse em arquivar o áudio mestre."
+          </div>
+<!-- Linked Meme Entity Card -->
+<div class="p-space-sm rounded bg-surface-container-lowest flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">movie</span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Jeremias Muito Louco (2006)</span>
+<span class="font-label-mono text-[10px] text-outline">Slug: #jeremias-muito-louco-2006 • Era: Clássicos do YouTube</span>
+</div>
+</div>
+<a class="p-1 rounded text-outline hover:text-secondary transition-colors" href="#" title="Abrir Verbete">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Telemetry & Compliance Fingerprint -->
+<div class="grid grid-cols-2 gap-space-xs p-space-sm rounded bg-surface-container text-body-sm font-body-sm text-on-surface-variant font-label-mono">
+<div>
+<span class="text-outline block text-[10px] uppercase">Timestamp BRT:</span>
+<span>2025-02-18 14:32:09</span>
+</div>
+<div>
+<span class="text-outline block text-[10px] uppercase">IP Auditado (Mascarado):</span>
+<span class="text-secondary">177.18.230.***</span>
+</div>
+<div>
+<span class="text-outline block text-[10px] uppercase">Agente / Plataforma:</span>
+<span>Firefox 122 (Linux x86_64)</span>
+</div>
+<div>
+<span class="text-outline block text-[10px] uppercase">Assinatura HMAC:</span>
+<span class="truncate block">e4f3a8b...77c2</span>
+</div>
+</div>
+<!-- Audit Trail / Timeline Pipeline -->
+<div class="space-y-space-xs">
+<span class="font-label-mono text-label-mono text-outline uppercase tracking-wider block">
+            Trilha de Auditoria do Item
+          </span>
+<div class="relative pl-4 space-y-space-sm">
+<div class="absolute left-1.5 top-1 bottom-1 w-px bg-surface-container-highest"></div>
+<div class="relative flex items-start gap-space-xs">
+<div class="w-3 h-3 rounded-full bg-secondary shrink-0 mt-0.5"></div>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">Enviado pelo usuário via frontend</span>
+<span class="font-label-mono text-[10px] text-outline">Hoje às 14:32:09 BRT</span>
+</div>
+</div>
+<div class="relative flex items-start gap-space-xs">
+<div class="w-3 h-3 rounded-full bg-primary-container shrink-0 mt-0.5"></div>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">Sinalizado por filtro automático de palavras-chave: 'fita'</span>
+<span class="font-label-mono text-[10px] text-outline">Hoje às 14:32:10 BRT • Classificador de Mídia Física</span>
+</div>
+</div>
+<div class="relative flex items-start gap-space-xs">
+<div class="w-3 h-3 rounded-full bg-outline shrink-0 mt-0.5 animate-pulse"></div>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-primary">Aguardando despacho manual de @cid_naosalvo</span>
+<span class="font-label-mono text-[10px] text-outline">Tempo na fila: 1h 48m</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Decision Box & Internal Justification -->
+<div class="pt-space-xs flex flex-col gap-space-sm">
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-label-mono text-outline uppercase flex items-center justify-between" for="auditReason">
+<span>Justificativa Técnica (Log Obrigatório)</span>
+<span class="text-[10px] text-secondary">Será gravado no Ledger</span>
+</label>
+<input class="w-full px-space-sm py-space-xs rounded bg-surface-container text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-high" id="auditReason" type="text" value="Colaboração relevante de fita física. Encaminhar solicitação de WAV para o acervo."/>
+</div>
+<!-- Primary Operational Buttons -->
+<div class="grid grid-cols-3 gap-space-xs">
+<button class="px-space-sm py-space-sm rounded bg-surface-container hover:bg-error/20 hover:text-error text-on-surface-variant font-headline-sm text-headline-sm uppercase transition-colors flex items-center justify-center gap-1" id="btnReject">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+<span>Ocultar</span>
+</button>
+<button class="px-space-sm py-space-sm rounded bg-surface-container hover:bg-surface-container-highest text-on-surface-variant font-headline-sm text-headline-sm uppercase transition-colors flex items-center justify-center gap-1" id="btnWarn">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+<span>Advertir</span>
+</button>
+<button class="px-space-sm py-space-sm rounded bg-primary-container text-on-primary-container hover:bg-primary font-headline-sm text-headline-sm uppercase font-bold transition-colors flex items-center justify-center gap-1 shadow-md" id="btnApprove">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Aprovar</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Demonstration Drawer: Empty State Fallback -->
+<div class="p-space-md rounded bg-surface-container-low shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-outline uppercase">Status das Filas de Resolução</span>
+<span class="font-label-mono text-[10px] px-1.5 py-0.5 rounded bg-tertiary-container/20 text-tertiary uppercase">Normalizado</span>
+</div>
+<div class="flex items-center gap-space-md p-space-sm rounded bg-surface-container">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Fila de Reversões de Link</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Nenhum link pendente de contestação nas últimas 24 horas.</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md p-space-sm rounded bg-surface-container">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined text-[20px]">mark_email_read</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface">Fila de Feedbacks Críticos</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Ticket #FB-3019 atribuído automaticamente à equipe técnica.</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Community Notice Modal (Hidden by default, triggered by "+ Criar Aviso Comunitário") -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-space-md bg-surface-container-lowest/80 backdrop-blur-sm hidden" id="noticeModal">
+<div class="w-full max-w-xl p-space-lg rounded bg-surface-container-low shadow-2xl flex flex-col gap-space-md border border-outline-variant/30">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">campaign</span>
+<h3 class="font-headline-md text-headline-md uppercase text-on-surface tracking-wider">
+            Publicar Aviso Geral para a Comunidade
+          </h3>
+</div>
+<button class="p-1 rounded text-outline hover:text-on-surface" id="btnCloseModal">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        O comunicado será exibido no topo do site público e no rodapé dos comentários para todos os usuários cadastrados e visitantes.
+      </p>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-mono text-label-mono text-outline uppercase">Título do Comunicado</label>
+<input class="px-space-md py-space-xs rounded bg-surface-container text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-container-high" placeholder="Ex: Mutirão de digitalização de fitas VHS e Orkut 2004-2008" type="text"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-mono text-label-mono text-outline uppercase">Mensagem Completa (Markdown suportado)</label>
+<textarea class="p-space-md rounded bg-surface-container text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-container-high resize-none" placeholder="Descreva os critérios de envio de links e regras de moderação..." rows="4"></textarea>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-2">
+<input class="rounded bg-surface-container text-primary-container accent-primary" id="urgentNotice" type="checkbox"/>
+<label class="font-label-mono text-label-mono text-on-surface-variant uppercase cursor-pointer" for="urgentNotice">Fixar como banner de urgência</label>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-space-xs rounded bg-surface-container text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono uppercase" id="btnCancelModal">Cancelar</button>
+<button class="px-space-md py-space-xs rounded bg-primary-container text-on-primary-container hover:bg-primary font-headline-sm text-headline-sm uppercase font-bold" id="btnPublishModal">Publicar Aviso</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Filter Tabs Switching Logic
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const rows = document.querySelectorAll('.data-row');
+  const searchInput = document.getElementById('searchInput');
+  const statusFilter = document.getElementById('statusFilter');
+
+  function applyFilters() {
+    const activeTab = document.querySelector('.tab-btn.bg-primary-container')?.dataset.tab || 'todos';
+    const query = searchInput.value.toLowerCase().trim();
+    const status = statusFilter.value;
+
+    rows.forEach(row => {
+      const rowType = row.dataset.type;
+      const rowStatus = row.dataset.status;
+      const rowText = row.innerText.toLowerCase();
+
+      const matchesTab = activeTab === 'todos' || rowType === activeTab;
+      const matchesSearch = !query || rowText.includes(query);
+      const matchesStatus = status === 'all' || rowStatus === status;
+
+      if (matchesTab && matchesSearch && matchesStatus) {
+        row.style.display = 'grid';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabButtons.forEach(b => {
+        b.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-bold');
+        b.classList.add('text-on-surface-variant');
+      });
+      btn.classList.add('bg-primary-container', 'text-on-primary-container', 'font-bold');
+      btn.classList.remove('text-on-surface-variant');
+      applyFilters();
+    });
+  });
+
+  searchInput.addEventListener('input', applyFilters);
+  statusFilter.addEventListener('change', applyFilters);
+
+  document.getElementById('btnClearFilters').addEventListener('click', () => {
+    searchInput.value = '';
+    statusFilter.value = 'all';
+    applyFilters();
+  });
+
+  // Checkbox Selection Counter
+  const selectAll = document.getElementById('selectAllCheckbox');
+  const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+  const selectedCountEl = document.getElementById('selectedCount');
+
+  function updateSelectionCount() {
+    const checkedCount = document.querySelectorAll('.item-checkbox:checked').length;
+    selectedCountEl.textContent = checkedCount;
+    selectAll.checked = checkedCount > 0 && checkedCount === itemCheckboxes.length;
+  }
+
+  selectAll.addEventListener('change', () => {
+    itemCheckboxes.forEach(cb => cb.checked = selectAll.checked);
+    updateSelectionCount();
+  });
+
+  itemCheckboxes.forEach(cb => {
+    cb.addEventListener('change', updateSelectionCount);
+  });
+
+  // Row selection trigger (active state decoration)
+  rows.forEach(row => {
+    row.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.closest('button')) return;
+      rows.forEach(r => {
+        r.classList.remove('bg-surface-container/90');
+        const bar = r.querySelector('.w-1.bg-primary');
+        if (bar) bar.remove();
+      });
+      row.classList.add('bg-surface-container/90');
+      const accent = document.createElement('div');
+      accent.className = 'absolute left-0 top-0 bottom-0 w-1 bg-primary';
+      row.appendChild(accent);
+    });
+  });
+
+  // Modal interactions
+  const modal = document.getElementById('noticeModal');
+  const btnNewNotice = document.getElementById('btnNewNotice');
+  const btnCloseModal = document.getElementById('btnCloseModal');
+  const btnCancelModal = document.getElementById('btnCancelModal');
+  const btnPublishModal = document.getElementById('btnPublishModal');
+
+  btnNewNotice.addEventListener('click', () => modal.classList.remove('hidden'));
+  [btnCloseModal, btnCancelModal, btnPublishModal].forEach(btn => {
+    btn.addEventListener('click', () => modal.classList.add('hidden'));
+  });
+
+  // Approve / Reject quick feedback
+  document.getElementById('btnApprove')?.addEventListener('click', () => {
+    const reason = document.getElementById('auditReason').value;
+    alert(`Registro #COM-9842 Aprovado com sucesso!\nLog de auditoria registrado: "${reason}"`);
+  });
+
+  document.getElementById('btnReject')?.addEventListener('click', () => {
+    alert('Registro #COM-9842 ocultado preventivamente.');
+  });
+</script></main></div><nav class="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-surface-container-low z-50 flex items-center justify-around px-space-sm shadow-[0_-2px_10px_rgba(0,0,0,0.5)]" data-active-classes="text-primary font-bold"><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="visao-geral" href="#"><span class="font-label-mono text-[9px] uppercase">Visão</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface relative" data-path="moderacao" href="#"><span class="font-label-mono text-[9px] uppercase">Mod</span><span class="absolute -top-1 right-1 w-2 h-2 rounded-full bg-primary-container"></span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="memes" href="#"><span class="font-label-mono text-[9px] uppercase">Acervo</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="comunidade" href="#"><span class="font-label-mono text-[9px] uppercase">Social</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="log-de-auditoria" href="#"><span class="font-label-mono text-[9px] uppercase">Audit</span></a></nav></body></html>
