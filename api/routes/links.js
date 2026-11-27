@@ -18,7 +18,7 @@ export default function registrar(r) {
     return send(res, 200, out, { 'Cache-Control': 'public, max-age=120' });
   });
 
-  r.post('/api/links', async ({ req, res, pool, ip, adminToken, usuario }) => {
+  r.post('/api/links', async ({ req, res, pool, ip, chaveHmac, usuario }) => {
     if (limited('l:' + ip, 10)) return send(res, 429, { erro: 'Muitos envios seguidos. Aguarde um pouco.' });
     const b = await lerJson(req);
     if (b === undefined || b === null || typeof b !== 'object' || Array.isArray(b)) return send(res, 400, { erro: 'json inválido' });
@@ -33,7 +33,7 @@ export default function registrar(r) {
     const autor = uRows[0].apelido;
 
     // anti-spam de pendentes: poucos por meme+IP e um teto por meme (o aprovado/recusado não conta)
-    const ipHash = hashIp(adminToken, ip);
+    const ipHash = hashIp(chaveHmac, ip);
     const { rows: [qt] } = await pool.query(
       `SELECT count(*) FILTER (WHERE ip_hash = $2)::int AS do_ip, count(*)::int AS do_meme
          FROM links_sugeridos WHERE meme_id = $1 AND status = 'pendente'`, [id, ipHash]);

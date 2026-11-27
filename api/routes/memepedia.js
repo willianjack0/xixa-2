@@ -22,7 +22,7 @@ export default function registrar(r) {
     return send(res, 200, out, { 'Cache-Control': 'public, max-age=120' });
   });
 
-  r.post('/api/memepedia', async ({ req, res, pool, ip, adminToken }) => {
+  r.post('/api/memepedia', async ({ req, res, pool, ip, chaveHmac }) => {
     if (limited('mp:' + ip, 12)) return send(res, 429, { erro: 'Muitos envios seguidos. Aguarde um pouco.' });
     const b = await lerJson(req);
     if (b === undefined) return send(res, 400, { erro: 'json inválido' });
@@ -34,7 +34,7 @@ export default function registrar(r) {
     if (texto.length < 10) return send(res, 422, { erro: 'Escreva pelo menos 10 caracteres.' });
     if (!/^[\w.\-]{3,20}$/.test(autor)) return send(res, 422, { erro: 'Nome de usuário inválido.' });
     if (fonte && !/^https?:\/\/\S+$/i.test(fonte)) fonte = '';
-    const ipHash = hashIp(adminToken, ip);
+    const ipHash = hashIp(chaveHmac, ip);
     const { rows: [qt] } = await pool.query(
       "SELECT count(*)::int AS n FROM memepedia_edicoes WHERE meme_id = $1 AND ip_hash = $2 AND status = 'pendente'", [id, ipHash]);
     if (qt.n >= EDICOES_PENDENTES_POR_IP) return send(res, 429, { erro: 'Você já tem edições deste meme esperando a moderação.' });

@@ -41,7 +41,7 @@ export async function excluirConta(ctx, confirmar) {
     const { rows: oauth } = await cli.query('SELECT provedor, provedor_id FROM contas_oauth WHERE usuario_id = $1', [id]);
     if (u.banido) {
       for (const o of oauth) {
-        await cli.query('INSERT INTO banimentos_provedor (hash) VALUES ($1) ON CONFLICT DO NOTHING', [hashProvedor(ctx.adminToken, o.provedor, o.provedor_id)]);
+        await cli.query('INSERT INTO banimentos_provedor (hash) VALUES ($1) ON CONFLICT DO NOTHING', [hashProvedor(ctx.chaveHmac ?? ctx.adminToken, o.provedor, o.provedor_id)]);
       }
     }
     await cli.query('DELETE FROM contas_oauth WHERE usuario_id = $1', [id]);

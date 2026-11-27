@@ -8,7 +8,7 @@ const FILTRO = { hoje: `dia = ${HOJE}`, '7d': `dia >= ${HOJE} - 6`, '30d': `dia 
 const periodoDe = (q) => (Object.hasOwn(FILTRO, q) ? q : 'hoje');
 
 export default function registrar(r) {
-  r.post('/api/nav', async ({ req, res, pool, ip, adminToken }) => {
+  r.post('/api/nav', async ({ req, res, pool, ip, chaveHmac }) => {
     if (limited('nav:' + ip, 400)) return send(res, 429, { erro: 'calma' });
     const b = await lerJson(req);
     if (!b || typeof b !== 'object' || Array.isArray(b)) return send(res, 400, { erro: 'json inválido' });
@@ -21,7 +21,7 @@ export default function registrar(r) {
         `INSERT INTO analytics_dia (dia, pagina, origem, dispositivo, visualizacoes, sessoes) VALUES (${HOJE}, $1, $2, $3, 1, $4)
          ON CONFLICT (dia, pagina, origem, dispositivo) DO UPDATE SET visualizacoes = analytics_dia.visualizacoes + 1, sessoes = analytics_dia.sessoes + $4`,
         [pagina, origem, disp, b.n === true ? 1 : 0]);
-      const vis = createHmac('sha256', adminToken || 'naosalvo').update('nav|' + ip + '|' + ua).digest('hex').slice(0, 32);
+      const vis = createHmac('sha256', chaveHmac || 'naosalvo').update('nav|' + ip + '|' + ua).digest('hex').slice(0, 32);
       const novo = await pool.query(`INSERT INTO analytics_visitante_dia (dia, visitante) VALUES (${HOJE}, $1) ON CONFLICT DO NOTHING`, [vis]);
       if (novo.rowCount) {
         await pool.query(`INSERT INTO analytics_visitantes (dia, visitantes) VALUES (${HOJE}, 1) ON CONFLICT (dia) DO UPDATE SET visitantes = analytics_visitantes.visitantes + 1`);
