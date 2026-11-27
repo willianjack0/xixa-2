@@ -1,0 +1,28 @@
+/* Admin · aba Comunidade (referência: docs/admin-stitch/comunidade.png). Só tokens do theme.css, claro e escuro. */
+/* segmentos como abas de uma barra de ferramentas */
+.com .com-seg{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;margin-bottom:12px;gap:6px}
+.com .com-seg button{border-radius:10px;border-color:transparent;background:transparent;font:700 14px Inter,sans-serif;letter-spacing:.3px}
+.com .com-seg button:hover{background:var(--panel2);color:var(--txt)}
+.com .com-seg button[aria-pressed=true]{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-ink)}
+/* filtros em painel */
+.com .com-filtros{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.com .com-cont{margin:0 2px 12px;font-weight:600}
+/* itens: faixa lateral por situação, em grade quando há espaço */
+.com .com-lista{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.com .com-lista>.item{display:flex;flex-direction:column;gap:2px;border-left:4px solid var(--line2)}
+.com .com-lista>.item:has(.chip.warn){border-left-color:var(--warn)}
+.com .com-lista>.item:has(.chip.ok){border-left-color:var(--ok)}
+.com .com-lista>.item:has(.chip.bad){border-left-color:var(--bad)}
+.com .com-lista>.item:has(.chip.info){border-left-color:var(--brand)}
+.com .com-lista .item-h h3{overflow-wrap:anywhere}
+.com .com-lista .item-h .mini{margin-left:auto}
+.com .com-lista .chip{line-height:1.4;padding:2px 8px;align-self:center}
+.com .com-lista .txt{background:var(--panel2);border-radius:10px;padding:8px 12px;margin:6px 0}
+.com .com-lista .acts{margin-top:auto;padding-top:6px}
+@media (min-width:1100px){
+  .com .com-lista{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+}
+@media (max-width:640px){
+  .com .com-seg button{flex:1 1 auto}
+  .com .com-lista .item-h .mini{margin-left:0;flex-basis:100%}
+}

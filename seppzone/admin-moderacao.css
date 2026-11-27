@@ -1,0 +1,41 @@
+/* Admin · aba Moderação (referência: docs/admin-stitch/moderacao.png). Só tokens do theme.css, claro e escuro. */
+.mod{counter-reset:modsec}
+.mod .mod-sec{counter-increment:modsec;margin-bottom:32px}
+.mod .mod-sec>h2{font:700 13px Inter,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--brand-ink);padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.mod .mod-sec>h2::before{content:"0" counter(modsec) " //";color:var(--mut-strong)}
+.mod .mod-cont{letter-spacing:.4px;text-transform:none}
+.mod .mod-sec>.estado{background:var(--panel2)}
+
+/* cartões em grade: 1 coluna no celular, 2 no tablet, 3 no desktop largo */
+.mod .mod-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:14px;align-items:start}
+.mod .mod-item{display:flex;flex-direction:column;gap:2px;border-left:4px solid var(--brand);background:var(--panel)}
+.mod .mod-item .item-h h3{flex:1 1 100%;font-size:20px;line-height:1.2}
+.mod .mod-item .acts{margin-top:auto;padding-top:10px}
+.mod .mod-item .acts .b{flex:1 1 120px}
+.mod .mod-item textarea{background:var(--panel2);min-height:64px}
+.mod .mod-item.atrasada{border-left-color:var(--bad)}
+.mod .mod-item .cd{display:inline-flex;align-items:center;min-height:28px;padding:2px 10px;border-radius:8px;border:1px solid var(--line2);background:var(--panel2);font-size:13px}
+.mod .mod-item .cd.bad{border-color:var(--bad)}
+.mod .mod-sec .filtros{margin-bottom:12px}
+.mod .mod-sec .filtros .campo{flex:0 1 220px}
+.mod .arte-previa{margin:8px 0}
+
+/* Seus envios: tabela em linhas (título, situação, datas) */
+.mod .mod-meus{gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel)}
+.mod .mod-meu{border:0;border-radius:0;border-bottom:1px solid var(--line);display:block;min-height:44px}
+.mod .mod-meu:last-child{border-bottom:0}
+.mod .mod-meu-t{font-size:15px}
+.mod .mod-meu-m{font-size:13px;color:var(--mut-strong);margin:0 8px}
+.mod .mod-meu-s{display:inline-block;justify-self:start;padding:1px 8px;border-radius:8px;border:1px solid var(--line2);background:var(--panel2);font-size:12px}
+.mod .mod-st-aprovado{border-color:var(--ok);color:var(--ok)}
+.mod .mod-st-rejeitado{border-color:var(--bad);color:var(--bad)}
+.mod .mod-st-aberto,.mod .mod-st-ajuste{border-color:var(--warn);color:var(--warn)}
+@media (min-width:900px){
+  .mod .mod-meu{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto;gap:4px 16px;align-items:center}
+  .mod .mod-meu-d{grid-column:1/-1}
+}
+@media (max-width:640px){.mod .mod-item .item-h h3{font-size:18px}}
+
+.mod .mod-sec>p.mini{margin-bottom:12px}
+@media (min-width:900px){.mod .mod-meu-m{margin:0}}
+.mod .chip{line-height:1.4;min-height:0;padding:2px 8px;align-self:center}

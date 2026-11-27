@@ -117,7 +117,7 @@ test("cliente-economia: Blob vai como corpo binário com o próprio Content-Type
 
 test("seppzone: seção 'Artes de cartas' na moderação, com prévia, aprovar, rejeitar com motivo e versões novas", () => {
   const a = ler("seppzone/admin.js");
-  assert.match(a, /h2", null, "Artes de cartas"/);
+  assert.match(a, /sec\("Artes de cartas", artes/);
   assert.match(a, /\/api\/mod\/arte\/envios\?status=pendente/);
   assert.match(a, /\/aprovar/); assert.match(a, /\/rejeitar/);
   assert.match(a, /motivo: \{ rotulo: "Motivo \(3 a 300 caracteres\)"/);

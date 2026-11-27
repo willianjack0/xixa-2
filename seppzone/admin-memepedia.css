@@ -1,0 +1,42 @@
+/* Admin · aba Memepédia (referência: docs/admin-stitch/memepedia.png). Só tokens do theme.css, claro e escuro. */
+/* cobertura: anel + números num cartão */
+.mp .mp-resumo-card{display:flex;gap:20px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.mp-anel{--pct:0;width:112px;height:112px;flex:none;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--ok) calc(var(--pct) * 1%),var(--panel2) 0);position:relative}
+.mp-anel::before{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--panel)}
+.mp-anel span{position:relative;font:700 26px Rajdhani,sans-serif;color:var(--txt)}
+.mp-resumo-txt{flex:1 1 260px;min-width:0}
+.mp .mp-numeros li{padding:2px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel2)}
+.mp .mp-numeros li.mp-num-pend{border-color:var(--warn)}
+.mp .sec>h2{font:700 13px Inter,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--brand-ink);padding-bottom:8px;border-bottom:1px solid var(--line)}
+.mp .sec .mp-resumo{margin-top:12px}
+
+/* filtros em painel */
+.mp .filtros{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px}
+
+/* lista de memes em grade */
+.mp .mp-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:14px;align-items:stretch}
+.mp .mp-meme{display:flex;flex-direction:column;gap:6px;border-left:4px solid var(--brand)}
+.mp .mp-meme-pend{border-left-color:var(--warn)}
+.mp .mp-meme .item-h h3{flex:1 1 100%;font-size:19px;line-height:1.2}
+.mp .mp-meme .acts{margin-top:auto}
+.mp .item-h .chip{line-height:1.4;padding:2px 8px;align-self:center}
+.mp .mp-meme .acts .b{flex:1 1 140px}
+
+/* editor: cabeçalho do meme, campos em duas colunas no desktop, histórico em linha do tempo */
+.mp .mp-cab{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.mp .mp-cab>h2{border-bottom:0;text-transform:none;letter-spacing:.4px;font:700 26px Rajdhani,sans-serif;color:var(--txt);padding-bottom:0}
+.mp .mp-campos-grade{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.mp .mp-campo{margin-bottom:0;border-left:4px solid var(--brand)}
+.mp .mp-campo textarea{background:var(--panel2);line-height:1.5}
+.mp .mp-pend{background:var(--panel2)}
+.mp .mp-hist .lista{border-left:2px solid var(--line2);padding-left:12px;margin-left:6px}
+.mp .mp-hist .item{position:relative}
+.mp .mp-hist .item::before{content:"";position:absolute;left:-19px;top:20px;width:10px;height:10px;border-radius:50%;background:var(--line2)}
+.mp .mp-hist .mp-atual::before{background:var(--brand)}
+@media (min-width:1100px){
+  .mp .mp-campos-grade{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .mp-anel{width:96px;height:96px}
+  .mp .mp-cab>h2{font-size:22px}
+}

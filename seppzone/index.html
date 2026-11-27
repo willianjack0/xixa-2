@@ -11,25 +11,48 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/theme.css?v=20261208a">
-<link rel="stylesheet" href="/seppzone/admin.css?v=6">
+<link rel="stylesheet" href="/seppzone/admin.css?v=7">
+<link rel="stylesheet" href="/seppzone/admin-visao.css?v=3">
+<link rel="stylesheet" href="/seppzone/admin-moderacao.css?v=2">
+<link rel="stylesheet" href="/seppzone/admin-memepedia.css?v=2">
+<link rel="stylesheet" href="/seppzone/admin-usuarios.css?v=1">
+<link rel="stylesheet" href="/seppzone/admin-memes.css?v=2">
+<link rel="stylesheet" href="/seppzone/admin-cartas.css?v=1">
+<link rel="stylesheet" href="/seppzone/admin-eras.css?v=1">
+<link rel="stylesheet" href="/seppzone/admin-comunidade.css?v=2">
+<link rel="stylesheet" href="/seppzone/admin-log.css?v=2">
+<link rel="stylesheet" href="/seppzone/admin-mcp.css?v=2">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 </head>
 <body>
-<div class="wrap">
-  <header class="bar">
-    <a href="/" aria-label="Voltar ao site"><img src="/logo-word.png" alt="Não Salvo" width="198" height="38"></a>
-    <h1>Admin</h1>
-    <span class="sp"></span>
-    <span class="quem" id="quem"></span>
-    <a class="b" href="/">Voltar ao site</a>
-    <button class="b" id="tema" type="button" role="switch" aria-checked="false">Tema</button>
-  </header>
-  <main id="app" aria-live="off"></main>
+<div class="adm" id="adm">
+  <aside class="side" id="side" aria-label="Menu do painel">
+    <a class="side-marca" href="/" aria-label="Voltar ao site"><img src="/logo-word.png" alt="Não Salvo" width="198" height="38"></a>
+    <nav class="side-nav" id="nav" aria-label="Seções do painel"></nav>
+  </aside>
+  <div class="scrim" id="scrim" hidden></div>
+  <div class="col">
+    <header class="bar">
+      <button class="b ibtn so-gaveta" id="menu-btn" type="button" aria-expanded="false" aria-controls="side" aria-label="Abrir menu"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <button class="b ibtn so-desk" id="recolher-btn" type="button" aria-expanded="true" aria-controls="side" aria-label="Recolher menu lateral"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="bar-tit">
+        <p class="crumb">Painel / <span id="crumb">Admin</span></p>
+        <h1 id="titulo">Admin</h1>
+      </div>
+      <span class="sp"></span>
+      <span class="quem" id="quem"></span>
+      <button class="b" id="tema" type="button" role="switch" aria-checked="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg><span class="rot">Tema</span></button>
+      <a class="b" href="/">Voltar ao site</a>
+    </header>
+    <div class="wrap">
+      <main id="app" aria-live="off"></main>
+    </div>
+  </div>
 </div>
 <div class="avisos">
   <div id="av-ok" aria-live="polite" role="status"></div>
   <div id="av-erro" role="alert"></div>
 </div>
-<script src="/seppzone/admin.js?v=7"></script>
+<script src="/seppzone/admin.js?v=12"></script>
 </body>
 </html>

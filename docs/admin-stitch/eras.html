@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"primary-fixed-dim":"#ffb95f","secondary-fixed-dim":"#4cd7f6","on-secondary-fixed":"#001f26","on-primary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","secondary-container":"#03b5d3","inverse-surface":"#d3e4fe","tertiary-container":"#30c88f","primary-fixed":"#ffddb8","surface-container":"#102034","on-surface-variant":"#d8c3ad","on-primary-container":"#613b00","secondary-fixed":"#acedff","on-tertiary":"#003824","on-tertiary-fixed-variant":"#005236","on-background":"#d3e4fe","surface-container-highest":"#26364a","on-primary-fixed":"#2a1700","outline-variant":"#534434","primary-container":"#f59e0b","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","inverse-on-surface":"#213145","on-secondary-container":"#00424e","on-error":"#690005","on-secondary-fixed-variant":"#004e5c","error":"#ffb4ab","surface-variant":"#26364a","on-error-container":"#ffdad6","surface-container-low":"#0b1c30","surface-dim":"#031427","outline":"#a08e7a","error-container":"#93000a","primary":"#ffc174","on-primary":"#472a00","surface":"#031427","secondary":"#4cd7f6","on-tertiary-container":"#004e34","tertiary-fixed":"#6ffbbe","inverse-primary":"#855300","surface-bright":"#2a3a4f","on-surface":"#d3e4fe","background":"#031427","tertiary":"#56e5a9","surface-container-high":"#1b2b3f","on-secondary":"#003640","surface-tint":"#ffb95f"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-sm":"0.5rem","margin-desktop":"1.5rem","gutter":"1rem","margin":"1rem","gutter-desktop":"1.25rem","space-md":"0.75rem","space-xl":"1.75rem","space-lg":"1.25rem","space-xs":"0.25rem"},"fontFamily":{"headline-lg-mobile":["Oswald"],"body-sm":["Inter"],"title-md":["Inter"],"label-mono":["JetBrains Mono"],"body-lg":["Inter"],"headline-lg":["Oswald"],"headline-sm":["Oswald"],"label-lg":["Inter"],"headline-md":["Oswald"],"display-lg":["Oswald"],"body-md":["Inter"],"label-md":["Inter"]},"fontSize":{"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"0.03em","fontWeight":"600"}],"body-sm":["11px",{"lineHeight":"16px","fontWeight":"400"}],"title-md":["16px",{"lineHeight":"22px","fontWeight":"600"}],"label-mono":["11px",{"lineHeight":"14px","letterSpacing":"0em","fontWeight":"500"}],"body-lg":["15px",{"lineHeight":"22px","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"38px","letterSpacing":"0.03em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"0.02em","fontWeight":"500"}],"label-lg":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"30px","letterSpacing":"0.02em","fontWeight":"600"}],"display-lg":["48px",{"lineHeight":"52px","letterSpacing":"0.04em","fontWeight":"700"}],"body-md":["13px",{"lineHeight":"18px","fontWeight":"400"}],"label-md":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"600"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low z-50 hidden md:flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="flex flex-col h-full overflow-hidden"><div class="h-14 px-gutter-desktop flex items-center justify-between shrink-0 bg-surface-container-low"><div class="flex items-center gap-space-sm"><img alt="Logo Não Salvo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB_wCaM1dJa0JTXZqPdTQpEDG9lWMv54hWBga6RdAKrd1TW_6gIWtAGuG_Bmci8G9cAYG6QoHdkgD29FISuvW_4_g8SR2bxHg_PThwlBou-5a3miuOn8LM4D_G09qlMBL5_U9eFkGboH2i1fhd-9_Ou3Pi98AOXY8iB3oVk7ViuWeFAh9VCYw7fDiQkwin6oG0N8N2u74IuAYHt7eIjwtbh_Tv1Oq00trDay1IHJRE"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm uppercase tracking-wider text-primary leading-none">NÃO SALVO</span><span class="font-label-mono text-label-mono text-secondary tracking-normal uppercase">MUSEU MEMÉTICA</span></div></div><span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface-variant">v3.4</span></div><nav class="flex-1 px-space-sm py-space-sm overflow-y-auto space-y-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg"><div class="mb-space-xs"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="visao-geral" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Visão Geral</span></a></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">MODERAÇÃO</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="moderacao" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Moderação</span><span class="font-label-mono text-label-mono px-1.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-bold">14</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="memepedia" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Memepédia</span></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">ACERVO</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="memes" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Memes</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="cartas-e-colecoes" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Cartas e Coleções</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="eras-historicas" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Eras Históricas</span></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">PESSOAS</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="usuarios" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Usuários</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="comunidade" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Comunidade</span></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">SISTEMA</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="log-de-auditoria" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">Log Auditoria</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="mcp-api-keys" href="#"><span class="font-label-lg text-label-lg uppercase tracking-wide">MCP / API Keys</span></a></div></div></nav><div class="p-space-sm bg-surface-container-lowest shrink-0"><div class="p-space-sm rounded bg-surface-container flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-primary text-[16px]">tune</span><span class="font-label-mono text-label-mono text-on-surface uppercase">Visão Ativa</span></div><div class="flex items-center gap-1 bg-surface-container-highest p-0.5 rounded"><span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-bold">ADM</span><span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded text-outline hover:text-on-surface cursor-pointer">MOD</span></div></div></div></div></aside><div class="md:pl-64"><header class="fixed top-0 left-0 md:left-64 right-0 h-14 bg-surface/85 backdrop-blur-xl z-40 px-gutter md:px-gutter-desktop flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.25)]"><div class="flex items-center gap-space-md"><div class="md:hidden flex items-center gap-space-sm"><img alt="Logo Não Salvo" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB_wCaM1dJa0JTXZqPdTQpEDG9lWMv54hWBga6RdAKrd1TW_6gIWtAGuG_Bmci8G9cAYG6QoHdkgD29FISuvW_4_g8SR2bxHg_PThwlBou-5a3miuOn8LM4D_G09qlMBL5_U9eFkGboH2i1fhd-9_Ou3Pi98AOXY8iB3oVk7ViuWeFAh9VCYw7fDiQkwin6oG0N8N2u74IuAYHt7eIjwtbh_Tv1Oq00trDay1IHJRE"/></div><div class="flex items-center gap-space-xs font-label-mono text-label-mono text-outline"><span class="text-on-surface-variant uppercase font-semibold">PAINEL</span><span>/</span><span class="text-on-surface-variant uppercase font-semibold">ADMIN</span><span>/</span><span class="text-on-surface-variant uppercase font-semibold">ACERVO</span><span>/</span><span class="text-secondary font-semibold uppercase">ERAS HISTÓRICAS</span></div></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-primary-container/20 text-primary-fixed-dim"><span class="material-symbols-outlined text-[14px]">verified_user</span><span class="font-label-mono text-label-mono font-bold tracking-wider uppercase">ADMIN ONLY</span></div><button class="flex items-center gap-1 p-space-xs rounded bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[18px]">dark_mode</span></button><a class="hidden lg:flex items-center gap-space-xs text-on-surface-variant hover:text-secondary font-label-mono text-label-mono transition-colors" href="#"><span class="uppercase tracking-wider">VOLTAR AO SITE</span><span class="material-symbols-outlined text-[15px]">open_in_new</span></a><div class="flex items-center gap-space-sm pl-space-xs"><div class="hidden sm:flex flex-col text-right leading-none"><span class="font-label-lg text-label-lg text-on-surface">Cid / Arquivista-Chefe</span><span class="font-label-mono text-[10px] text-outline">cid@naosalvo.com.br</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrqS8A3T25Mr_xsOMlRcBjnSdPgK1FelWgnb0Hp5i0e5L-bKqZzl0U-Y1xelnJMfYYM81fHrtDg8GyheHoAC4UtpM51KdEkKZkT9dJz4xcB913V48maRu1I0AYyNMyFS2yC0F3RPA3mawtBDKY7WPSFby4haiX586XCDU0ECvkskoHYv6VzZcIrg2jmwNMeXTzR2HRFwFGBxaIGats6DsKK4JySI11eOu7u1aqGrD69prI_CF9TA2svMpj8CnMwA"/></div></div></header><main class="w-full pt-14 px-gutter md:px-gutter-desktop min-h-screen bg-surface"><div class="flex flex-col w-full pb-12">
+<!-- Content Header Area -->
+<section class="flex flex-col gap-space-md py-space-lg">
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<h1 class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-wider">
+            Eras Históricas da Memética BR
+          </h1>
+<span class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-primary-container/15 text-primary font-label-mono text-label-mono">
+<span class="material-symbols-outlined text-[13px]">shield_lock</span>
+            ADMIN ONLY // TAXONOMIA CANÔNICA
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+          Mapeamento cronológico das eras da internet brasileira, períodos de transição cultural, reordenação e vínculos canônicos com o acervo permanente do Não Salvo.
+        </p>
+</div>
+<!-- Action Button Group -->
+<div class="flex items-center gap-space-sm">
+<div class="hidden xl:flex items-center gap-1.5 px-space-md py-space-xs rounded bg-surface-container text-secondary font-label-mono text-label-mono">
+<span class="material-symbols-outlined text-[16px] animate-pulse">drag_indicator</span>
+          ARRASTE E SOLTE ATIVO (DRAG &amp; DROP)
+        </div>
+<button class="inline-flex items-center gap-space-xs px-space-lg py-space-sm rounded bg-primary text-on-primary font-headline-sm text-headline-sm uppercase tracking-wider hover:bg-primary-fixed transition-colors shadow-md" id="btnNovaEra">
+<span class="material-symbols-outlined text-[18px]">add</span>
+          + Nova Era
+        </button>
+</div>
+</div>
+<!-- Quick Stats Telemetry Strip -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-sm">
+<div class="p-space-md rounded bg-surface-container-low flex items-center justify-between shadow-sm">
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-outline uppercase">Período Total Catalogado</span>
+<span class="font-headline-sm text-headline-sm text-primary tracking-wide">8 ERAS (1998 - 2025)</span>
+</div>
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">history_toggle_off</span>
+</div>
+</div>
+<div class="p-space-md rounded bg-surface-container-low flex items-center justify-between shadow-sm">
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-outline uppercase">Memes Atribuídos</span>
+<span class="font-headline-sm text-headline-sm text-secondary tracking-wide">12.854 MEMES</span>
+</div>
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[18px]">collections_bookmark</span>
+</div>
+</div>
+<div class="p-space-md rounded bg-surface-container-low flex items-center justify-between shadow-sm">
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-outline uppercase">Rascunhos / Sem Vínculo</span>
+<span class="font-headline-sm text-headline-sm text-tertiary tracking-wide">1 ERA ELEGÍVEL REMOÇÃO</span>
+</div>
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[18px]">delete_sweep</span>
+</div>
+</div>
+<div class="p-space-md rounded bg-surface-container-low flex items-center justify-between shadow-sm">
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-outline uppercase">Integridade Taxonômica</span>
+<span class="font-headline-sm text-headline-sm text-on-surface tracking-wide">100% CANÔNICA</span>
+</div>
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+</div>
+</div>
+<!-- Search & Filter Controls -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm p-space-sm rounded bg-surface-container-low">
+<div class="relative flex-1 min-w-[280px]">
+<span class="material-symbols-outlined absolute left-space-md top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full bg-surface-container pl-10 pr-24 py-space-sm rounded text-on-surface font-body-md text-body-md placeholder:text-outline focus:outline-none focus:bg-surface-container-highest transition-colors" id="filtroEras" placeholder="Filtrar era histórica por nome, ano ou slug..." type="text"/>
+<div class="absolute right-space-md top-1/2 -translate-y-1/2 flex items-center gap-1 font-label-mono text-[10px] text-outline bg-surface-container-highest px-1.5 py-0.5 rounded">
+<span>CTRL</span><span>+</span><span>K</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono">
+<span class="text-outline uppercase px-space-xs">Exibir:</span>
+<button class="px-space-sm py-1 rounded bg-surface-container-high text-primary font-semibold">Todas (8)</button>
+<button class="px-space-sm py-1 rounded hover:bg-surface-container text-on-surface-variant transition-colors">Com Memes (7)</button>
+<button class="px-space-sm py-1 rounded hover:bg-surface-container text-on-surface-variant transition-colors">Rascunho (1)</button>
+</div>
+</div>
+</section>
+<!-- 2-Column Split: Timeline List & Inspect Drawer -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop items-start">
+<!-- LEFT COLUMN: 65% (8/12 on lg) Timeline List -->
+<div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-space-xs pb-1">
+<span class="font-headline-sm text-headline-sm uppercase tracking-wider text-outline">
+          Linha do Tempo Canônica [Sequência 01 a 08]
+        </span>
+<span class="font-label-mono text-label-mono text-outline">
+          Reordenação salva automaticamente
+        </span>
+</div>
+<!-- ERA 01 -->
+<article class="group relative flex flex-col sm:flex-row sm:items-center justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all cursor-move shadow-sm" data-era-id="era-bbs-foruns">
+<div class="flex items-start sm:items-center gap-space-md min-w-0">
+<div class="flex items-center gap-space-xs shrink-0 text-outline group-hover:text-primary">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+<span class="font-label-mono text-label-mono text-outline group-hover:text-on-surface">#01</span>
+</div>
+<div class="w-3 h-8 rounded bg-primary shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">
+                Era Pré-Histórica &amp; BBS / Fóruns
+              </h2>
+<span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container text-secondary">
+                1998 - 2003
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-0.5 font-label-mono text-body-sm text-outline">
+<span class="text-on-surface-variant font-medium">412 memes</span>
+<span>•</span>
+<span class="text-tertiary">CANÔNICA / ATIVA</span>
+<span>•</span>
+<span class="text-outline">slug: `era-bbs-foruns`</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs pt-space-sm sm:pt-0 shrink-0 self-end sm:self-center">
+<button class="p-space-xs rounded hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" title="Editar metadados da era">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container text-on-surface-variant hover:text-secondary hover:bg-surface-container-high font-label-mono text-label-mono uppercase transition-colors" title="Inspecionar memes desta era">
+            Inspecionar
+          </button>
+<!-- Locked Delete Button -->
+<div class="relative group/lock">
+<button class="p-space-xs rounded bg-surface-container-highest/40 text-outline cursor-not-allowed opacity-60 flex items-center justify-center" disabled="">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+<div class="absolute right-0 bottom-full mb-2 hidden group-hover/lock:flex flex-col w-64 p-space-sm rounded bg-surface-container-highest text-on-surface shadow-xl z-30 font-label-mono text-body-sm">
+<span class="text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Exclusão bloqueada:
+              </span>
+<span class="text-on-surface-variant pt-0.5">Existem 412 memes indexados nesta era. Reatribua os memes antes de remover.</span>
+</div>
+</div>
+</div>
+</article>
+<!-- ERA 02 -->
+<article class="group relative flex flex-col sm:flex-row sm:items-center justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all cursor-move shadow-sm" data-era-id="era-orkut-fotolog">
+<div class="flex items-start sm:items-center gap-space-md min-w-0">
+<div class="flex items-center gap-space-xs shrink-0 text-outline group-hover:text-primary">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+<span class="font-label-mono text-label-mono text-outline group-hover:text-on-surface">#02</span>
+</div>
+<div class="w-3 h-8 rounded bg-secondary shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">
+                Era de Ouro do Orkut &amp; Fotolog
+              </h2>
+<span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container text-secondary">
+                2004 - 2008
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-0.5 font-label-mono text-body-sm text-outline">
+<span class="text-on-surface-variant font-medium">3.420 memes</span>
+<span>•</span>
+<span class="text-tertiary">CANÔNICA / ATIVA</span>
+<span>•</span>
+<span class="text-outline">slug: `era-orkut-fotolog`</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs pt-space-sm sm:pt-0 shrink-0 self-end sm:self-center">
+<button class="p-space-xs rounded hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" title="Editar metadados">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container text-on-surface-variant hover:text-secondary hover:bg-surface-container-high font-label-mono text-label-mono uppercase transition-colors">
+            Inspecionar
+          </button>
+<div class="relative group/lock">
+<button class="p-space-xs rounded bg-surface-container-highest/40 text-outline cursor-not-allowed opacity-60 flex items-center justify-center" disabled="">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+<div class="absolute right-0 bottom-full mb-2 hidden group-hover/lock:flex flex-col w-64 p-space-sm rounded bg-surface-container-highest text-on-surface shadow-xl z-30 font-label-mono text-body-sm">
+<span class="text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Exclusão bloqueada:
+              </span>
+<span class="text-on-surface-variant pt-0.5">Existem 3.420 memes indexados nesta era. Reatribua antes de remover.</span>
+</div>
+</div>
+</div>
+</article>
+<!-- ERA 03 -->
+<article class="group relative flex flex-col sm:flex-row sm:items-center justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all cursor-move shadow-sm" data-era-id="era-msn-blogosfera">
+<div class="flex items-start sm:items-center gap-space-md min-w-0">
+<div class="flex items-center gap-space-xs shrink-0 text-outline group-hover:text-primary">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+<span class="font-label-mono text-label-mono text-outline group-hover:text-on-surface">#03</span>
+</div>
+<div class="w-3 h-8 rounded bg-tertiary shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">
+                Era MSN Messenger &amp; Blogosfera
+              </h2>
+<span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container text-secondary">
+                2006 - 2011
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-0.5 font-label-mono text-body-sm text-outline">
+<span class="text-on-surface-variant font-medium">2.140 memes</span>
+<span>•</span>
+<span class="text-tertiary">CANÔNICA / ATIVA</span>
+<span>•</span>
+<span class="text-outline">slug: `era-msn-blogosfera`</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs pt-space-sm sm:pt-0 shrink-0 self-end sm:self-center">
+<button class="p-space-xs rounded hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" title="Editar metadados">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container text-on-surface-variant hover:text-secondary hover:bg-surface-container-high font-label-mono text-label-mono uppercase transition-colors">
+            Inspecionar
+          </button>
+<div class="relative group/lock">
+<button class="p-space-xs rounded bg-surface-container-highest/40 text-outline cursor-not-allowed opacity-60 flex items-center justify-center" disabled="">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+<div class="absolute right-0 bottom-full mb-2 hidden group-hover/lock:flex flex-col w-64 p-space-sm rounded bg-surface-container-highest text-on-surface shadow-xl z-30 font-label-mono text-body-sm">
+<span class="text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Exclusão bloqueada:
+              </span>
+<span class="text-on-surface-variant pt-0.5">Existem 2.140 memes indexados nesta era. Reatribua antes de remover.</span>
+</div>
+</div>
+</div>
+</article>
+<!-- ERA 04 (ACTIVE / SELECTED INSPECT STATE) -->
+<article class="relative flex flex-col sm:flex-row sm:items-center justify-between p-space-md rounded bg-surface-container-high shadow-md" data-era-id="era-youtube-ouro">
+<!-- Neon active marker on left -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary-container rounded-l"></div>
+<div class="flex items-start sm:items-center gap-space-md min-w-0 pl-1">
+<div class="flex items-center gap-space-xs shrink-0 text-primary">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+<span class="font-label-mono text-label-mono font-bold text-primary">#04</span>
+</div>
+<div class="w-3 h-8 rounded bg-primary-container shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-primary tracking-wide truncate">
+                Era de Ouro do YouTube BR
+              </h2>
+<span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-primary-container text-on-primary font-bold">
+                2006 - 2012
+              </span>
+<span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-primary/20 text-primary uppercase font-bold tracking-widest">
+                SELECIONADA
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-0.5 font-label-mono text-body-sm text-on-surface-variant">
+<span class="text-primary font-semibold">4.890 memes vinculados</span>
+<span>•</span>
+<span class="text-tertiary">CANÔNICA / ATIVA</span>
+<span>•</span>
+<span class="text-outline">slug: `era-youtube-ouro`</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs pt-space-sm sm:pt-0 shrink-0 self-end sm:self-center">
+<button class="p-space-xs rounded bg-surface-container text-primary hover:bg-surface-container-highest transition-colors" title="Editar metadados inline">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<span class="px-space-sm py-1 rounded bg-primary-container text-on-primary-container font-label-mono text-label-mono uppercase font-bold">
+            Inspecionando
+          </span>
+<div class="relative group/lock">
+<button class="p-space-xs rounded bg-surface-container-highest/40 text-outline cursor-not-allowed opacity-60 flex items-center justify-center" disabled="">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+<div class="absolute right-0 bottom-full mb-2 hidden group-hover/lock:flex flex-col w-64 p-space-sm rounded bg-surface-container-highest text-on-surface shadow-xl z-30 font-label-mono text-body-sm">
+<span class="text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Exclusão bloqueada:
+              </span>
+<span class="text-on-surface-variant pt-0.5">Existem 4.890 memes indexados nesta era. Reatribua os memes antes de remover.</span>
+</div>
+</div>
+</div>
+</article>
+<!-- ERA 05 -->
+<article class="group relative flex flex-col sm:flex-row sm:items-center justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all cursor-move shadow-sm" data-era-id="era-tumblr-reality">
+<div class="flex items-start sm:items-center gap-space-md min-w-0">
+<div class="flex items-center gap-space-xs shrink-0 text-outline group-hover:text-primary">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+<span class="font-label-mono text-label-mono text-outline group-hover:text-on-surface">#05</span>
+</div>
+<div class="w-3 h-8 rounded bg-secondary-fixed-dim shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">
+                Era Tumblr &amp; GIFs de Reality
+              </h2>
+<span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container text-secondary">
+                2011 - 2015
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-0.5 font-label-mono text-body-sm text-outline">
+<span class="text-on-surface-variant font-medium">980 memes</span>
+<span>•</span>
+<span class="text-tertiary">CANÔNICA / ATIVA</span>
+<span>•</span>
+<span class="text-outline">slug: `era-tumblr-reality`</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs pt-space-sm sm:pt-0 shrink-0 self-end sm:self-center">
+<button class="p-space-xs rounded hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" title="Editar metadados">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container text-on-surface-variant hover:text-secondary hover:bg-surface-container-high font-label-mono text-label-mono uppercase transition-colors">
+            Inspecionar
+          </button>
+<div class="relative group/lock">
+<button class="p-space-xs rounded bg-surface-container-highest/40 text-outline cursor-not-allowed opacity-60 flex items-center justify-center" disabled="">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+<div class="absolute right-0 bottom-full mb-2 hidden group-hover/lock:flex flex-col w-64 p-space-sm rounded bg-surface-container-highest text-on-surface shadow-xl z-30 font-label-mono text-body-sm">
+<span class="text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Exclusão bloqueada:
+              </span>
+<span class="text-on-surface-variant pt-0.5">Existem 980 memes indexados nesta era.</span>
+</div>
+</div>
+</div>
+</article>
+<!-- ERA 06 -->
+<article class="group relative flex flex-col sm:flex-row sm:items-center justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all cursor-move shadow-sm" data-era-id="era-redes-polarizacao">
+<div class="flex items-start sm:items-center gap-space-md min-w-0">
+<div class="flex items-center gap-space-xs shrink-0 text-outline group-hover:text-primary">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+<span class="font-label-mono text-label-mono text-outline group-hover:text-on-surface">#06</span>
+</div>
+<div class="w-3 h-8 rounded bg-primary-fixed-dim shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">
+                Era da Polarização Facebook &amp; Twitter Clássico
+              </h2>
+<span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container text-secondary">
+                2013 - 2019
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-0.5 font-label-mono text-body-sm text-outline">
+<span class="text-on-surface-variant font-medium">612 memes</span>
+<span>•</span>
+<span class="text-tertiary">CANÔNICA / ATIVA</span>
+<span>•</span>
+<span class="text-outline">slug: `era-redes-polarizacao`</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs pt-space-sm sm:pt-0 shrink-0 self-end sm:self-center">
+<button class="p-space-xs rounded hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" title="Editar metadados">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container text-on-surface-variant hover:text-secondary hover:bg-surface-container-high font-label-mono text-label-mono uppercase transition-colors">
+            Inspecionar
+          </button>
+<div class="relative group/lock">
+<button class="p-space-xs rounded bg-surface-container-highest/40 text-outline cursor-not-allowed opacity-60 flex items-center justify-center" disabled="">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+<div class="absolute right-0 bottom-full mb-2 hidden group-hover/lock:flex flex-col w-64 p-space-sm rounded bg-surface-container-highest text-on-surface shadow-xl z-30 font-label-mono text-body-sm">
+<span class="text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Exclusão bloqueada:
+              </span>
+<span class="text-on-surface-variant pt-0.5">Existem 612 memes indexados nesta era.</span>
+</div>
+</div>
+</div>
+</article>
+<!-- ERA 07 -->
+<article class="group relative flex flex-col sm:flex-row sm:items-center justify-between p-space-md rounded bg-surface-container-low hover:bg-surface-container transition-all cursor-move shadow-sm" data-era-id="era-zapcraft">
+<div class="flex items-start sm:items-center gap-space-md min-w-0">
+<div class="flex items-center gap-space-xs shrink-0 text-outline group-hover:text-primary">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+<span class="font-label-mono text-label-mono text-outline group-hover:text-on-surface">#07</span>
+</div>
+<div class="w-3 h-8 rounded bg-tertiary-container shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">
+                Era dos Memes de WhatsApp &amp; Zapcraft
+              </h2>
+<span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container text-secondary">
+                2016 - 2021
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-0.5 font-label-mono text-body-sm text-outline">
+<span class="text-on-surface-variant font-medium">400 memes</span>
+<span>•</span>
+<span class="text-tertiary">CANÔNICA / ATIVA</span>
+<span>•</span>
+<span class="text-outline">slug: `era-zapcraft`</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs pt-space-sm sm:pt-0 shrink-0 self-end sm:self-center">
+<button class="p-space-xs rounded hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" title="Editar metadados">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container text-on-surface-variant hover:text-secondary hover:bg-surface-container-high font-label-mono text-label-mono uppercase transition-colors">
+            Inspecionar
+          </button>
+<div class="relative group/lock">
+<button class="p-space-xs rounded bg-surface-container-highest/40 text-outline cursor-not-allowed opacity-60 flex items-center justify-center" disabled="">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+</button>
+<div class="absolute right-0 bottom-full mb-2 hidden group-hover/lock:flex flex-col w-64 p-space-sm rounded bg-surface-container-highest text-on-surface shadow-xl z-30 font-label-mono text-body-sm">
+<span class="text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Exclusão bloqueada:
+              </span>
+<span class="text-on-surface-variant pt-0.5">Existem 400 memes indexados nesta era.</span>
+</div>
+</div>
+</div>
+</article>
+<!-- ERA 08: DRAFT / 0 MEMES (DELETION ENABLED) -->
+<article class="group relative flex flex-col sm:flex-row sm:items-center justify-between p-space-md rounded bg-surface-container-lowest hover:bg-surface-container-low transition-all cursor-move shadow-sm" data-era-id="era-cibernetica-draft">
+<div class="flex items-start sm:items-center gap-space-md min-w-0">
+<div class="flex items-center gap-space-xs shrink-0 text-outline group-hover:text-primary">
+<span class="material-symbols-outlined text-[18px]">drag_indicator</span>
+<span class="font-label-mono text-label-mono text-outline">#08</span>
+</div>
+<div class="w-3 h-8 rounded bg-surface-container-highest shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<div class="flex flex-wrap items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-on-surface-variant truncate">
+                Era Cibernética Experimental (Rascunho)
+              </h2>
+<span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container-high text-outline">
+                2025 - Em Definição
+              </span>
+<span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-surface-container-highest text-outline uppercase font-bold">
+                RASCUNHO
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm pt-0.5 font-label-mono text-body-sm text-outline">
+<span class="text-error font-medium">0 memes vinculados</span>
+<span>•</span>
+<span class="text-primary-fixed-dim">ELEGÍVEL PARA EXCLUSÃO</span>
+<span>•</span>
+<span class="text-outline">slug: `era-cibernetica-draft`</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs pt-space-sm sm:pt-0 shrink-0 self-end sm:self-center">
+<button class="p-space-xs rounded hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" title="Editar metadados">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container text-on-surface-variant hover:text-on-surface font-label-mono text-label-mono uppercase transition-colors">
+            Inspecionar
+          </button>
+<!-- Enabled Trash Button for 0 Memes Era -->
+<div class="relative group/trash">
+<button class="p-space-xs rounded bg-error-container text-on-error hover:bg-error transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+<div class="absolute right-0 bottom-full mb-2 hidden group-hover/trash:flex flex-col w-60 p-space-sm rounded bg-surface-container-highest text-on-surface shadow-xl z-30 font-label-mono text-body-sm">
+<span class="text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">delete_forever</span> Excluir era
+              </span>
+<span class="text-on-surface-variant pt-0.5">Sem dependências meméticas. Esta era pode ser removida com segurança.</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Reordering Guidance Banner -->
+<div class="p-space-md rounded bg-surface-container-lowest flex items-center gap-space-sm text-outline font-label-mono text-body-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">info</span>
+<span>Para alterar a precedência cronológica canônica no museu, arraste os itens pelos pontos laterais. A indexação de cartões TCG e links permanentes será atualizada globalmente.</span>
+</div>
+</div>
+<!-- RIGHT COLUMN: 35% (4/12 on lg) Sticky Inspect & Linked Memes Panel -->
+<aside class="lg:col-span-5 xl:col-span-4 sticky top-16 flex flex-col gap-space-md">
+<!-- Era Details Header Card -->
+<div class="p-space-lg rounded bg-surface-container-low shadow-xl flex flex-col gap-space-md">
+<!-- Badge & Identity Header -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded bg-primary-container flex items-center justify-center text-on-primary-container font-headline-md text-headline-md">
+<span class="material-symbols-outlined text-[24px]">smart_display</span>
+</div>
+<div class="flex flex-col leading-tight">
+<div class="flex items-center gap-1.5 font-label-mono text-label-mono text-outline">
+<span class="text-primary font-bold">#ERA-004</span>
+<span>/</span>
+<span>ORDEM #04</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface uppercase tracking-wide">
+                YouTube BR
+              </span>
+</div>
+</div>
+<span class="font-label-mono text-label-mono px-space-sm py-1 rounded bg-primary-container text-on-primary font-bold">
+            2006 - 2012
+          </span>
+</div>
+<!-- Telemetry & Preservation Metric Grid -->
+<div class="grid grid-cols-2 gap-space-xs">
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<span class="font-label-mono text-[10px] text-outline uppercase">Memes Catalogados</span>
+<span class="font-headline-sm text-headline-sm text-primary">4.890</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<span class="font-label-mono text-[10px] text-outline uppercase">Coleções TCG</span>
+<span class="font-headline-sm text-headline-sm text-secondary">12 Decks</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<span class="font-label-mono text-[10px] text-outline uppercase">Preservação Arquivo</span>
+<span class="font-headline-sm text-headline-sm text-tertiary">99.8%</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<span class="font-label-mono text-[10px] text-outline uppercase">Taxa Viral Média</span>
+<span class="font-headline-sm text-headline-sm text-primary-fixed-dim">94 / 100</span>
+</div>
+</div>
+<!-- Description Block -->
+<div class="p-space-sm rounded bg-surface-container flex flex-col gap-1">
+<span class="font-label-mono text-[10px] text-outline uppercase">Sumário Canônico Curatorial</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+            Período marcado pela explosão dos primeiros vloggers, clássicos policiais de regional TV convertidos em virais eternos (Jeremias, Tapa na Pantera) e primórdios da farsa orquestrada pelo Não Salvo.
+          </p>
+</div>
+<!-- Linked Memes Highlights -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-[12px] uppercase text-outline tracking-wider font-semibold">
+              Memes Canônicos de Destaque
+            </span>
+<span class="font-label-mono text-[10px] text-secondary">6 de 4.890 exibidos</span>
+</div>
+<!-- Meme Card Stack -->
+<div class="flex flex-col gap-1.5 max-h-[360px] overflow-y-auto pr-1">
+<!-- Item 1: Jeremias -->
+<div class="p-space-xs rounded bg-surface-container hover:bg-surface-container-high transition-colors flex items-center gap-space-sm">
+<img class="w-12 h-12 object-cover rounded bg-surface-container-highest shrink-0" data-alt="Vintage Brazilian internet viral video screengrab of Jeremias Muito Louco, 2006 low resolution CRT TV broadcast recording with timestamp overlay, retro color grading, nostalgic Brazilian web meme aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLtYmp2e4LocVeuDy3f74ju150gp-rNppAFDDZaIRl4Ho4YNWO1buuDdXhl3thhsrVqiGprpq51cjHCnFuQNcGBmLwBieyH92PDGgx8tY6_8V4PrZQTuOm7dIC5lEBal0CrprUl6xn7PeWHGVJWVgJwLRNG4utVryM6-FAiZIk4fyo_0RGpy-SRXUvV4Rl7ryT5BCe88X043m9nkPbIEF2exYohXlVwiZtVMo_R5KZKBC08glMGrKe76renenVlA"/>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-[13px] text-on-surface truncate font-semibold">Jeremias Muito Louco (2006)</span>
+<span class="font-label-mono text-[9px] px-1 py-0.5 rounded bg-surface-container-highest text-primary">#001</span>
+</div>
+<div class="flex items-center gap-1.5 font-label-mono text-[10px] text-outline pt-0.5">
+<span class="text-on-surface-variant">Bordões &amp; Clássicos</span>
+<span>•</span>
+<span class="text-tertiary">Publicado</span>
+</div>
+</div>
+</div>
+<!-- Item 2: Tapa na Pantera -->
+<div class="p-space-xs rounded bg-surface-container hover:bg-surface-container-high transition-colors flex items-center gap-space-sm">
+<img class="w-12 h-12 object-cover rounded bg-surface-container-highest shrink-0" data-alt="Short comedy film scene screengrab of Tapa na Pantera 2006, Brazilian elderly woman speaking intimately to webcam interview, golden afternoon light, early YouTube cult classic atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmKLE6tutUzxdDJumVFSSJbd-EPpEdC4jKVlJ7lFyW0paZHrnnG2qa0bDJ5knOOW4sLg0kjab2yoWjyfwFNqu4mwLZDPvsufactbV3xPSiEiOsbasa3veMpcwYl9MeZy9S9BjPQkvjL262wcgGajPjZA8ywnQ8GFwe5B_geT-j42UZEmKcaJGqQu5ngiKmXJ1J7STOunD-Qr7JeVtd6NrakVxE_podINdwLKabRA8LrvdkDGrhEgti22cRUBOqyw"/>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-[13px] text-on-surface truncate font-semibold">Tapa na Pantera (2006)</span>
+<span class="font-label-mono text-[9px] px-1 py-0.5 rounded bg-surface-container-highest text-primary">#002</span>
+</div>
+<div class="flex items-center gap-1.5 font-label-mono text-[10px] text-outline pt-0.5">
+<span class="text-on-surface-variant">Curta Web</span>
+<span>•</span>
+<span class="text-tertiary">Publicado</span>
+</div>
+</div>
+</div>
+<!-- Item 3: Cid Coreia do Norte -->
+<div class="p-space-xs rounded bg-surface-container hover:bg-surface-container-high transition-colors flex items-center gap-space-sm">
+<img class="w-12 h-12 object-cover rounded bg-surface-container-highest shrink-0" data-alt="Brazilian internet historic media hoax operation by blog Nao Salvo featuring mock North Korean television broadcast of World Cup victories, vintage news broadcast scanlines, 2011 viral sensation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9HxcjxBR5QajZrMPIbKyeU_BmMTWqHl4ayTZI-g-HGkRd15Uh91rHSSvFJ0s_FgBDXrP2cKg6V31cE0ex3zbukXbXcpCIjjd258fsx7l9ntVGMo2wGyRIzlMIJJAAC3PskBpitvid_E10Snok4_EuQp9Gn58nD2aPLTMLUB6gsSUzvo8Vx3zgm7p1HZSwWAIKfMcY2f8TkCuCDowkrp5j3TumvYbjqPndmwejoqM6vR-Ih_6B0BFB1UhKbay3Tw"/>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-[13px] text-on-surface truncate font-semibold">Cid - Coréia do Norte (2011)</span>
+<span class="font-label-mono text-[9px] px-1 py-0.5 rounded bg-primary-container text-on-primary font-bold">#01998</span>
+</div>
+<div class="flex items-center gap-1.5 font-label-mono text-[10px] text-outline pt-0.5">
+<span class="text-primary font-medium">Operação Canônica</span>
+<span>•</span>
+<span class="text-tertiary">Publicado</span>
+</div>
+</div>
+</div>
+<!-- Item 4: Grávida de Taubaté -->
+<div class="p-space-xs rounded bg-surface-container hover:bg-surface-container-high transition-colors flex items-center gap-space-sm">
+<img class="w-12 h-12 object-cover rounded bg-surface-container-highest shrink-0" data-alt="Morning show television frame grab of Gravida de Taubate wearing massive prosthetic pregnancy belly, colorful TV studio studio lighting, classic Brazilian viral meme archive photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCo5reeYN3ZVtQfX_sw5Yec-N8o177HciG1DHZObd10s9KlH63qJBf59Nje9rQf9TvaXMMbAlXCiJJnvoGpne8yniMI7tdE-PFLkAuQOq1doOcfGY5pRunGwGX1XUhjiwssMhLGtiU9VzGH42NJ2-XwP_WWdSfZ8-KfIu5pODoPuny64MhGut5WnS1j6xP_jgxmefjsbTtBVDh2O5IRr-MtS7Ks9SFxD-Xrc-NbLg-NA-TpvDypNbatKaKehXD7w"/>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-[13px] text-on-surface truncate font-semibold">Grávida de Taubaté (2012)</span>
+<span class="font-label-mono text-[9px] px-1 py-0.5 rounded bg-surface-container-highest text-primary">#003</span>
+</div>
+<div class="flex items-center gap-1.5 font-label-mono text-[10px] text-outline pt-0.5">
+<span class="text-on-surface-variant">TV Aberta / Gafes</span>
+<span>•</span>
+<span class="text-tertiary">Publicado</span>
+</div>
+</div>
+</div>
+<!-- Item 5: Luíza no Canadá -->
+<div class="p-space-xs rounded bg-surface-container hover:bg-surface-container-high transition-colors flex items-center gap-space-sm">
+<img class="w-12 h-12 object-cover rounded bg-surface-container-highest shrink-0" data-alt="Commercial television advertisement clip frame featuring Brazilian family living room, text banner less Luiza who is in Canada, warm commercial lighting, 2012 internet phenomenon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbocFS_PgCH4WY39TEIEdBf4E-sWLuX1BEKk4PQmWLWsipWfHM-6y4Xpv2nGXYQuu0oUMmtglPoDW1tUed66yiXyuZmWTz0Wmj8apGxvVIjxGoyE8ThPEJMe_2sQ7WPQTeWDj3K-0AyVGSshHFjBCyjX81EDjS8Xdcy-I74IooLNIj2j4MEIDVGY7VxLJql5zLRXu9-yatrZilj4DN3r3lfzoaEGoM-MNYkWrfBMJ-92yMpF-VilKXyxpgzkaOCQ"/>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-[13px] text-on-surface truncate font-semibold">Luíza no Canadá (2012)</span>
+<span class="font-label-mono text-[9px] px-1 py-0.5 rounded bg-surface-container-highest text-primary">#004</span>
+</div>
+<div class="flex items-center gap-1.5 font-label-mono text-[10px] text-outline pt-0.5">
+<span class="text-on-surface-variant">Comercial TV</span>
+<span>•</span>
+<span class="text-tertiary">Publicado</span>
+</div>
+</div>
+</div>
+<!-- Item 6: Puta Falta de Sacanagem -->
+<div class="p-space-xs rounded bg-surface-container hover:bg-surface-container-high transition-colors flex items-center gap-space-sm">
+<img class="w-12 h-12 object-cover rounded bg-surface-container-highest shrink-0" data-alt="Crowded concert venue entrance interview with Brazilian emotional emo teenagers reacting angrily to cancelled show, 2010 portable camera news footage, vivid emotional expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVRiwLT1dHD8T5M5CtdQMDW7aiEV3Tw-zXAwMRgOwvq1J5grH5tL4ZbTfyqYWfrhTnJ9nrSXXi_NG4nMiBGt0D5tgpD34q1DOXUgmvFlvhOywvnoJeZcixkRKsyOPzcYUOkY7tXNP-A3PYGbFKJTjB2yEjrcaxvcFpnyKbYXZbaAsgrsMIlMOe7u1YNCr85zM8RUOyu6WqUZ_amDVqeVUC7x10SP4FlIlQJiOqgrWzOUT76MafKJa-HAS5E4pbTg"/>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-[13px] text-on-surface truncate font-semibold">Puta Falta de Sacanagem (2010)</span>
+<span class="font-label-mono text-[9px] px-1 py-0.5 rounded bg-surface-container-highest text-primary">#005</span>
+</div>
+<div class="flex items-center gap-1.5 font-label-mono text-[10px] text-outline pt-0.5">
+<span class="text-on-surface-variant">Emo / Restart</span>
+<span>•</span>
+<span class="text-tertiary">Publicado</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Drawer Buttons -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<a class="w-full py-space-sm px-space-md rounded bg-surface-container-high hover:bg-surface-container-highest text-secondary text-center font-label-lg text-label-lg uppercase tracking-wider flex items-center justify-center gap-1 transition-colors" href="#">
+            Ver todos os 4.890 memes no Acervo
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+<button class="w-full py-space-sm px-space-md rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface text-center font-label-mono text-label-mono uppercase transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[15px]">swap_horiz</span>
+            Reatribuir memes em lote
+          </button>
+</div>
+</div>
+<!-- Quick Curatorial Audit Log Snapshot -->
+<div class="p-space-md rounded bg-surface-container-lowest flex flex-col gap-space-xs shadow-sm">
+<span class="font-headline-sm text-[11px] uppercase tracking-wider text-outline font-semibold">
+          Última Auditoria da Era #004
+        </span>
+<div class="flex items-center justify-between font-label-mono text-[10px] text-on-surface-variant">
+<span>Modificado por: Cid (Admin)</span>
+<span class="text-outline">Hoje, 14:32</span>
+</div>
+<p class="font-label-mono text-[10px] text-outline">
+          Hash de taxonomia validado: <code class="text-secondary">#a89f2-canonica-yt</code>
+</p>
+</div>
+</aside>
+</div>
+</div>
+<script>
+  // Simple quick filter interaction for demonstration
+  const searchInput = document.getElementById('filtroEras');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const eraRows = document.querySelectorAll('article[data-era-id]');
+      eraRows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        if (text.includes(query)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  }
+</script></main></div><nav class="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-surface-container-low z-50 flex items-center justify-around px-space-sm shadow-[0_-2px_10px_rgba(0,0,0,0.5)]" data-active-classes="text-primary font-bold"><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface font-label-mono text-[10px] uppercase" data-path="visao-geral" href="#">Visão</a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface font-label-mono text-[10px] uppercase" data-path="moderacao" href="#">Mod</a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface font-label-mono text-[10px] uppercase" data-path="eras-historicas" href="#">Eras</a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface font-label-mono text-[10px] uppercase" data-path="comunidade" href="#">Social</a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface font-label-mono text-[10px] uppercase" data-path="log-de-auditoria" href="#">Audit</a></nav></body></html>

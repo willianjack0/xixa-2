@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"primary-fixed-dim":"#ffb95f","secondary-fixed-dim":"#4cd7f6","on-secondary-fixed":"#001f26","on-primary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","secondary-container":"#03b5d3","inverse-surface":"#d3e4fe","tertiary-container":"#30c88f","primary-fixed":"#ffddb8","surface-container":"#102034","on-surface-variant":"#d8c3ad","on-primary-container":"#613b00","secondary-fixed":"#acedff","on-tertiary":"#003824","on-tertiary-fixed-variant":"#005236","on-background":"#d3e4fe","surface-container-highest":"#26364a","on-primary-fixed":"#2a1700","outline-variant":"#534434","primary-container":"#f59e0b","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","inverse-on-surface":"#213145","on-secondary-container":"#00424e","on-error":"#690005","on-secondary-fixed-variant":"#004e5c","error":"#ffb4ab","surface-variant":"#26364a","on-error-container":"#ffdad6","surface-container-low":"#0b1c30","surface-dim":"#031427","outline":"#a08e7a","error-container":"#93000a","primary":"#ffc174","on-primary":"#472a00","surface":"#031427","secondary":"#4cd7f6","on-tertiary-container":"#004e34","tertiary-fixed":"#6ffbbe","inverse-primary":"#855300","surface-bright":"#2a3a4f","on-surface":"#d3e4fe","background":"#031427","tertiary":"#56e5a9","surface-container-high":"#1b2b3f","on-secondary":"#003640","surface-tint":"#ffb95f"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-sm":"0.5rem","margin-desktop":"1.5rem","gutter":"1rem","margin":"1rem","gutter-desktop":"1.25rem","space-md":"0.75rem","space-xl":"1.75rem","space-lg":"1.25rem","space-xs":"0.25rem"},"fontFamily":{"headline-lg-mobile":["Oswald"],"body-sm":["Inter"],"title-md":["Inter"],"label-mono":["JetBrains Mono"],"body-lg":["Inter"],"headline-lg":["Oswald"],"headline-sm":["Oswald"],"label-lg":["Inter"],"headline-md":["Oswald"],"display-lg":["Oswald"],"body-md":["Inter"],"label-md":["Inter"]},"fontSize":{"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"0.03em","fontWeight":"600"}],"body-sm":["11px",{"lineHeight":"16px","fontWeight":"400"}],"title-md":["16px",{"lineHeight":"22px","fontWeight":"600"}],"label-mono":["11px",{"lineHeight":"14px","letterSpacing":"0em","fontWeight":"500"}],"body-lg":["15px",{"lineHeight":"22px","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"38px","letterSpacing":"0.03em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"0.02em","fontWeight":"500"}],"label-lg":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"30px","letterSpacing":"0.02em","fontWeight":"600"}],"display-lg":["48px",{"lineHeight":"52px","letterSpacing":"0.04em","fontWeight":"700"}],"body-md":["13px",{"lineHeight":"18px","fontWeight":"400"}],"label-md":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"600"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low z-50 hidden md:flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="flex flex-col h-full overflow-hidden"><div class="h-14 px-gutter-desktop flex items-center justify-between shrink-0 bg-surface-container-low"><div class="flex items-center gap-space-sm"><img alt="Logo Não Salvo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB_wCaM1dJa0JTXZqPdTQpEDG9lWMv54hWBga6RdAKrd1TW_6gIWtAGuG_Bmci8G9cAYG6QoHdkgD29FISuvW_4_g8SR2bxHg_PThwlBou-5a3miuOn8LM4D_G09qlMBL5_U9eFkGboH2i1fhd-9_Ou3Pi98AOXY8iB3oVk7ViuWeFAh9VCYw7fDiQkwin6oG0N8N2u74IuAYHt7eIjwtbh_Tv1Oq00trDay1IHJRE"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm uppercase tracking-wider text-primary leading-none">NÃO SALVO</span><span class="font-label-mono text-label-mono text-secondary tracking-normal uppercase">MUSEU MEMÉTICA</span></div></div><span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface-variant">v3.4</span></div><nav class="flex-1 px-space-sm py-space-sm overflow-y-auto space-y-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg"><div class="mb-space-xs"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="visao-geral" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">dashboard</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Visão Geral</span></div></a></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">MODERAÇÃO</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="moderacao" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">gavel</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Moderação</span></div><span class="font-label-mono text-label-mono px-1.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-bold">14</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="memepedia" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">menu_book</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Memepédia</span></div></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">ACERVO</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="memes" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">movie</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Memes</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="cartas-e-colecoes" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">style</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Cartas e Coleções</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="eras" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">history_toggle_off</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Eras Históricas</span></div></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">PESSOAS</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="usuarios" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">group</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Usuários</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="comunidade" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">forum</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Comunidade</span></div><span class="font-label-mono text-label-mono px-1 py-0.5 rounded bg-surface-container-highest text-secondary text-[9px]">RADAR</span></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">SISTEMA</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="log-de-auditoria" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">receipt_long</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Log Auditoria</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="mcp-api-keys" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">key</span><span class="font-label-lg text-label-lg uppercase tracking-wide">MCP / API Keys</span></div></a></div></div></nav><div class="p-space-sm bg-surface-container-lowest shrink-0"><div class="p-space-sm rounded bg-surface-container flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-primary text-[16px]">tune</span><span class="font-label-mono text-label-mono text-on-surface uppercase">Visão Ativa</span></div><div class="flex items-center gap-1 bg-surface-container-highest p-0.5 rounded"><span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-bold">ADM</span><span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded text-outline hover:text-on-surface cursor-pointer">MOD</span></div></div></div></div></aside><div class="md:pl-64"><header class="fixed top-0 left-0 md:left-64 right-0 h-14 bg-surface/85 backdrop-blur-xl z-40 px-gutter md:px-gutter-desktop flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.25)]"><div class="flex items-center gap-space-md"><div class="md:hidden flex items-center gap-space-sm"><img alt="Logo Não Salvo" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB_wCaM1dJa0JTXZqPdTQpEDG9lWMv54hWBga6RdAKrd1TW_6gIWtAGuG_Bmci8G9cAYG6QoHdkgD29FISuvW_4_g8SR2bxHg_PThwlBou-5a3miuOn8LM4D_G09qlMBL5_U9eFkGboH2i1fhd-9_Ou3Pi98AOXY8iB3oVk7ViuWeFAh9VCYw7fDiQkwin6oG0N8N2u74IuAYHt7eIjwtbh_Tv1Oq00trDay1IHJRE"/></div><div class="flex items-center gap-space-xs font-label-mono text-label-mono text-outline"><span class="text-on-surface-variant uppercase font-semibold">PAINEL</span><span>/</span><span class="text-secondary font-semibold uppercase">ADMIN</span></div></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-primary-container/20 text-primary-fixed-dim"><span class="material-symbols-outlined text-[14px]">verified_user</span><span class="font-label-mono text-label-mono font-bold tracking-wider">ADMIN</span></div><button class="flex items-center gap-1 p-space-xs rounded bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[18px]">dark_mode</span></button><a class="hidden lg:flex items-center gap-space-xs text-on-surface-variant hover:text-secondary font-label-mono text-label-mono transition-colors" href="#"><span class="uppercase tracking-wider">Voltar ao site</span><span class="material-symbols-outlined text-[15px]">open_in_new</span></a><div class="flex items-center gap-space-sm pl-space-xs"><div class="hidden sm:flex flex-col text-right leading-none"><span class="font-label-lg text-label-lg text-on-surface">Cid / Arquivista-Chefe</span><span class="font-label-mono text-[10px] text-outline">cid@naosalvo.com.br</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrqS8A3T25Mr_xsOMlRcBjnSdPgK1FelWgnb0Hp5i0e5L-bKqZzl0U-Y1xelnJMfYYM81fHrtDg8GyheHoAC4UtpM51KdEkKZkT9dJz4xcB913V48maRu1I0AYyNMyFS2yC0F3RPA3mawtBDKY7WPSFby4haiX586XCDU0ECvkskoHYv6VzZcIrg2jmwNMeXTzR2HRFwFGBxaIGats6DsKK4JySI11eOu7u1aqGrD69prI_CF9TA2svMpj8CnMwA"/></div></div></header><main class="w-full pt-14 px-gutter md:px-gutter-desktop min-h-screen bg-surface"><div class="flex flex-col w-full pb-16 space-y-space-lg">
+<!-- Breadcrumb & Top Bar -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono text-outline">
+<span class="text-on-surface-variant uppercase tracking-wider">PAINEL</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface-variant uppercase tracking-wider">ADMIN</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface-variant uppercase tracking-wider">SISTEMA</span>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-semibold uppercase tracking-wider">LOG DE AUDITORIA</span>
+</div>
+<!-- Main Title & Action Bar -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md mt-space-xs">
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-space-sm">
+<h1 class="font-headline-lg text-headline-lg uppercase tracking-wide text-on-surface">
+            LOG DE AUDITORIA
+          </h1>
+<span class="font-label-mono text-label-mono px-2 py-0.5 rounded bg-surface-container-high text-secondary border border-secondary/20">
+            v3.4.1998-BR
+          </span>
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-container/15 text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-mono text-[10px] uppercase font-semibold tracking-wider">TELEMETRIA ATIVA</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-4xl">
+          Registro imutável de eventos de sistema, ações de moderadores e requisições via protocolo MCP. Trilha de auditoria criptográfica com garantia de integridade ponto-a-ponto e somente leitura.
+        </p>
+</div>
+<!-- Action Presets & Export Buttons -->
+<div class="flex flex-wrap items-center gap-space-sm shrink-0">
+<!-- Range Presets -->
+<div class="flex items-center bg-surface-container-lowest p-0.5 rounded-lg shadow-inner">
+<button class="px-2.5 py-1 rounded font-label-mono text-label-mono text-outline hover:text-on-surface transition-colors">Hoje</button>
+<button class="px-2.5 py-1 rounded font-label-mono text-label-mono bg-primary-container text-on-primary-container font-semibold shadow-sm">24h</button>
+<button class="px-2.5 py-1 rounded font-label-mono text-label-mono text-outline hover:text-on-surface transition-colors">7d</button>
+<button class="px-2.5 py-1 rounded font-label-mono text-label-mono text-outline hover:text-on-surface transition-colors">30d</button>
+</div>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[17px] text-secondary">file_download</span>
+<span class="font-headline-sm text-[12px] uppercase tracking-wider font-semibold">Exportar CSV</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[17px] text-primary">verified</span>
+<span class="font-headline-sm text-[12px] uppercase tracking-wider font-semibold">Validar Merkle</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Realtime Sync & Tamper-proof Banner -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm px-space-md py-2.5 rounded-xl bg-surface-container-low shadow-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary">lock_clock</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+<strong class="text-on-surface font-semibold">Registro Imutável:</strong> Append-only store criptografado com Árvore de Merkle
+      </span>
+<span class="font-label-mono text-label-mono text-secondary bg-surface-container px-1.5 py-0.5 rounded">
+        Root: 0x8f4c...9d2e1
+      </span>
+</div>
+<div class="flex items-center gap-2 font-label-mono text-label-mono text-outline self-end sm:self-auto">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary animate-ping"></span>
+<span>Sincronizado há 12s</span>
+<span class="text-outline-variant">•</span>
+<span class="text-on-surface-variant font-semibold">SSE Link Ativo</span>
+</div>
+</div>
+<!-- Telemetry Stat Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Stat 1: Total Eventos -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container p-space-md shadow-md flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-headline-sm text-[11px] uppercase tracking-widest text-outline">Total Eventos Gravados</span>
+<div class="font-display-lg text-[32px] leading-tight text-on-surface font-bold mt-1">
+            1.482.903
+          </div>
+</div>
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">database</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-tertiary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +4.2% vs ontem
+        </span>
+<span class="font-label-mono text-[10px] text-on-surface-variant">Append DB: 4.8 GB (100% OK)</span>
+</div>
+</div>
+<!-- Stat 2: Ações MCP / Agentes IA -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container p-space-md shadow-md flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-headline-sm text-[11px] uppercase tracking-widest text-outline">Requisições MCP / Agentes IA</span>
+<div class="font-display-lg text-[32px] leading-tight text-secondary font-bold mt-1">
+            34.120 <span class="text-title-md font-normal text-on-surface-variant">hoje</span>
+</div>
+</div>
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">smart_toy</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-secondary-fixed flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> 99.98% Sucesso
+        </span>
+<span class="font-label-mono text-[10px] text-error">3 falhas interceptadas</span>
+</div>
+</div>
+<!-- Stat 3: Ações Críticas / Bans -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container p-space-md shadow-md flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-headline-sm text-[11px] uppercase tracking-widest text-outline">Ações Críticas &amp; Punições</span>
+<div class="font-display-lg text-[32px] leading-tight text-primary-container font-bold mt-1">
+            18 <span class="text-title-md font-normal text-outline">/ 24h</span>
+</div>
+</div>
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[20px]">gavel</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-on-surface-variant">
+          14 temp • 4 perm
+        </span>
+<span class="font-label-mono text-[10px] text-tertiary">0 contestações</span>
+</div>
+</div>
+<!-- Stat 4: Integridade Criptográfica -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container p-space-md shadow-md flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-headline-sm text-[11px] uppercase tracking-widest text-outline">Integridade Criptográfica</span>
+<div class="font-display-lg text-[32px] leading-tight text-tertiary font-bold mt-1">
+            100% <span class="text-title-md font-normal text-outline">SHA-256</span>
+</div>
+</div>
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[20px]">encrypted</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between">
+<span class="font-label-mono text-label-mono text-on-surface">
+          Bloco: <span class="text-primary font-bold">#98.860</span>
+</span>
+<span class="font-label-mono text-[10px] text-tertiary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]">shield</span> Auditado
+        </span>
+</div>
+</div>
+</div>
+<!-- Advanced Filters Card -->
+<div class="rounded-xl bg-surface-container-low p-space-md space-y-space-md shadow-sm">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-sm pb-space-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">filter_alt</span>
+<span class="font-headline-sm text-[14px] uppercase tracking-wider text-on-surface font-semibold">
+          Filtros de Telemetria e Auditoria
+        </span>
+</div>
+<div class="flex flex-wrap items-center gap-1.5">
+<span class="font-label-mono text-[10px] uppercase text-outline mr-1">Atalhos:</span>
+<button class="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-mono text-[10px] transition-colors">
+          Bans Recentes
+        </button>
+<button class="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-secondary font-label-mono text-[10px] transition-colors">
+          Chamadas MCP (IA)
+        </button>
+<button class="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-primary font-label-mono text-[10px] transition-colors">
+          Ações de @cid_naosalvo
+        </button>
+<button class="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-tertiary font-label-mono text-[10px] transition-colors">
+          Emissão de Cartas Raras
+        </button>
+<button class="px-2 py-0.5 rounded bg-surface-container hover:bg-surface-container-high text-error font-label-mono text-[10px] transition-colors">
+          LGPD / Exclusão
+        </button>
+</div>
+</div>
+<!-- Inputs Row -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-space-sm">
+<!-- Filter: Ator -->
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[10px] uppercase text-outline">Ator / Executor</label>
+<div class="relative">
+<select class="w-full bg-surface-container text-on-surface font-body-sm text-body-sm px-2.5 py-1.5 rounded-lg appearance-none focus:outline-none focus:bg-surface-container-high">
+<option value="">Todos os atores</option>
+<option>@cid_naosalvo</option>
+<option>@bicmuller</option>
+<option>@morroida</option>
+<option>AutoMod-Bot</option>
+<option>Cards-Engine</option>
+<option>DPO-Service</option>
+</select>
+<span class="material-symbols-outlined text-[16px] text-outline absolute right-2 top-2 pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Filter: Ação -->
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[10px] uppercase text-outline">Ação / Evento</label>
+<div class="relative">
+<select class="w-full bg-surface-container text-on-surface font-body-sm text-body-sm px-2.5 py-1.5 rounded-lg appearance-none focus:outline-none focus:bg-surface-container-high">
+<option value="">Todas as ações</option>
+<option>moderacao.aprovar</option>
+<option>usuario.banir</option>
+<option>meme.editar</option>
+<option>papel.alterar</option>
+<option>mcp.auth.rotate</option>
+<option>carta.emitir</option>
+<option>conta.excluir</option>
+</select>
+<span class="material-symbols-outlined text-[16px] text-outline absolute right-2 top-2 pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Filter: Alvo / Target -->
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[10px] uppercase text-outline">Alvo / Target Slug</label>
+<input class="w-full bg-surface-container text-on-surface placeholder:text-outline font-label-mono text-label-mono px-2.5 py-1.5 rounded-lg focus:outline-none focus:bg-surface-container-high" placeholder="ex: meme_tapa, usr_9041..." type="text"/>
+</div>
+<!-- Filter: Intervalo de Datas -->
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[10px] uppercase text-outline">Intervalo Temporal</label>
+<input class="w-full bg-surface-container text-on-surface font-label-mono text-label-mono px-2.5 py-1.5 rounded-lg focus:outline-none focus:bg-surface-container-high" type="text" value="01/10/2024 - 30/10/2024"/>
+</div>
+<!-- Filter: Severidade -->
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[10px] uppercase text-outline">Severidade</label>
+<div class="flex items-center gap-1 bg-surface-container p-1 rounded-lg">
+<button class="flex-1 py-1 rounded font-label-mono text-[10px] bg-surface-container-highest text-primary font-bold">ALL</button>
+<button class="flex-1 py-1 rounded font-label-mono text-[10px] text-outline hover:text-on-surface">INFO</button>
+<button class="flex-1 py-1 rounded font-label-mono text-[10px] text-outline hover:text-primary">WARN</button>
+<button class="flex-1 py-1 rounded font-label-mono text-[10px] text-outline hover:text-error">CRIT</button>
+</div>
+</div>
+<!-- Filter: Reset Action -->
+<div class="flex flex-col justify-end">
+<button class="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg bg-surface-container hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors font-headline-sm text-[12px] uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">clear_all</span>
+          Limpar Filtros
+        </button>
+</div>
+</div>
+</div>
+<!-- Audit Trail Header Bar -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs px-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide text-on-surface">
+        TRILHA DE EVENTOS AUDITADOS
+      </span>
+<span class="font-label-mono text-label-mono text-outline">
+        (Mostrando 1–7 de 1.482.903 registros)
+      </span>
+</div>
+<div class="flex items-center gap-space-sm font-label-mono text-[11px] text-outline">
+<span>Auto-scroll:</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-secondary font-bold uppercase cursor-pointer hover:bg-surface-container-high">PAUSADO</span>
+</div>
+</div>
+<!-- Chronological Table & Expanded Inspector Layout -->
+<div class="space-y-space-md">
+<!-- Main Log Table -->
+<div class="overflow-x-auto rounded-xl bg-surface-container shadow-md">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest text-outline font-label-mono text-[11px] uppercase tracking-wider">
+<th class="py-3 px-4">Timestamp • Bloco</th>
+<th class="py-3 px-4">Ator / Executor</th>
+<th class="py-3 px-4">Ação / Evento</th>
+<th class="py-3 px-4">Alvo / Entidade</th>
+<th class="py-3 px-4">Origem / IP</th>
+<th class="py-3 px-4 text-right">Payload</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/40 font-body-sm text-body-sm">
+<!-- Row 1 (Expanded / Inspected Item) -->
+<tr class="bg-surface-container-high/70 hover:bg-surface-container-high transition-colors">
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex flex-col font-label-mono">
+<span class="text-on-surface font-semibold">2024-10-30 19:42:11.902</span>
+<span class="text-[10px] text-primary">#98860 • merkl-leaf</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-primary-container/20 text-primary-fixed flex items-center justify-center font-bold text-[10px]">C</span>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface font-semibold">@cid_naosalvo</span>
+<span class="font-label-mono text-[9px] text-primary-fixed uppercase tracking-wider">ROOT ADMIN</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary font-label-mono text-[10px] font-bold uppercase">
+                moderacao.aprovar
+              </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-outline">movie</span>
+<span class="text-secondary font-semibold hover:underline cursor-pointer">meme_tapa_pantera_1080p</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono text-[11px] text-on-surface-variant">
+<span>189.40.12.88</span>
+<span class="text-outline text-[10px] block">São Paulo, BR (VPC Direct)</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-primary-container text-on-primary-container font-label-mono text-[11px] font-bold shadow-sm">
+<span class="material-symbols-outlined text-[14px]">data_object</span>
+                { } Inspecionando
+              </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-high/50 transition-colors">
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex flex-col font-label-mono">
+<span class="text-on-surface">2024-10-30 19:41:04.120</span>
+<span class="text-[10px] text-outline">#98859 • merkl-leaf</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-secondary/20 text-secondary flex items-center justify-center font-bold text-[10px]">B</span>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">@bicmuller</span>
+<span class="font-label-mono text-[9px] text-secondary uppercase tracking-wider">MODERADOR</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded-full bg-error-container/40 text-error font-label-mono text-[10px] font-bold uppercase">
+                usuario.banir
+              </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-outline">person_off</span>
+<span class="text-on-surface hover:underline cursor-pointer">usr_bot_troll_9104</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono text-[11px] text-on-surface-variant">
+<span>201.86.155.12</span>
+<span class="text-outline text-[10px] block">Curitiba, BR (Auth Proxy)</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-on-surface-variant font-label-mono text-[11px] transition-colors">
+<span class="material-symbols-outlined text-[14px]">visibility</span>
+                Diff JSON
+              </button>
+</td>
+</tr>
+<!-- Row 3: MCP Agent -->
+<tr class="hover:bg-surface-container-high/50 transition-colors">
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex flex-col font-label-mono">
+<span class="text-on-surface">2024-10-30 19:39:52.441</span>
+<span class="text-[10px] text-outline">#98858 • merkl-leaf</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-secondary-container/20 text-secondary-fixed flex items-center justify-center font-bold text-[10px]">
+<span class="material-symbols-outlined text-[14px]">smart_toy</span>
+</span>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-secondary">AutoMod-Bot</span>
+<span class="font-label-mono text-[9px] text-outline uppercase tracking-wider">SISTEMA DAEMON</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-primary-fixed-dim font-label-mono text-[10px] font-bold uppercase">
+                meme.editar
+              </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-outline">tag</span>
+<span class="text-on-surface hover:underline cursor-pointer">verbete_galo_cego</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono text-[11px] text-on-surface-variant">
+<span>10.240.0.14</span>
+<span class="text-outline text-[10px] block">Cloudflare Worker • Internal</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-on-surface-variant font-label-mono text-[11px] transition-colors">
+<span class="material-symbols-outlined text-[14px]">visibility</span>
+                Diff JSON
+              </button>
+</td>
+</tr>
+<!-- Row 4: MCP Protocol Auth -->
+<tr class="hover:bg-surface-container-high/50 transition-colors">
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex flex-col font-label-mono">
+<span class="text-on-surface">2024-10-30 19:35:10.003</span>
+<span class="text-[10px] text-outline">#98857 • merkl-leaf</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container-highest text-on-surface flex items-center justify-center font-bold text-[10px]">M</span>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">@morroida</span>
+<span class="font-label-mono text-[9px] text-tertiary uppercase tracking-wider">ARQUIVISTA-CHEFE</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary-fixed-dim font-label-mono text-[10px] font-bold uppercase">
+                mcp.auth.rotate
+              </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-outline">key</span>
+<span class="text-on-surface hover:underline cursor-pointer">key_claude_agent_sub</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono text-[11px] text-on-surface-variant">
+<span>177.18.230.45</span>
+<span class="text-outline text-[10px] block">Rio de Janeiro, BR</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-on-surface-variant font-label-mono text-[11px] transition-colors">
+<span class="material-symbols-outlined text-[14px]">visibility</span>
+                Diff JSON
+              </button>
+</td>
+</tr>
+<!-- Row 5: Cards Engine -->
+<tr class="hover:bg-surface-container-high/50 transition-colors">
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex flex-col font-label-mono">
+<span class="text-on-surface">2024-10-30 19:30:00.812</span>
+<span class="text-[10px] text-outline">#98856 • merkl-leaf</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-primary-container/20 text-primary flex items-center justify-center font-bold text-[10px]">
+<span class="material-symbols-outlined text-[14px]">style</span>
+</span>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">Cards-Engine</span>
+<span class="font-label-mono text-[9px] text-outline uppercase tracking-wider">COLEÇÕES AUTO</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary font-label-mono text-[10px] font-bold uppercase">
+                carta.emitir
+              </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-outline">auto_awesome</span>
+<span class="text-secondary font-semibold hover:underline cursor-pointer">card_ed_ouro_geraldo</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono text-[11px] text-on-surface-variant">
+<span>10.240.2.91</span>
+<span class="text-outline text-[10px] block">Batch Worker #04 • Internal</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-on-surface-variant font-label-mono text-[11px] transition-colors">
+<span class="material-symbols-outlined text-[14px]">visibility</span>
+                Diff JSON
+              </button>
+</td>
+</tr>
+<!-- Row 6: DPO Compliance -->
+<tr class="hover:bg-surface-container-high/50 transition-colors">
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex flex-col font-label-mono">
+<span class="text-on-surface">2024-10-30 19:22:15.549</span>
+<span class="text-[10px] text-outline">#98855 • merkl-leaf</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-error-container/20 text-error flex items-center justify-center font-bold text-[10px]">
+<span class="material-symbols-outlined text-[14px]">policy</span>
+</span>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">DPO-Service</span>
+<span class="font-label-mono text-[9px] text-error uppercase tracking-wider">COMPLIANCE BOT</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded-full bg-error-container/40 text-error font-label-mono text-[10px] font-bold uppercase">
+                conta.excluir
+              </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-outline">person_remove</span>
+<span class="text-on-surface hover:underline cursor-pointer">usr_anon_anonimizado_lgpd</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono text-[11px] text-on-surface-variant">
+<span>10.100.8.12</span>
+<span class="text-outline text-[10px] block">LGPD Queue Runner • Internal</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-on-surface-variant font-label-mono text-[11px] transition-colors">
+<span class="material-symbols-outlined text-[14px]">visibility</span>
+                Diff JSON
+              </button>
+</td>
+</tr>
+<!-- Row 7: Wayback Agent -->
+<tr class="hover:bg-surface-container-high/50 transition-colors">
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex flex-col font-label-mono">
+<span class="text-on-surface">2024-10-30 19:18:40.119</span>
+<span class="text-[10px] text-outline">#98854 • merkl-leaf</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-secondary-container/20 text-secondary flex items-center justify-center font-bold text-[10px]">
+<span class="material-symbols-outlined text-[14px]">public</span>
+</span>
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">Wayback-Sync</span>
+<span class="font-label-mono text-[9px] text-secondary uppercase tracking-wider">AGENTE MCP</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary-fixed font-label-mono text-[10px] font-bold uppercase">
+                papel.alterar
+              </span>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-outline">verified_user</span>
+<span class="text-on-surface hover:underline cursor-pointer">role_preservador_voluntario</span>
+</div>
+</td>
+<td class="py-3 px-4 whitespace-nowrap font-label-mono text-[11px] text-on-surface-variant">
+<span>140.82.112.4</span>
+<span class="text-outline text-[10px] block">Wayback Machine Archive VPC</span>
+</td>
+<td class="py-3 px-4 text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-bright text-on-surface-variant font-label-mono text-[11px] transition-colors">
+<span class="material-symbols-outlined text-[14px]">visibility</span>
+                Diff JSON
+              </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Inspector Panel (Embedded Payload & Merkle Proof Viewer) -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-lg space-y-space-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">terminal</span>
+<div>
+<span class="font-headline-sm text-[13px] uppercase tracking-wider text-on-surface font-semibold">
+              Inspetor de Transação • Bloco #98860 (Merkle Leaf Hash Validado)
+            </span>
+<span class="font-label-mono text-[10px] text-outline block">
+              Alvo: meme_tapa_pantera_1080p • Ação: moderacao.aprovar
+            </span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<span class="font-label-mono text-[10px] px-2 py-0.5 rounded bg-surface-container-high text-tertiary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">verified</span> GPG 0x992B4A1 (Cid)
+          </span>
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-outline hover:text-on-surface font-label-mono text-[11px] transition-colors">
+            Copiar JSON
+          </button>
+</div>
+</div>
+<!-- JSON Diff Visualizer -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-sm">
+<!-- Pre-State (Left) -->
+<div class="bg-surface-container p-space-md rounded-lg space-y-2">
+<div class="flex items-center justify-between text-outline font-label-mono text-[10px] uppercase pb-1">
+<span class="flex items-center gap-1 text-error">
+<span class="material-symbols-outlined text-[12px]">remove_circle</span> PRE-STATE (ESTADO ANTERIOR)
+            </span>
+<span>Versão 1.1</span>
+</div>
+<pre class="font-label-mono text-[11px] text-on-surface-variant overflow-x-auto leading-relaxed">{
+  <span class="text-outline">"slug"</span>: <span class="text-secondary">"meme_tapa_pantera_1080p"</span>,
+  <span class="text-outline">"status"</span>: <span class="text-primary-container">"em_revisao_tecnica"</span>,
+  <span class="text-outline">"era"</span>: <span class="text-secondary">"anos_2000_ouro"</span>,
+  <span class="text-outline">"resolution_max"</span>: <span class="text-error">"480p"</span>,
+  <span class="text-outline">"audio_clean"</span>: <span class="text-error">false</span>,
+  <span class="text-outline">"curated_by"</span>: <span class="text-outline">null</span>,
+  <span class="text-outline">"checksum"</span>: <span class="text-outline">"9b2e04f...8a"</span>
+}</pre>
+</div>
+<!-- Post-State (Right) -->
+<div class="bg-surface-container p-space-md rounded-lg space-y-2">
+<div class="flex items-center justify-between text-outline font-label-mono text-[10px] uppercase pb-1">
+<span class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-[12px]">add_circle</span> POST-STATE (ESTADO CONVERGIDO)
+            </span>
+<span class="text-tertiary">Versão 1.2 (Commit)</span>
+</div>
+<pre class="font-label-mono text-[11px] text-on-surface overflow-x-auto leading-relaxed">{
+  <span class="text-outline">"slug"</span>: <span class="text-secondary">"meme_tapa_pantera_1080p"</span>,
+  <span class="text-outline">"status"</span>: <span class="text-tertiary">"acervo_publico_aprovado"</span>,
+  <span class="text-outline">"era"</span>: <span class="text-secondary">"anos_2000_ouro"</span>,
+  <span class="text-outline">"resolution_max"</span>: <span class="text-tertiary">"1080p_remaster"</span>,
+  <span class="text-outline">"audio_clean"</span>: <span class="text-tertiary">true</span>,
+  <span class="text-outline">"curated_by"</span>: <span class="text-primary">"@cid_naosalvo"</span>,
+  <span class="text-outline">"curator_note"</span>: <span class="text-primary-fixed-dim">"Upscale de áudio verificado pela equipe. FLAC lossless mantido."</span>,
+  <span class="text-outline">"checksum"</span>: <span class="text-secondary">"3a7f82b8109d...ee14"</span>
+}</pre>
+</div>
+</div>
+<!-- Hash Trail Details -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs font-label-mono text-[10px] text-outline">
+<div class="flex items-center gap-2">
+<span>SHA-256 LEAF:</span>
+<span class="text-secondary select-all">3a7f82b8109d43521bba8f310e5b7218680c441b2fce12d8a4f9441235ee14</span>
+</div>
+<div class="flex items-center gap-3">
+<span>Merkle Index: 0x018228</span>
+<span>•</span>
+<span class="text-tertiary font-semibold">Integridade Verificada OK</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination Controls & Rows Per Page -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="font-label-mono text-[11px] text-outline">Registros por página:</span>
+<div class="flex items-center bg-surface-container rounded-lg p-0.5">
+<button class="px-2.5 py-1 rounded font-label-mono text-[11px] text-outline hover:text-on-surface">15</button>
+<button class="px-2.5 py-1 rounded font-label-mono text-[11px] bg-surface-container-highest text-primary font-bold">25</button>
+<button class="px-2.5 py-1 rounded font-label-mono text-[11px] text-outline hover:text-on-surface">50</button>
+<button class="px-2.5 py-1 rounded font-label-mono text-[11px] text-outline hover:text-on-surface">100</button>
+</div>
+</div>
+<!-- Navigation Buttons -->
+<div class="flex items-center gap-1 font-label-mono text-[11px]">
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors disabled:opacity-40">
+<span class="material-symbols-outlined text-[15px]">chevron_left</span>
+        Anterior
+      </button>
+<button class="w-8 h-8 rounded-lg bg-primary-container text-on-primary-container font-bold flex items-center justify-center shadow-sm">
+        1
+      </button>
+<button class="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors">
+        2
+      </button>
+<button class="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors">
+        3
+      </button>
+<span class="px-1 text-outline">…</span>
+<button class="px-2.5 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors">
+        98.860
+      </button>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors">
+        Próximo
+        <span class="material-symbols-outlined text-[15px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Notice & Legal Governance Footer Banner -->
+<div class="rounded-xl bg-surface-container-low p-space-md flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md shadow-sm">
+<div class="flex items-start gap-space-sm max-w-4xl">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[19px]">policy</span>
+</div>
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-[12px] uppercase tracking-wider text-on-surface font-semibold">
+            Aviso Legal &amp; Governança do Museu Memético Não Salvo
+          </span>
+<span class="font-label-mono text-[9px] px-1.5 py-0.2 rounded bg-tertiary-container/20 text-tertiary uppercase font-bold">
+            Imutabilidade Garantida
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-outline">
+          O log de auditoria é mantido sob custódia legal criptografada. Nenhuma entrada pode ser retroativamente alterada, truncada ou apagada pelos operadores, conforme Diretrizes de Preservação Digital do Patrimônio Memético Nacional e a Lei Geral de Proteção de Dados (LGPD).
+        </p>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0 self-end md:self-auto font-label-mono text-[10px] text-outline">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> NODE_SYNC: OK
+      </span>
+<span>•</span>
+<span class="text-secondary font-semibold">PROTOCOL_MCP: v1.4</span>
+</div>
+</div>
+</div></main></div><nav class="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-surface-container-low z-50 flex items-center justify-around px-space-sm shadow-[0_-2px_10px_rgba(0,0,0,0.5)]" data-active-classes="text-primary font-bold"><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="visao-geral" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-label-mono text-[9px] uppercase">Visão</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface relative" data-path="moderacao" href="#"><span class="material-symbols-outlined text-[20px]">gavel</span><span class="font-label-mono text-[9px] uppercase">Mod</span><span class="absolute -top-1 right-1 w-2 h-2 rounded-full bg-primary-container"></span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="memes" href="#"><span class="material-symbols-outlined text-[20px]">movie</span><span class="font-label-mono text-[9px] uppercase">Acervo</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="comunidade" href="#"><span class="material-symbols-outlined text-[20px]">forum</span><span class="font-label-mono text-[9px] uppercase">Social</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="log-de-auditoria" href="#"><span class="material-symbols-outlined text-[20px]">receipt_long</span><span class="font-label-mono text-[9px] uppercase">Audit</span></a></nav></body></html>

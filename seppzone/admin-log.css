@@ -1,0 +1,36 @@
+/* Admin · Log (trilha de auditoria no layout Stitch, traduzido para os tokens do theme.css; claro e escuro).
+   Só estilo: mesma informação e ações da aba. Tudo escopado em #p-log. */
+
+/* filtros: painel com rótulos pequenos em caixa-alta */
+#p-log .filtros{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:16px;align-items:flex-end}
+#p-log .filtros label{font:700 12px Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--mut-strong)}
+#p-log .filtros input{background:var(--sunk);font-family:ui-monospace,Consolas,monospace;font-size:14px}
+#p-log .b{min-height:44px}
+
+/* trilha: cada registro é uma linha com faixa de destaque; hora à direita */
+#p-log [role=status].mini{font:600 12px ui-monospace,Consolas,monospace;letter-spacing:.4px;text-transform:uppercase;color:var(--mut-strong);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+#p-log [role=status].mini::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+#p-log .lista{gap:8px}
+#p-log .item{position:relative;padding:12px 16px 12px 20px;border-radius:12px;background:var(--panel);overflow:hidden}
+#p-log .item::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--brand)}
+#p-log .item:hover{border-color:var(--line2);background:var(--panel2)}
+#p-log .item-h{align-items:center;gap:8px 10px}
+#p-log .item-h .mini{margin-left:auto;font:600 13px ui-monospace,Consolas,monospace;color:var(--mut-strong)}
+#p-log .item-h .chip.info{font:700 12px ui-monospace,Consolas,monospace;letter-spacing:.6px;text-transform:uppercase;background:var(--brand-soft)}
+#p-log .item-h .chip.cod{background:var(--sunk);font-size:13px;color:var(--brand-text);border-color:var(--line2);overflow-wrap:anywhere;white-space:normal}
+#p-log .meta{margin:6px 0 0}
+
+/* detalhe como "inspetor": de (antes) riscado, para (depois) em destaque */
+#p-log .det{margin-top:8px;padding:10px 12px;border:1px solid var(--line);border-left:3px solid var(--line2);border-radius:10px;background:var(--sunk);font:13px/1.5 ui-monospace,Consolas,monospace;gap:4px;overflow-wrap:anywhere}
+#p-log .det b{color:var(--mut-strong);font-weight:700}
+#p-log .det .de{color:var(--bad)}
+#p-log .det .para{color:var(--ok);font-weight:700}
+
+#p-log .pager{margin:14px 0 4px}
+
+@media (max-width:640px){
+  #p-log .filtros{padding:12px}
+  #p-log .filtros .b{width:100%}
+  #p-log .item{padding:12px 12px 12px 16px}
+  #p-log .item-h .mini{margin-left:0;flex-basis:100%}
+}

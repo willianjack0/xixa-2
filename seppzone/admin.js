@@ -310,54 +310,127 @@ function listaPaginada(box, { buscar, desenhar, vazio: txtVazio, resumo }) {
   return { recarregar: () => carregar(true) };
 }
 
-// ---------- navegação por abas ----------
+// ---------- navegação por abas (sidebar agrupada) ----------
 const ABAS = [
-  { id: "visao", nome: "Visão geral", papeis: ["admin"], montar: abaVisao, sempre: true },
-  { id: "moderacao", nome: "Moderação", papeis: ["moderador", "admin"], montar: abaMod, sempre: true },
-  { id: "memepedia", nome: "Memepédia", papeis: ["moderador", "admin"], montar: abaMemepedia },
-  { id: "usuarios", nome: "Usuários", papeis: ["admin"], montar: abaUsuarios },
-  { id: "memes", nome: "Memes", papeis: ["admin"], montar: abaMemes },
-  { id: "cartas", nome: "Cartas e coleções", papeis: ["admin"], montar: abaCartas },
-  { id: "eras", nome: "Eras", papeis: ["admin"], montar: abaEras },
-  { id: "comunidade", nome: "Comunidade", papeis: ["admin"], montar: abaComunidade },
-  { id: "log", nome: "Log", papeis: ["admin"], montar: abaLog },
-  { id: "mcp", nome: "MCP", papeis: ["admin"], montar: abaMcp }
+  { id: "visao", nome: "Visão geral", grupo: null, papeis: ["admin"], montar: abaVisao, sempre: true },
+  { id: "moderacao", nome: "Moderação", grupo: "Moderação", papeis: ["moderador", "admin"], montar: abaMod, sempre: true },
+  { id: "memepedia", nome: "Memepédia", grupo: "Moderação", papeis: ["moderador", "admin"], montar: abaMemepedia },
+  { id: "memes", nome: "Memes", grupo: "Acervo", papeis: ["admin"], montar: abaMemes },
+  { id: "cartas", nome: "Cartas e coleções", grupo: "Acervo", papeis: ["admin"], montar: abaCartas },
+  { id: "eras", nome: "Eras", grupo: "Acervo", papeis: ["admin"], montar: abaEras },
+  { id: "usuarios", nome: "Usuários", grupo: "Pessoas", papeis: ["admin"], montar: abaUsuarios },
+  { id: "comunidade", nome: "Comunidade", grupo: "Pessoas", papeis: ["admin"], montar: abaComunidade },
+  { id: "log", nome: "Log", grupo: "Sistema", papeis: ["admin"], montar: abaLog },
+  { id: "mcp", nome: "MCP", grupo: "Sistema", papeis: ["admin"], montar: abaMcp }
 ];
+// ícones fixos do próprio código (nunca dado da API): traço 24x24 com currentColor
+const ICONES = {
+  visao: "M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z",
+  moderacao: "M12 3v18M5 7h14M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0zM8 21h8",
+  memepedia: "M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5M9 8h6",
+  memes: "M3 6h18v13H3zM3 6l3-3h12l3 3M8 12l3 2-3 2z",
+  cartas: "M7 4h9a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9 9h6M9 13h6",
+  eras: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2",
+  usuarios: "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 7M22 21a7 7 0 0 0-4-6",
+  comunidade: "M4 5h16v11H9l-5 4zM8 9h8M8 12h5",
+  log: "M6 3h12v18H6zM9 8h6M9 12h6M9 16h4",
+  mcp: "M8 15a4 4 0 1 1 3.9-5H22v4h-3v3h-3v-3h-4.1A4 4 0 0 1 8 15z"
+};
+function icone(nome) {
+  const NS = "http://www.w3.org/2000/svg";
+  const s = document.createElementNS(NS, "svg");
+  s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false"); s.setAttribute("class", "ico");
+  const p = document.createElementNS(NS, "path"); p.setAttribute("d", ICONES[nome] || ""); s.append(p); return s;
+}
 
 function painel() {
   const visiveis = ABAS.filter((a) => a.papeis.includes(eu.papel));
-  const tabs = h("div", { class: "tabs", role: "tablist", "aria-label": "Seções do painel" });
+  const tabs = h("div", { class: "tabs", role: "tablist", "aria-orientation": "vertical", "aria-label": "Seções do painel" });
   const paineis = h("div");
   const mapa = {};
+  let grupoAtual, caixa = null;
   for (const a of visiveis) {
-    const b = h("button", { class: "tab", type: "button", role: "tab", id: "t-" + a.id, "aria-controls": "p-" + a.id, "aria-selected": "false", tabindex: "-1" }, a.nome);
+    if (!caixa || a.grupo !== grupoAtual) {
+      grupoAtual = a.grupo;
+      caixa = h("div", { class: "nav-grupo", role: "none" });
+      if (a.grupo) caixa.append(h("span", { class: "nav-rot", "aria-hidden": "true" }, a.grupo));
+      tabs.append(caixa);
+    }
+    const b = h("button", { class: "tab", type: "button", role: "tab", id: "t-" + a.id, "aria-controls": "p-" + a.id, "aria-selected": "false", tabindex: "-1", title: a.nome }, icone(a.id), h("span", { class: "tab-nome" }, a.nome));
     const p = h("section", { role: "tabpanel", id: "p-" + a.id, "aria-labelledby": "t-" + a.id, hidden: true, tabindex: "0" });
-    b.addEventListener("click", () => { if (location.hash !== "#" + a.id) location.hash = a.id; else ativar(a.id); });
-    tabs.append(b); paineis.append(p); mapa[a.id] = { a, b, p, montado: false };
+    b.addEventListener("click", () => { fecharGaveta(); if (location.hash !== "#" + a.id) location.hash = a.id; else ativar(a.id); });
+    caixa.append(h("div", { class: "nav-item", role: "none" }, b));
+    paineis.append(p); mapa[a.id] = { a, b, p, montado: false };
   }
   tabs.addEventListener("keydown", (e) => {
     const ids = Object.keys(mapa); const i = ids.findIndex((k) => mapa[k].b === document.activeElement);
     if (i < 0) return; let j = null;
-    if (e.key === "ArrowRight") j = (i + 1) % ids.length; else if (e.key === "ArrowLeft") j = (i - 1 + ids.length) % ids.length;
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") j = (i + 1) % ids.length; else if (e.key === "ArrowUp" || e.key === "ArrowLeft") j = (i - 1 + ids.length) % ids.length;
     else if (e.key === "Home") j = 0; else if (e.key === "End") j = ids.length - 1;
     if (j == null) return; e.preventDefault(); mapa[ids[j]].b.focus(); location.hash = ids[j];
   });
+  // selo com a contagem da fila de moderação (só aparece se a API entregar o número; erro = sem selo)
+  const selo = h("span", { class: "nav-selo", "aria-hidden": "true", hidden: true });
+  const desc = h("span", { class: "sr", id: "bd-moderacao" });
+  if (mapa.moderacao) mapa.moderacao.b.parentNode.append(selo, desc);
+  let contando = false;
+  async function contarFila() {
+    if (!mapa.moderacao || contando) return; contando = true;
+    try {
+      const r = await api("GET", "/api/mod/fila");
+      const n = r.ok && r.data && Array.isArray(r.data.itens) ? r.data.itens.length : 0;
+      selo.hidden = !n; selo.textContent = n > 99 ? "99+" : n ? String(n) : "";
+      desc.textContent = n ? n + (n === 1 ? " envio na fila" : " envios na fila") : "";
+      if (n) mapa.moderacao.b.setAttribute("aria-describedby", "bd-moderacao"); else mapa.moderacao.b.removeAttribute("aria-describedby");
+    } catch (e) { /* sem selo */ } finally { contando = false; }
+  }
   function ativar(id) {
     if (!mapa[id]) id = visiveis[0].id;
     for (const [k, t] of Object.entries(mapa)) { const on = k === id; t.b.setAttribute("aria-selected", on); t.b.tabIndex = on ? 0 : -1; t.p.hidden = !on; }
     const t = mapa[id];
+    titulo(t.a.nome);
     if (!t.montado || t.a.sempre) { t.montado = true; trocar(t.p); t.a.montar(t.p); }
+    contarFila();
   }
   window.addEventListener("hashchange", () => { if ($("#p-" + (location.hash.slice(1) || "x")) || !location.hash) ativar(location.hash.slice(1)); });
-  trocar(app, tabs, paineis);
+  trocar($("#nav"), tabs);
+  trocar(app, paineis);
   ativar(location.hash.slice(1));
+}
+function titulo(nome) {
+  const t = $("#titulo"); if (t) t.textContent = nome;
+  const c = $("#crumb"); if (c) c.textContent = nome;
+  document.title = nome + " · Admin · NÃO SALVO";
+}
+// gaveta (celular) e recolher (desktop)
+function abrirGaveta() {
+  $("#adm").classList.add("gaveta-aberta"); $("#scrim").hidden = false;
+  $("#menu-btn").setAttribute("aria-expanded", "true");
+  const sel = $("#nav [role=tab][aria-selected=true]") || $("#nav [role=tab]"); if (sel) sel.focus();
+}
+function fecharGaveta(devolverFoco) {
+  const adm = $("#adm"); if (!adm.classList.contains("gaveta-aberta")) return;
+  adm.classList.remove("gaveta-aberta"); $("#scrim").hidden = true;
+  $("#menu-btn").setAttribute("aria-expanded", "false");
+  if (devolverFoco) $("#menu-btn").focus();
+}
+function ligarShell() {
+  const adm = $("#adm"), menu = $("#menu-btn"), rec = $("#recolher-btn");
+  let r0 = false; try { r0 = localStorage.getItem("ns_admin_nav") === "1"; } catch (e) { /* sem storage */ }
+  const pinta = (r) => { adm.classList.toggle("recolhida", r); rec.setAttribute("aria-expanded", String(!r)); rec.setAttribute("aria-label", r ? "Expandir menu lateral" : "Recolher menu lateral"); };
+  pinta(r0);
+  rec.addEventListener("click", () => { const r = !adm.classList.contains("recolhida"); pinta(r); try { localStorage.setItem("ns_admin_nav", r ? "1" : "0"); } catch (e) { /* sem storage */ } });
+  menu.addEventListener("click", () => (adm.classList.contains("gaveta-aberta") ? fecharGaveta(true) : abrirGaveta()));
+  $("#scrim").addEventListener("click", () => fecharGaveta(true));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && adm.classList.contains("gaveta-aberta") && !document.querySelector("dialog[open]")) { e.preventDefault(); fecharGaveta(true); } });
+  window.matchMedia("(max-width: 900px)").addEventListener("change", () => fecharGaveta(false));
 }
 
 // ---------- Visão geral ----------
 function abaVisao(p) {
   const cartao = (titulo, aba, carregar) => {
     const num = h("p", { class: "num", "aria-live": "polite" }, "…"), mini = h("p", { class: "mini" });
-    const corpo = h("div", { class: "card" }, h("h2", null, titulo), num, mini, h("p", { class: "acts" }, h("a", { class: "b peq", href: "#" + aba }, "Abrir " + titulo.toLowerCase())));
+    const corpo = h("div", { class: "card kpi" }, h("h2", null, titulo), num, mini, h("p", { class: "acts" }, h("a", { class: "b peq", href: "#" + aba }, "Abrir " + titulo.toLowerCase())));
     const ir = async () => {
       num.textContent = "…"; num.classList.remove("alerta"); mini.textContent = "Carregando…";
       try { const r = await carregar(); num.textContent = r.valor; mini.textContent = r.texto || ""; if (r.alerta) num.classList.add("alerta"); }
@@ -411,7 +484,7 @@ function painelNavegacao() {
   const memes = h("div", { class: "mem-blk" });
   const marca = () => botoes.forEach((b, i) => b.setAttribute("aria-pressed", String(PERIODOS_NAV[i][0] === per)));
 
-  const kpi = (titulo, valor, mini) => h("div", { class: "card" }, h("h3", null, titulo), h("p", { class: "num" }, valor), h("p", { class: "mini" }, mini || ""));
+  const kpi = (titulo, valor, mini) => h("div", { class: "card kpi" }, h("h3", null, titulo), h("p", { class: "num" }, valor), h("p", { class: "mini" }, mini || ""));
   function ranking(titulo, itens, nomes, comTempo) {
     const max = Math.max(1, ...itens.map((x) => x.visualizacoes));
     return h("div", { class: "card" }, h("h3", null, titulo),
@@ -480,13 +553,17 @@ function textoPrazo(iso) {
 }
 function pintaPrazo(c) { const r = textoPrazo(c.prazo); c.el.textContent = "Prazo de 72 h: " + r.t; c.el.classList.toggle("bad", r.atrasado || c.forcaAtraso); }
 
+// contagem ao lado do título da seção (some quando não há nada)
+function contaMod(box, n, sing, plur) {
+  const c = box.parentNode && box.parentNode.querySelector(".mod-cont"); if (!c) return;
+  c.hidden = !n; c.textContent = n ? n + " " + (n === 1 ? sing : plur) : "";
+}
 function abaMod(p) {
   contadores = [];
   const fila = h("div"), meus = h("div"), rem = h("div"), artes = h("div");
-  trocar(p, h("div", { class: "sec" }, h("h2", null, "Fila de envios"), fila),
-    h("div", { class: "sec" }, h("h2", null, "Artes de cartas"), artes),
-    h("div", { class: "sec" }, h("h2", null, "Seus envios"), meus),
-    h("div", { class: "sec" }, h("h2", null, "Pedidos de remoção"), rem));
+  const sec = (tit, box, cls) => h("div", { class: "sec mod-sec " + cls }, h("h2", null, tit, h("span", { class: "chip info mod-cont", hidden: true })), box);
+  p.classList.add("mod");
+  trocar(p, sec("Fila de envios", fila, "mod-fila"), sec("Artes de cartas", artes, "mod-artes"), sec("Seus envios", meus, "mod-meus-s"), sec("Pedidos de remoção", rem, "mod-rem-s"));
   carregarFila(fila); carregarArtes(artes); carregarMeusEnvios(meus); carregarRemocoes(rem);
 }
 
@@ -494,14 +571,15 @@ function abaMod(p) {
 // Aprovar grava a imagem da carta (e rejeita as outras pendentes da mesma carta); rejeitar exige o motivo. A prévia sai de uma rota
 // que só moderador acessa (o arquivo pendente nunca é público). Quem enviou não decide a própria arte (só admin).
 async function carregarArtes(box) {
-  trocar(box, carregando("Carregando as artes…"));
+  trocar(box, carregando("Carregando as artes…")); contaMod(box, 0);
   const r = await api("GET", "/api/mod/arte/envios?status=pendente");
   if (r.status === 404) return trocar(box, vazio("O envio de arte de carta ainda não está disponível neste servidor."));
   if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarArtes(box)));
   const itens = r.data.itens || [];
   if (!itens.length) return trocar(box, vazio("Nenhuma arte esperando moderação."));
+  contaMod(box, r.data.total || itens.length, "pendente", "pendentes");
   trocar(box, h("p", { class: "mini" }, (r.data.total || itens.length) + " arte(s) esperando. Aprovar põe a imagem na carta e rejeita as outras artes pendentes dela."),
-    h("ul", { class: "lista" }, itens.map((i) => cartaoArte(i, box))));
+    h("ul", { class: "lista mod-grade" }, itens.map((i) => cartaoArte(i, box))));
 }
 
 function cartaoArte(i, box) {
@@ -525,7 +603,7 @@ function cartaoArte(i, box) {
     aviso("Arte rejeitada.", "ok"); carregarArtes(box);
   }
   botoes.push(h("button", { class: "b ok", type: "button", on: { click: aprovar } }, "Aprovar"), h("button", { class: "b bad", type: "button", on: { click: rejeitar } }, "Rejeitar"));
-  return h("li", { class: "item" },
+  return h("li", { class: "item mod-item" },
     h("div", { class: "item-h" }, h("h3", null, i.carta_nome), chip(i.colecao_nome), chip(i.raridade),
       i.outros_pendentes ? chip(i.outros_pendentes + " concorrente(s)", "info") : null, i.carta_ja_tem_arte ? chip("Carta já tem arte", "bad") : null),
     h("div", { class: "meta" }, h("span", null, "Enviado por " + i.autor + " · " + quando(i.criado_em)), h("span", null, i.largura + " × " + i.altura + " px · " + Math.round((i.bytes || 0) / 1024) + " KB")),
@@ -536,26 +614,28 @@ function cartaoArte(i, box) {
 const SITUACAO_ENVIO = { aberto: "Aguardando moderação", aprovado: "Aprovado", rejeitado: "Rejeitado", ajuste: "Ajuste pedido", duplicado: "Duplicado" };
 // os envios de quem está logado: a fila acima nunca mostra os próprios (quem envia não vota no próprio envio)
 async function carregarMeusEnvios(box) {
-  trocar(box, carregando("Carregando seus envios…"));
+  trocar(box, carregando("Carregando seus envios…")); contaMod(box, 0);
   const r = await api("GET", "/api/envios/meus");
   if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarMeusEnvios(box)));
   const itens = r.data.itens || [];
   if (!itens.length) return trocar(box, vazio("Você ainda não enviou nada por esta conta."));
+  contaMod(box, itens.length, "registro", "registros");
   trocar(box, h("p", { class: "mini" }, "Quem envia não vota no próprio envio: outra pessoa com papel de moderador precisa votar. Por isso estes envios não aparecem na fila acima."),
-    h("ul", { class: "lista" }, itens.map((i) => h("li", { class: "item" },
-      h("b", null, i.titulo), " · ", i.ano, " · ", i.categoria, " · ", h("strong", null, SITUACAO_ENVIO[i.status] || i.status),
-      h("div", { class: "mini" }, "Enviado em ", quando(i.criado_em), i.decidido_em ? " · decidido em " + quando(i.decidido_em) : "", i.motivo ? " · " + i.motivo : "")))));
+    h("ul", { class: "lista mod-meus" }, itens.map((i) => h("li", { class: "item mod-meu" },
+      h("b", { class: "mod-meu-t" }, i.titulo), h("span", { class: "mod-meu-m" }, i.ano + " · " + i.categoria), h("strong", { class: "mod-meu-s mod-st-" + i.status }, SITUACAO_ENVIO[i.status] || i.status),
+      h("div", { class: "mini mod-meu-d" }, "Enviado em ", quando(i.criado_em), i.decidido_em ? " · decidido em " + quando(i.decidido_em) : "", i.motivo ? " · " + i.motivo : "")))));
 }
 
 async function carregarFila(box) {
-  trocar(box, carregando("Carregando a fila…"));
+  trocar(box, carregando("Carregando a fila…")); contaMod(box, 0);
   const r = await api("GET", "/api/mod/fila");
   if (r.status === 404) return trocar(box, vazio("A fila de envios ainda não está disponível neste servidor."));
   if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarFila(box)));
   const itens = r.data.itens || [];
   if (!itens.length) return trocar(box, vazio("Nenhum envio esperando o seu voto. Seus próprios envios não entram aqui (veja \"Seus envios\" abaixo)."));
+  contaMod(box, itens.length, "pendente", "pendentes");
   trocar(box, h("p", { class: "mini" }, "Voto cego: você vê só quantos votos o envio já tem, nunca os votos dos outros. Dois votos iguais fecham o envio; se dividir, um admin desempata."),
-    h("ul", { class: "lista" }, itens.map((i) => cartaoEnvio(i, box))));
+    h("ul", { class: "lista mod-grade" }, itens.map((i) => cartaoEnvio(i, box))));
 }
 
 function cartaoEnvio(i, box) {
@@ -572,7 +652,7 @@ function cartaoEnvio(i, box) {
     else aviso("Voto registrado (" + (VOTO_PASSADO[v]).toLowerCase() + "). Aguardando mais votos ou o desempate de um admin.", "ok");
     carregarFila(box);
   }
-  return h("li", { class: "item" },
+  return h("li", { class: "item mod-item" },
     h("div", { class: "item-h" }, h("h3", null, i.titulo), i.ano ? chip(i.ano) : null, i.categoria ? chip(i.categoria) : null,
       i.meu_voto ? chip("Seu voto: " + (VOTO_PASSADO[i.meu_voto] || i.meu_voto).toLowerCase(), "info") : null),
     h("div", { class: "meta" }, h("span", null, "Enviado por " + (i.autor || "—") + " · " + quando(i.criado_em)), h("span", null, (i.votos || 0) + (i.votos === 1 ? " voto" : " votos"))),
@@ -583,11 +663,12 @@ function cartaoEnvio(i, box) {
 }
 
 async function carregarRemocoes(box) {
-  trocar(box, carregando("Carregando pedidos de remoção…"));
+  trocar(box, carregando("Carregando pedidos de remoção…")); contaMod(box, 0);
   const r = await api("GET", "/api/mod/remocoes");
   if (r.status === 404) return trocar(box, vazio("Os pedidos de remoção ainda não estão disponíveis neste servidor."));
   if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarRemocoes(box)));
   const todos = r.data.itens || [];
+  contaMod(box, todos.filter((x) => x.status === "aberta").length, "aberta", "abertas");
   const idF = uid("rf");
   const sel = h("select", { id: idF, value: "aberta" }, h("option", { value: "aberta" }, "Abertas"), h("option", { value: "" }, "Todas"), h("option", { value: "atendida" }, "Atendidas"), h("option", { value: "negada" }, "Negadas"));
   const area = h("div");
@@ -595,7 +676,7 @@ async function carregarRemocoes(box) {
     contadores = [];
     const lista = todos.filter((x) => !sel.value || x.status === sel.value).sort((a, b) => (a.status === "aberta" ? 0 : 1) - (b.status === "aberta" ? 0 : 1) || new Date(a.prazo_em) - new Date(b.prazo_em));
     if (!lista.length) return trocar(area, vazio(sel.value === "aberta" ? "Nenhum pedido de remoção aberto." : "Nenhum pedido neste filtro."));
-    trocar(area, h("ul", { class: "lista" }, lista.map((x) => cartaoRemocao(x, box))));
+    trocar(area, h("ul", { class: "lista mod-grade" }, lista.map((x) => cartaoRemocao(x, box))));
   }
   sel.addEventListener("change", desenhar);
   trocar(box, h("div", { class: "filtros" }, h("div", { class: "campo" }, h("label", { for: idF }, "Mostrar"), sel)), area);
@@ -617,7 +698,7 @@ function cartaoRemocao(x, box) {
     aviso(dec === "atendida" ? "Pedido atendido: o meme saiu do site." : "Pedido negado.", "ok");
     carregarRemocoes(box);
   }
-  return h("li", { class: "item" + (atrasada ? " atrasada" : "") },
+  return h("li", { class: "item mod-item" + (atrasada ? " atrasada" : "") },
     h("div", { class: "item-h" }, h("h3", null, x.meme_titulo || x.meme_id), x.meme_id ? h("span", { class: "chip cod" }, x.meme_id) : null,
       chip(aberta ? (atrasada ? "Aberta · atrasada" : "Aberta") : x.status === "atendida" ? "Atendida" : "Negada", aberta ? (atrasada ? "bad" : "warn") : x.status === "atendida" ? "ok" : "")),
     h("div", { class: "meta" }, h("span", null, "Pedido por " + (x.solicitante || "—")), x.contato ? h("span", null, "Contato: " + x.contato) : null, h("span", null, "Recebido em " + quando(x.criado_em))),
@@ -938,7 +1019,7 @@ function abaMemes(p) {
     });
   }
   function linhaMeme(m) {
-    const li = h("li", { class: "item" + (m.status !== "publicado" ? " feito" : "") },
+    const li = h("li", { class: "item meme-lin st-" + m.status + (m.status !== "publicado" ? " feito" : "") },
       h("div", { class: "item-h" }, h("h3", null, (m.emoji ? m.emoji + " " : "") + m.titulo), chip(STATUS_MEME[m.status] || m.status, m.status === "publicado" ? "ok" : m.status === "oculto" ? "warn" : "bad")),
       h("div", { class: "meta" }, chip(m.ano), chip(m.categoria), chip(m.raridade), h("span", { class: "chip cod" }, m.id)),
       h("div", { class: "acts" }, h("button", { class: "b", type: "button", on: { click: () => abrirMeme(m, (novo) => troca(novo)) } }, "Editar"),
@@ -955,7 +1036,7 @@ function abaMemes(p) {
     }
     return li;
   }
-  trocar(p, h("form", { class: "filtros", role: "search", on: { submit: (e) => { e.preventDefault(); filtrar(); } } },
+  trocar(p, h("form", { class: "filtros mem-filtros", role: "search", on: { submit: (e) => { e.preventDefault(); filtrar(); } } },
     h("div", { class: "campo larg" }, h("label", { for: idB }, "Título contém"), busca),
     h("div", { class: "campo" }, h("label", { for: idA }, "Ano"), ano, erroA), h("div", { class: "campo" }, h("label", { for: idC }, "Categoria"), cat), h("div", { class: "campo" }, h("label", { for: idS }, "Situação"), st),
     h("button", { class: "b pri", type: "submit" }, "Filtrar"),
@@ -1067,18 +1148,19 @@ function abaComunidade(p) {
     { id: "comentarios", nome: "Comentários", cfg: cfgComentarios }, { id: "links", nome: "Links sugeridos", cfg: cfgLinks },
     { id: "memepedia", nome: "Memepédia", cfg: cfgMemepedia }
   ];
-  const corpo = h("div"); const bar = h("div", { class: "sub", role: "group", "aria-label": "Tipo de item" });
+  const corpo = h("div", { class: "com-corpo" }); const bar = h("div", { class: "sub com-seg", role: "group", "aria-label": "Tipo de item" });
+  p.classList.add("com");
   const botoes = segs.map((s) => h("button", { type: "button", "aria-pressed": "false", on: { click: () => ir(s) } }, s.nome));
   bar.append(...botoes);
-  function ir(s) { botoes.forEach((b, i) => b.setAttribute("aria-pressed", segs[i] === s)); listaCliente(corpo, s.cfg()); }
+  function ir(s) { botoes.forEach((b, i) => b.setAttribute("aria-pressed", segs[i] === s)); corpo.dataset.seg = s.id; listaCliente(corpo, s.cfg()); }
   trocar(p, bar, corpo); ir(segs[0]);
 }
 
 function listaCliente(box, cfg) {
-  let itens = []; const area = h("div"), cont = h("p", { class: "mini", role: "status" });
+  let itens = []; const area = h("div"), cont = h("p", { class: "mini com-cont", role: "status" });
   const idB = uid("cb"), busca = h("input", { id: idB, type: "search", autocomplete: "off" });
   const idT = uid("ct"), tipo = cfg.filtro ? h("select", { id: idT, value: cfg.filtro.padrao || "" }) : null;
-  const filtros = h("div", { class: "filtros" }, h("div", { class: "campo larg" }, h("label", { for: idB }, "Buscar"), busca),
+  const filtros = h("div", { class: "filtros com-filtros" }, h("div", { class: "campo larg" }, h("label", { for: idB }, "Buscar"), busca),
     tipo ? h("div", { class: "campo" }, h("label", { for: idT }, cfg.filtro.rotulo), tipo) : null, cfg.extra ? cfg.extra() : null);
   const ctx = {
     async apagar(item, txt) {
@@ -1099,7 +1181,7 @@ function listaCliente(box, cfg) {
     cont.textContent = lista.length + " de " + itens.length + " " + cfg.rotulo + ".";
     if (!itens.length) return trocar(area, vazio(cfg.vazio));
     if (!lista.length) return trocar(area, vazio("Nada encontrado com esse filtro."));
-    trocar(area, h("ul", { class: "lista" }, lista.map((i) => cfg.desenhar(i, ctx))));
+    trocar(area, h("ul", { class: "lista com-lista" }, lista.map((i) => cfg.desenhar(i, ctx))));
   }
   async function carregar() {
     trocar(area, carregando());
@@ -1207,7 +1289,7 @@ function listaMemepedia(raiz) {
   const idB = uid("mpb"), idF = uid("mpf");
   const inBusca = h("input", { id: idB, type: "search", autocomplete: "off", maxLength: 60, placeholder: "título ou id do meme" });
   const selF = h("select", { id: idF, value: "todos" }, MP_FILTROS.map(([v, r]) => h("option", { value: v }, r)));
-  const resumoEl = h("div", { class: "mp-resumo" }), info = h("p", { class: "mini", role: "status" }), ul = h("ul", { class: "lista" });
+  const resumoEl = h("div", { class: "mp-resumo" }), info = h("p", { class: "mini", role: "status" }), ul = h("ul", { class: "lista mp-grade" });
   const mais = h("button", { class: "b", type: "button", hidden: true, on: { click: () => carregar(false) } }, "Mostrar mais memes");
   trocar(raiz,
     h("div", { class: "sec" }, h("h2", null, "Memepédia"), resumoEl),
@@ -1216,18 +1298,22 @@ function listaMemepedia(raiz) {
 
   function desenharResumo(r) {
     const total = r.resumo.campos_total;
-    trocar(resumoEl,
+    const pct = total ? Math.round(r.resumo.campos_preenchidos / total * 100) : 0;
+    const anel = h("div", { class: "mp-anel", role: "img", "aria-label": "Cobertura: " + pct + "%" }, h("span", null, pct + "%"));
+    anel.style.setProperty("--pct", pct);
+    resumoEl.className = "mp-resumo mp-resumo-card";
+    trocar(resumoEl, anel, h("div", { class: "mp-resumo-txt" },
       h("p", { class: "mp-cobertura" }, h("b", null, r.resumo.campos_preenchidos + " de " + total), " campos com texto aprovado (", total ? Math.round(r.resumo.campos_preenchidos / total * 100) : 0, "%) em ", r.resumo.memes, " memes"),
       barraCobertura(r.resumo.campos_preenchidos, total, "Cobertura da Memepédia"),
       h("ul", { class: "mp-numeros" },
         h("li", null, h("b", null, r.resumo.sem_nenhum), " sem nenhum texto"),
         h("li", null, h("b", null, r.resumo.incompletos), " com texto incompleto"),
         h("li", null, h("b", null, r.resumo.completos), " completos"),
-        h("li", null, h("b", null, r.resumo.pendentes), " edições esperando moderação")));
+        h("li", { class: r.resumo.pendentes ? "mp-num-pend" : null }, h("b", null, r.resumo.pendentes), " edições esperando moderação"))));
   }
 
   function cartao(i) {
-    return h("li", { class: "item" },
+    return h("li", { class: "item mp-meme" + (i.pendentes ? " mp-meme-pend" : "") },
       h("div", { class: "item-h" }, h("h3", null, i.titulo),
         i.status !== "publicado" ? chip(STATUS_MEME[i.status] || i.status, "warn") : null,
         i.pendentes ? chip(i.pendentes + (i.pendentes === 1 ? " pendente" : " pendentes"), "warn") : null,
@@ -1372,11 +1458,11 @@ function editorMemepedia(raiz, id, voltar) {
   function desenhar() {
     const m = dados.meme, feitos = dados.campos.filter((c) => c.atual).length;
     trocar(corpo,
-      h("div", { class: "sec" },
+      h("div", { class: "sec mp-cab" },
         h("h2", null, m.titulo, h("a", { class: "b peq", href: "/memepedia.html#" + encodeURIComponent(m.id), target: "_blank", rel: "noopener noreferrer" }, "Ver na Memepédia")),
         h("div", { class: "meta" }, chip(m.ano + " · " + m.categoria), m.status !== "publicado" ? chip(STATUS_MEME[m.status] || m.status, "warn") : null, chip(feitos + "/6 campos com texto", feitos === 6 ? "ok" : ""), h("span", { class: "mini" }, m.id)),
         barraCobertura(feitos, 6, "Cobertura deste meme")),
-      dados.campos.map(blocoCampo));
+      h("div", { class: "mp-campos-grade" }, dados.campos.map(blocoCampo)));
   }
   carregar(false);
 }
@@ -1387,7 +1473,7 @@ function sessaoExpirou() {
   telaEntrar("Sua sessão expirou. Entre de novo para continuar.");
 }
 function telaEntrar(msg) {
-  eu = null; mostraQuem();
+  eu = null; mostraQuem(); trocar($("#nav")); fecharGaveta(false); titulo("Admin");
   trocar(app, h("div", { class: "estado" }, h("h2", null, "Entre para acessar"), h("p", null, msg || "O painel é só para a equipe do Não Salvo. Entre com o Discord para continuar."),
     h("p", null, h("a", { class: "b pri", href: "/entrar.html?voltar=/seppzone/" }, "Entrar"))));
   app.querySelector("h2").tabIndex = -1; app.querySelector("h2").focus();
@@ -1410,8 +1496,9 @@ async function boot() {
 }
 
 const temaB = $("#tema");
-const pintaTema = () => { const d = document.documentElement.dataset.theme === "dark"; temaB.setAttribute("aria-checked", d); temaB.textContent = d ? "Tema: escuro" : "Tema: claro"; };
+const pintaTema = () => { const d = document.documentElement.dataset.theme === "dark"; temaB.setAttribute("aria-checked", d); temaB.querySelector(".rot").textContent = d ? "Tema: escuro" : "Tema: claro"; };
 temaB.addEventListener("click", () => { const n = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; document.documentElement.dataset.theme = n; try { localStorage.setItem("ns_theme", n); } catch (e) { /* sem storage */ } pintaTema(); });
 pintaTema();
+ligarShell();
 boot();
 })();
