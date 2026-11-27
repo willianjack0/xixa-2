@@ -307,3 +307,35 @@ for (const [w, tema] of [[390, "light"], [390, "dark"], [1280, "light"], [1280, 
     await ctx.close();
   });
 }
+
+// ---- conversão Stitch: anel de cobertura, grade de memes, editor em colunas, só tokens do tema
+test("memepedia.css: só tokens do tema (nada de cor fixa), fontes >= 12px; index sobe o ?v= do css da aba", () => {
+  const css = ler("seppzone/admin-memepedia.css");
+  assert.ok(!/#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(/.test(css.replace(/\/\*[\s\S]*?\*\//g, "")), "cor fixa no css da aba");
+  for (const m of css.matchAll(/font(?:-size)?:[^;}]*?(\d+(?:\.\d+)?)px/g)) assert.ok(Number(m[1]) >= 12, "fonte < 12px: " + m[0]);
+  assert.match(ler("seppzone/index.html"), /admin-memepedia\.css\?v=([2-9]|\d{2,})"/);
+});
+
+for (const tema of ["light", "dark"]) {
+  for (const w of [360, 768, 1280]) {
+    test(`memepédia ${w}px ${tema}: anel de cobertura, grade de memes e editor sem rolagem lateral`, opts, async () => {
+      const { ctx, page, erros } = await abrir({}, { largura: w, tema });
+      assert.strictEqual(await page.$eval("#p-memepedia .mp-anel", (e) => e.style.getPropertyValue("--pct")), "44");
+      assert.strictEqual(await page.textContent("#p-memepedia .mp-anel"), "44%");
+      const col = await page.$eval("#p-memepedia .mp-grade", (g) => getComputedStyle(g).gridTemplateColumns.split(" ").length);
+      if (w === 360) assert.strictEqual(col, 1); else assert.ok(col >= 1);
+      assert.strictEqual(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, "lista: rolagem lateral");
+      await abrirEditor(page);
+      assert.strictEqual(await page.$$eval("#p-memepedia .mp-campos-grade > .mp-campo", (n) => n.length), 6);
+      const cols = await page.$eval("#p-memepedia .mp-campos-grade", (g) => getComputedStyle(g).gridTemplateColumns.split(" ").length);
+      assert.strictEqual(cols, w >= 1100 ? 2 : 1);
+      assert.strictEqual(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, "editor: rolagem lateral");
+      if (w === 360) {
+        const peq = await page.$$eval("#p-memepedia button, #p-memepedia select, #p-memepedia textarea, #p-memepedia input, #p-memepedia summary", (n) => n.filter((e) => { const r = e.getBoundingClientRect(); return r.height && r.height < 43.5; }).length);
+        assert.strictEqual(peq, 0);
+      }
+      assert.deepStrictEqual(erros, []);
+      await ctx.close();
+    });
+  }
+}
