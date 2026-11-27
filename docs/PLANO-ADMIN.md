@@ -44,3 +44,13 @@ Cuidados:
 - Renomear o apelido depois da migração não muda o papel; quem registrar o apelido depois não herda nada.
 
 Fica para depois: tela de login própria do admin, 2FA e expiração mais curta da sessão de admin.
+
+## Aposentar o `ADMIN_TOKEN` (fatia 6) — passo a passo
+
+O token tinha dois usos: chave de emergência do `/api/admin/*` (Bearer) e chave HMAC dos hashes (`ip_hash`, visitante do analytics, banimentos de contas excluídas). Os usos foram separados no código: `HMAC_KEY` (secret `HMAC_KEY_FILE`) é a chave dos hashes e **cai no `ADMIN_TOKEN` quando não existe**, então nada muda enquanto o secret não for criado.
+
+Ordem em produção (o Swarm falha o deploy se a stack citar um secret que não existe, por isso o secret vem antes):
+1. Criar o secret `naosalvo_hmac_key` **com o mesmo valor do `naosalvo_admin_token` atual** (assim os hashes de banimento já gravados continuam batendo; o `ip_hash` expira em 3 dias e o de visitante só vale por dia).
+2. Num PR, citar `HMAC_KEY_FILE: /run/secrets/naosalvo_hmac_key` nas stacks e declarar o secret. Deploy e conferência.
+3. Só então tirar `ADMIN_TOKEN_FILE` das stacks: sem a variável, `ehAdmin` já devolve `false` e o `/api/admin/*` passa a aceitar só sessão de admin. Reservar o acesso de emergência para um admin com sessão (e a chave de API do MCP, que é de um dono humano).
+4. Rotacionar: depois de aposentado o token, a `HMAC_KEY` pode ser trocada por um valor novo a qualquer momento ao custo de invalidar os banimentos de contas já excluídas (tabela `banimentos_provedor`), então rotacione só se necessário.
