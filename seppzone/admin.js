@@ -553,13 +553,17 @@ function textoPrazo(iso) {
 }
 function pintaPrazo(c) { const r = textoPrazo(c.prazo); c.el.textContent = "Prazo de 72 h: " + r.t; c.el.classList.toggle("bad", r.atrasado || c.forcaAtraso); }
 
+// contagem ao lado do título da seção (some quando não há nada)
+function contaMod(box, n, sing, plur) {
+  const c = box.parentNode && box.parentNode.querySelector(".mod-cont"); if (!c) return;
+  c.hidden = !n; c.textContent = n ? n + " " + (n === 1 ? sing : plur) : "";
+}
 function abaMod(p) {
   contadores = [];
   const fila = h("div"), meus = h("div"), rem = h("div"), artes = h("div");
-  trocar(p, h("div", { class: "sec" }, h("h2", null, "Fila de envios"), fila),
-    h("div", { class: "sec" }, h("h2", null, "Artes de cartas"), artes),
-    h("div", { class: "sec" }, h("h2", null, "Seus envios"), meus),
-    h("div", { class: "sec" }, h("h2", null, "Pedidos de remoção"), rem));
+  const sec = (tit, box, cls) => h("div", { class: "sec mod-sec " + cls }, h("h2", null, tit, h("span", { class: "chip info mod-cont", hidden: true })), box);
+  p.classList.add("mod");
+  trocar(p, sec("Fila de envios", fila, "mod-fila"), sec("Artes de cartas", artes, "mod-artes"), sec("Seus envios", meus, "mod-meus-s"), sec("Pedidos de remoção", rem, "mod-rem-s"));
   carregarFila(fila); carregarArtes(artes); carregarMeusEnvios(meus); carregarRemocoes(rem);
 }
 
@@ -567,14 +571,15 @@ function abaMod(p) {
 // Aprovar grava a imagem da carta (e rejeita as outras pendentes da mesma carta); rejeitar exige o motivo. A prévia sai de uma rota
 // que só moderador acessa (o arquivo pendente nunca é público). Quem enviou não decide a própria arte (só admin).
 async function carregarArtes(box) {
-  trocar(box, carregando("Carregando as artes…"));
+  trocar(box, carregando("Carregando as artes…")); contaMod(box, 0);
   const r = await api("GET", "/api/mod/arte/envios?status=pendente");
   if (r.status === 404) return trocar(box, vazio("O envio de arte de carta ainda não está disponível neste servidor."));
   if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarArtes(box)));
   const itens = r.data.itens || [];
   if (!itens.length) return trocar(box, vazio("Nenhuma arte esperando moderação."));
+  contaMod(box, r.data.total || itens.length, "pendente", "pendentes");
   trocar(box, h("p", { class: "mini" }, (r.data.total || itens.length) + " arte(s) esperando. Aprovar põe a imagem na carta e rejeita as outras artes pendentes dela."),
-    h("ul", { class: "lista" }, itens.map((i) => cartaoArte(i, box))));
+    h("ul", { class: "lista mod-grade" }, itens.map((i) => cartaoArte(i, box))));
 }
 
 function cartaoArte(i, box) {
@@ -598,7 +603,7 @@ function cartaoArte(i, box) {
     aviso("Arte rejeitada.", "ok"); carregarArtes(box);
   }
   botoes.push(h("button", { class: "b ok", type: "button", on: { click: aprovar } }, "Aprovar"), h("button", { class: "b bad", type: "button", on: { click: rejeitar } }, "Rejeitar"));
-  return h("li", { class: "item" },
+  return h("li", { class: "item mod-item" },
     h("div", { class: "item-h" }, h("h3", null, i.carta_nome), chip(i.colecao_nome), chip(i.raridade),
       i.outros_pendentes ? chip(i.outros_pendentes + " concorrente(s)", "info") : null, i.carta_ja_tem_arte ? chip("Carta já tem arte", "bad") : null),
     h("div", { class: "meta" }, h("span", null, "Enviado por " + i.autor + " · " + quando(i.criado_em)), h("span", null, i.largura + " × " + i.altura + " px · " + Math.round((i.bytes || 0) / 1024) + " KB")),
@@ -609,26 +614,28 @@ function cartaoArte(i, box) {
 const SITUACAO_ENVIO = { aberto: "Aguardando moderação", aprovado: "Aprovado", rejeitado: "Rejeitado", ajuste: "Ajuste pedido", duplicado: "Duplicado" };
 // os envios de quem está logado: a fila acima nunca mostra os próprios (quem envia não vota no próprio envio)
 async function carregarMeusEnvios(box) {
-  trocar(box, carregando("Carregando seus envios…"));
+  trocar(box, carregando("Carregando seus envios…")); contaMod(box, 0);
   const r = await api("GET", "/api/envios/meus");
   if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarMeusEnvios(box)));
   const itens = r.data.itens || [];
   if (!itens.length) return trocar(box, vazio("Você ainda não enviou nada por esta conta."));
+  contaMod(box, itens.length, "registro", "registros");
   trocar(box, h("p", { class: "mini" }, "Quem envia não vota no próprio envio: outra pessoa com papel de moderador precisa votar. Por isso estes envios não aparecem na fila acima."),
-    h("ul", { class: "lista" }, itens.map((i) => h("li", { class: "item" },
-      h("b", null, i.titulo), " · ", i.ano, " · ", i.categoria, " · ", h("strong", null, SITUACAO_ENVIO[i.status] || i.status),
-      h("div", { class: "mini" }, "Enviado em ", quando(i.criado_em), i.decidido_em ? " · decidido em " + quando(i.decidido_em) : "", i.motivo ? " · " + i.motivo : "")))));
+    h("ul", { class: "lista mod-meus" }, itens.map((i) => h("li", { class: "item mod-meu" },
+      h("b", { class: "mod-meu-t" }, i.titulo), h("span", { class: "mod-meu-m" }, i.ano + " · " + i.categoria), h("strong", { class: "mod-meu-s mod-st-" + i.status }, SITUACAO_ENVIO[i.status] || i.status),
+      h("div", { class: "mini mod-meu-d" }, "Enviado em ", quando(i.criado_em), i.decidido_em ? " · decidido em " + quando(i.decidido_em) : "", i.motivo ? " · " + i.motivo : "")))));
 }
 
 async function carregarFila(box) {
-  trocar(box, carregando("Carregando a fila…"));
+  trocar(box, carregando("Carregando a fila…")); contaMod(box, 0);
   const r = await api("GET", "/api/mod/fila");
   if (r.status === 404) return trocar(box, vazio("A fila de envios ainda não está disponível neste servidor."));
   if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarFila(box)));
   const itens = r.data.itens || [];
   if (!itens.length) return trocar(box, vazio("Nenhum envio esperando o seu voto. Seus próprios envios não entram aqui (veja \"Seus envios\" abaixo)."));
+  contaMod(box, itens.length, "pendente", "pendentes");
   trocar(box, h("p", { class: "mini" }, "Voto cego: você vê só quantos votos o envio já tem, nunca os votos dos outros. Dois votos iguais fecham o envio; se dividir, um admin desempata."),
-    h("ul", { class: "lista" }, itens.map((i) => cartaoEnvio(i, box))));
+    h("ul", { class: "lista mod-grade" }, itens.map((i) => cartaoEnvio(i, box))));
 }
 
 function cartaoEnvio(i, box) {
@@ -645,7 +652,7 @@ function cartaoEnvio(i, box) {
     else aviso("Voto registrado (" + (VOTO_PASSADO[v]).toLowerCase() + "). Aguardando mais votos ou o desempate de um admin.", "ok");
     carregarFila(box);
   }
-  return h("li", { class: "item" },
+  return h("li", { class: "item mod-item" },
     h("div", { class: "item-h" }, h("h3", null, i.titulo), i.ano ? chip(i.ano) : null, i.categoria ? chip(i.categoria) : null,
       i.meu_voto ? chip("Seu voto: " + (VOTO_PASSADO[i.meu_voto] || i.meu_voto).toLowerCase(), "info") : null),
     h("div", { class: "meta" }, h("span", null, "Enviado por " + (i.autor || "—") + " · " + quando(i.criado_em)), h("span", null, (i.votos || 0) + (i.votos === 1 ? " voto" : " votos"))),
@@ -656,11 +663,12 @@ function cartaoEnvio(i, box) {
 }
 
 async function carregarRemocoes(box) {
-  trocar(box, carregando("Carregando pedidos de remoção…"));
+  trocar(box, carregando("Carregando pedidos de remoção…")); contaMod(box, 0);
   const r = await api("GET", "/api/mod/remocoes");
   if (r.status === 404) return trocar(box, vazio("Os pedidos de remoção ainda não estão disponíveis neste servidor."));
   if (!r.ok) return trocar(box, erroEstado(msgErro(r), () => carregarRemocoes(box)));
   const todos = r.data.itens || [];
+  contaMod(box, todos.filter((x) => x.status === "aberta").length, "aberta", "abertas");
   const idF = uid("rf");
   const sel = h("select", { id: idF, value: "aberta" }, h("option", { value: "aberta" }, "Abertas"), h("option", { value: "" }, "Todas"), h("option", { value: "atendida" }, "Atendidas"), h("option", { value: "negada" }, "Negadas"));
   const area = h("div");
@@ -668,7 +676,7 @@ async function carregarRemocoes(box) {
     contadores = [];
     const lista = todos.filter((x) => !sel.value || x.status === sel.value).sort((a, b) => (a.status === "aberta" ? 0 : 1) - (b.status === "aberta" ? 0 : 1) || new Date(a.prazo_em) - new Date(b.prazo_em));
     if (!lista.length) return trocar(area, vazio(sel.value === "aberta" ? "Nenhum pedido de remoção aberto." : "Nenhum pedido neste filtro."));
-    trocar(area, h("ul", { class: "lista" }, lista.map((x) => cartaoRemocao(x, box))));
+    trocar(area, h("ul", { class: "lista mod-grade" }, lista.map((x) => cartaoRemocao(x, box))));
   }
   sel.addEventListener("change", desenhar);
   trocar(box, h("div", { class: "filtros" }, h("div", { class: "campo" }, h("label", { for: idF }, "Mostrar"), sel)), area);
@@ -690,7 +698,7 @@ function cartaoRemocao(x, box) {
     aviso(dec === "atendida" ? "Pedido atendido: o meme saiu do site." : "Pedido negado.", "ok");
     carregarRemocoes(box);
   }
-  return h("li", { class: "item" + (atrasada ? " atrasada" : "") },
+  return h("li", { class: "item mod-item" + (atrasada ? " atrasada" : "") },
     h("div", { class: "item-h" }, h("h3", null, x.meme_titulo || x.meme_id), x.meme_id ? h("span", { class: "chip cod" }, x.meme_id) : null,
       chip(aberta ? (atrasada ? "Aberta · atrasada" : "Aberta") : x.status === "atendida" ? "Atendida" : "Negada", aberta ? (atrasada ? "bad" : "warn") : x.status === "atendida" ? "ok" : "")),
     h("div", { class: "meta" }, h("span", null, "Pedido por " + (x.solicitante || "—")), x.contato ? h("span", null, "Contato: " + x.contato) : null, h("span", null, "Recebido em " + quando(x.criado_em))),
