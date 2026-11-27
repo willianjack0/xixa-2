@@ -1,1 +1,63 @@
-/* Admin � aba visao: estilos da aba (preenchido pela PR dela). Use s� tokens do theme.css. */
+/* Admin · Visão geral (layout Stitch traduzido para os tokens do theme.css; claro e escuro).
+   Só estilo: mesma informação e ações da aba. Tudo escopado em #p-visao. */
+
+/* KPIs: rótulo pequeno em caixa-alta, número grande, atalho com seta */
+#p-visao .kpi{position:relative;display:flex;flex-direction:column;gap:6px;padding:16px 18px 14px;overflow:hidden}
+#p-visao .kpi::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--brand),transparent 85%)}
+#p-visao .kpi h2,#p-visao .kpi h3{font:700 12px Inter,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut-strong);margin:0}
+#p-visao .kpi .num{font:700 clamp(36px,4.4vw,48px)/1 Rajdhani,sans-serif;color:var(--brand-ink);letter-spacing:.5px;font-variant-numeric:tabular-nums}
+#p-visao .kpi .num.alerta{color:var(--bad)}
+#p-visao .kpi .mini{font-size:13px;min-height:1.3em}
+#p-visao .kpi .acts{margin-top:auto;padding-top:8px}
+#p-visao .kpi .acts a.b{border:0;background:transparent;padding:0;min-height:44px;font:700 12px Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--brand-text);justify-content:flex-start}
+#p-visao .kpi .acts a.b::after{content:"→";font-size:16px;margin-left:4px;transition:transform .15s}
+#p-visao .kpi .acts a.b:hover{color:var(--brand-ink)}
+#p-visao .kpi .acts a.b:hover::after{transform:translateX(3px)}
+
+/* painel "Navegação do site" */
+#p-visao>.sec{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:24px}
+#p-visao>.sec>h2{font:700 clamp(22px,2.4vw,28px)/1.1 Rajdhani,sans-serif;letter-spacing:.8px;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+#p-visao>.sec>h2::before{content:"";width:4px;height:1.1em;border-radius:2px;background:var(--brand)}
+#p-visao>.sec>.mini{margin:4px 0 12px}
+#p-visao .sub{gap:0;padding:3px;border:1px solid var(--line2);border-radius:12px;background:var(--sunk);width:fit-content;max-width:100%}
+#p-visao .sub button{border:0;border-radius:9px;background:transparent;font:600 13px Inter,sans-serif;letter-spacing:.3px;padding:8px 14px}
+#p-visao .sub button:hover{color:var(--txt)}
+#p-visao .sub button[aria-pressed=true]{background:var(--btn-b);color:var(--on-brand)}
+#p-visao .sec .kpi{background:var(--sunk)}
+#p-visao .sec .kpi h3{font-size:12px}
+
+/* gráfico: grade, barras em degradê, último dia em destaque */
+#p-visao .barras{position:relative;height:200px;gap:4px;padding:8px 6px 0;border-bottom:1px solid var(--line2);background:repeating-linear-gradient(to top,transparent 0 calc(25% - 1px),var(--line) calc(25% - 1px) 25%)}
+#p-visao .barras span{border-radius:4px 4px 0 0;background:linear-gradient(to top,var(--brand-soft),var(--brand));border:1px solid var(--brand);border-bottom:0;transition:filter .15s}
+#p-visao .barras span:hover{filter:brightness(1.25)}
+#p-visao .barras span:last-child{background:var(--brand-text);border-color:var(--brand-text)}
+#p-visao details>summary{display:flex;align-items:center;min-height:44px;cursor:pointer;font:600 13px Inter,sans-serif;color:var(--brand-text)}
+#p-visao .tabela-rol{border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+#p-visao .tabela-rol th{font:700 12px Inter,sans-serif;letter-spacing:.6px;text-transform:uppercase;color:var(--mut-strong)}
+
+/* rankings (páginas, origens, dispositivos) */
+#p-visao .g3 .card h3{font:700 clamp(18px,2vw,22px)/1.1 Rajdhani,sans-serif;letter-spacing:.8px;text-transform:uppercase}
+#p-visao .rk{gap:14px}
+#p-visao .rk-b{height:8px;border-radius:99px;background:var(--sunk);box-shadow:inset 0 0 0 1px var(--line)}
+#p-visao .rk-b span{border-radius:99px;background:linear-gradient(90deg,var(--brand-strong),var(--brand))}
+#p-visao .rk-v{font-variant-numeric:tabular-nums}
+
+/* memes mais vistos: numeração grande 01, 02… */
+#p-visao .mem-blk>h2{font:700 clamp(20px,2.2vw,26px)/1.1 Rajdhani,sans-serif;letter-spacing:.8px;text-transform:uppercase}
+#p-visao ol.rk-memes{counter-reset:pos;gap:10px}
+#p-visao ol.rk-memes>li{counter-increment:pos;position:relative;padding:10px 12px 10px 56px;border:1px solid var(--line);border-radius:12px;background:var(--sunk)}
+#p-visao ol.rk-memes>li::before{content:counter(pos,decimal-leading-zero);position:absolute;left:12px;top:50%;transform:translateY(-50%);font:700 26px/1 Rajdhani,sans-serif;color:var(--brand-text)}
+#p-visao ol.rk-memes>li:nth-child(n+4)::before{color:var(--mut-strong)}
+
+/* KPIs de acervo: 5 por linha quando cabe; números longos (tempo) menores; respiro no gráfico */
+#p-visao>.grid.g4:first-child{grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr))}
+#p-visao .sec .kpi .num{font-size:clamp(30px,3.2vw,40px)}
+#p-visao .barras{margin-top:12px}
+#p-visao .barras+.mini{margin-top:8px}
+
+@media (max-width:640px){
+  #p-visao>.sec{padding:14px 12px}
+  #p-visao .sub{width:100%}
+  #p-visao .sub button{flex:1 1 auto;min-height:44px;padding:8px 6px}
+  #p-visao .barras{height:150px;gap:2px}
+}

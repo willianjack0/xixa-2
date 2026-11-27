@@ -430,7 +430,7 @@ function ligarShell() {
 function abaVisao(p) {
   const cartao = (titulo, aba, carregar) => {
     const num = h("p", { class: "num", "aria-live": "polite" }, "…"), mini = h("p", { class: "mini" });
-    const corpo = h("div", { class: "card" }, h("h2", null, titulo), num, mini, h("p", { class: "acts" }, h("a", { class: "b peq", href: "#" + aba }, "Abrir " + titulo.toLowerCase())));
+    const corpo = h("div", { class: "card kpi" }, h("h2", null, titulo), num, mini, h("p", { class: "acts" }, h("a", { class: "b peq", href: "#" + aba }, "Abrir " + titulo.toLowerCase())));
     const ir = async () => {
       num.textContent = "…"; num.classList.remove("alerta"); mini.textContent = "Carregando…";
       try { const r = await carregar(); num.textContent = r.valor; mini.textContent = r.texto || ""; if (r.alerta) num.classList.add("alerta"); }
@@ -484,7 +484,7 @@ function painelNavegacao() {
   const memes = h("div", { class: "mem-blk" });
   const marca = () => botoes.forEach((b, i) => b.setAttribute("aria-pressed", String(PERIODOS_NAV[i][0] === per)));
 
-  const kpi = (titulo, valor, mini) => h("div", { class: "card" }, h("h3", null, titulo), h("p", { class: "num" }, valor), h("p", { class: "mini" }, mini || ""));
+  const kpi = (titulo, valor, mini) => h("div", { class: "card kpi" }, h("h3", null, titulo), h("p", { class: "num" }, valor), h("p", { class: "mini" }, mini || ""));
   function ranking(titulo, itens, nomes, comTempo) {
     const max = Math.max(1, ...itens.map((x) => x.visualizacoes));
     return h("div", { class: "card" }, h("h3", null, titulo),
