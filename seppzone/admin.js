@@ -1148,18 +1148,19 @@ function abaComunidade(p) {
     { id: "comentarios", nome: "Comentários", cfg: cfgComentarios }, { id: "links", nome: "Links sugeridos", cfg: cfgLinks },
     { id: "memepedia", nome: "Memepédia", cfg: cfgMemepedia }
   ];
-  const corpo = h("div"); const bar = h("div", { class: "sub", role: "group", "aria-label": "Tipo de item" });
+  const corpo = h("div", { class: "com-corpo" }); const bar = h("div", { class: "sub com-seg", role: "group", "aria-label": "Tipo de item" });
+  p.classList.add("com");
   const botoes = segs.map((s) => h("button", { type: "button", "aria-pressed": "false", on: { click: () => ir(s) } }, s.nome));
   bar.append(...botoes);
-  function ir(s) { botoes.forEach((b, i) => b.setAttribute("aria-pressed", segs[i] === s)); listaCliente(corpo, s.cfg()); }
+  function ir(s) { botoes.forEach((b, i) => b.setAttribute("aria-pressed", segs[i] === s)); corpo.dataset.seg = s.id; listaCliente(corpo, s.cfg()); }
   trocar(p, bar, corpo); ir(segs[0]);
 }
 
 function listaCliente(box, cfg) {
-  let itens = []; const area = h("div"), cont = h("p", { class: "mini", role: "status" });
+  let itens = []; const area = h("div"), cont = h("p", { class: "mini com-cont", role: "status" });
   const idB = uid("cb"), busca = h("input", { id: idB, type: "search", autocomplete: "off" });
   const idT = uid("ct"), tipo = cfg.filtro ? h("select", { id: idT, value: cfg.filtro.padrao || "" }) : null;
-  const filtros = h("div", { class: "filtros" }, h("div", { class: "campo larg" }, h("label", { for: idB }, "Buscar"), busca),
+  const filtros = h("div", { class: "filtros com-filtros" }, h("div", { class: "campo larg" }, h("label", { for: idB }, "Buscar"), busca),
     tipo ? h("div", { class: "campo" }, h("label", { for: idT }, cfg.filtro.rotulo), tipo) : null, cfg.extra ? cfg.extra() : null);
   const ctx = {
     async apagar(item, txt) {
@@ -1180,7 +1181,7 @@ function listaCliente(box, cfg) {
     cont.textContent = lista.length + " de " + itens.length + " " + cfg.rotulo + ".";
     if (!itens.length) return trocar(area, vazio(cfg.vazio));
     if (!lista.length) return trocar(area, vazio("Nada encontrado com esse filtro."));
-    trocar(area, h("ul", { class: "lista" }, lista.map((i) => cfg.desenhar(i, ctx))));
+    trocar(area, h("ul", { class: "lista com-lista" }, lista.map((i) => cfg.desenhar(i, ctx))));
   }
   async function carregar() {
     trocar(area, carregando());
