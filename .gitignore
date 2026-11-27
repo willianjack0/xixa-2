@@ -20,3 +20,6 @@ inspect_*.py
 .claude/
 docs/references/*.png
 .secrets/
+
+# Referencias visuais do Stitch (so os .html e o LEIA-ME vao para o git)
+docs/admin-stitch/*.png

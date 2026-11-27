@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"primary-fixed-dim":"#ffb95f","secondary-fixed-dim":"#4cd7f6","on-secondary-fixed":"#001f26","on-primary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","secondary-container":"#03b5d3","inverse-surface":"#d3e4fe","tertiary-container":"#30c88f","primary-fixed":"#ffddb8","surface-container":"#102034","on-surface-variant":"#d8c3ad","on-primary-container":"#613b00","secondary-fixed":"#acedff","on-tertiary":"#003824","on-tertiary-fixed-variant":"#005236","on-background":"#d3e4fe","surface-container-highest":"#26364a","on-primary-fixed":"#2a1700","outline-variant":"#534434","primary-container":"#f59e0b","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","inverse-on-surface":"#213145","on-secondary-container":"#00424e","on-error":"#690005","on-secondary-fixed-variant":"#004e5c","error":"#ffb4ab","surface-variant":"#26364a","on-error-container":"#ffdad6","surface-container-low":"#0b1c30","surface-dim":"#031427","outline":"#a08e7a","error-container":"#93000a","primary":"#ffc174","on-primary":"#472a00","surface":"#031427","secondary":"#4cd7f6","on-tertiary-container":"#004e34","tertiary-fixed":"#6ffbbe","inverse-primary":"#855300","surface-bright":"#2a3a4f","on-surface":"#d3e4fe","background":"#031427","tertiary":"#56e5a9","surface-container-high":"#1b2b3f","on-secondary":"#003640","surface-tint":"#ffb95f"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-sm":"0.5rem","margin-desktop":"1.5rem","gutter":"1rem","margin":"1rem","gutter-desktop":"1.25rem","space-md":"0.75rem","space-xl":"1.75rem","space-lg":"1.25rem","space-xs":"0.25rem"},"fontFamily":{"headline-lg-mobile":["Oswald"],"body-sm":["Inter"],"title-md":["Inter"],"label-mono":["JetBrains Mono"],"body-lg":["Inter"],"headline-lg":["Oswald"],"headline-sm":["Oswald"],"label-lg":["Inter"],"headline-md":["Oswald"],"display-lg":["Oswald"],"body-md":["Inter"],"label-md":["Inter"]},"fontSize":{"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"0.03em","fontWeight":"600"}],"body-sm":["11px",{"lineHeight":"16px","fontWeight":"400"}],"title-md":["16px",{"lineHeight":"22px","fontWeight":"600"}],"label-mono":["11px",{"lineHeight":"14px","letterSpacing":"0em","fontWeight":"500"}],"body-lg":["15px",{"lineHeight":"22px","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"38px","letterSpacing":"0.03em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"0.02em","fontWeight":"500"}],"label-lg":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"30px","letterSpacing":"0.02em","fontWeight":"600"}],"display-lg":["48px",{"lineHeight":"52px","letterSpacing":"0.04em","fontWeight":"700"}],"body-md":["13px",{"lineHeight":"18px","fontWeight":"400"}],"label-md":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"600"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low z-50 hidden md:flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="flex flex-col h-full overflow-hidden"><div class="h-14 px-gutter-desktop flex items-center justify-between shrink-0 bg-surface-container-low"><div class="flex items-center gap-space-sm"><img alt="Logo Não Salvo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB_wCaM1dJa0JTXZqPdTQpEDG9lWMv54hWBga6RdAKrd1TW_6gIWtAGuG_Bmci8G9cAYG6QoHdkgD29FISuvW_4_g8SR2bxHg_PThwlBou-5a3miuOn8LM4D_G09qlMBL5_U9eFkGboH2i1fhd-9_Ou3Pi98AOXY8iB3oVk7ViuWeFAh9VCYw7fDiQkwin6oG0N8N2u74IuAYHt7eIjwtbh_Tv1Oq00trDay1IHJRE"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm uppercase tracking-wider text-primary leading-none">NÃO SALVO</span><span class="font-label-mono text-label-mono text-secondary tracking-normal uppercase">MUSEU MEMÉTICA</span></div></div><span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface-variant">v3.4</span></div><nav class="flex-1 px-space-sm py-space-sm overflow-y-auto space-y-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg"><div class="mb-space-xs"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="visao-geral" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">dashboard</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Visão Geral</span></div></a></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">MODERAÇÃO</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="moderacao" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">gavel</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Moderação</span></div><span class="font-label-mono text-label-mono px-1.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-bold">14</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="memepedia" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">menu_book</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Memepédia</span></div></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">ACERVO</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="memes" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">movie</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Memes</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="cartas-e-colecoes" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">style</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Cartas e Coleções</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="eras" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">history_toggle_off</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Eras Históricas</span></div></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">PESSOAS</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="usuarios" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">group</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Usuários</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="comunidade" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">forum</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Comunidade</span></div><span class="font-label-mono text-label-mono px-1 py-0.5 rounded bg-surface-container-highest text-secondary text-[9px]">RADAR</span></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">SISTEMA</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="log-de-auditoria" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">receipt_long</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Log Auditoria</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="mcp-api-keys" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">key</span><span class="font-label-lg text-label-lg uppercase tracking-wide">MCP / API Keys</span></div></a></div></div></nav><div class="p-space-sm bg-surface-container-lowest shrink-0"><div class="p-space-sm rounded bg-surface-container flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-primary text-[16px]">tune</span><span class="font-label-mono text-label-mono text-on-surface uppercase">Visão Ativa</span></div><div class="flex items-center gap-1 bg-surface-container-highest p-0.5 rounded"><span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-bold">ADM</span><span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded text-outline hover:text-on-surface cursor-pointer">MOD</span></div></div></div></div></aside><div class="md:pl-64"><header class="fixed top-0 left-0 md:left-64 right-0 h-14 bg-surface/85 backdrop-blur-xl z-40 px-gutter md:px-gutter-desktop flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.25)]"><div class="flex items-center gap-space-md"><div class="md:hidden flex items-center gap-space-sm"><img alt="Logo Não Salvo" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB_wCaM1dJa0JTXZqPdTQpEDG9lWMv54hWBga6RdAKrd1TW_6gIWtAGuG_Bmci8G9cAYG6QoHdkgD29FISuvW_4_g8SR2bxHg_PThwlBou-5a3miuOn8LM4D_G09qlMBL5_U9eFkGboH2i1fhd-9_Ou3Pi98AOXY8iB3oVk7ViuWeFAh9VCYw7fDiQkwin6oG0N8N2u74IuAYHt7eIjwtbh_Tv1Oq00trDay1IHJRE"/></div><div class="flex items-center gap-space-xs font-label-mono text-label-mono text-outline"><span class="text-on-surface-variant uppercase font-semibold">PAINEL</span><span>/</span><span class="text-secondary font-semibold uppercase">ADMIN</span></div></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-primary-container/20 text-primary-fixed-dim"><span class="material-symbols-outlined text-[14px]">verified_user</span><span class="font-label-mono text-label-mono font-bold tracking-wider">ADMIN</span></div><button class="flex items-center gap-1 p-space-xs rounded bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[18px]">dark_mode</span></button><a class="hidden lg:flex items-center gap-space-xs text-on-surface-variant hover:text-secondary font-label-mono text-label-mono transition-colors" href="#"><span class="uppercase tracking-wider">Voltar ao site</span><span class="material-symbols-outlined text-[15px]">open_in_new</span></a><div class="flex items-center gap-space-sm pl-space-xs"><div class="hidden sm:flex flex-col text-right leading-none"><span class="font-label-lg text-label-lg text-on-surface">Cid / Arquivista-Chefe</span><span class="font-label-mono text-[10px] text-outline">cid@naosalvo.com.br</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrqS8A3T25Mr_xsOMlRcBjnSdPgK1FelWgnb0Hp5i0e5L-bKqZzl0U-Y1xelnJMfYYM81fHrtDg8GyheHoAC4UtpM51KdEkKZkT9dJz4xcB913V48maRu1I0AYyNMyFS2yC0F3RPA3mawtBDKY7WPSFby4haiX586XCDU0ECvkskoHYv6VzZcIrg2jmwNMeXTzR2HRFwFGBxaIGats6DsKK4JySI11eOu7u1aqGrD69prI_CF9TA2svMpj8CnMwA"/></div></div></header><main class="w-full pt-14 px-gutter md:px-gutter-desktop min-h-screen bg-surface"><div class="flex flex-col w-full space-y-space-lg pb-space-xl">
+<!-- Top Command & Header Area -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<!-- Breadcrumb & Micro Status -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs font-label-mono text-label-mono text-outline"><span class="text-on-surface-variant uppercase font-medium">PAINEL</span><span>/</span><span class="text-on-surface-variant uppercase font-medium">ADMIN</span><span>/</span><span class="text-on-surface-variant uppercase font-medium">MODERAÇÃO</span><span>/</span><span class="text-secondary font-semibold uppercase tracking-wider">MEMEPÉDIA</span></div><div class="flex items-center gap-space-xs"><div class="flex items-center gap-1.5 px-space-sm py-1 rounded bg-surface-container-high text-on-surface-variant text-[11px] font-label-mono"><span class="inline-block w-2 h-2 rounded-full bg-tertiary animate-pulse"></span><span class="text-secondary font-bold uppercase">CLUSTER BR-SP-01</span><span class="text-outline">•</span><span class="text-tertiary uppercase font-semibold">SYNC ATIVO</span></div><div class="flex items-center gap-space-xs px-space-sm py-1 rounded bg-surface-container-high text-secondary-fixed text-label-mono font-label-mono"><span class="tracking-wide uppercase">BASE DE CONHECIMENTO COLABORATIVA • v3.4.1998-BR</span></div></div></div>
+<!-- Title and Primary Actions -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md mt-space-xs">
+<div>
+<h1 class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-wide leading-tight">
+          MEMEPÉDIA: CURADORIA &amp; GLOSSÁRIO
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-4xl mt-0.5">
+          Gestão enciclopédica do acervo memético: cobertura taxonômica, editor estruturado, controle de versão e fila de aprovação comunitária.
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm shrink-0">
+<div class="flex items-center gap-1.5 px-space-md py-space-xs rounded bg-surface-container-high text-secondary text-label-mono font-label-mono">
+<span class="material-symbols-outlined text-[16px]">sync_saved_locally</span>
+<span class="uppercase">INDEXADOR: 92.4% SINCRONIZADO</span>
+</div>
+<button class="flex items-center gap-1 px-space-md py-space-xs rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-mono text-label-mono uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">history</span>
+<span>HISTÓRICO GLOBAL (LOG)</span>
+</button>
+<button class="flex items-center gap-1.5 px-space-lg py-space-xs rounded bg-primary-container text-on-primary-container hover:bg-primary-fixed-dim transition-colors font-headline-sm text-label-lg uppercase tracking-wider font-bold shadow-md">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>NOVO VERBETE / MEME</span>
+</button>
+</div>
+</div>
+</div>
+<!-- SECTION 1: COVERAGE PANEL -->
+<section class="grid grid-cols-1 xl:grid-cols-12 gap-space-md">
+<!-- Telemetry & Coverage Stats Card (5 cols) -->
+<div class="xl:col-span-5 flex flex-col justify-between p-space-lg rounded-lg bg-surface-container-low shadow-sm">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">donut_large</span>
+<h2 class="font-headline-sm text-headline-sm uppercase text-primary tracking-wide">
+            COBERTURA DO ACERVO
+          </h2>
+</div>
+<span class="font-label-mono text-label-mono px-2 py-0.5 rounded bg-surface-container-highest text-secondary uppercase font-semibold">
+          INDEXADOS: 12.854
+        </span>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-space-lg my-auto py-space-sm">
+<!-- SVG Radial Ring Chart -->
+<div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90 transform" viewbox="0 0 120 120">
+<circle class="text-surface-container-highest" cx="60" cy="60" fill="transparent" r="50" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary-container" cx="60" cy="60" fill="transparent" r="50" stroke="currentColor" stroke-dasharray="314.159" stroke-dashoffset="67.85" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<div class="absolute flex flex-col items-center justify-center text-center">
+<span class="font-display-lg text-[32px] leading-none text-on-surface font-bold">78.4%</span>
+<span class="font-label-mono text-[9px] uppercase tracking-wider text-outline mt-1">COMPLETOS</span>
+</div>
+</div>
+<div class="flex flex-col justify-center space-y-space-md w-full">
+<div class="space-y-1">
+<div class="flex items-center justify-between font-label-mono text-label-mono">
+<span class="text-on-surface-variant flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-primary-container inline-block"></span>
+                Texto Completo &amp; Verificado
+              </span>
+<span class="text-on-surface font-bold">10.077</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 78.4%;"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex items-center justify-between font-label-mono text-label-mono">
+<span class="text-on-surface-variant flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-secondary inline-block"></span>
+                Rascunhos em Análise
+              </span>
+<span class="text-on-surface font-bold">1.432</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 11.1%;"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex items-center justify-between font-label-mono text-label-mono">
+<span class="text-on-surface-variant flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-error inline-block"></span>
+                Sem Redação Enciclopédica
+              </span>
+<span class="text-error font-bold">1.345</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-error rounded-full" style="width: 10.5%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex items-center justify-between mt-space-sm">
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
+<span>Meta Q4: 85% de cobertura total da década 2010-2020</span>
+</div>
+<span class="font-label-mono text-[10px] text-tertiary font-bold uppercase tracking-wider">+3.2% ESTE MÊS</span>
+</div>
+</div>
+<!-- Urgent Gap Queue / Memes Sem Verbete (7 cols) -->
+<div class="xl:col-span-7 flex flex-col p-space-lg rounded-lg bg-surface-container-low shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">assignment_late</span>
+<h2 class="font-headline-sm text-headline-sm uppercase text-secondary tracking-wide">
+            MEMES SEM VERBETE OU INCOMPLETOS
+          </h2>
+</div>
+<span class="font-label-mono text-label-mono text-outline uppercase">5 DE 2.777 MEMES PRIORITÁRIOS</span>
+</div>
+<!-- Quick List -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead>
+<tr class="bg-surface-container-high text-outline uppercase font-label-mono text-[10px] tracking-wider">
+<th class="py-2 px-space-sm rounded-l">Meme / Ano</th>
+<th class="py-2 px-space-sm">Tags &amp; Era</th>
+<th class="py-2 px-space-sm">Visualizações</th>
+<th class="py-2 px-space-sm text-right rounded-r">Ação Rápida</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-highest/30">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="py-2.5 px-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-surface-container-highest shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Screenshot vintage of Luiza no Canada meme from 2012 internet viral campaign Brazilian television clip" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqSv7W4VgYvQJidzy-8z9rX99o14cHZzrhV7kgKhoP_bFfcsSKiBEUmQayk1LporDFXZz3w2iZCNT5cexRgWujXP08gM2GuVyvoCpcUvVFobUDr5w1fKPcYLmmPk1BBzDuBwHrw_4MjZFqFn63JPqRHu39NRQKFK1b_jF2Ke6PPvYFFNiqIKMq4l4gDmYa9fdBe6yPHZD_eDkqpJ0jNB7PNc93HpcOk9BxOv-z2x4Nm7_ijDLOlAatd9Qdsnefzw"/>
+</div>
+<div>
+<span class="font-title-md text-label-lg text-on-surface font-semibold block leading-tight">Luíza que está no Canadá</span>
+<span class="font-label-mono text-[10px] text-outline">Ano 2012 • ID #MEME-0811</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm">
+<div class="flex flex-wrap gap-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-secondary text-[9px] font-label-mono">Comercial TV</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-[9px] font-label-mono">Paraíba</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-label-mono text-label-mono text-on-surface">3.8M</td>
+<td class="py-2.5 px-space-sm text-right">
+<button class="px-space-sm py-1 rounded bg-primary-container text-on-primary-container hover:bg-primary transition-colors font-label-mono text-[10px] font-bold uppercase tracking-wider inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+                  Redigir
+                </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="py-2.5 px-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-surface-container-highest shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Screenshot of Alexander de Almeida Rei do Camarote VIP night club viral video with champagne in 2013 Brazil" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjFfxmIJCHyL5wg4btsckjZMjr2zxIP42KmkNuMSIFr0I-iy479DKAe8W33dOkbV5PEOEbEJKO2w0O3TKzTk1FWShOICwVYrifjXpkn73ScUm0hMUx3oq2bckSQ9uPvQ1lpsORylP8aq9sE6a_EtB7sM3wmmIC0nrrDEoeRbpERAFdJCsMWEflT8P-3Mezj8E5BlDoI6hvaU8j-prmbdiHme5NUAsm2R_1cBTRF7328gCRCT9gGLgo2oGbIENEzw"/>
+</div>
+<div>
+<span class="font-title-md text-label-lg text-on-surface font-semibold block leading-tight">O Rei do Camarote</span>
+<span class="font-label-mono text-[10px] text-outline">Ano 2013 • ID #MEME-0943</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm">
+<div class="flex flex-wrap gap-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-secondary text-[9px] font-label-mono">Veja SP</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-[9px] font-label-mono">Ostentação</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-label-mono text-label-mono text-on-surface">5.1M</td>
+<td class="py-2.5 px-space-sm text-right">
+<button class="px-space-sm py-1 rounded bg-primary-container text-on-primary-container hover:bg-primary transition-colors font-label-mono text-[10px] font-bold uppercase tracking-wider inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+                  Redigir
+                </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="py-2.5 px-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-surface-container-highest shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Creepy ghost girl prank in Brazilian elevator camera footage Silvio Santos SBT 2012 meme" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnVs3-1Ow1Z4cBmqtxfbINwTM1GsxP9Ck1DrjVHXPZyREvK50dnE1LalXaMvaEt3GY4hprpDhTxWjvJR_zKze27xOrZJAvus0N4iHrFYQI4JBmbQqK5DMIjyX76QMEfa_pI7iO33TvIMFRytMbQVBOaGZ8QJ1SjYI9Gs8SU6tV1ej_BsQ6-vepPs_TGaWVcxY6DARU1f19x74sVR_FLalCS5zvDOuBVlyH68XuNpPI9FH3LF2ErGKjoNsalpt8dg"/>
+</div>
+<div>
+<span class="font-title-md text-label-lg text-on-surface font-semibold block leading-tight">Menina Fantasma do Elevador</span>
+<span class="font-label-mono text-[10px] text-outline">Ano 2012 • ID #MEME-0720</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm">
+<div class="flex flex-wrap gap-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-secondary text-[9px] font-label-mono">Pegadinha SBT</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-[9px] font-label-mono">Internacional</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-label-mono text-label-mono text-on-surface">18.4M</td>
+<td class="py-2.5 px-space-sm text-right">
+<button class="px-space-sm py-1 rounded bg-primary-container text-on-primary-container hover:bg-primary transition-colors font-label-mono text-[10px] font-bold uppercase tracking-wider inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+                  Redigir
+                </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="py-2.5 px-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-surface-container-highest shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Brazilian 90s music clip E o Tchan in Egypt pyramids vintage choreography axe music aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARMmRrcyXtnxVZxeT4LPrG4sHOOalf56PwxCA0rqShy7l1XxVOpt5ZitlMMkE1zPHQ6-x4uLkpJpKyusbjaNfw-m6xTE-m9aI7DpLPlq7VeEpvrnhde88x1cpQlyWi3nFFVYcHI42uv-NDaV-vlhHxjKL3Yyq28IRyFvYw6kvl39tBcNORvGGeFPX8FVX6Pr1yJtJ2ociQM53N2KQfJkcST4QGIHHq1-key9eQoUxAPRDa-iq45Ha31j3fSOYFPg"/>
+</div>
+<div>
+<span class="font-title-md text-label-lg text-on-surface font-semibold block leading-tight">Segura o Tchan no Egito</span>
+<span class="font-label-mono text-[10px] text-outline">Ano 1998 • ID #MEME-0012</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm">
+<div class="flex flex-wrap gap-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-secondary text-[9px] font-label-mono">Proto-Meme</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-[9px] font-label-mono">Axé 90s</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-label-mono text-label-mono text-on-surface">2.4M</td>
+<td class="py-2.5 px-space-sm text-right">
+<button class="px-space-sm py-1 rounded bg-primary-container text-on-primary-container hover:bg-primary transition-colors font-label-mono text-[10px] font-bold uppercase tracking-wider inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+                  Redigir
+                </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="py-2.5 px-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded bg-surface-container-highest shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Emo teenagers upset shouting Puta falta de sacanagem outside concert venue in Sao Paulo Brazil 2010" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWjuaQbsacVuLb_ADuqBmMjjeveA9XptFAYbbflLal4WM6x6rhrf4HCTnWgslTNM9biYkEYkp9OGa8EaNLqjGAXJQ0PHOnddBh_NuOy-xaqoJkkNzQ3Up4dh_oehYQ8zXNjAQe17Y4nJpsALqB8IbWAGwfxL0GJ0E61QLaemEYA0j9U_iutjh1O6__4ESviyUXUtO3pUwn0VezBy5LreGXvTzyRoQwmyeuQP6jKAiU9MbPo9RTO7WLDWyMI3p7GA"/>
+</div>
+<div>
+<span class="font-title-md text-label-lg text-on-surface font-semibold block leading-tight">Puta Falta de Sacanagem</span>
+<span class="font-label-mono text-[10px] text-outline">Ano 2010 • ID #MEME-0319</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm">
+<div class="flex flex-wrap gap-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-secondary text-[9px] font-label-mono">Restart</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-[9px] font-label-mono">Cultura Emo</span>
+</div>
+</td>
+<td class="py-2.5 px-space-sm font-label-mono text-label-mono text-on-surface">7.9M</td>
+<td class="py-2.5 px-space-sm text-right">
+<button class="px-space-sm py-1 rounded bg-primary-container text-on-primary-container hover:bg-primary transition-colors font-label-mono text-[10px] font-bold uppercase tracking-wider inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+                  Redigir
+                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- SECTION 2: STRUCTURED EDITOR & LIVE SIDE-BY-SIDE PREVIEW -->
+<section class="flex flex-col space-y-space-md">
+<!-- Editor Header Toolbar -->
+<div class="p-space-md rounded-lg bg-surface-container-low shadow-sm flex flex-wrap items-center justify-between gap-space-md"><div class="flex flex-wrap items-center gap-space-md"><div class="flex items-center gap-space-sm"><div class="w-3 h-3 rounded-full bg-primary-container animate-pulse shadow-sm"></div><span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-wide">EDITANDO: GRÁVIDA DE TAUBATÉ (2012)</span><span class="font-label-mono text-[11px] px-2 py-0.5 rounded bg-surface-container-highest text-secondary uppercase font-semibold">ID #MEME-0248</span></div><div class="flex items-center gap-2"><span class="px-2 py-0.5 rounded bg-primary-container/20 text-primary-fixed-dim text-label-mono font-label-mono uppercase font-bold text-[10px] ring-1 ring-primary/40">EM REVISÃO</span><span class="font-label-mono text-[11px] text-outline flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-tertiary">cloud_done</span>Salvo há 2 min</span></div></div><div class="flex flex-wrap items-center gap-space-xs"><button class="px-space-md py-space-xs rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-mono text-label-mono uppercase flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-outline">save</span><span>Salvar Rascunho</span></button><a class="px-space-md py-space-xs rounded bg-surface-container-high text-secondary hover:bg-surface-container-highest transition-colors font-label-mono text-label-mono uppercase flex items-center gap-1.5" href="#"><span class="material-symbols-outlined text-[16px]">open_in_new</span><span>Ver na Memepédia</span></a><button class="px-space-lg py-space-xs rounded bg-primary-container text-on-primary-container hover:bg-primary-fixed-dim transition-colors font-headline-sm text-label-lg uppercase tracking-wider font-bold flex items-center gap-1.5 shadow-md"><span class="material-symbols-outlined text-[18px]">publish</span><span>Publicar Verbete</span></button></div></div>
+<!-- Dual Column: Editor vs Live Preview -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- Left Column: Structured Form Fields Editor (6 cols) -->
+<div class="lg:col-span-6 flex flex-col space-y-space-md p-space-lg rounded-lg bg-surface-container-low shadow-sm">
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">edit_document</span>
+<h3 class="font-headline-sm text-headline-sm uppercase text-primary tracking-wide">
+              CAMPOS ESTRUTURADOS
+            </h3>
+</div>
+<span class="font-label-mono text-[10px] text-outline uppercase">SCHEMA ENCICLOPÉDICO V2</span>
+</div>
+<!-- Field 1: Origin & Dating -->
+<div class="space-y-1">
+<label class="font-headline-sm text-[12px] uppercase text-on-surface tracking-wider block font-semibold">
+            1. Origem &amp; Datação Geográfica
+          </label>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-xs">
+<input class="sm:col-span-1 px-space-sm py-1.5 rounded bg-surface-container text-on-surface font-label-mono text-label-mono focus:outline-none focus:ring-1 focus:ring-secondary" type="text" value="Janeiro de 2012"/>
+<input class="sm:col-span-2 px-space-sm py-1.5 rounded bg-surface-container text-on-surface font-label-mono text-label-mono focus:outline-none focus:ring-1 focus:ring-secondary" type="text" value="Taubaté - SP / TV Record"/>
+</div>
+<p class="font-label-mono text-[10px] text-outline">Inclua cidade, estado, veículo de difusão e marco temporal de primeiro registro.</p>
+</div>
+<!-- Field 2: Historical Context (Markdown Toolbar + Area) -->
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<label class="font-headline-sm text-[12px] uppercase text-on-surface tracking-wider font-semibold">
+              2. Contexto Histórico &amp; Viralização
+            </label>
+<span class="font-label-mono text-[10px] text-secondary">MARKDOWN SUPORTADO</span>
+</div>
+<!-- Markdown quick bar -->
+<div class="flex items-center gap-1 p-1 rounded-t bg-surface-container-high text-on-surface-variant">
+<button class="p-1 rounded hover:bg-surface-container-highest text-on-surface font-label-mono text-[11px] font-bold">B</button>
+<button class="p-1 rounded hover:bg-surface-container-highest text-on-surface font-label-mono text-[11px] italic">I</button>
+<span class="h-3 w-px bg-surface-container-highest mx-0.5"></span>
+<button class="p-1 rounded hover:bg-surface-container-highest text-on-surface flex items-center"><span class="material-symbols-outlined text-[14px]">format_quote</span></button>
+<button class="p-1 rounded hover:bg-surface-container-highest text-on-surface flex items-center"><span class="material-symbols-outlined text-[14px]">link</span></button>
+<button class="p-1 rounded hover:bg-surface-container-highest text-on-surface flex items-center"><span class="material-symbols-outlined text-[14px]">format_list_bulleted</span></button>
+<span class="h-3 w-px bg-surface-container-highest mx-0.5"></span>
+<span class="font-label-mono text-[9px] text-outline ml-auto pr-1">1.842 CARACTERES</span>
+</div>
+<textarea class="w-full p-space-sm rounded-b bg-surface-container text-on-surface font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-secondary resize-none" rows="7">Em 11 de janeiro de 2012, Maria Verônica Aparecida César Santos compareceu ao programa matinal *Hoje em Dia* da RecordTV afirmando estar grávida de quadrigêmias (Maria Eduarda, Maria Fernanda, Maria Vitória e Maria Klara). O volume desproporcional do ventre chamou atenção instantânea de telespectadores e internautas no Twitter e comunidades do Orkut.
+
+A comoção inicial converteu-se em investigação após o repórter Chris Flores suspeitar da consistência física da barriga e solicitar averiguação médica independente. O caso culminou na confissão de que a gestação era fictícia e sustentada por uma estrutura de silicone com enchimento de tecidos e fraldas descartáveis.</textarea>
+</div>
+<!-- Field 3: Cultural Impact & Curiosities -->
+<div class="space-y-1.5">
+<label class="font-headline-sm text-[12px] uppercase text-on-surface tracking-wider font-semibold">
+            3. Curiosidades &amp; Impacto Cultural (Itens Marcantes)
+          </label>
+<div class="space-y-1">
+<div class="flex items-center gap-space-xs p-1.5 rounded bg-surface-container font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[16px] shrink-0">drag_indicator</span>
+<span class="flex-1">Desmascaramento ao vivo pela jornalista Chris Flores e equipe médica.</span>
+<button class="text-error hover:text-on-surface"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</div>
+<div class="flex items-center gap-space-xs p-1.5 rounded bg-surface-container font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[16px] shrink-0">drag_indicator</span>
+<span class="flex-1">Fantasias de Carnaval temáticas replicadas nacionalmente desde 2012.</span>
+<button class="text-error hover:text-on-surface"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</div>
+<div class="flex items-center gap-space-xs p-1.5 rounded bg-surface-container font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[16px] shrink-0">drag_indicator</span>
+<span class="flex-1">Gênese da expressão popular "de Taubaté" como sinônimo brasileiro de farsa.</span>
+<button class="text-error hover:text-on-surface"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</div>
+</div>
+<button class="font-label-mono text-[10px] text-secondary hover:text-on-surface flex items-center gap-1 uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">add_circle</span>
+            Adicionar Novo Fato Notável
+          </button>
+</div>
+<!-- Field 4: Multimedia & External Archival References -->
+<div class="space-y-1.5 pt-1">
+<label class="font-headline-sm text-[12px] uppercase text-on-surface tracking-wider font-semibold">
+            4. Referências &amp; Arquivos Multimídia (Wayback / URLs)
+          </label>
+<div class="space-y-1 font-label-mono text-label-mono">
+<div class="flex items-center gap-space-xs p-1.5 rounded bg-surface-container">
+<span class="material-symbols-outlined text-tertiary text-[16px]">archive</span>
+<span class="truncate flex-1 text-on-surface text-[10px]">web.archive.org/web/20120115/record.r7.com/hoje-em-dia/gravida-quadrigueos</span>
+<span class="px-1 py-0.5 rounded bg-surface-container-highest text-outline text-[9px]">SNAPSHOT</span>
+</div>
+<div class="flex items-center gap-space-xs p-1.5 rounded bg-surface-container">
+<span class="material-symbols-outlined text-secondary text-[16px]">ondemand_video</span>
+<span class="truncate flex-1 text-on-surface text-[10px]">youtube.com/watch?v=kL94_taubate_revelacao_original_sbt</span>
+<span class="px-1 py-0.5 rounded bg-surface-container-highest text-outline text-[9px]">VÍDEO 1080p</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Live Enciclopedic Public Preview (6 cols) -->
+<div class="lg:col-span-6 flex flex-col p-space-lg rounded-lg bg-surface-container shadow-md">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[20px]">visibility</span>
+<h3 class="font-headline-sm text-headline-sm uppercase text-tertiary tracking-wide">
+              PRÉ-VISUALIZAÇÃO ENCICLOPÉDICA PÚBLICA
+            </h3>
+</div>
+<span class="px-2 py-0.5 rounded bg-tertiary/20 text-tertiary font-label-mono text-label-mono uppercase font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">verified</span>
+            VERBETE VERIFICADO
+          </span>
+</div>
+<!-- Enciclopedic Mock Card -->
+<div class="p-space-md rounded bg-surface-container-low space-y-space-md">
+<!-- Hero Card Layout Inside -->
+<div class="flex flex-col sm:flex-row gap-space-md">
+<div class="w-full sm:w-44 h-36 rounded bg-surface-container-highest shrink-0 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Iconic photograph of the fake pregnant woman of Taubate in colorful dress standing with massive silicone belly on Brazilian morning television show 2012" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB18s6b_sEgLypveygezM3OihfU8bXry773rxlaQtc0lSOMzB4h1bey1WNAXSwPaOb1UGhcrMbxSXtIUtfYeqF6dkAHMKyK76pS19BKRH2F8BSC4uIRoi2lYrg3tK_-vMvdMKxVPOr9KiIY4yrEhNA7UvHUU696-D3tJo5TDHySfJsAAieF-qGy1DigS5ncWVfy3PjpPxMn1u83CGfSGGWtHFH5Cm-bFJhibF12vsgvGpHHT1yq_C5uiTsShAgByg"/>
+<span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-surface-container-lowest/80 font-label-mono text-[9px] text-secondary">
+                REGISTRO OFICIAL
+              </span>
+</div>
+<div class="flex flex-col justify-between">
+<div>
+<div class="flex flex-wrap items-center gap-1 mb-1">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-primary text-[10px] font-label-mono uppercase font-bold">
+                    ERA DE OURO DA TV ABERTA
+                  </span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-outline text-[10px] font-label-mono uppercase">
+                    CANON MEMÉTICO BR
+                  </span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface uppercase tracking-wide leading-tight">
+                  Grávida de Taubaté
+                </h4>
+<p class="font-label-mono text-[11px] text-outline mt-0.5">
+                  Taxonomia: Hoax Televisivo / Falsa Gestação / Folclore Pós-Orkut
+                </p>
+</div>
+<!-- Metadata micro-grid -->
+<div class="grid grid-cols-2 gap-2 pt-2 text-[10px] font-label-mono bg-surface-container-lowest/60 p-2 rounded">
+<div>
+<span class="text-outline uppercase block">Primeira Ocorrência:</span>
+<span class="text-on-surface font-semibold">11/01/2012</span>
+</div>
+<div>
+<span class="text-outline uppercase block">Origem Primária:</span>
+<span class="text-on-surface font-semibold">Hoje em Dia (Record)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: Origem -->
+<div class="space-y-1">
+<span class="font-headline-sm text-[11px] uppercase tracking-wider text-primary font-bold block">
+              ORIGEM &amp; HISTÓRICO
+            </span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed text-justify">
+              Em 11 de janeiro de 2012, Maria Verônica Aparecida César Santos compareceu ao programa matinal <em>Hoje em Dia</em> da RecordTV afirmando estar grávida de quadrigêmias. O volume do ventre chamou atenção instantânea nas transmissões e redes da época.
+            </p>
+</div>
+<!-- Section: O Desfecho & Legado -->
+<div class="space-y-1">
+<span class="font-headline-sm text-[11px] uppercase tracking-wider text-secondary font-bold block">
+              DESFECHO &amp; IMPACTO CULTURAL
+            </span>
+<ul class="list-disc list-inside font-body-sm text-body-sm text-on-surface-variant space-y-0.5">
+<li>Desmascaramento comprovado através de laudo de ultrassonografia falso.</li>
+<li>Surgimento da expressão canônica "de Taubaté" no vocabulário popular do Brasil.</li>
+<li>Mais de 120 mil menções simultâneas em fóruns e Twitter na semana do caso.</li>
+</ul>
+</div>
+<!-- Section: Fontes Arquivadas -->
+<div class="pt-space-xs">
+<span class="font-headline-sm text-[11px] uppercase tracking-wider text-outline font-bold block mb-1">
+              ARQUIVOS &amp; EVIDÊNCIAS CATALOGADAS
+            </span>
+<div class="flex flex-wrap gap-space-xs">
+<a class="inline-flex items-center gap-1 px-2 py-1 rounded bg-surface-container text-secondary text-label-mono text-[10px] hover:underline" href="#">
+<span class="material-symbols-outlined text-[12px]">link</span>
+                Arquivo Matéria R7 (2012)
+              </a>
+<a class="inline-flex items-center gap-1 px-2 py-1 rounded bg-surface-container text-secondary text-label-mono text-[10px] hover:underline" href="#">
+<span class="material-symbols-outlined text-[12px]">link</span>
+                Cobertura Blog Não Salvo
+              </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: REVISION HISTORY, DIFF VIEWER & ROLLBACK -->
+<section class="p-space-lg rounded-lg bg-surface-container-low shadow-sm space-y-space-md">
+<div class="flex flex-wrap items-center justify-between gap-space-sm pb-1">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">history_edu</span>
+<h3 class="font-headline-sm text-headline-sm uppercase text-primary tracking-wide">
+          HISTÓRICO DE VERSÕES &amp; DIFF VISUAL (#MEME-0248)
+        </h3>
+</div>
+<span class="font-label-mono text-label-mono text-outline uppercase">
+        TOTAL DE 14 REVISÕES REGISTRADAS
+      </span>
+</div>
+<!-- Revisions Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-md">
+<!-- Rev 14 (Active) -->
+<div class="p-space-md rounded bg-surface-container flex flex-col justify-between space-y-space-sm">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">REV #14 (ATUAL)</span>
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary text-[10px] font-label-mono uppercase font-bold">
+              VERSÃO ATIVA
+            </span>
+</div>
+<div class="font-label-mono text-[10px] text-outline">
+            Há 3 horas por <span class="text-secondary">@morroida</span> (Admin)
+          </div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pt-1">
+            Expansão da seção de repercussão jurídica e adição de 2 fontes jornalísticas arquivadas no Wayback.
+          </p>
+</div>
+<div class="flex items-center justify-between pt-space-xs font-label-mono text-[10px]">
+<span class="text-tertiary font-bold">+420 / -15 linhas</span>
+<span class="text-outline uppercase">Checksum: 8bfa91</span>
+</div>
+</div>
+<!-- Rev 13 -->
+<div class="p-space-md rounded bg-surface-container flex flex-col justify-between space-y-space-sm"><div class="space-y-1"><div class="flex items-center justify-between"><span class="font-headline-sm text-headline-sm uppercase text-on-surface">REV #13</span><span class="font-label-mono text-[10px] text-outline uppercase font-semibold">ARQUIVADA</span></div><div class="font-label-mono text-[10px] text-outline">Ontem às 18:42 por <span class="text-primary font-semibold">@cid_naosalvo</span> (Arquivista-Chefe)</div><p class="font-body-sm text-body-sm text-on-surface-variant pt-1">Ajuste na datação de transmissão televisiva e correção da URL original de snapshot do WebArchive.</p></div><div class="flex items-center justify-between pt-space-xs"><span class="font-label-mono text-[10px] text-tertiary font-bold">+32 / -8 linhas</span><div class="flex items-center gap-1"><button class="px-2 py-0.5 rounded bg-surface-container-high text-secondary hover:bg-surface-container-highest font-label-mono text-[10px] uppercase font-semibold">Ver Diff</button><button class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container hover:bg-primary font-label-mono text-[10px] font-bold uppercase">Restaurar</button></div></div></div>
+<!-- Rev 12 -->
+<div class="p-space-md rounded bg-surface-container flex flex-col justify-between space-y-space-sm">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">REV #12</span>
+<span class="font-label-mono text-[10px] text-outline uppercase font-semibold">ARQUIVADA</span>
+</div>
+<div class="font-label-mono text-[10px] text-outline">
+            12 Out 2024 por <span class="text-secondary">@bicmuller</span> (Curador)
+          </div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pt-1">
+            Criação do verbete base a partir de submissão da comunidade e consolidação das notas prévias.
+          </p>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-mono text-[10px] text-tertiary font-bold">+1.250 linhas</span>
+<div class="flex items-center gap-1">
+<button class="px-2 py-0.5 rounded bg-surface-container-high text-secondary hover:bg-surface-container-highest font-label-mono text-[10px] uppercase">
+              Ver Diff
+            </button>
+<button class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-mono text-[10px] uppercase">
+              Restaurar
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Visual Diff Viewer Snippet -->
+<div class="p-space-md rounded bg-surface-container font-label-mono text-label-mono space-y-1">
+<div class="flex items-center justify-between pb-1 text-[10px] text-outline border-b border-surface-container-highest/40">
+<span class="uppercase">DIFF VISUAL: COMPARAÇÃO REV #13 → REV #14 (EXPANSÃO JURÍDICA)</span>
+<span class="text-tertiary font-semibold">MODO UNIFICADO</span>
+</div>
+<div class="pt-1 space-y-0.5 text-[11px] leading-tight overflow-x-auto">
+<div class="p-1 rounded bg-error-container/30 text-on-error-container flex items-start gap-2">
+<span class="select-none font-bold text-error">-</span>
+<span>O caso teve repercussão local com processo no tribunal de pequenas causas da comarca de Taubaté.</span>
+</div>
+<div class="p-1 rounded bg-tertiary/20 text-on-surface flex items-start gap-2">
+<span class="select-none font-bold text-tertiary">+</span>
+<span>Em 2014, o Ministério Público de São Paulo determinou o arquivamento definitivo da ação de estelionato após conciliação com os doadores das fraldas e brinquedos.</span>
+</div>
+<div class="p-1 rounded bg-tertiary/20 text-on-surface flex items-start gap-2">
+<span class="select-none font-bold text-tertiary">+</span>
+<span>[FONTE 04] Snapshot oficial do Diário de Justiça do Estado de SP arquivado via Wayback Machine (protocolo #9921-A).</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: COMMUNITY SUBMISSIONS APPROVAL QUEUE -->
+<section class="p-space-lg rounded-lg bg-surface-container-low shadow-sm space-y-space-md">
+<div class="flex flex-wrap items-center justify-between gap-space-sm pb-1">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">how_to_reg</span>
+<h3 class="font-headline-sm text-headline-sm uppercase text-secondary tracking-wide">
+          PENDENTES - FILA DE EDIÇÕES COMUNITÁRIAS AGUARDANDO APROVAÇÃO
+        </h3>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-label-mono text-[10px] font-bold uppercase tracking-wider">
+        5 SUGESTÕES PENDENTES
+      </span>
+</div>
+<!-- Queue Items List -->
+<div class="space-y-space-sm">
+<!-- Item 1 -->
+<div class="p-space-md rounded bg-surface-container flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md max-w-4xl">
+<div class="w-10 h-10 rounded bg-surface-container-highest shrink-0 overflow-hidden mt-0.5">
+<img class="w-full h-full object-cover" data-alt="Vintage Brazilian TV host Fausto Silva talking on microphone Domingao do Faustao ERROU meme moment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBu7Ve6YvLNRJD134ERC-VsL_rGi2Vevr6flx7SuuRUK2HNspGmfWU3Bxg1gYN0C5J3HddnS17_NtT7Nnk65-eiNphXBIRsrgAo91rN1detGl2wg3U3pgwjysAQqE4fXN7euQ5DnDITihOwKtZ_jdkLodedBEGd-Zy-GD-NvyoszdqK6fu5YTXWDNC5soGfX9s_cHoygPITKe6_ddU3Qxn7wr7w5UpnwfP-sgOGp78MdwIoHJUepAY1_lx2GfiKSQ"/>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase leading-tight">
+                Cabine do Faustão Errou! (1997)
+              </span>
+<span class="px-2 py-0.2 rounded bg-surface-container-high text-outline text-[10px] font-label-mono">
+                Submetido há 42 min
+              </span>
+<span class="px-2 py-0.2 rounded bg-secondary/15 text-secondary text-[10px] font-label-mono font-semibold">
+                @pedro_memes99 (Membro Prata)
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+<strong class="text-on-surface">Proposta:</strong> Adicionar curiosidade técnica sobre a matriz de áudio analógica do bordão "ERROU!" que passou a ser sampleada por narradores e streamers de eSports a partir de 2016.
+            </p>
+<div class="p-1.5 rounded bg-surface-container-lowest font-label-mono text-[11px] text-tertiary flex items-center gap-1.5">
+<span class="font-bold">+1 parágrafo (+248 caracteres)</span>
+<span class="text-outline">• 1 link verificado (Globo Play / Acervo)</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs shrink-0 self-end xl:self-center">
+<button class="px-space-md py-1.5 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-label-mono text-label-mono uppercase transition-colors">
+            Editar Antes
+          </button>
+<button class="px-space-md py-1.5 rounded bg-error-container text-on-error-container hover:bg-error transition-colors font-label-mono text-label-mono uppercase font-semibold">
+            Rejeitar
+          </button>
+<button class="px-space-lg py-1.5 rounded bg-tertiary-container text-on-tertiary hover:bg-tertiary transition-colors font-headline-sm text-label-lg uppercase tracking-wider font-bold shadow-sm">
+            Aprovar Edição
+          </button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-space-md rounded bg-surface-container flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md max-w-4xl">
+<div class="w-10 h-10 rounded bg-surface-container-highest shrink-0 overflow-hidden mt-0.5">
+<img class="w-full h-full object-cover" data-alt="Screenshot of viral pop sensation Ines Brasil Make Love audition video on webcam with leopard print 2013" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcRBSn6ocxaflhThq_nuImyAxG7fkoR6jqmEU4lk2PoYSwn9G7g2sA_TeIAxOKL2cmx0G8Kz9QrI6QzZdaYoFuMiaG01DU9Gqj6yIXtSwC4cGPGMTZLjq5U8Djlw9VPTKCM0pVm-OOxXJ8mDePnkHPS1KgKanb15aFTGw0ylhwy1tXctdq70F1yMgztgH6aBOa6BeHjz38kbBKJJae5sF3zetbOd3PKHIBKgAJZxan1dCQsMg-bzhCYAYirldFhw"/>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase leading-tight">
+                Inês Brasil: Make Love (2013)
+              </span>
+<span class="px-2 py-0.2 rounded bg-surface-container-high text-outline text-[10px] font-label-mono">
+                Submetido há 2 horas
+              </span>
+<span class="px-2 py-0.2 rounded bg-primary/15 text-primary text-[10px] font-label-mono font-semibold">
+                @carol_archive (Curadora Ouro)
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+<strong class="text-on-surface">Proposta:</strong> Correção cronológica do vídeo original de inscrição do BBB 13 com inserção do arquivo resgatado do Dailymotion datado de dezembro de 2012.
+            </p>
+<div class="p-1.5 rounded bg-surface-container-lowest font-label-mono text-[11px] text-tertiary flex items-center gap-1.5">
+<span class="font-bold">+3 referências cronológicas</span>
+<span class="text-outline">• Ajuste na datação de Dez/12 para Jan/13</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs shrink-0 self-end xl:self-center">
+<button class="px-space-md py-1.5 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-label-mono text-label-mono uppercase transition-colors">
+            Editar Antes
+          </button>
+<button class="px-space-md py-1.5 rounded bg-error-container text-on-error-container hover:bg-error transition-colors font-label-mono text-label-mono uppercase font-semibold">
+            Rejeitar
+          </button>
+<button class="px-space-lg py-1.5 rounded bg-tertiary-container text-on-tertiary hover:bg-tertiary transition-colors font-headline-sm text-label-lg uppercase tracking-wider font-bold shadow-sm">
+            Aprovar Edição
+          </button>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="p-space-md rounded bg-surface-container flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md max-w-4xl">
+<div class="w-10 h-10 rounded bg-surface-container-highest shrink-0 overflow-hidden mt-0.5">
+<img class="w-full h-full object-cover" data-alt="Kleber Bambam screaming in gym workout video mutante trapezista descendente Brazilian fitness meme" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd_VP0Wra39YaOy5D3Gx7jkCBmPsdq-HxzTEJN8wHlztR7lg9uqDUgfaVl_ob87ign0fZpnM2et3VSSIl4ioy03CjT2w26r-9newyUKl44El1l1TUcBD3zbJipl7xfJDP0ln15b1p0LBI-rU3f43tkRCufleq-UCrzcernIDGpKVgXDTvtEikgiU_f_sRy_OAMWkM-XvWJ8EeFpNx31PDP2WYdTGAvkvA19tYlSWzeySA3kMm8zgfiTkX_xq1rJA"/>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface uppercase leading-tight">
+                Bambam Mutante / Trapezista Descendente (2016)
+              </span>
+<span class="px-2 py-0.2 rounded bg-surface-container-high text-outline text-[10px] font-label-mono">
+                Submetido há 5 horas
+              </span>
+<span class="px-2 py-0.2 rounded bg-surface-container-high text-outline text-[10px] font-label-mono">
+                @bodybuilder_br (Membro Bronze)
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+<strong class="text-on-surface">Proposta:</strong> Transcrição literal integral dos jargões "Hora do Show Porra" e "Birl" correlacionados ao ecossistema do canal de musculação do Felipe Franco.
+            </p>
+<div class="p-1.5 rounded bg-surface-container-lowest font-label-mono text-[11px] text-tertiary flex items-center gap-1.5">
+<span class="font-bold">+18 linhas de glossário</span>
+<span class="text-outline">• Adição de 4 novos termos no Vocabulário Memético</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs shrink-0 self-end xl:self-center">
+<button class="px-space-md py-1.5 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-label-mono text-label-mono uppercase transition-colors">
+            Editar Antes
+          </button>
+<button class="px-space-md py-1.5 rounded bg-error-container text-on-error-container hover:bg-error transition-colors font-label-mono text-label-mono uppercase font-semibold">
+            Rejeitar
+          </button>
+<button class="px-space-lg py-1.5 rounded bg-tertiary-container text-on-tertiary hover:bg-tertiary transition-colors font-headline-sm text-label-lg uppercase tracking-wider font-bold shadow-sm">
+            Aprovar Edição
+          </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<script>
+  // Ensure the sidebar navigation highlights 'Memepédia'
+  (function initActiveState() {
+    const memepediaNav = document.querySelector('aside a[data-path="memepedia"]');
+    if (memepediaNav) {
+      memepediaNav.classList.remove('text-on-surface-variant');
+      memepediaNav.classList.add('bg-primary-container', 'text-on-primary-container', 'font-semibold', 'rounded-lg');
+    }
+  })();
+</script></main></div><nav class="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-surface-container-low z-50 flex items-center justify-around px-space-sm shadow-[0_-2px_10px_rgba(0,0,0,0.5)]" data-active-classes="text-primary font-bold"><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="visao-geral" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-label-mono text-[9px] uppercase">Visão</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface relative" data-path="moderacao" href="#"><span class="material-symbols-outlined text-[20px]">gavel</span><span class="font-label-mono text-[9px] uppercase">Mod</span><span class="absolute -top-1 right-1 w-2 h-2 rounded-full bg-primary-container"></span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="memes" href="#"><span class="material-symbols-outlined text-[20px]">movie</span><span class="font-label-mono text-[9px] uppercase">Acervo</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="comunidade" href="#"><span class="material-symbols-outlined text-[20px]">forum</span><span class="font-label-mono text-[9px] uppercase">Social</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="log-de-auditoria" href="#"><span class="material-symbols-outlined text-[20px]">receipt_long</span><span class="font-label-mono text-[9px] uppercase">Audit</span></a></nav></body></html>

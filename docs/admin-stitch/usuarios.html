@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"primary-fixed-dim":"#ffb95f","secondary-fixed-dim":"#4cd7f6","on-secondary-fixed":"#001f26","on-primary-fixed-variant":"#653e00","surface-container-lowest":"#000f21","secondary-container":"#03b5d3","inverse-surface":"#d3e4fe","tertiary-container":"#30c88f","primary-fixed":"#ffddb8","surface-container":"#102034","on-surface-variant":"#d8c3ad","on-primary-container":"#613b00","secondary-fixed":"#acedff","on-tertiary":"#003824","on-tertiary-fixed-variant":"#005236","on-background":"#d3e4fe","surface-container-highest":"#26364a","on-primary-fixed":"#2a1700","outline-variant":"#534434","primary-container":"#f59e0b","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","inverse-on-surface":"#213145","on-secondary-container":"#00424e","on-error":"#690005","on-secondary-fixed-variant":"#004e5c","error":"#ffb4ab","surface-variant":"#26364a","on-error-container":"#ffdad6","surface-container-low":"#0b1c30","surface-dim":"#031427","outline":"#a08e7a","error-container":"#93000a","primary":"#ffc174","on-primary":"#472a00","surface":"#031427","secondary":"#4cd7f6","on-tertiary-container":"#004e34","tertiary-fixed":"#6ffbbe","inverse-primary":"#855300","surface-bright":"#2a3a4f","on-surface":"#d3e4fe","background":"#031427","tertiary":"#56e5a9","surface-container-high":"#1b2b3f","on-secondary":"#003640","surface-tint":"#ffb95f"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-sm":"0.5rem","margin-desktop":"1.5rem","gutter":"1rem","margin":"1rem","gutter-desktop":"1.25rem","space-md":"0.75rem","space-xl":"1.75rem","space-lg":"1.25rem","space-xs":"0.25rem"},"fontFamily":{"headline-lg-mobile":["Oswald"],"body-sm":["Inter"],"title-md":["Inter"],"label-mono":["JetBrains Mono"],"body-lg":["Inter"],"headline-lg":["Oswald"],"headline-sm":["Oswald"],"label-lg":["Inter"],"headline-md":["Oswald"],"display-lg":["Oswald"],"body-md":["Inter"],"label-md":["Inter"]},"fontSize":{"headline-lg-mobile":["26px",{"lineHeight":"32px","letterSpacing":"0.03em","fontWeight":"600"}],"body-sm":["11px",{"lineHeight":"16px","fontWeight":"400"}],"title-md":["16px",{"lineHeight":"22px","fontWeight":"600"}],"label-mono":["11px",{"lineHeight":"14px","letterSpacing":"0em","fontWeight":"500"}],"body-lg":["15px",{"lineHeight":"22px","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"38px","letterSpacing":"0.03em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"24px","letterSpacing":"0.02em","fontWeight":"500"}],"label-lg":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"30px","letterSpacing":"0.02em","fontWeight":"600"}],"display-lg":["48px",{"lineHeight":"52px","letterSpacing":"0.04em","fontWeight":"700"}],"body-md":["13px",{"lineHeight":"18px","fontWeight":"400"}],"label-md":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"600"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low z-50 hidden md:flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="flex flex-col h-full overflow-hidden"><div class="h-14 px-gutter-desktop flex items-center justify-between shrink-0 bg-surface-container-low"><div class="flex items-center gap-space-sm"><img alt="Logo Não Salvo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB_wCaM1dJa0JTXZqPdTQpEDG9lWMv54hWBga6RdAKrd1TW_6gIWtAGuG_Bmci8G9cAYG6QoHdkgD29FISuvW_4_g8SR2bxHg_PThwlBou-5a3miuOn8LM4D_G09qlMBL5_U9eFkGboH2i1fhd-9_Ou3Pi98AOXY8iB3oVk7ViuWeFAh9VCYw7fDiQkwin6oG0N8N2u74IuAYHt7eIjwtbh_Tv1Oq00trDay1IHJRE"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm uppercase tracking-wider text-primary leading-none">NÃO SALVO</span><span class="font-label-mono text-label-mono text-secondary tracking-normal uppercase">MUSEU MEMÉTICA</span></div></div><span class="font-label-mono text-label-mono px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface-variant">v3.4</span></div><nav class="flex-1 px-space-sm py-space-sm overflow-y-auto space-y-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg"><div class="mb-space-xs"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="visao-geral" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">dashboard</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Visão Geral</span></div></a></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">MODERAÇÃO</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="moderacao" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">gavel</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Moderação</span></div><span class="font-label-mono text-label-mono px-1.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-bold">14</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="memepedia" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">menu_book</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Memepédia</span></div></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">ACERVO</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="memes" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">movie</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Memes</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="cartas-e-colecoes" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">style</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Cartas e Coleções</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="eras" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">history_toggle_off</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Eras Históricas</span></div></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">PESSOAS</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="usuarios" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">group</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Usuários</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="comunidade" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">forum</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Comunidade</span></div><span class="font-label-mono text-label-mono px-1 py-0.5 rounded bg-surface-container-highest text-secondary text-[9px]">RADAR</span></a></div></div><div class="pt-space-xs"><div class="px-space-md py-1 font-headline-sm text-[10px] tracking-widest text-outline uppercase font-semibold">SISTEMA</div><div class="space-y-0.5"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="log-de-auditoria" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">receipt_long</span><span class="font-label-lg text-label-lg uppercase tracking-wide">Log Auditoria</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="mcp-api-keys" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">key</span><span class="font-label-lg text-label-lg uppercase tracking-wide">MCP / API Keys</span></div></a></div></div></nav><div class="p-space-sm bg-surface-container-lowest shrink-0"><div class="p-space-sm rounded bg-surface-container flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-primary text-[16px]">tune</span><span class="font-label-mono text-label-mono text-on-surface uppercase">Visão Ativa</span></div><div class="flex items-center gap-1 bg-surface-container-highest p-0.5 rounded"><span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container font-bold">ADM</span><span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded text-outline hover:text-on-surface cursor-pointer">MOD</span></div></div></div></div></aside><div class="md:pl-64"><header class="fixed top-0 left-0 md:left-64 right-0 h-14 bg-surface/85 backdrop-blur-xl z-40 px-gutter md:px-gutter-desktop flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.25)]"><div class="flex items-center gap-space-md"><div class="md:hidden flex items-center gap-space-sm"><img alt="Logo Não Salvo" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB_wCaM1dJa0JTXZqPdTQpEDG9lWMv54hWBga6RdAKrd1TW_6gIWtAGuG_Bmci8G9cAYG6QoHdkgD29FISuvW_4_g8SR2bxHg_PThwlBou-5a3miuOn8LM4D_G09qlMBL5_U9eFkGboH2i1fhd-9_Ou3Pi98AOXY8iB3oVk7ViuWeFAh9VCYw7fDiQkwin6oG0N8N2u74IuAYHt7eIjwtbh_Tv1Oq00trDay1IHJRE"/></div><div class="flex items-center gap-space-xs font-label-mono text-label-mono text-outline"><span class="text-on-surface-variant uppercase font-semibold">PAINEL</span><span>/</span><span class="text-secondary font-semibold uppercase">ADMIN</span></div></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-primary-container/20 text-primary-fixed-dim"><span class="material-symbols-outlined text-[14px]">verified_user</span><span class="font-label-mono text-label-mono font-bold tracking-wider">ADMIN</span></div><button class="flex items-center gap-1 p-space-xs rounded bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[18px]">dark_mode</span></button><a class="hidden lg:flex items-center gap-space-xs text-on-surface-variant hover:text-secondary font-label-mono text-label-mono transition-colors" href="#"><span class="uppercase tracking-wider">Voltar ao site</span><span class="material-symbols-outlined text-[15px]">open_in_new</span></a><div class="flex items-center gap-space-sm pl-space-xs"><div class="hidden sm:flex flex-col text-right leading-none"><span class="font-label-lg text-label-lg text-on-surface">Cid / Arquivista-Chefe</span><span class="font-label-mono text-[10px] text-outline">cid@naosalvo.com.br</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrqS8A3T25Mr_xsOMlRcBjnSdPgK1FelWgnb0Hp5i0e5L-bKqZzl0U-Y1xelnJMfYYM81fHrtDg8GyheHoAC4UtpM51KdEkKZkT9dJz4xcB913V48maRu1I0AYyNMyFS2yC0F3RPA3mawtBDKY7WPSFby4haiX586XCDU0ECvkskoHYv6VzZcIrg2jmwNMeXTzR2HRFwFGBxaIGats6DsKK4JySI11eOu7u1aqGrD69prI_CF9TA2svMpj8CnMwA"/></div></div></header><main class="w-full pt-14 px-gutter md:px-gutter-desktop min-h-screen bg-surface"><div class="flex flex-col w-full pb-16">
+<!-- Top Bar: Gestão de Usuários & Telemetria Geral -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md py-space-lg">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-sm flex-wrap">
+<span class="font-label-mono text-label-mono px-2 py-0.5 rounded bg-primary-container/20 text-primary-fixed-dim uppercase tracking-wider font-semibold">ADMIN ONLY</span>
+<span class="font-label-mono text-label-mono px-2 py-0.5 rounded bg-error-container/40 text-error uppercase tracking-wider font-semibold">ACESSO RESTRITO // LVL-04</span>
+<span class="font-label-mono text-label-mono text-outline">SYS.AUTH_MODULE_v3.4</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg uppercase text-on-surface tracking-wide mt-1">
+        GESTÃO DE USUÁRIOS
+      </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+        Controle central de permissões, inventário de contas comunitárias, moderação de acessos, sanções disciplinares e protocolo de anonimização LGPD do acervo memético.
+      </p>
+</div>
+<!-- Quick Actions Header -->
+<div class="flex items-center gap-space-sm shrink-0 flex-wrap">
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-lg text-label-lg uppercase tracking-wider shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">file_download</span>
+<span>Exportar Dados (CSV)</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-lg text-label-lg uppercase tracking-wider shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">receipt_long</span>
+<span>Registros de Auditoria</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-primary-container text-on-primary-container hover:bg-primary-fixed transition-colors font-label-lg text-label-lg uppercase tracking-wider font-bold shadow-md">
+<span class="material-symbols-outlined text-[16px]">person_add</span>
+<span>Convidar Curador</span>
+</button>
+</div>
+</div>
+<!-- KPI Pulse Overview Bar -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-lg">
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-mono text-label-mono uppercase tracking-wider">TOTAL REGISTRADOS</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">groups</span>
+</div>
+<div class="mt-2 flex items-baseline gap-space-sm">
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">184.920</span>
+<span class="font-label-mono text-label-mono text-tertiary font-bold">+412 hoje</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mt-3 overflow-hidden">
+<div class="bg-secondary h-full" style="width: 78%"></div>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-mono text-label-mono uppercase tracking-wider">ATIVOS (ÚLTIMAS 24H)</span>
+<span class="material-symbols-outlined text-[16px] text-primary">bolt</span>
+</div>
+<div class="mt-2 flex items-baseline gap-space-sm">
+<span class="font-headline-md text-headline-md text-primary font-semibold">19.482</span>
+<span class="font-label-mono text-label-mono text-outline">10.5% base</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mt-3 overflow-hidden">
+<div class="bg-primary h-full" style="width: 62%"></div>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-mono text-label-mono uppercase tracking-wider">SANÇÕES ATIVAS</span>
+<span class="material-symbols-outlined text-[16px] text-error">gavel</span>
+</div>
+<div class="mt-2 flex items-baseline gap-space-sm">
+<span class="font-headline-md text-headline-md text-error font-semibold">142</span>
+<span class="font-label-mono text-label-mono text-error">Banidos</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mt-3 overflow-hidden">
+<div class="bg-error h-full" style="width: 14%"></div>
+</div>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-mono text-label-mono uppercase tracking-wider">ANONIMIZADOS LGPD</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">shield_person</span>
+</div>
+<div class="mt-2 flex items-baseline gap-space-sm">
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">315</span>
+<span class="font-label-mono text-label-mono text-secondary-fixed-dim">3 pendentes</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mt-3 overflow-hidden">
+<div class="bg-outline h-full" style="width: 25%"></div>
+</div>
+</div>
+</div>
+<!-- Barra de Busca, Segmentação e Filtros Avançados -->
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm mb-space-lg flex flex-col gap-space-md">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md items-center">
+<!-- Input de Busca -->
+<div class="lg:col-span-5 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full pl-10 pr-space-md py-2.5 rounded-lg bg-surface-container text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-secondary transition-all" placeholder="Buscar por Apelido, ID (#49281), e-mail ou IP..." type="text" value=""/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+<kbd class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-surface-container-highest text-outline">ESC</kbd>
+</div>
+</div>
+<!-- Filtro: Papel -->
+<div class="lg:col-span-2">
+<label class="block font-label-mono text-[10px] text-outline uppercase tracking-wider mb-1">Papel</label>
+<div class="relative">
+<select class="w-full appearance-none px-space-md py-2 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg focus:outline-none focus:ring-1 focus:ring-secondary pr-8">
+<option value="all">Todos os Papéis</option>
+<option value="admin">Administrador (4)</option>
+<option value="mod">Moderador (28)</option>
+<option value="user">Usuário Comum (184k)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Filtro: Status -->
+<div class="lg:col-span-2">
+<label class="block font-label-mono text-[10px] text-outline uppercase tracking-wider mb-1">Status da Conta</label>
+<div class="relative">
+<select class="w-full appearance-none px-space-md py-2 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg focus:outline-none focus:ring-1 focus:ring-secondary pr-8">
+<option value="all">Todos os Status</option>
+<option value="active">Ativo (184.463)</option>
+<option value="banned">Banido (142)</option>
+<option value="lgpd">Anonimizado LGPD (315)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Filtro: Ordenação -->
+<div class="lg:col-span-2">
+<label class="block font-label-mono text-[10px] text-outline uppercase tracking-wider mb-1">Ordenar Por</label>
+<div class="relative">
+<select class="w-full appearance-none px-space-md py-2 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg focus:outline-none focus:ring-1 focus:ring-secondary pr-8">
+<option value="recent">Mais Recentes</option>
+<option value="xp">Maior XP Memético</option>
+<option value="coins">Mais Moedas Não Salvo</option>
+<option value="last_seen">Último Acesso</option>
+<option value="oldest">Mais Antigos (Ancestrais)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[18px]">sort</span>
+</div>
+</div>
+<!-- Quick Reset -->
+<div class="lg:col-span-1 flex items-end justify-center">
+<button class="w-full mt-auto py-2 px-space-sm rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-outline hover:text-on-surface transition-colors flex items-center justify-center gap-1 font-label-mono text-label-mono" title="Limpar Filtros">
+<span class="material-symbols-outlined text-[16px]">filter_alt_off</span>
+<span class="lg:hidden">Limpar</span>
+</button>
+</div>
+</div>
+<!-- Active Filter Tags Ribbon -->
+<div class="flex items-center gap-space-sm flex-wrap pt-space-xs">
+<span class="font-label-mono text-label-mono text-outline uppercase tracking-wide">Filtros Ativos:</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-mono text-label-mono">
+        Status: <strong>Todos</strong>
+<span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-error">close</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-mono text-label-mono">
+        Ordenação: <strong>Mais Recentes</strong>
+<span class="material-symbols-outlined text-[14px] cursor-pointer hover:text-error">close</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-secondary/15 text-secondary font-label-mono text-label-mono">
+        Escopo: <strong>Global (BR-NET)</strong>
+</span>
+<button class="font-label-mono text-[10px] text-primary hover:underline ml-auto uppercase tracking-wide">
+        Salvar Visão Padrão
+      </button>
+</div>
+</div>
+<!-- Layout Principal: 12 Colunas (8 Colunas Tabela + 4 Colunas Resumo/Ações) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- COLUNA PRINCIPAL: Tabela Robusta de Usuários (8 Cols) -->
+<div class="xl:col-span-8 flex flex-col gap-space-md">
+<div class="rounded-xl bg-surface-container-low shadow-sm overflow-hidden flex flex-col">
+<!-- Table Control Strip -->
+<div class="px-space-lg py-space-sm bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-wide">TABELA DE USUÁRIOS</span>
+<span class="font-label-mono text-label-mono px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary">184.920 registros</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Atualizar">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Configurar Colunas">
+<span class="material-symbols-outlined text-[18px]">view_column</span>
+</button>
+</div>
+</div>
+<!-- Table Responsive Wrapper -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left font-body-md text-body-md border-collapse">
+<thead>
+<tr class="bg-surface-container-high/60 text-outline font-label-mono text-[10px] uppercase tracking-wider">
+<th class="py-space-md px-space-md">Usuário &amp; ID</th>
+<th class="py-space-md px-space-md">Patente &amp; Nível</th>
+<th class="py-space-md px-space-md">Papel</th>
+<th class="py-space-md px-space-md">Status</th>
+<th class="py-space-md px-space-md">Último Acesso</th>
+<th class="py-space-md px-space-md text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-highest/40">
+<!-- LINHA 1: Cid Não Salvo (ADMIN LOGADO - SELF ACCOUNT) -->
+<tr class="hover:bg-surface-container-high/40 transition-colors bg-surface-container/30">
+<td class="py-space-md px-space-md min-w-[200px]">
+<div class="flex items-center gap-space-sm">
+<img class="w-10 h-10 rounded-full object-cover shadow-sm ring-1 ring-primary" data-alt="Retro cyber portrait avatar with sunglasses representing iconic Brazilian internet archivist Mauricio Cid with warm studio amber lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByDwa9kN5WDFgvXPB12wbaVcQPdE3Hdr_W1h_iSHif99nTGK4DlPu4K4MgBQWlx-VKgoRzcgcJGLeQ4eNZogm9O7FVOE1VZYv4IkZYJeD-ibV8kMgWgeFl_Uy65kxQB9e2JXikmCDf8zZBktLv712f58Xw27um-vSLXULUmzgKUvIXT3WfuGMYxCCzs0jCkWQRkDeWmaYLe_ynUE_uReIg1cSGKVUta7leCE_6FgoimsYTWl1Fl7EyLETA5hdy_w"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md text-on-surface font-semibold truncate">Cid Não Salvo</span>
+<span class="font-label-mono text-[9px] px-1 py-0.2 rounded bg-primary-container text-on-primary-container font-bold">VOCÊ</span>
+</div>
+<span class="font-label-mono text-label-mono text-outline">@cid_naosalvo • #00001</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md min-w-[150px]">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-primary font-semibold">Arquivista Ancestral</span>
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono text-on-surface-variant">
+<span>Lvl 99</span>
+<span>•</span>
+<span class="text-secondary font-semibold">849.200 NS$</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono px-2 py-0.5 rounded-full bg-primary-container/20 text-primary-fixed-dim font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+                    Administrador
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                    Online agora
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap font-label-mono text-label-mono text-outline">
+                  Agora mesmo
+                </td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="flex items-center justify-end gap-1">
+<span class="font-label-mono text-[10px] text-outline bg-surface-container-highest px-2 py-1 rounded">Você (Bloqueado)</span>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Ver Perfil Público">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- LINHA 2: Bic Muller (MODERADOR) -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-space-md px-space-md min-w-[200px]">
+<div class="flex items-center gap-space-sm">
+<img class="w-10 h-10 rounded-full object-cover shadow-sm ring-1 ring-secondary/50" data-alt="Digital pixelated pop culture retro avatar of a female Brazilian meme curator with neon cyan background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7FYiGjSTJ188xNnUDW1ZaF_CIWDC_nwZpf9s71K-yZ-5ZEHJNnwKBGiRvoXLL6VM1uDOmNCBhPAS027RknWnnd2vY-wUUFgWkWpkItelC6woJNSz_2pyjjxOrVf_6A82MNxjS-sn3-PQ8IbIF-vWsXMS4c9Hg7w9G08CTjCwD2opZWKRbjaBYoB4ZqRRdQ-GXrWZgedRPOh5OnNU7ilWDBL149kDQL3FnWniCUzI2LB5B6hS2Ro8yCqFwXWgxXw"/>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface font-semibold truncate">Bic Müller</span>
+<span class="font-label-mono text-label-mono text-outline">@bicmuller • #00042</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md min-w-[150px]">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-secondary font-semibold">Curadora-Mestre</span>
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono text-on-surface-variant">
+<span>Lvl 76</span>
+<span>•</span>
+<span class="text-secondary font-semibold">142.090 NS$</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Moderador
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                    Ativo
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap font-label-mono text-label-mono text-outline">
+                  Há 14 min
+                </td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-mono text-[10px] uppercase transition-colors" title="Modificar nível de acesso">
+                      Papel
+                    </button>
+<button class="p-1 rounded text-outline hover:text-error hover:bg-surface-container-high transition-colors" title="Aplicar Sanção">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+</button>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Ver Perfil">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- LINHA 3: Morroida (USUÁRIO MEMBRO HISTÓRICO) -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-space-md px-space-md min-w-[200px]">
+<div class="flex items-center gap-space-sm">
+<img class="w-10 h-10 rounded-full object-cover shadow-sm ring-1 ring-outline/30" data-alt="Digital vector avatar of an early 2010s Brazilian internet blogger wearing a vintage cap with retro computer screen scanlines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaW7piTrElOMAsaxIxbId50LlWTZVnhKC-XzPsjqaJzZXBvXksVsKfe4lyxa08neKLL_dF97y3SK2cl5dGNHpyVsGYvByuIAsGqHVmZvJ2QsuVxT-tVoWtXf0zu5tyQY7hPcmOeOggKWlnK-arY22Yx7nelwJrM3-2yCR0BgOOLW0B_Fc1efZ2p51NePiD-eTM6MwtnTlH5T-Gsc-pCu5k5AL8k3kA8yOmq6NmC-vIhvKXvfuK6u-xP5-eyGDaTQ"/>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface font-semibold truncate">Rodrigo Morroida</span>
+<span class="font-label-mono text-label-mono text-outline">@morroida • #00108</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md min-w-[150px]">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Veterano de Guerra dos Memes</span>
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono text-on-surface-variant">
+<span>Lvl 62</span>
+<span>•</span>
+<span class="text-secondary font-semibold">91.450 NS$</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant">
+                    Usuário
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                    Ativo
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap font-label-mono text-label-mono text-outline">
+                  Ontem às 22:40
+                </td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-mono text-[10px] uppercase transition-colors">
+                      Promover
+                    </button>
+<button class="p-1 rounded text-outline hover:text-error hover:bg-surface-container-high transition-colors" title="Banir">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+</button>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- LINHA 4: Aline Dias (USUÁRIA COLABORADORA) -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-space-md px-space-md min-w-[200px]">
+<div class="flex items-center gap-space-sm">
+<img class="w-10 h-10 rounded-full object-cover shadow-sm ring-1 ring-outline/30" data-alt="Modern cyberpunk illustrated female portrait with headphones bathed in deep navy and electric teal neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTRiG5LGMjhyIP37Zz_NQUBFQdxSnghRpPELCH8nuN6bBgNXaxEs4uRJoSz1kB-R29xTKqLPI_C84xP4Vz6P9DrWPLJbtKKEeOOZy329euBOatkO6cTv6DVycRcyi5saG9BLHNDqQUX8-cQ-gK5j45hFABz6MtJYLMQE6GrLNSv_pMfAmfEE5EzagYHdY_fg2njtq2lR5XBkfFTuV4h_0FPZNb0qrjY5j1scmxkjvyjMNP6bRBsmbiIX8Jodnc_A"/>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface font-semibold truncate">Aline Dias</span>
+<span class="font-label-mono text-label-mono text-outline">@aline_dias • #01948</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md min-w-[150px]">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Redatora Memepédia</span>
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono text-on-surface-variant">
+<span>Lvl 34</span>
+<span>•</span>
+<span class="text-secondary font-semibold">24.120 NS$</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant">
+                    Usuário
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                    Ativo
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap font-label-mono text-label-mono text-outline">
+                  3 dias atrás
+                </td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-mono text-[10px] uppercase transition-colors">
+                      Promover
+                    </button>
+<button class="p-1 rounded text-outline hover:text-error hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+</button>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- LINHA 5: TROLL BANIDO (EXEMPLO DE STATUS: BANIDO COM TARGET DA MODAL) -->
+<tr class="hover:bg-surface-container-high/40 transition-colors bg-error-container/10">
+<td class="py-space-md px-space-md min-w-[200px]">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-error font-headline-sm">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-error line-through truncate">troll_orkut_2008</span>
+<span class="font-label-mono text-label-mono text-outline">@troll_orkut_2008 • #49281</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md min-w-[150px]">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-outline">Incursor Tóxico</span>
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono text-error">
+<span>Lvl 02</span>
+<span>•</span>
+<span>0 NS$ (Congelado)</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono px-2 py-0.5 rounded-full bg-surface-container-highest text-outline">
+                    Usuário
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono px-2 py-0.5 rounded bg-error-container text-error font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                    Banido (Perm.)
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap font-label-mono text-label-mono text-outline">
+                  12/05/2024
+                </td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-error/20 hover:bg-error/30 text-error font-label-mono text-[10px] uppercase font-bold transition-colors">
+                      Desbanir
+                    </button>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Ver Dossiê">
+<span class="material-symbols-outlined text-[18px]">history_edu</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- LINHA 6: CONTA REMOVIDA LGPD (ANONIMIZADA / READ-ONLY) -->
+<tr class="hover:bg-surface-container-high/20 transition-colors opacity-75 bg-surface-container-lowest/50">
+<td class="py-space-md px-space-md min-w-[200px]">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[20px]">no_accounts</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-mono text-title-md text-outline font-semibold">removida-123</span>
+<span class="font-label-mono text-[9px] px-1.5 py-0.5 rounded bg-surface-container-highest text-outline font-bold">LGPD</span>
+</div>
+<span class="font-label-mono text-label-mono text-outline/60">[DADOS PESSOAIS EXPUNGIDOS]</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md min-w-[150px]">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-outline">Anonimizado</span>
+<span class="font-label-mono text-label-mono text-outline/60">Saldo Zerado</span>
+</div>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono px-2 py-0.5 rounded bg-surface-container-highest text-outline">
+                    Expurgado
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono px-2 py-0.5 rounded bg-surface-container-highest text-outline font-semibold">
+<span class="material-symbols-outlined text-[12px]">lock</span>
+                    ANONIMIZADO (LGPD)
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap font-label-mono text-label-mono text-outline">
+                  04/01/2024
+                </td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="flex items-center justify-end gap-1">
+<span class="font-label-mono text-[10px] text-outline px-2 py-1 rounded bg-surface-container-highest">
+                      Somente Leitura
+                    </span>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Certificado de Anonimização">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- LINHA 7: Outro Usuário Ativo Normal -->
+<tr class="hover:bg-surface-container-high/40 transition-colors">
+<td class="py-space-md px-space-md min-w-[200px]">
+<div class="flex items-center gap-space-sm">
+<img class="w-10 h-10 rounded-full object-cover shadow-sm ring-1 ring-outline/30" data-alt="Digital art retro vaporwave avatar portrait of an internet user with purple sunglasses and green CRT lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC04RKdaDwCeVvL3r2oj7upShiyBnlyubDIxJIs_wNGAik8VGr2DevTmYB1ryvwMlZSXqzCZXjY_xlsNMcVOHViTceQNOVw-EHD0CICl_HnwUFggNktFNF2mlCWO9D4aYF5sdedyWp0Kn7ThQWvnGsT865h6hvAk2vUw1ZARZs-9CSX2kMFM3FLXOZq0Hy146492B_DJLLznFJie1RD4CB2X4zpgJE7iHG-xXJmwwgMc94PmLxcWTm59-9njoa9JA"/>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface font-semibold truncate">Didi Mocó Fan</span>
+<span class="font-label-mono text-label-mono text-outline">@didifan2000 • #58201</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md min-w-[150px]">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Explorador de Gifs</span>
+<div class="flex items-center gap-space-xs font-label-mono text-label-mono text-on-surface-variant">
+<span>Lvl 19</span>
+<span>•</span>
+<span class="text-secondary font-semibold">8.390 NS$</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant">
+                    Usuário
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-1 font-label-mono text-label-mono text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                    Ativo
+                  </span>
+</td>
+<td class="py-space-md px-space-md whitespace-nowrap font-label-mono text-label-mono text-outline">
+                  Há 2 horas
+                </td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="flex items-center justify-end gap-1">
+<button class="px-2 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-mono text-[10px] uppercase transition-colors">
+                      Promover
+                    </button>
+<button class="p-1 rounded text-outline hover:text-error hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+</button>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Paginação Completa -->
+<div class="px-space-lg py-space-md bg-surface-container flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm font-label-mono text-label-mono text-outline">
+<span>Mostrando <strong class="text-on-surface">1 - 7</strong> de <strong class="text-on-surface">184.920</strong> usuários</span>
+<span class="hidden md:inline">•</span>
+<div class="hidden md:flex items-center gap-1">
+<span>Linhas por página:</span>
+<select class="bg-surface-container-high text-on-surface text-label-mono px-2 py-1 rounded focus:outline-none">
+<option>10</option>
+<option selected="">25</option>
+<option>50</option>
+<option>100</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded bg-surface-container-high text-outline hover:text-on-surface disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[18px]">first_page</span>
+</button>
+<button class="p-1.5 rounded bg-surface-container-high text-outline hover:text-on-surface disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="px-3 py-1 rounded bg-primary-container text-on-primary-container font-label-mono text-label-mono font-bold">1</button>
+<button class="px-3 py-1 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-label-mono text-label-mono">2</button>
+<button class="px-3 py-1 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-label-mono text-label-mono">3</button>
+<span class="px-2 text-outline font-label-mono text-label-mono">...</span>
+<button class="px-3 py-1 rounded bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-label-mono text-label-mono">7.397</button>
+<button class="p-1.5 rounded bg-surface-container-high text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+<button class="p-1.5 rounded bg-surface-container-high text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-[18px]">last_page</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Audit Snapshot Banner -->
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">policy</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">POLÍTICA DE PRIVACIDADE &amp; CONFORMIDADE LGPD</span>
+<span class="font-body-sm text-body-sm text-outline">Todas as operações de alteração de permissão, exclusão de dados e banimento geram hashes criptográficos no Registro de Auditoria.</span>
+</div>
+</div>
+<button class="font-label-mono text-label-mono px-space-md py-1.5 rounded bg-surface-container-high text-secondary hover:bg-surface-container-highest uppercase shrink-0 transition-colors">
+          Ver DPA / Termos
+        </button>
+</div>
+</div>
+<!-- COLUNA LATERAL: Side Summary, Telemetria & Diretrizes (4 Cols) -->
+<div class="xl:col-span-4 flex flex-col gap-space-lg">
+<!-- Card 1: Distribuição por Papel -->
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-wide">DISTRIBUIÇÃO POR PAPEL</span>
+<span class="font-label-mono text-label-mono text-outline">RBAC ACERVO</span>
+</div>
+<div class="space-y-space-sm mt-2">
+<!-- Admin -->
+<div class="flex flex-col gap-1 p-space-sm rounded bg-surface-container">
+<div class="flex items-center justify-between font-label-mono text-label-mono">
+<span class="flex items-center gap-1.5 text-primary font-bold">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+                Administradores
+              </span>
+<span class="text-on-surface font-semibold">4 <span class="text-outline font-normal">(0.002%)</span></span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full" style="width: 2%"></div>
+</div>
+</div>
+<!-- Moderador -->
+<div class="flex flex-col gap-1 p-space-sm rounded bg-surface-container">
+<div class="flex items-center justify-between font-label-mono text-label-mono">
+<span class="flex items-center gap-1.5 text-secondary font-bold">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                Moderadores
+              </span>
+<span class="text-on-surface font-semibold">28 <span class="text-outline font-normal">(0.015%)</span></span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 5%"></div>
+</div>
+</div>
+<!-- Usuários Comuns -->
+<div class="flex flex-col gap-1 p-space-sm rounded bg-surface-container">
+<div class="flex items-center justify-between font-label-mono text-label-mono">
+<span class="flex items-center gap-1.5 text-on-surface-variant font-bold">
+<span class="w-2 h-2 rounded-full bg-surface-container-highest"></span>
+                Usuários Comuns
+              </span>
+<span class="text-on-surface font-semibold">184.888 <span class="text-outline font-normal">(99.98%)</span></span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-surface-container-highest h-full" style="width: 100%"></div>
+</div>
+</div>
+</div>
+<!-- SVG Mini Visualizer Chart -->
+<div class="mt-2 p-space-sm rounded bg-surface-container-lowest flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-mono text-[10px] text-outline uppercase">Ratio Hierárquico</span>
+<span class="font-title-md text-title-md text-secondary font-bold">1 Mod : 6.603 Users</span>
+</div>
+<svg class="w-24 h-8 text-secondary" fill="none" viewbox="0 0 100 30">
+<path d="M0 25 L20 22 L40 24 L60 15 L80 18 L100 5" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+<path d="M0 25 L20 22 L40 24 L60 15 L80 18 L100 5 L100 30 L0 30 Z" fill="currentColor" fill-opacity="0.1"></path>
+</svg>
+</div>
+</div>
+<!-- Card 2: Métricas de Conformidade & Moderação -->
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-wide">CONFORMIDADE &amp; LGPD</span>
+<span class="material-symbols-outlined text-outline text-[18px]">verified_user</span>
+</div>
+<div class="grid grid-cols-2 gap-space-sm mt-1">
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<span class="font-label-mono text-[10px] text-outline uppercase">Contas Banidas</span>
+<span class="font-headline-sm text-headline-sm text-error font-bold mt-1">142</span>
+<span class="font-label-mono text-[9px] text-outline">0.07% do total</span>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex flex-col">
+<span class="font-label-mono text-[10px] text-outline uppercase">Anonimizadas (LGPD)</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold mt-1">315</span>
+<span class="font-label-mono text-[9px] text-outline">Irrevogáveis</span>
+</div>
+</div>
+<div class="p-space-sm rounded bg-surface-container flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-primary font-bold uppercase">Solicitações LGPD Pendentes</span>
+<span class="font-body-sm text-body-sm text-outline">3 solicitações aguardando prazo legal de 15 dias.</span>
+</div>
+<button class="px-space-sm py-1 rounded bg-primary-container text-on-primary-container font-label-mono text-[10px] uppercase font-bold hover:bg-primary-fixed transition-colors">
+            Revisar
+          </button>
+</div>
+</div>
+<!-- Card 3: Diretrizes Rápidas de Moderação -->
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[18px]">rule</span>
+<span class="font-headline-sm text-headline-sm uppercase tracking-wide">DIRETRIZES DE MODERAÇÃO</span>
+</div>
+<ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface-variant divide-y divide-surface-container-highest/50">
+<li class="pt-1.5 flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px] shrink-0 mt-0.5">check_circle</span>
+<span><strong>Banimento Temporário (24h/7d):</strong> Recomendado para infrações leves de flood nos comentários e brigas clubistas.</span>
+</li>
+<li class="pt-1.5 flex items-start gap-2">
+<span class="material-symbols-outlined text-error text-[16px] shrink-0 mt-0.5">warning</span>
+<span><strong>Banimento Permanente:</strong> Aplicado imediatamente a bots mineradores de cripto e discursos de ódio.</span>
+</li>
+<li class="pt-1.5 flex items-start gap-2">
+<span class="material-symbols-outlined text-outline text-[16px] shrink-0 mt-0.5">lock_reset</span>
+<span><strong>Anonimização LGPD:</strong> Processo <em>definitivo</em>. Apaga e-mails, senhas, IPs e referências nominais para sempre.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- SEÇÃO INTERATIVA DEMONSTRATIVA: Modal de Banimento em Destaque Contextual -->
+<div class="mt-space-xl p-space-md rounded-xl bg-surface-container-low shadow-xl">
+<div class="flex items-center justify-between pb-space-sm mb-space-md bg-surface-container-lowest/50 p-space-sm rounded-lg">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-error text-[20px]">report</span>
+<span class="font-headline-sm text-headline-sm uppercase text-on-surface">INTERFACE DE SANÇÃO DISCIPLINAR (PREVIEW MODAL ATIVO)</span>
+</div>
+<span class="font-label-mono text-label-mono px-2 py-0.5 rounded bg-surface-container-highest text-outline">MODAL_SIMULATION_VIEW</span>
+</div>
+<!-- Container do Diálogo / Modal Mock -->
+<div class="max-w-2xl mx-auto rounded-xl bg-surface-container shadow-2xl p-space-lg flex flex-col gap-space-md">
+<!-- Modal Header -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-error-container/30 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[28px]">gavel</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-md text-headline-md uppercase text-on-surface font-semibold">Confirmar Banimento de Usuário</h2>
+<span class="font-label-mono text-label-mono text-error">ALVO: @troll_orkut_2008 (ID #49281)</span>
+</div>
+</div>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Warning Callout -->
+<div class="p-space-sm rounded-lg bg-surface-container-lowest flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">info</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+          Esta ação revogará a capacidade de login do usuário, bloqueará votos no acervo e impedirá edições de verbetes na Memepédia. O log será auditado.
+        </span>
+</div>
+<!-- Form Inputs -->
+<div class="flex flex-col gap-space-md">
+<!-- Motivo Principal -->
+<div>
+<label class="block font-label-mono text-label-mono text-outline uppercase tracking-wider mb-1">Motivo do Banimento</label>
+<div class="relative">
+<select class="w-full appearance-none px-space-md py-2.5 rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-error pr-10">
+<option selected="">Vandalismo de verbetes na Memepédia</option>
+<option>Discurso de ódio / Violação de diretrizes</option>
+<option>Spam / Bots de mineração</option>
+<option>Tentativa de invasão / Manipulação de Moedas</option>
+<option>Outro (especificar abaixo)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+<!-- Duração do Banimento -->
+<div>
+<label class="block font-label-mono text-label-mono text-outline uppercase tracking-wider mb-1">Duração da Sanção</label>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm">
+<label class="flex items-center justify-center p-2 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface cursor-pointer font-label-mono text-label-mono">
+<input class="hidden peer" name="duration" type="radio"/>
+<span class="peer-checked:text-primary peer-checked:font-bold">24 HORAS</span>
+</label>
+<label class="flex items-center justify-center p-2 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface cursor-pointer font-label-mono text-label-mono">
+<input class="hidden peer" name="duration" type="radio"/>
+<span class="peer-checked:text-primary peer-checked:font-bold">7 DIAS</span>
+</label>
+<label class="flex items-center justify-center p-2 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface cursor-pointer font-label-mono text-label-mono">
+<input class="hidden peer" name="duration" type="radio"/>
+<span class="peer-checked:text-primary peer-checked:font-bold">30 DIAS</span>
+</label>
+<label class="flex items-center justify-center p-2 rounded-lg bg-error-container/30 text-error cursor-pointer font-label-mono text-label-mono font-bold">
+<input checked="" class="hidden peer" name="duration" type="radio"/>
+<span>PERMANENTE</span>
+</label>
+</div>
+</div>
+<!-- Justificativa Interna de Auditoria -->
+<div>
+<label class="block font-label-mono text-label-mono text-outline uppercase tracking-wider mb-1">Justificativa Interna de Auditoria (Obrigatório)</label>
+<textarea class="w-full px-space-md py-2 rounded-lg bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-error" placeholder="Descreva as evidências, URLs violadas ou histórico prévio deste usuário para fins de auditoria interna..." rows="3">Usuário inseriu repetidamente links maliciosos e apagou as referências históricas do verbete 'Sanduiche-iche' na Memepédia durante a madrugada.</textarea>
+</div>
+<!-- Checkbox de Revogação Imediata -->
+<label class="flex items-center gap-space-sm cursor-pointer mt-1">
+<input checked="" class="w-4 h-4 rounded bg-surface-container-lowest text-primary focus:ring-0" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Revogar todas as sessões ativas e tokens de API imediatamente</span>
+</label>
+</div>
+<!-- Modal Actions -->
+<div class="flex items-center justify-end gap-space-sm pt-space-sm">
+<button class="px-space-md py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-label-lg text-label-lg uppercase tracking-wider">
+          Cancelar
+        </button>
+<button class="px-space-lg py-2.5 rounded-lg bg-error-container text-on-error-container hover:bg-error transition-colors font-label-lg text-label-lg uppercase tracking-wider font-bold shadow-md flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+<span>Confirmar Banimento (Ação Auditada)</span>
+</button>
+</div>
+</div>
+</div>
+</div></main></div><nav class="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-surface-container-low z-50 flex items-center justify-around px-space-sm shadow-[0_-2px_10px_rgba(0,0,0,0.5)]" data-active-classes="text-primary font-bold"><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="visao-geral" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-label-mono text-[9px] uppercase">Visão</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface relative" data-path="moderacao" href="#"><span class="material-symbols-outlined text-[20px]">gavel</span><span class="font-label-mono text-[9px] uppercase">Mod</span><span class="absolute -top-1 right-1 w-2 h-2 rounded-full bg-primary-container"></span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="memes" href="#"><span class="material-symbols-outlined text-[20px]">movie</span><span class="font-label-mono text-[9px] uppercase">Acervo</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="comunidade" href="#"><span class="material-symbols-outlined text-[20px]">forum</span><span class="font-label-mono text-[9px] uppercase">Social</span></a><a class="flex flex-col items-center text-on-surface-variant hover:text-on-surface" data-path="log-de-auditoria" href="#"><span class="material-symbols-outlined text-[20px]">receipt_long</span><span class="font-label-mono text-[9px] uppercase">Audit</span></a></nav></body></html>
