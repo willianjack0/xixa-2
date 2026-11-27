@@ -33,7 +33,7 @@ test("termos: perfil usa Patente (não Nível); álbum chama de carta o que o se
 test("cache-bust: index, perfil e álbum usam o mesmo ?v= e nenhum antigo", () => {
   for (const f of ["index.html", "perfil.html", "album.html"]) {
     const h = ler(f);
-    assert.ok(h.includes("?v=20261207b"), `${f} sem o ?v= novo`);
-    assert.ok(!/\?v=2026\d{4}[a-z]/.test(h.replace(/\?v=20261207b/g, "")), `${f} mistura ?v= de datas diferentes`);
+    assert.ok(h.includes("?v=20261208a"), `${f} sem o ?v= novo`);
+    assert.ok(!/\?v=2026\d{4}[a-z]/.test(h.replace(/\?v=20261208a/g, "")), `${f} mistura ?v= de datas diferentes`);
   }
 });
