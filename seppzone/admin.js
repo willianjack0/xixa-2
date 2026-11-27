@@ -1011,7 +1011,7 @@ function abaMemes(p) {
     });
   }
   function linhaMeme(m) {
-    const li = h("li", { class: "item" + (m.status !== "publicado" ? " feito" : "") },
+    const li = h("li", { class: "item meme-lin st-" + m.status + (m.status !== "publicado" ? " feito" : "") },
       h("div", { class: "item-h" }, h("h3", null, (m.emoji ? m.emoji + " " : "") + m.titulo), chip(STATUS_MEME[m.status] || m.status, m.status === "publicado" ? "ok" : m.status === "oculto" ? "warn" : "bad")),
       h("div", { class: "meta" }, chip(m.ano), chip(m.categoria), chip(m.raridade), h("span", { class: "chip cod" }, m.id)),
       h("div", { class: "acts" }, h("button", { class: "b", type: "button", on: { click: () => abrirMeme(m, (novo) => troca(novo)) } }, "Editar"),
@@ -1028,7 +1028,7 @@ function abaMemes(p) {
     }
     return li;
   }
-  trocar(p, h("form", { class: "filtros", role: "search", on: { submit: (e) => { e.preventDefault(); filtrar(); } } },
+  trocar(p, h("form", { class: "filtros mem-filtros", role: "search", on: { submit: (e) => { e.preventDefault(); filtrar(); } } },
     h("div", { class: "campo larg" }, h("label", { for: idB }, "Título contém"), busca),
     h("div", { class: "campo" }, h("label", { for: idA }, "Ano"), ano, erroA), h("div", { class: "campo" }, h("label", { for: idC }, "Categoria"), cat), h("div", { class: "campo" }, h("label", { for: idS }, "Situação"), st),
     h("button", { class: "b pri", type: "submit" }, "Filtrar"),
