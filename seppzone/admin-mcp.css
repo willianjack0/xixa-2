@@ -1,1 +1,47 @@
-/* Admin � aba mcp: estilos da aba (preenchido pela PR dela). Use s� tokens do theme.css. */
+/* Admin · MCP (chaves de API e llms.txt no layout Stitch, traduzido para os tokens do theme.css; claro e escuro).
+   Só estilo: mesma informação e ações da aba. Tudo escopado em #p-mcp. */
+
+/* seções viram painéis; em tela larga, criar chave e lista lado a lado e o llms.txt embaixo, em largura total */
+#p-mcp{display:grid;gap:18px;align-items:start}
+#p-mcp>.sec{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0}
+#p-mcp>.sec>h2{font:700 clamp(20px,2.2vw,26px)/1.1 Rajdhani,sans-serif;letter-spacing:.8px;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:8px}
+#p-mcp>.sec>h2::before{content:"";width:4px;height:1.1em;border-radius:2px;background:var(--brand)}
+#p-mcp>.sec>.mini{margin-bottom:12px}
+#p-mcp .b{min-height:44px}
+@media (min-width:1100px){
+  #p-mcp{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}
+  #p-mcp>.sec:nth-child(3){grid-column:1/-1}
+}
+
+/* formulário de criação */
+#p-mcp .form-chave{max-width:none;background:var(--sunk);border-color:var(--line2)}
+#p-mcp .campo>label,#p-mcp .escopos legend{font:700 12px Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--mut-strong)}
+#p-mcp .escopos{background:var(--panel);border-color:var(--line2)}
+#p-mcp .opc{border-radius:10px}
+#p-mcp .opc:hover{background:var(--panel2)}
+#p-mcp .opc .dica{color:var(--mut-strong)}
+
+/* segredo recém-criado: faixa de alerta (aparece uma vez) */
+#p-mcp .segredo{max-width:none;border-color:var(--warn);border-left-width:6px;background:var(--panel2)}
+#p-mcp .segredo h2{font:700 clamp(20px,2.2vw,26px)/1.1 Rajdhani,sans-serif;letter-spacing:.8px;text-transform:uppercase;color:var(--warn)}
+#p-mcp .chave-linha input.cod{background:var(--sunk);color:var(--txt);font-size:14px;letter-spacing:.3px}
+#p-mcp pre.llms{background:var(--sunk);border-color:var(--line2);border-left:3px solid var(--brand)}
+
+/* chaves: linhas com faixa de estado, prefixo em mono, revogada riscada */
+#p-mcp .lista{gap:8px}
+#p-mcp .lista .item{position:relative;padding:12px 16px 12px 20px;border-radius:12px;background:var(--sunk);overflow:hidden}
+#p-mcp .lista .item::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--ok)}
+#p-mcp .lista .item.feito::before{background:var(--bad)}
+#p-mcp .lista .item.feito h3{text-decoration:line-through;color:var(--mut-strong)}
+#p-mcp .lista .item h3{font:700 clamp(18px,2vw,21px)/1.15 Rajdhani,sans-serif;letter-spacing:.4px}
+#p-mcp .lista .meta .cod{padding:2px 8px;border:1px solid var(--line2);border-radius:8px;background:var(--panel);color:var(--brand-text);overflow-wrap:anywhere}
+#p-mcp .lista .meta{gap:4px 14px}
+
+/* llms.txt: bloco de código largo e rolável */
+#p-mcp pre.llms{max-height:520px;font-size:13px}
+
+@media (max-width:640px){
+  #p-mcp>.sec{padding:14px 12px}
+  #p-mcp .lista .item{padding:12px 12px 12px 16px}
+  #p-mcp .acts .b{flex:1 1 auto}
+}
