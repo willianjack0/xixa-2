@@ -2,7 +2,7 @@
 // Comparação NORMALIZADA: minúsculas, sem acentos, sem espaço nem . _ - e sem números no fim.
 // Assim 'Admin', 'ADMIN', 'a.d.m.i.n', 'admin_2', 'Admin123' e 'Nao_Salvo' caem na mesma regra.
 export const RESERVADOS = Object.freeze(['admin', 'administrador', 'mod', 'moderador', 'moderacao', 'suporte', 'staff',
-  'nao salvo', 'naosalvo', 'xet', 'sistema', 'system', 'root', 'discord', 'oficial']);
+  'nao salvo', 'naosalvo', 'xet', 'sistema', 'system', 'root', 'discord', 'oficial', 'removida']);
 
 export const normalizarApelido = (s) => String(s ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
   .replace(/[\s._-]+/g, '').replace(/\d+$/, '');

@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <link rel="icon" type="image/png" sizes="128x128" href="/avatar-ns.png?v=1">
 <link rel="apple-touch-icon" href="/avatar-ns.png?v=1">
-<script src="gate.js?v=20261207b"></script>
-<script src="cliente-economia.js?v=20261207b"></script>
+<script src="gate.js?v=20261208a"></script>
+<script src="cliente-economia.js?v=20261208a"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NÃO SALVO — Museu da Internet Brasileira</title>
 <meta name="description" content="O museu da internet brasileira: relembre os maiores memes, virais e momentos históricos da web nacional dos anos 90 até hoje.">
@@ -24,8 +24,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://i.ytimg.com">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20261207b">
-<link rel="stylesheet" href="viewer.css?v=20261207b">
+<link rel="stylesheet" href="theme.css?v=20261208a">
+<link rel="stylesheet" href="viewer.css?v=20261208a">
 <script>try{var t=localStorage.getItem("ns_theme")}catch(e){}document.documentElement.dataset.theme=t==="dark"?"dark":"light"</script>
 <style>
 main{padding:24px 28px 60px;max-width:1280px;margin:0 auto}
@@ -170,7 +170,7 @@ main{display:flex;flex-direction:column}
 .top,.cur{grid-template-columns:1fr}.stage{grid-template-columns:1fr}.side{display:none}.rail{grid-template-columns:1fr 1fr}.rail .card:nth-child(3){display:none}main{padding:16px 16px 40px}}
 @media(max-width:600px){.f .two{grid-template-columns:1fr}.today{grid-template-columns:110px 1fr}.box .body{padding:16px}}
 </style>
-<link rel="stylesheet" href="home.css?v=20261207b">
+<link rel="stylesheet" href="home.css?v=20261208a">
 </head>
 <body class="home">
 <div class="rays-wrap" aria-hidden="true"><div class="rays" id="rays"></div></div>
@@ -224,11 +224,11 @@ main{display:flex;flex-direction:column}
 
 <div class="modal" id="modal" onclick="if(event.target===this)closeM()"><div class="box" id="box"></div></div>
 
-<script src="common.js?v=20261207b"></script>
-<script src="data.js?v=20261207b"></script>
-<script src="player.js?v=20261207b"></script>
-<script src="viewer.js?v=20261207b"></script>
-<script src="alertas.js?v=20261207b"></script>
+<script src="common.js?v=20261208a"></script>
+<script src="data.js?v=20261208a"></script>
+<script src="player.js?v=20261208a"></script>
+<script src="viewer.js?v=20261208a"></script>
+<script src="alertas.js?v=20261208a"></script>
 <script>
 renderHeader("inicio",{search:true,sub:[]});
 document.querySelectorAll("[data-ic]").forEach(e=>e.outerHTML=icon(e.dataset.ic));
@@ -550,6 +550,6 @@ if(["rank","mod","send","rand","tl","todos"].includes(h))setTimeout(()=>{ftGo(h)
 function placeRays(){const im=document.querySelector(".hero .sun img"),r=$("rays");if(!im||!r)return;const b=im.getBoundingClientRect();r.style.left=(b.left+b.width/2+scrollX)+"px";r.style.top=(b.top+b.height*0.42+scrollY)+"px"}
 placeRays();addEventListener("resize",placeRays);addEventListener("load",placeRays);document.querySelector(".hero .sun img").addEventListener("load",placeRays);
 </script>
-<script src="/nav.js?v=20261207b"></script>
+<script src="/nav.js?v=20261208a"></script>
 </body>
 </html>

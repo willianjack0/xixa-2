@@ -160,6 +160,7 @@ export async function ehMembro(accessToken, guildId, fetchFn = fetch) {
 // ---- usuário: apelido único e gato inicial ----
 /** Apelido válido (3 a 20 de [A-Za-z0-9_.-]) derivado do nome do Discord; sufixo numérico quando já existe. */
 import { ehReservado } from './apelidos.js';
+import { hashProvedor } from '../lib/lgpd.js';
 
 // Reservado não se resolve com número (variantes com número no fim também são reservadas): ganha o sufixo "_gato".
 const fugirDeReservado = (n) => (ehReservado(n) ? n.slice(0, 15).replace(/[_.-]+$/, '') + '_gato' : n);
@@ -181,7 +182,7 @@ export function gatoInicial(discordId) {
 }
 
 /** Acha ou cria o usuário do Discord. Devolve { id, apelido, banido, novo }. Não mexe em sessão. */
-export async function acharOuCriarUsuario(pool, perfil) {
+export async function acharOuCriarUsuario(pool, perfil, { chaveBanimento = '' } = {}) {
   const nomeExibicao = (perfil.global_name || perfil.username || '').slice(0, 64) || null;
   for (let tentativa = 0; tentativa < 30; tentativa++) {
     const { rows: ex } = await pool.query(
@@ -194,6 +195,9 @@ export async function acharOuCriarUsuario(pool, perfil) {
       await aplicarEquipe(pool, ex[0].id); // equipe do site: papel aplicado uma vez, pelo ID do Discord
       return { id: Number(ex[0].id), apelido: ex[0].apelido, banido: ex[0].banido, novo: false };
     }
+    // conta excluída que estava BANIDA: o banimento sobrevive (só o HMAC do id do provedor foi guardado, ver lib/lgpd.js)
+    const { rows: ban } = await pool.query('SELECT 1 FROM banimentos_provedor WHERE hash = $1', [hashProvedor(chaveBanimento, 'discord', perfil.id)]);
+    if (ban.length) return { id: null, apelido: null, banido: true, novo: false };
     const cli = await pool.connect();
     try {
       await cli.query('BEGIN');

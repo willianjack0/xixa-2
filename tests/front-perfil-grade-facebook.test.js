@@ -184,6 +184,6 @@ test("WhatsApp 1280: perfil compacto, não passa dos outros visuais (antes ~2x)"
     alt[l] = await o.page.evaluate(() => document.documentElement.scrollHeight); await o.ctx.close();
   }
   console.log("alturas 1280 (página inteira, com cabeçalho e rodapé):", JSON.stringify(alt));
-  assert.ok(alt.whatsapp <= 1500, "whatsapp " + alt.whatsapp);
+  assert.ok(alt.whatsapp <= 1560, "whatsapp " + alt.whatsapp); // 1500 + ~60px da linha "Privacidade e conta" (excluir conta, LGPD) no fim do perfil
   assert.ok(alt.whatsapp <= Math.max(alt.orkut, alt.facebook), "não maior que os outros: " + JSON.stringify(alt));
 });

@@ -6,7 +6,7 @@ import { gerarApelido } from '../auth/discord.js';
 import { validarApelido } from '../auth/perfil.js';
 import { servidor } from './helpers.js';
 
-const BASES = ['admin', 'administrador', 'mod', 'moderador', 'moderacao', 'suporte', 'staff', 'nao salvo', 'naosalvo', 'xet', 'sistema', 'system', 'root', 'discord', 'oficial'];
+const BASES = ['admin', 'administrador', 'mod', 'moderador', 'moderacao', 'suporte', 'staff', 'nao salvo', 'naosalvo', 'xet', 'sistema', 'system', 'root', 'discord', 'oficial', 'removida'];
 
 test('normalização: minúsculas, sem acento, sem espaço . _ - e sem números no fim', () => {
   assert.equal(normalizarApelido('Moderação'), 'moderacao');

@@ -82,6 +82,16 @@ Estado do perfil (todos em `usuario` de `GET /api/eu`):
 
 **Lista fechada do `avatar_gato`** (as mesmas opções do criador de gato em `common.js`): `fur` 0 a 9 (10 pelos; 9 = Sphynx), `pat` 0 a 4 (5 padrões), `eye` 0 a 4 (5 olhos), `acc` 0 a 8 (9 acessórios), `clo` 0 a 7 (8 roupas), `bg` 0 a 7 (8 fundos). Todas as 6 chaves são obrigatórias, todas inteiros JSON (não strings) dentro da faixa; qualquer chave extra ou valor fora da faixa é recusado.
 
+### `POST /api/eu/excluir` 🔒 (exige `X-CSRF`) — LGPD: excluir a própria conta
+Corpo `{ confirmar: "<seu apelido>" }` (sem diferenciar maiúsculas, com `trim`). **Anonimiza** a conta numa única transação; não apaga em cascata. Só atua na conta da sessão (não há id na rota nem no corpo, então não existe IDOR). Limite de 5 tentativas por pessoa em 10 min (`429`).
+- `200 { ok: true }` + `Set-Cookie` que limpa a sessão. A sessão e todas as outras da pessoa deixam de valer (`401`).
+- `422 { erro, campo: "confirmar" }` se o apelido digitado não bate; `409` se a conta é de `moderador`/`admin` (um admin retira o papel antes) ou se já foi removida; `403` sem `X-CSRF`/`Origin` ou conta banida (banida não passa pela rota: o banimento continua valendo); `401` sem login.
+- **Some:** vínculo OAuth (ID, nome de exibição e foto do Discord), sessões, chaves de API (revogadas e sem `ultimo_ip`), recados recebidos, publicações do perfil, artes de carta pendentes, `feedback.contato`, `avatar_gato`, `usar_foto`, `perfil_layout`, `carta_favorita`, `cadastro_completo_em`, `apelido_alterado_em`, `ultimo_acesso`.
+- **Fica, anônimo:** `usuarios` (id, `apelido = 'removida-<id>'`, `xp`/`moedas`, `removida_em`), comentários, votos, links e edições da Memepédia (o texto do autor vira `removida-<id>`, o `ip_hash` é anulado), envios aprovados, razão de XP/moedas, inventário e o log de auditoria. A auditoria grava `conta.excluir` com `alvo = usuarios:<id>` e `{ banida }`: sem apelido nem ID do Discord. Limite conhecido: `memepedia_edicoes` não tem `usuario_id`; a troca do autor casa pelo apelido atual, então edições feitas sob apelidos antigos não são alcançadas.
+- **Banimento sobrevive:** se a conta estava banida, grava-se em `banimentos_provedor` só o `HMAC-SHA256(ADMIN_TOKEN, "ban:discord:<id>")`; um novo login com o mesmo Discord volta com `?login=banido` e não cria conta. **Atenção:** girar o `ADMIN_TOKEN` invalida esses hashes (mesmo cuidado do `ip_hash`).
+- **Reentrada:** quem não estava banido pode entrar de novo com o mesmo Discord, mas é um cadastro NOVO (outro id, sem XP, moedas nem cartas). Conta `removida_em` não aparece no ranking nem em `GET /api/perfil/:apelido` (404). O prefixo `removida` é apelido reservado.
+- Migração `032` (só adiciona): `usuarios.removida_em`, tabela `banimentos_provedor` e índices parciais do `ip_hash`.
+
 ### `PATCH /api/eu` 🔒 (exige `X-CSRF`)
 
 Corpo JSON com **pelo menos um** de: `{ apelido?, avatar_gato?, usar_foto? }`. Chave desconhecida = erro. As mudanças valem juntas (tudo ou nada). `avatar_url` **não** é aceito do cliente (vem só do login Discord).
