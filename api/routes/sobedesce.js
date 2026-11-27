@@ -8,13 +8,13 @@ const HOJE = "(now() AT TIME ZONE 'America/Sao_Paulo')::date";
 
 export default function registrar(r) {
   // conta 1 visita/clique por meme, IP e dia (repetir no mesmo dia não infla o ranking)
-  r.post('/api/eventos', async ({ req, res, pool, ip, adminToken }) => {
+  r.post('/api/eventos', async ({ req, res, pool, ip, chaveHmac }) => {
     if (limited('ev:' + ip, 300)) return send(res, 429, { erro: 'calma' });
     const b = await lerJson(req);
     if (b === undefined) return send(res, 400, { erro: 'json inválido' });
     const id = String(b.id || ''), tipo = String(b.tipo || '');
     if (!VOTE_ID.test(id) || !['visita', 'clique'].includes(tipo)) return send(res, 400, { erro: 'evento inválido' });
-    const ipHash = hashIp(adminToken, ip);
+    const ipHash = hashIp(chaveHmac, ip);
     try {
       const novo = await pool.query(
         `INSERT INTO eventos_meme_ip (meme_id, tipo, dia, ip_hash) VALUES ($1,$2,${HOJE},$3) ON CONFLICT DO NOTHING`, [id, tipo, ipHash]);

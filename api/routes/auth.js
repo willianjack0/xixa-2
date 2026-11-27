@@ -37,7 +37,7 @@ export default function registrar(r) {
   });
 
   // 2) volta do Discord: confere o state, troca o code, cria/atualiza o usuário e abre a sessão
-  r.get('/api/auth/discord/callback', async ({ req, res, url, pool, ip, auth }) => {
+  r.get('/api/auth/discord/callback', async ({ req, res, url, pool, ip, auth, chaveHmac }) => {
     if (limited('auth:' + ip, LIMITE_AUTH)) return send(res, 429, { erro: 'Muitas tentativas. Aguarde um pouco.' });
     if (!auth?.discord) return indisponivel(res);
     const limpaState = apagarCookie(COOKIE_STATE, { path: PATH_STATE, secure: auth.cookieSecure });
@@ -65,7 +65,7 @@ export default function registrar(r) {
       return para('erro');
     }
 
-    const usuario = await acharOuCriarUsuario(pool, perfil);
+    const usuario = await acharOuCriarUsuario(pool, perfil, { chaveBanimento: chaveHmac });
     if (usuario.banido) return para('banido'); // conta suspensa: sem sessão
 
     const sessao = await criarSessao(pool, { usuarioId: usuario.id, ip, userAgent: req.headers['user-agent'] });

@@ -21,6 +21,27 @@ export async function limparEventosIp(pool, { lote = LOTE, maxLotes = MAX_LOTES 
   return total;
 }
 
+// ---- ip_hash do anti-spam: a política promete apagar em ~3 dias. Anula o código (a linha do registro FICA) ----
+export const IP_HASH_DIAS = 3;
+const TABELAS_IP_HASH = ['links_sugeridos', 'memepedia_edicoes'];
+
+/** Anula ip_hash com mais de 3 dias em links_sugeridos e memepedia_edicoes, em lotes. Devolve { tabela: n }. */
+export async function limparIpHash(pool, { lote = LOTE, maxLotes = MAX_LOTES } = {}) {
+  const out = {};
+  for (const t of TABELAS_IP_HASH) {
+    let total = 0;
+    for (let i = 0; i < maxLotes; i++) {
+      const r = await pool.query(
+        `UPDATE ${t} SET ip_hash = NULL WHERE ctid = ANY (ARRAY(
+           SELECT ctid FROM ${t} WHERE ip_hash IS NOT NULL AND criado_em < now() - make_interval(days => $2) LIMIT $1))`, [lote, IP_HASH_DIAS]);
+      total += r.rowCount;
+      if (r.rowCount < lote) break;
+    }
+    out[t] = total;
+  }
+  return out;
+}
+
 /** Roda já e depois a cada 6h. Nunca lança: erro vai para o log. Devolve o timer (unref: não segura o processo). */
 export function agendarLimpezaEventosIp(pool, { log = console, intervaloMs = A_CADA_MS } = {}) {
   const rodar = async () => {
@@ -29,6 +50,13 @@ export function agendarLimpezaEventosIp(pool, { log = console, intervaloMs = A_C
       if (n) log.log(`limpeza: ${n} linhas antigas removidas de eventos_meme_ip`);
     } catch (e) {
       log.error('limpeza de eventos_meme_ip falhou: ' + (e && e.message));
+    }
+    try {
+      const o = await limparIpHash(pool);
+      const n = Object.values(o).reduce((a, b) => a + b, 0);
+      if (n) log.log(`limpeza: ip_hash anulado em ${n} registros (${Object.entries(o).map(([t, v]) => t + ' ' + v).join(', ')})`);
+    } catch (e) {
+      log.error('limpeza de ip_hash falhou: ' + (e && e.message));
     }
   };
   const primeira = rodar();

@@ -34,7 +34,8 @@ setInterval(limpar, 3_600_000).unref();
 
 const { server } = criarApp({
   pool,
-  adminToken: segredo('ADMIN_TOKEN'),
+  adminToken: segredo('ADMIN_TOKEN'),   // chave de emergência do /api/admin (a aposentar)
+  chaveHmac: segredo('HMAC_KEY'),       // chave dos hashes (ip, visitante, banimento); sem ela cai no ADMIN_TOKEN
   ytKey: segredo('YT_API_KEY'), // opcional: sem chave, /api/yt-stats devolve {}
   autenticar: criarAutenticador({ stub, cookieSecure }), // sessão do login Discord; o stub só existe em dev/teste (allowlist)
   auth: { discord, cookieSecure, origemSite }

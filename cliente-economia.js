@@ -89,6 +89,8 @@
     comprar: function (p, o) { return pedir('POST', '/api/pacotes/comprar', p, o); },
     abrir: function (p, o) { return pedir('POST', '/api/pacotes/abrir', p, o); },
     perfil: function (p, o) { return pedir('PATCH', '/api/eu', p, o); },
+    // LGPD: exclui (anonimiza) a própria conta; confirmar = apelido digitado. A API encerra a sessão e limpa o cookie
+    excluirConta: function (confirmar, o) { return pedir('POST', '/api/eu/excluir', { confirmar: confirmar }, o); },
     reciclar: function (p, o) { return pedir('POST', '/api/album/reciclar', p, o); },
     // votos: um por pessoa e por meme (POST exige login); meusVotos marca o botão de curtir/as estrelas
     votar: function (p, o) { return pedir('POST', '/api/votos', p, o); },

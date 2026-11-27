@@ -338,14 +338,14 @@ export async function ranking(pool, { metrica = 'xp', limite = 50 } = {}) {
     const { rows } = await pool.query(
       `SELECT u.id, u.apelido, u.avatar_gato, count(*)::int AS valor, u.xp, u.papel, ${FOTO_DO_RANKING}, ${PATENTE_FIXA_SQL}
          FROM inventario_cartas i JOIN usuarios u ON u.id = i.usuario_id
-        WHERE i.quantidade > 0 AND NOT u.banido GROUP BY u.id ORDER BY valor DESC, u.xp DESC, u.id LIMIT $1`, [lim]);
+        WHERE i.quantidade > 0 AND NOT u.banido AND u.removida_em IS NULL GROUP BY u.id ORDER BY valor DESC, u.xp DESC, u.id LIMIT $1`, [lim]);
     return rows.map((r, i) => ({ posicao: i + 1, apelido: r.apelido, avatar_gato: r.avatar_gato, avatar_url: r.avatar_url, valor: r.valor, patente: comPatenteFixa(pats, Number(r.xp), r.patente_fixa).atual?.nome, moderador: r.papel === 'moderador' }));
   }
   // xp: soma do razão (eventos reais), não o cache
   const { rows } = await pool.query(
     `SELECT u.id, u.apelido, u.avatar_gato, sum(e.valor)::bigint AS valor, u.papel, ${FOTO_DO_RANKING}, ${PATENTE_FIXA_SQL}
        FROM eventos_xp e JOIN usuarios u ON u.id = e.usuario_id
-      WHERE NOT u.banido GROUP BY u.id HAVING sum(e.valor) > 0 ORDER BY valor DESC, u.id LIMIT $1`, [lim]);
+      WHERE NOT u.banido AND u.removida_em IS NULL GROUP BY u.id HAVING sum(e.valor) > 0 ORDER BY valor DESC, u.id LIMIT $1`, [lim]);
   return rows.map((r, i) => ({ posicao: i + 1, apelido: r.apelido, avatar_gato: r.avatar_gato, avatar_url: r.avatar_url, valor: Number(r.valor), patente: comPatenteFixa(pats, Number(r.valor), r.patente_fixa).atual?.nome, moderador: r.papel === 'moderador' }));
 }
 
