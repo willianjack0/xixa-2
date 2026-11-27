@@ -711,3 +711,29 @@ for (const largura of [360, 768, 1280]) {
     });
   }
 }
+
+// ---------------------------------------------------------------- aba Memes (Stitch): linhas com faixa de situação, filtros em painel
+for (const tema of ["claro", "escuro"]) {
+  for (const largura of [360, 768, 1280]) {
+    test(`memes (${tema}, ${largura}px): linha com faixa por situação, ações >= 44px, sem rolagem horizontal, filtros e ações intactos`, opts, async () => {
+      const { ctx, page, erros } = await abrir({}, { largura, tema, hash: "#memes" });
+      await page.waitForSelector("#p-memes .meme-lin");
+      const r = await page.evaluate(() => {
+        const l = [...document.querySelectorAll("#p-memes .meme-lin")];
+        return {
+          n: l.length, filtros: !!document.querySelector("#p-memes form.mem-filtros[role=search]"),
+          classes: l.map((x) => [...x.classList].find((c) => c.startsWith("st-"))),
+          botoes: [...document.querySelectorAll("#p-memes .meme-lin .acts .b, #p-memes .mem-filtros .b")].map((b) => b.getBoundingClientRect().height),
+          faixa: getComputedStyle(l[0]).borderLeftWidth, rolou: document.documentElement.scrollWidth > innerWidth + 1
+        };
+      });
+      assert.ok(r.n >= 1 && r.filtros);
+      assert.ok(r.classes.every((c) => /^st-(publicado|oculto|removido)$/.test(c)), r.classes.join());
+      assert.strictEqual(r.faixa, "4px");
+      assert.ok(r.botoes.every((a) => a >= 43.5), "alvo de toque " + Math.min(...r.botoes));
+      assert.strictEqual(r.rolou, false);
+      assert.deepStrictEqual(erros, []);
+      await ctx.close();
+    });
+  }
+}
